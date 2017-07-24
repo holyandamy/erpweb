@@ -14,9 +14,13 @@ import Companyset from './views/systemset/company/companyset.vue'  //公司信�
 import Approval from './views/systemset/approval/approval.vue' //审批设置
 import Addapproval from './views/systemset/approval/addapproval.vue'  //添加审批
 //角色管理
-
+import Role from './views/systemset/role/role.vue' //角色管理
+import Addrole from './views/systemset/role/addrole.vue'  //新增角色
 //员工管理
+import Staff from './views/systemset/staff/staff.vue' //员工管理
+import Addstaff from './views/systemset/staff/addstaff.vue'  //新增员工
 //操作日志
+import Log from './views/systemset/log/log.vue'  //新增员工
 //图片库
 
 
@@ -74,6 +78,11 @@ let routes = [
             {path: '/cmanagement/companyset', component: Companyset, name: '公司信息设置',hidden:true},
             {path: '/approval', component: Approval, name: '审批配置'},
             {path: '/approval/addapproval', component: Addapproval, name: '新增审批',hidden:true},
+            {path: '/role', component: Role, name: '角色管理'},
+            {path: '/role/addrole', component: Addrole, name: '新增角色',hidden:true},
+            {path: '/staff', component: Staff, name: '员工管理'},
+            {path: '/staff/addstaff', component: Addstaff, name: '新增员工',hidden:true},
+            {path: '/log', component: Log, name: '操作日志'}
 //        		children:[
 //        		{path: '/cmanagement/department', component: Department, name: '部门管理'},
 //        		{path: '/cmanagement/bankaccount', component: Bankaccount, name: '银行账号设置'},
