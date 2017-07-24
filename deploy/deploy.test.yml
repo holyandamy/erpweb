@@ -11,7 +11,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://172.19.9.13:5514"
+        syslog-address: "tcp://172.17.9.13:5514"
         tag: $PROJECT_NAME
     deploy: 
       replicas: 3
