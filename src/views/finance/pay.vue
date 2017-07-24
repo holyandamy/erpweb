@@ -92,8 +92,13 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
 			<!--<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>-->
-			 <el-pagination layout="total,prev, pager, next" @current-change="handleCurrentChange" :page-size="pagesize" :total="total" style="float:right;">
-			</el-pagination>
+			<el-pagination
+    	@current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-size="pagesize"
+      layout="total, prev, pager, next"
+      :total="total">
+    </el-pagination>
     
 		</el-col>
 
@@ -233,8 +238,12 @@
 					}]
 				},
 				total: 0,
-				page: 1,
-				pagesize:1
+				pagesize:10,
+				currentPage:1,
+				pageset:{
+					pageindex:'',
+					pagesize:''
+				}
 
 			}
 
@@ -253,13 +262,12 @@
 			},
 			//获取用户列表
 			getUsers() {
-				let para = {
-					page: this.page,  //
-					pageSize:this.pagesize
-				};
+				this.pageset.pageindex = this.currentPage -1
+		    	this.pageset.pagesize = this.pagesize
+		    	let page = this.pageset
 				//console.log(para)
 				this.listLoading = true;
-				axios.post('https://172.17.9.13:3001/api/finance/pay', para).then((data) => {
+				axios.post('https://172.17.9.13:3001/api/finance/pay', page).then((data) => {
 					//console.log(data.data.res)
 					this.total = Number(data.data.obj.total);
 					//console.log(data)
