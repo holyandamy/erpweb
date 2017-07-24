@@ -70,14 +70,13 @@
 								</td>
 								<td>
 									<el-col :span="20">
-										<el-select placeholder="收款账号" v-model="domain.id" id="bankvalue">
+										<el-select placeholder="收款账号" v-model="domain.id" @change="changeValue">
 											 <el-option
 											      v-for="item in banklist"
 											      :key="item.bankNameAccount"
 											      :label="item.bankNameAccount"
 											      :value="item.id"
 											      >
-											     
 											</el-option>
 										</el-select>
 										
@@ -196,9 +195,7 @@
 						name: 'food2.jpeg',
 						url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
 					}
-				],
-				accounts:[]
-				
+				]
 			}
 		},
 		created() {
@@ -209,21 +206,21 @@
 
 		},
 		methods: {
-			
+			changeValue(value) {
+	           let obj = {};
+          		obj = this.options.find((item)=>{
+             	 return item.value === value;
+         		 });
+	 		console.log(obj.label);
+	        },
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
+
+						//this.collectForm.list.conta(this.dynamicValidateForm.domains)
 						let para = Object.assign({}, this.collectForm);
 						this.collectForm.list.push(this.dynamicValidateForm.domains)
 						para.linetime = (!para.linetime || para.linetime == '') ? '' : util.formatDate.format(new Date(para.linetime), 'yyyy-MM-dd');
-						for(let i = 0 ; i < this.banklist.length;i++){
-							for(let j = 0 ; j <para.list[0].length;j++){
-								if(this.banklist[i].id == para.list[0][j].id){
-								console.log(this.banklist[i].bankNameAccount)
-								para.list[0][j].account =  this.banklist[i].bankNameAccount
-								}
-							}
-						}
 						axios.post("https://172.17.9.13:3001/api/finance/collect/save", para).then((res) => {
 							console.log(para, res)
 							this.$message({
@@ -291,7 +288,7 @@
 			checkbanklist(){
 				axios.post("https://172.17.9.13:3001/api/sys/bank/accounts").then((res) => {
 					this.banklist = res.data.obj
-					//console.log(this.banklist)
+					console.log(this.banklist)
 				})
 			}
 			

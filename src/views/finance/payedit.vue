@@ -1,15 +1,19 @@
 <template>
-	<el-col :span="24" class="bgwhite">
-		<!--:rules="rules"-->
-		<el-col :span="24">
-			<el-form :model="collectForm"  ref="collectForm" label-width="100px" class="demo-ruleForm">
+	<el-row>
+		<el-breadcrumb separator="/">
+		  <el-breadcrumb-item :to="{ path: '/paylist' }">付款管理</el-breadcrumb-item>
+		  <el-breadcrumb-item>付款登记</el-breadcrumb-item>
+		</el-breadcrumb>
+		
+		<div class="bg-white margin30 padding30">
+			<el-form :model="collectForm"  ref="collectForm" :rules="rules" label-width="100px" class="demo-ruleForm">
 				<el-form-item label="创建日期">
-					<el-col :span="11">
-						2015-55-55
+					<el-col :span="11" prop="createtime">
+						{{collectForm.createtime}}
 					</el-col>
 				</el-form-item>
 				<el-form-item label="业务类型" prop="businesstypename">
-					<el-select v-model="collectForm.businesstypename" placeholder="选择">
+					<el-select v-model="collectForm.businesstypename" placeholder="选择" >
 						<el-option label="预收款" value="0"></el-option>
 						<el-option label="订单预收款" value="1"></el-option>
 						<el-option label="预付款退款" value="2"></el-option>
@@ -18,17 +22,17 @@
 
 				<el-form-item label="订单编号" required prop="orderno">
 					<el-col :span="10">
-						<el-input placeholder="HP23083098409283098028450" v-model="collectForm.orderno"></el-input>
+						<el-input placeholder="HP23083098409283098028450" @blur="typethis" v-model="collectForm.orderno"></el-input>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="团号" prop="teamno">
+				<el-form-item label="团号" prop="teamno" v-show="isshow">
 					<el-col :span="10" v-model="collectForm.teamno">
 						HP23083098409283098028450
 					</el-col>
 				</el-form-item>
-				<el-form-item label="线路名称" prop="linename">
-					<el-col :span="24" v-model="collectForm.linename">
-						桂林龙脊梯田、义江缘或黄洛瑶寨、訾洲象鼻山、兴坪漓江义江缘或黄洛瑶
+				<el-form-item label="线路名称" prop="linename"  v-show="isshow">
+					<el-col :span="24" >
+						{{collectForm.linename}}
 					</el-col>
 				</el-form-item>
 				<el-form-item label="付款单位" prop="companyname">
@@ -64,7 +68,7 @@
 									</el-col>
 								</td>
 								<td><el-col :span="20">
-										<el-select placeholder="收款账号" name="collectForm.accountid" v-model="domain.accountid">
+										<el-select placeholder="收款账号"  v-model="domain.accountid">
 											<el-option label="账号1" value="0"></el-option>
 											<el-option label="账号2" value="1"></el-option>
 											<el-option label="账号3" value="2"></el-option>
@@ -85,7 +89,7 @@
 								</td>
 								<td>
 									<el-col :span="20">
-										<el-input v-model="collectForm.remarks" placeholder="请输入内容"></el-input>
+										<el-input v-model="domain.remark" placeholder="请输入内容"></el-input>
 									</el-col>
 								</td>
 								<td>
@@ -115,8 +119,9 @@
 				</el-form-item>
 
 			</el-form>
-		</el-col>
-	</el-col>
+		</div>
+		
+	</el-row>
 </template>
 <script>
 	import axios from 'axios';
@@ -124,7 +129,19 @@
 	export default {
 		
 		data() {
+			var validatePass= (rule, value, callback) => {
+	        if (value === '') {
+	        	this.isshow = false
+	          callback(new Error('请输入订单编号'));
+	        } else {
+	          if (this.collectForm.orderno !== '') {
+	            this.isshow = true
+	          }
+	          callback();
+	        }
+	      };
 			return {
+				isshow:false,
 				pickerOptions0: {
 					disabledDate(time) {
 						return time.getTime() < Date.now() - 8.64e7;
@@ -134,21 +151,20 @@
 			          domains: [{
 			            businesstype:'',
 			            accountid:'',
-			            linetime:''
+			            linetime:'',
+			            remark: ''
 			          }]
 			    },
+			    
 				collectForm: {
-					createtime: '',
+					createtime:'',
 					businesstypename: '',
 					orderno: '',
 					teamno: '',
 					list:[],
-					businesstype:'',
-					accountid:'',
-					linetime:'',
 					remarks:'',
-					remarks: '',
-					collectForm: ''
+					linename:'222'
+					
 				},
 				rules: {
 					businesstypename: [{
@@ -157,8 +173,7 @@
 						trigger: 'change'
 					}],
 					orderno:[{
-						required: true,
-						message: '请填写订单编号',
+						validator: validatePass,
 						trigger: 'blur'
 					}],
 					companyname:[{
@@ -178,15 +193,23 @@
 				]
 			}
 		},
+		created(){
+			let mydate = new Date()
+		    let today = mydate.getFullYear()+"-"+(mydate.getMonth()+1)+"-"+mydate.getDate()
+		    this.collectForm.createtime = today
+		  
+		},
 		methods: {
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
+						
 						//this.collectForm.list.conta(this.dynamicValidateForm.domains)
 						let para = Object.assign({}, this.collectForm);
 						this.collectForm.list.push(this.dynamicValidateForm.domains)
 						para.linetime = (!para.linetime || para.linetime == '') ? '' : util.formatDate.format(new Date(para.linetime), 'yyyy-MM-dd');
-						axios.get("http://localhost:8080/static/json/collectlist.json",para).then((res) => {
+						axios.get("https://172.17.9.13:3001/api/finance/pay/save",para).then((res) => {
+							console.log(para,res)
 							this.$message({
 									message: '提交成功',
 									type: 'success'
@@ -201,6 +224,12 @@
 						return false;
 					}
 				});
+			},
+			typethis(){
+				if(this.$refs.collectForm.orderno=""){
+					console.log(1)
+				}
+				this.$refs.collectForm.validateField('orderno');
 			},
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
@@ -220,21 +249,29 @@
 	          businesstype:'',
 	          linetime:''
 	         });
-	      },
+	      	},
 	       removeDomain(item) {
-	        var index = this.dynamicValidateForm.domains.indexOf(item)
-	        if (index !== -1) {
-	          this.dynamicValidateForm.domains.splice(index, 1)
-	        }
-	      }
+		        var index = this.dynamicValidateForm.domains.indexOf(item)
+		        if (index !== -1) {
+		          this.dynamicValidateForm.domains.splice(index, 1)
+		        }
+		      }
+		      
+		      
 		}
 	}
 </script>
 <style scoped lang="scss">
-	.bgwhite {
-		background: white;
+	
+		.bg-white{background: white;}
+		.padding30{padding: 20px;}
+		.margin30{margin:30px;}
 		.el-form-item {
 			text-align: left;
+		}
+		.el-breadcrumb{
+			padding: 20px 40px;
+			background: white;
 		}
 		.collecttable {
 			border: 1px solid #dee5ec;
@@ -251,5 +288,5 @@
 			}
 		}
 		
-	}
+	
 </style>
