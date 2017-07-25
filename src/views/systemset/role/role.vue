@@ -86,7 +86,7 @@
      roleId: '',
      roleName: '',
    }
-   
+
    */
   import axios from 'axios';
   export default {
@@ -136,7 +136,7 @@
     },
     methods:{
       deleteRow(index, rows) {
-        rows.splice(index, 1);
+        this.roleList.splice(index, 1);
         this.operation.type='delete';
         this.operation.roleID=rows.roleId;
         this.getList(0);
