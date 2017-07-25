@@ -162,16 +162,21 @@
 		},
 		created(){
 			this.getlist()
+			
 		},
 		methods:{
 			getlist(){
 				this.pageset.pageIndex = this.currentPage-1
 		    	this.pageset.pageSize = this.pagesize
 		    	let page = this.pageset
+		    	
 		    	axios.post("https://172.17.9.13:3001/api/sys/bank/list",page).then((res) => {
 					this.banklist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
-				})
+					console.log(res)
+				}).catch(function(err){
+				        console.log(33);
+				    })
 			},
 			handleSizeChange(val) {
 		        console.log(`每页 ${val} 条`);
@@ -233,11 +238,12 @@
 		      	   this.updatestatus.isEnable = i
 		      	   this.updatestatus.id = id
 		      	   let status =   this.updatestatus
-		      		//console.log(status)
 		      		axios.post('https://172.17.9.13:3001/api/sys/bank/status',status).then((res) =>{
-		      			console.log(status)
-		      			console.log(res)
-		      			this.$message("状态改变成功！")
+		      			this.$notify({
+				          title: '成功',
+				          message: '状态改变成功',
+				          type: 'success'
+				        });
 		      			this.getlist()
 		      		})
 		      }

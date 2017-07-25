@@ -16,14 +16,55 @@
 			</el-menu>
 			</el-col>
 		<el-col :span="12">
-		<el-button class="defaultbutton" >新增银行账户</el-button>
+		<el-button class="defaultbutton" >新增部门</el-button>
 		</el-col>
 		</el-row>
 		</header>
-		<section class="bg-white margin30 padding30">
-			<el-tree :data="data2" :props="defaultProps" show-checkbox="" node-key="id" default-expand-all :expand-on-click-node="false">
-			</el-tree>
-
+		<section class="bg-white margin30 ">
+			<!--<el-tree :data="data2" :props="defaultProps" show-checkbox="" node-key="id" default-expand-all :expand-on-click-node="false">
+			</el-tree>-->
+			<div class="title">
+				<ul>
+					<li>部门名称</li>
+					<li>人数</li>
+					<li>添加下级</li>
+					<li>操作</li>
+				</ul>
+			</div>
+			<div class="list">
+				<div class="firstlist">
+					<ul>
+						<li>张若昀</li>
+						<li>2</li>
+						<li>+</li>
+						<li>编辑删除</li>
+					</ul>
+				</div>
+				<div class="secondlist">
+					<ul>
+						<li>张若昀</li>
+						<li>2</li>
+						<li>+</li>
+						<li>编辑删除</li>
+					</ul>
+				</div>
+				<div class="threelist">
+					<ul>
+						<li>张若昀</li>
+						<li>2</li>
+						<li>+</li>
+						<li>编辑删除</li>
+					</ul>
+				</div>
+				<div class="fourlist">
+					<ul>
+						<li>张若昀</li>
+						<li>2</li>
+						<li>+</li>
+						<li>编辑删除</li>
+					</ul>
+				</div>
+			</div>
 		</section>
 	</div>
 </template>
@@ -140,4 +181,34 @@ let id = 1000;
 			color: #333;
 		}
 	}
+	.title{padding: 0 20px; height: 40px; line-height: 40px;border-bottom: 1px solid #bfcbda; background: #f5f7f9;
+		ul{
+			width: 100%;
+			li{float: left;
+			font-size: 12px;
+			
+				}
+			:first-child{width: 50%; }
+			:nth-child(2){width: 20%;}
+			:nth-child(3){width: 20%;}
+			:last-child{width: 10%;}
+		}
+		
+	}
+	.list{padding: 0 20px; background: #fff;height: 40px;
+		ul{
+			width: 100%; height: 40px;
+				li{float: left;
+				font-size: 12px;
+				border-bottom: 1px solid #dee5ec;
+				line-height: 40px;
+				}
+				:first-child{width: 50%;}
+				:nth-child(2){width: 20%;}
+				:nth-child(3){width: 20%;}
+				:last-child{width: 10%;}
+			}
+		
+	}
+	
 </style>
