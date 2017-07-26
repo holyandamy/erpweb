@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div v-if="modeType == 'role'">
     <header>
       <el-row>
         <el-col :span="12">
@@ -8,7 +9,9 @@
             <el-breadcrumb-item>角色管理</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
-
+        <el-col :span="12">
+          <el-button class="defaultbutton" @click="setMode('addrole')">新增角色</el-button>
+        </el-col>
       </el-row>
     </header>
     <section class="padding30">
@@ -41,7 +44,7 @@
       </div>
       <!--编辑-->
       <el-dialog title="编辑" size="tiny"  v-model="showFormVisible" :close-on-click-modal="false">
-        <el-form :model="editRole" label-width="80px" ref="editbank" style="text-align: left;">
+        <el-form :model="editRole" label-width="80px" ref="editRole" style="text-align: left;">
           <el-form-item label="角色ID" prop="roleId">
             <el-input v-model="editRole.roleId"></el-input>
           </el-form-item>
@@ -51,16 +54,14 @@
 
         </el-form>
         <div slot="footer" class="dialog-footer">
-
           <el-button type="primary" @click="saveEdit('editRole')">保存</el-button>
           <el-button @click.native="showFormVisible = false">取消</el-button>
         </div>
       </el-dialog>
-
-
     </section>
   </div>
-
+    <AddRole v-else  v-on:setMode="setMode" :addRoleBackData="addRoleBackData"></AddRole>
+  </div>
 </template>
 
 <script>
@@ -89,9 +90,14 @@
 
    */
   import axios from 'axios';
+  import AddRole from './AddRole';
   export default {
+    components: {
+      AddRole, // add role
+    },
     data() {
       return {
+        modeType:'role',
         roleList: [{
           addTime: '2016-05-03',
           roleName: '财务',
@@ -111,7 +117,6 @@
           roleId: '012000',
         }],
         activeIndex: "2",
-        banklist: [],
         total:0,
         currentPage:1,
         pagesize:15,
@@ -132,9 +137,15 @@
       }
     },
     created(){
-      this.getList(1)
+      this.getList(0)
     },
     methods:{
+      setMode(type){
+        this.modeType=type;
+      },
+      addRoleBackData(backData){
+        this.roleList=backData;
+      },
       deleteRow(index, rows) {
         this.roleList.splice(index, 1);
         this.operation.type='delete';
