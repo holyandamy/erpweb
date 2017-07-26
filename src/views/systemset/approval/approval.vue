@@ -13,14 +13,24 @@
 		</el-col>
 		</el-row>
 		</header>
-		<section class="padding30">
 		
+		<section class="padding30">
+		<el-form :inline="true" :model="formInline" class="demo-form-inline" style="text-align: left;">
+		  
+		  <el-form-item label="被审批人">
+		    <el-input v-model="formInline.user" placeholder="被审批人"></el-input>
+		  </el-form-item><el-form-item>
+		    <el-button type="primary" @click="onSubmit">查询</el-button>
+		  </el-form-item>
+		</el-form>
 		<el-table :data="banklist" style="text-align: left; font-size: 12px;">
-			<el-table-column prop="bankName" label="开户行">
+			<el-table-column prop="bankName" label="被审批人">
 			</el-table-column>
-			<el-table-column prop="name" label="姓名">
+			<el-table-column prop="name" label="审批功能">
 			</el-table-column>
-			<el-table-column prop="account" label="账号">
+			<el-table-column prop="account" label="产品分类">
+			</el-table-column>
+			<el-table-column prop="status" label="审批流程" >
 			</el-table-column>
 			<el-table-column prop="status" label="状态" >
 			</el-table-column>
@@ -67,6 +77,7 @@
 		
 		
 	</section>
+
 </div>
 	
 </template>
@@ -76,6 +87,10 @@
 	export default {
 		data() {
 			return {
+				formInline: {
+		          user: '',
+		          region: ''
+		     	},
 				activeIndex: "2",
 				banklist: [],
 				total:0,
@@ -110,13 +125,17 @@
 			this.getlist()
 		},
 		methods:{
+			onSubmit() {
+		        console.log('submit!');
+		     },
 			getlist(){
 				this.pageset.pageIndex = this.currentPage-1
 		    	this.pageset.pageSize = this.pagesize
 		    	let page = this.pageset
-		    	axios.post("https://172.17.9.13:3001/api/sys/bank/list",page).then((res) => {
-					this.banklist = res.data.obj.datas
-					this.total = Number(res.data.obj.total)
+		    	axios.post("https://172.17.9.13:3001/api//sys/approve/list",page).then((res) => {
+					//this.banklist = res.data.obj.datas
+					//this.total = Number(res.data.obj.total)
+					console.log(res)
 				})
 			},
 			handleSizeChange(val) {
@@ -142,7 +161,7 @@
 		            	this.addBank.isEnable = 1
 		            }
 		            let para = this.addBank
-		            axios.post('https://172.17.9.13:3001/api/sys/bank/save',para).then((res) => {
+		            axios.post('https://172.17.9.13:3001/api/sys/approve/save',para).then((res) => {
 		            	this.addbankuser = false
 		            	this.$message('保存成功！');
 		            	this.getlist()

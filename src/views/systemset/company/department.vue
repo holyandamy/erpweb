@@ -34,95 +34,50 @@
 			<div class="list">
 				<div class="firstlist">
 					<ul>
-						<li>张若昀</li>
-						<li>2</li>
-						<li>+</li>
-						<li>编辑删除</li>
+						<li>
+							<div class="name">张若昀</div>
+							<div class="presonnum">4</div>
+							<div>+</div>
+							<div><el-button type="text">编辑</el-button><el-button type="text">删除</el-button></div>
+						</li>
+						
 					</ul>
-				</div>
-				<div class="secondlist">
+					<div class="secondlist">
 					<ul>
-						<li>张若昀</li>
-						<li>2</li>
-						<li>+</li>
-						<li>编辑删除</li>
+						
 					</ul>
+					</div>
 				</div>
-				<div class="threelist">
-					<ul>
-						<li>张若昀</li>
-						<li>2</li>
-						<li>+</li>
-						<li>编辑删除</li>
-					</ul>
-				</div>
-				<div class="fourlist">
-					<ul>
-						<li>张若昀</li>
-						<li>2</li>
-						<li>+</li>
-						<li>编辑删除</li>
-					</ul>
-				</div>
+				
 			</div>
 		</section>
 	</div>
 </template>
 
 <script>
-let id = 1000;
+import axios from 'axios';
 	export default {
 		data() {
 			return {
 				activeIndex: "1",
-				data2: [{
-					id: 1,
-					label: '一级 1',
-					children: [{
-						id: 4,
-						label: '二级 1-1',
-						children: [{
-							id: 9,
-							label: '三级 1-1-1'
-						}, {
-							id: 10,
-							label: '三级 1-1-2'
-						}]
-					}]
-				}, {
-					id: 2,
-					label: '一级 2',
-					children: [{
-						id: 5,
-						label: '二级 2-1'
-					}, {
-						id: 6,
-						label: '二级 2-2'
-					}]
-				}, {
-					id: 3,
-					label: '一级 3',
-					children: [{
-						id: 7,
-						label: '二级 3-1'
-					}, {
-						id: 8,
-						label: '二级 3-2'
-					}]
-				}],
 				defaultProps: {
 					children: 'children',
 					label: 'label'
 				}
 			}
 			},
+			created(){
+				this.getuser()
+			},
 			methods:{
-				 append(store,data) {
-			        store.append({ id: id++, label: 'testtest', children: [] }, data);
-			      },
-				 remove(store,data) {
-			        store.remove(data);
-			      }
+				getuser(){
+					let para = {token:''}
+					axios.post("https://172.17.9.13:3001/api/sys/dept/list",para).then((res) => {
+						console.log(res)
+					}).catch((res)=>{
+						console.log(res)
+					})
+				}
 			}
 		
 	}
@@ -195,18 +150,22 @@ let id = 1000;
 		}
 		
 	}
-	.list{padding: 0 20px; background: #fff;height: 40px;
-		ul{
-			width: 100%; height: 40px;
-				li{float: left;
+	.list{ background: #fff;height: 40px;
+		ul{background: #fff;
+			li{height: 40px;
+				display: block;
 				font-size: 12px;
 				border-bottom: 1px solid #dee5ec;
 				line-height: 40px;
+				div{
+					float: left;
 				}
-				:first-child{width: 50%;}
+				:first-child{width: 49%; padding-left: 1%;}
 				:nth-child(2){width: 20%;}
 				:nth-child(3){width: 20%;}
 				:last-child{width: 10%;}
+				}
+				
 			}
 		
 	}
