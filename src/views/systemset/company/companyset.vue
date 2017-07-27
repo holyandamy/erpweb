@@ -1,18 +1,6 @@
 <template>
 	<div>
-		<header>
-			<el-menu class="el-menu-demo" :default-active="activeIndex" mode="horizontal" style="background: #fff;">
-				<el-menu-item index="1">
-					<router-link :to="'/cmanagement/department'">部门管理</router-link>
-				</el-menu-item>
-				<el-menu-item index="2">
-					<router-link :to="'/cmanagement/bankaccount'">银行账号设置</router-link>
-				</el-menu-item>
-				<el-menu-item index="3">
-					<router-link :to="'/cmanagement/companyset'">公司信息设置</router-link>
-				</el-menu-item>
-			</el-menu>
-		</header>
+	
 		<section class="bg-white margin30 padding30">
 			<el-col :span="15">
 				<el-form :model="companyForm" :rules="rules" ref="companyForm" label-width="100px" class="demo-ruleForm">
@@ -99,9 +87,7 @@
 	import axios from 'axios';
 	export default {
 		data() {
-			
-
-		//验证手机号码
+			//验证手机号码
 			var checkmobile = (rule, value, callback) => {
 				if(!value) {
 					return callback(new Error('手机号码不能为空'));
@@ -222,7 +208,7 @@
 						})
 					} else {
 						 this.$message.error('提交错误！');
-						return false;
+						 return false;
 					}
 				});
 			},
@@ -245,6 +231,8 @@
 				axios.post("https://172.17.9.13:3001/api/sys/province/list",para).then((res) => {
 							this.province = res.data.obj
 							
+				}).catch(function(err) {
+					console.log("连接错误")
 				})
 			},
 			//获取市列表
@@ -252,6 +240,8 @@
 				axios.post("https://172.17.9.13:3001/api/sys/city/list",pro).then((res) => {
 							this.city = res.data.obj
 							
+				}).catch(function(err) {
+					console.log("连接错误")
 				})
 			},
 			//获取区列表
@@ -259,6 +249,8 @@
 				axios.post("https://172.17.9.13:3001/api/sys/district/list",city).then((res) => {
 								this.district = res.data.obj
 								
+				}).catch(function(err) {
+					console.log("连接错误")
 				})
 			},
 			//选择城市

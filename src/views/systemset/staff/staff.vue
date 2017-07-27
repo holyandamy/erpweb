@@ -1,5 +1,6 @@
 <template>
 <div>
+<div v-if="modetype == 'staff'">
 <header>
 	<el-row>
 			<el-col :span="12">
@@ -9,7 +10,7 @@
 			</el-breadcrumb>
 		</el-col>
 		<el-col :span="12">
-		<el-button class="defaultbutton"><router-link :to="'/staff/addstaff'">新增员工</router-link></el-button>
+		<el-button class="defaultbutton" @click="setMode('addstaff')">新增员工</el-button>
 		</el-col>
 		</el-row>
 		</header>
@@ -73,16 +74,22 @@
 		
 		
 	</section>
-
+</div>
+<AddStaff v-else  v-on:setMode="setMode" ></AddStaff>
 </div>
 	
 </template>
 
 <script>
+import AddStaff from './addstaff'
 	import axios from 'axios';
 	export default {
+	components:{
+		AddStaff
+	},
 		data() {
 			return {
+				modetype:'staff',
 				formInline: {
 		          user: '',
 		          region: ''
@@ -122,6 +129,9 @@
 			this.getlist()
 		},
 		methods:{
+			setMode(type){
+				this.modetype = type
+			},
 			onSubmit() {
 		        console.log('submit!');
 		     },

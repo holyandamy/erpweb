@@ -1,25 +1,6 @@
 <template>
 	<div>
-		<header>
-			<el-row>
-			<el-col :span="12">
-			<el-menu class="el-menu-demo" :default-active="activeIndex" mode="horizontal" style="background: #fff;">
-				<el-menu-item index="1">
-					<router-link :to="'/cmanagement/department'">部门管理</router-link>
-				</el-menu-item>
-				<el-menu-item index="2">
-					<router-link :to="'/cmanagement/bankaccount'">银行账号设置</router-link>
-				</el-menu-item>
-				<el-menu-item index="3">
-					<router-link :to="'/cmanagement/companyset'">公司信息设置</router-link>
-				</el-menu-item>
-			</el-menu>
-			</el-col>
-		<el-col :span="12">
-		<el-button class="defaultbutton" >新增部门</el-button>
-		</el-col>
-		</el-row>
-		</header>
+		
 		<section class="bg-white margin30 ">
 			<!--<el-tree :data="data2" :props="defaultProps" show-checkbox="" node-key="id" default-expand-all :expand-on-click-node="false">
 			</el-tree>-->

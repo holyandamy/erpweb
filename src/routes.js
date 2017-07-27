@@ -57,8 +57,7 @@ let routes = [
         children:[
         	{path: '/collectlist', component: Collectlist, name: '收款管理',},
         	{path: '/paylist', component: Paylist, name: '付款管理' },
-        	{path: '/collectedit', component: Collectedit, name: '收款登记',hidden:true},
-            {path: '/payedit', component: Collectedit, name: '付款登记',hidden:true}
+        	
         ]
     },
     {
@@ -72,29 +71,17 @@ let routes = [
         component: Home,
         name: '系统设置',
         children: [
-          	{path: '/cmanagement/companyset', component: Companyset, name: '公司管理'},
-          	{path: '/cmanagement/department', component: Department, name: '部门管理',hidden:true},
-          	{path: '/cmanagement/bankaccount', component: Bankaccount, name: '银行账号设置',hidden:true},
-            {path: '/cmanagement/companyset', component: Companyset, name: '公司信息设置',hidden:true},
+        	
+          	{path: '/menu', component: Cmanagement, name: '公司管理'},
+          
             {path: '/approval', component: Approval, name: '审批配置'},
-            {path: '/approval/addapproval', component: Addapproval, name: '新增审批',hidden:true},
-            {path: '/role', component: Role, name: '角色管理'},
-            {path: '/role/addrole', component: Addrole, name: '新增角色',hidden:true},
-            {path: '/staff', component: Staff, name: '员工管理'},
-            {path: '/staff/addstaff', component: Addstaff, name: '新增员工',hidden:true},
-            {path: '/log', component: Log, name: '操作日志'}
-//        		children:[
-//        		{path: '/cmanagement/department', component: Department, name: '部门管理'},
-//        		{path: '/cmanagement/bankaccount', component: Bankaccount, name: '银行账号设置'},
-//        		{path: '/cmanagement/companyset', component: Companyset, name: '公司信息设置'}
-//        		]
-          	
-//          {path: '/aconfiguration', component: Aconfiguration, name: '审批配置'},
-//          {path: '/user', component: User, name: '角色管理' },
-//          {path: '/staff', component: Staff, name: '员工管理'},
-//          {path: '/log', component: Log, name: '操作日志' },
-//          {path: '/picture', component: Picture, name: '图片库'}
            
+            {path: '/role', component: Role, name: '角色管理'},
+          
+            {path: '/staff', component: Staff, name: '员工管理'},
+           
+            {path: '/log', component: Log, name: '操作日志'}
+      
         ]
         
     },

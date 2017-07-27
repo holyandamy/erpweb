@@ -5,7 +5,7 @@
 				<el-col :span="12">
 					<el-breadcrumb separator="/">
 						<el-breadcrumb-item>系统设置</el-breadcrumb-item>
-						<el-breadcrumb-item>审批配置</el-breadcrumb-item>
+						<el-breadcrumb-item><span  @click="handleHide()">审批配置</span></el-breadcrumb-item>
 						<el-breadcrumb-item>新增审批</el-breadcrumb-item>
 					</el-breadcrumb>
 				</el-col>
@@ -14,7 +14,6 @@
 		</header>
 		<section class="padding30">
 			<el-row class="bg_white">
-
 				<el-col :span="8">
 					<el-form ref="appform" :model="appform" :rules="rules" label-width="110px" style="text-align: left;">
 						<el-form-item label="被审批人员"  prop='executorid'>
@@ -51,8 +50,8 @@
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label-width="80px">
-							<el-button type="primary" @click="onSubmit('appform')">保存</el-button>
-							<el-button @click="addappqx">取消</el-button>
+							<el-button  size="large" type="primary" @click="onSubmit('appform')">保存</el-button>
+							<el-button  size="large" @click="handleHide">取消</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -122,7 +121,7 @@
 					          message: '添加成功！',
 					          type: 'success'
 					        });
-					        this.$router.push({path: '/approval'});
+					        this.handleHide()
 						})
 		          } else {
 		            this.$notify.error({
@@ -135,9 +134,7 @@
 				
 				
 			},
-			addappqx(){
-				this.$router.push({path: '/approval'});
-			},
+			
 			//被审批人员选择
 			handleCheckAllChange(event) {
 				this.checkedCities = event.target.checked ? cityOptions : [];
@@ -166,6 +163,9 @@
 				this.checkAllapp = checkedCount === this.approvaleds.length;
 				this.isIndeterminate = checkedCount > 0 && checkedCount < this.approvaleds.length;
 			},
+			handleHide: function() {
+				this.$emit('setMode', 'approval');
+	     	 }
 		}
 	}
 </script>

@@ -1,5 +1,6 @@
 <template>
 <div>
+	<div v-if="modeType == 'approval'">
 <header>
 	<el-row>
 			<el-col :span="12">
@@ -9,7 +10,7 @@
 			</el-breadcrumb>
 		</el-col>
 		<el-col :span="12">
-		<el-button class="defaultbutton"><router-link :to="'/approval/addapproval'">新增审批</router-link></el-button>
+		<el-button class="defaultbutton" @click="setMode('addapproval')">新增审批</el-button>
 		</el-col>
 		</el-row>
 		</header>
@@ -77,16 +78,23 @@
 		
 		
 	</section>
-
+	</div>
+<AppRoval v-else @setMode="setMode"></AppRoval>
 </div>
 	
 </template>
 
 <script>
 	import axios from 'axios';
+	import AppRoval from './addapproval.vue'
+	
 	export default {
+		components: {
+	      AppRoval, // add role
+	    },
 		data() {
 			return {
+				modeType:'approval',
 				formInline: {
 		          user: '',
 		          region: ''
@@ -125,6 +133,9 @@
 			this.getlist()
 		},
 		methods:{
+			setMode(type){
+				this.modeType = type;
+			},
 			onSubmit() {
 		        console.log('submit!');
 		     },
