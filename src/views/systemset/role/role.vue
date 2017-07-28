@@ -17,16 +17,16 @@
     <section class="padding30">
 
       <el-table :data="roleList" style="text-align: left; font-size: 12px;">
-        <el-table-column prop="roleId" label="角色ID">
+        <el-table-column prop="id" label="角色ID">
         </el-table-column>
-        <el-table-column prop="roleName" label="角色名称">
+        <el-table-column prop="rolename" label="角色名称">
         </el-table-column>
-        <el-table-column prop="addTime" label="添加时间">
+        <el-table-column prop="createtime" label="添加时间">
         </el-table-column>
 
         <el-table-column  label="操作">
           <template scope="scope">
-            <el-button @click="handleShow(scope.$index, scope.row)" type="text" size="small">编辑</el-button>
+            <el-button @click="editorFn(scope.$index, scope.row)" type="text" size="small">编辑</el-button>
             <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -42,53 +42,13 @@
         </el-pagination>
 
       </div>
-      <!--编辑-->
-      <el-dialog title="编辑" size="tiny"  v-model="showFormVisible" :close-on-click-modal="false">
-        <el-form :model="editRole" label-width="80px" ref="editRole" style="text-align: left;">
-          <el-form-item label="角色ID" prop="roleId">
-            <el-input v-model="editRole.roleId"></el-input>
-          </el-form-item>
-          <el-form-item label="角色名称" prop="roleName">
-            <el-input v-model="editRole.roleName"></el-input>
-          </el-form-item>
-
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="saveEdit('editRole')">保存</el-button>
-          <el-button @click.native="showFormVisible = false">取消</el-button>
-        </div>
-      </el-dialog>
     </section>
   </div>
-    <AddRole v-else  v-on:setMode="setMode" :addRoleBackData="addRoleBackData"></AddRole>
+    <AddRole v-else  v-on:setMode="setMode" :operationType="operationType"></AddRole>
   </div>
 </template>
 
 <script>
-  /*
-  2017-7-25 by aklliy.mou
-  example:
-   get data style:
-   roleList: [{
-   addTime: '2016-05-03',
-   roleName: '财务',
-   province: '上海',
-   roleId: '012000',
-   },
-   .....
-   ]
-   delete operation post data:
-   operation:{
-     type:'delete',
-     roleID:''
-   },
-   editor  operation post data:
-   editRole: {
-     roleId: '',
-     roleName: '',
-   }
-
-   */
   import axios from 'axios';
   import AddRole from './AddRole';
   export default {
@@ -98,37 +58,18 @@
     data() {
       return {
         modeType:'role',
-        roleList: [{
-          addTime: '2016-05-03',
-          roleName: '财务',
-          province: '上海',
-          roleId: '012000',
-        },
-        {
-          addTime: '2016-05-03',
-          roleName: '财务',
-          province: '上海',
-          roleId: '012000',
-        },
-        {
-          addTime: '2016-05-03',
-          roleName: '财务',
-          province: '上海',
-          roleId: '012000',
-        }],
+        roleList: [],
         activeIndex: "2",
         total:0,
-        currentPage:1,
+        token:123,
+        currentPage:0,
         pagesize:15,
         showFormVisible:false,
-        isenable:false,
+        operationType:{type:'add',id:''},
         pageset:{
-          pageIndex:'',
+          token:'ssssss',
+          pageIndex:0,
           pageSize:''
-        },
-        operation:{
-          type:'',
-          roleID:''
         },
         editRole: {
           roleId: '',
@@ -140,26 +81,47 @@
       this.getList(0)
     },
     methods:{
-      setMode(type){
-        this.modeType=type;
-      },
-      addRoleBackData(backData){
-        this.roleList=backData;
-      },
-      deleteRow(index, rows) {
-        this.roleList.splice(index, 1);
-        this.operation.type='delete';
-        this.operation.roleID=rows.roleId;
-        this.getList(0);
+      setMode(type,option){
+          this.modeType=type;
+          if(type=='role') {
+            if (option == "new") {
+             // this.currentPage = ((this.total + 1) / this.pagesize).floor;
+              this.getList(0)
+            }
+            else {
+              this.getList(0)
+            }
+          }
 
+      },
+      editorFn(index, rows){
+          this.operationType.type='edit';
+          this.operationType.id=rows.id;
+          this.modeType='addRole';
+
+      },
+      deleteRow(index, rows){
+        this.roleList.splice(index, 1);
+        axios.post('https://172.17.9.13:3001/api/sys/role/del',{token:1111,id:rows.id} ).then((res) => {
+          if(res.data.error){
+            this.$message.error(res.data.massage);
+          }
+          else {
+            this.getList(0)
+          }
+        })
       },
       getList(length,massage){
         this.pageset.pageIndex = this.currentPage-length;
         this.pageset.pageSize = this.pagesize;
         let page = this.pageset;
+        console.log(page)
         axios.post("https://172.17.9.13:3001/api/sys/role/list",page).then((res) => {
-          this.roleList = res.data.obj.datas;
           this.total = Number(res.data.obj.total);
+          console.log()
+          this.roleList =Object.assign([],res.data.obj.datas);
+          console.log(res.data.obj.datas)
+          //console.log(this.roleList)
           arguments.length>1?this.$message(massage):'';
         })
       },
@@ -169,28 +131,6 @@
       },
       handleCurrentChange(val) {
         this.getList(1)
-      },
-
-      handleShow: function(index, row) {
-        this.showFormVisible = true;
-        this.editRole = Object.assign({}, row);
-      },
-
-      //editor save
-      saveEdit(formName){
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            axios.post('https://172.17.9.13:3001/api/sys/role/update',this.editRole).then((res) => {
-              this.showFormVisible = false
-              this.$message('保存成功！');
-              this.getList(0)
-            })
-          } else {
-            this.$message.error('提交错误！');
-            return false;
-          }
-        });
-
       }
     }
   }

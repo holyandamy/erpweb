@@ -22,6 +22,7 @@ import Addstaff from './views/systemset/staff/addstaff.vue'  //新增员工
 //操作日志
 import Log from './views/systemset/log/log.vue'  //新增员工
 //图片库
+import Role from './views/systemset/role/role.vue'  //角色管理
 
 
 let routes = [
@@ -42,13 +43,13 @@ let routes = [
         path: '/',
         component: Home,
         name: '产品管理'
-        
+
     },
     {
         path: '/',
         component: Home,
         name: '订单管理',
-        
+
     },
     {
         path: '/',
@@ -57,33 +58,33 @@ let routes = [
         children:[
         	{path: '/collectlist', component: Collectlist, name: '收款管理',},
         	{path: '/paylist', component: Paylist, name: '付款管理' },
-        	
+
         ]
     },
     {
         path: '/',
         component: Home,
         name: '报表管理',
-        
+
     },
     {
         path: '/',
         component: Home,
         name: '系统设置',
         children: [
-        	
+
           	{path: '/menu', component: Cmanagement, name: '公司管理'},
-          
+
             {path: '/approval', component: Approval, name: '审批配置'},
-           
-//          {path: '/role', component: Role, name: '角色管理'},
-          
+
+            {path: '/role', component: Role, name: '角色管理'},
+
             {path: '/staff', component: Staff, name: '员工管理'},
-           
+
             {path: '/log', component: Log, name: '操作日志'}
-      
+
         ]
-        
+
     },
 ];
 

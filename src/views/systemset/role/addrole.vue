@@ -6,7 +6,7 @@
           <el-breadcrumb separator="/">
             <el-breadcrumb-item>系统设置</el-breadcrumb-item>
             <el-breadcrumb-item  ><span v-on:click="handleHide()">角色管理</span></el-breadcrumb-item>
-            <el-breadcrumb-item>新增角色</el-breadcrumb-item>
+            <el-breadcrumb-item>{{optionName}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
       </el-row>
@@ -15,41 +15,32 @@
       <div class="role-name"><label><span style="color: red">*</span>角色名称</label>
         <el-input v-model="roleName" class="role-name-input" placeholder="请输入内容" ></el-input>
       </div>
-      <div class="add-role-item first">
-        <div class="left"><el-checkbox v-model="lineManage.status">线路管理</el-checkbox></div>
-        <div class="right">
-          <el-checkbox  :disabled="!lineManage.status" v-model="lineManage.editor" v-on:click="handleCheck" >备选项</el-checkbox>
-          <el-checkbox  :disabled="!lineManage.status"  v-model="lineManage.book">备选项备选项</el-checkbox>
+      <div class="bigItem" v-for="value in roleMap.childs">
+        <div class="bigTitle"><el-checkbox v-model="value.status" v-on:change="handleCheck(value)" >{{value.authname}}</el-checkbox></div>
+        <div class="add-role-item " v-for="sValue in value.childs">
+          <div class="left"><el-checkbox :disabled="!value.status"  v-model="sValue.status" v-on:change="handleCheck(sValue)">{{sValue.authname}}</el-checkbox></div>
+          <div class="right" >
+              <div v-for="tValue in sValue.childs" style="float: left">
+                <el-checkbox  :disabled="!value.status || !sValue.status" v-model="tValue.status" >{{tValue.authname}}</el-checkbox>
+              </div>
+          </div>
         </div>
-       </div>
-      <div class="add-role-item">
-        <div class="left"><el-checkbox v-model="orderManage.status">订单管理</el-checkbox></div>
-        <div class="right">
-          <el-checkbox :disabled="!orderManage.status" v-model="orderManage.editor">备选项</el-checkbox>
-          <el-checkbox :disabled="!orderManage.status" v-model="orderManage.book">备选项备选项</el-checkbox>
-        </div>
+
       </div>
-      <div class="add-role-item">
-        <div class="left"><el-checkbox v-model="financeManage.status">财务管理</el-checkbox></div>
-        <div class="right">
-          <el-checkbox :disabled="!financeManage.status" v-model="financeManage.editor">备选项</el-checkbox>
-          <el-checkbox  :disabled="!financeManage.status" v-model="financeManage.book">备选项备选项</el-checkbox>
-        </div>
-      </div>
-      <div class="add-role-item">
-        <div class="left"><el-checkbox v-model="customerManage.status">客服管理</el-checkbox></div>
-        <div class="right">
-          <el-checkbox :disabled="!customerManage.status" v-model="customerManage.editor">备选项</el-checkbox>
-          <el-checkbox :disabled="!customerManage.status" v-model="customerManage.book">备选项备选项</el-checkbox>
-        </div>
-      </div>
-      <div class="add-role-item">
-        <div class="left"><el-checkbox v-model="systemManage.status">系统管理</el-checkbox></div>
-        <div class="right">
-          <el-checkbox :disabled="!systemManage.status" v-model="systemManage.editor">备选项</el-checkbox>
-          <el-checkbox :disabled="!systemManage.status" v-model="systemManage.book">备选项备选项</el-checkbox>
-        </div>
-      </div>
+
+      <!--
+      <div class="bigItem">
+          <div class="bigTitle"><el-checkbox v-model="lineManage.status" v-on:change="handleCheck('lineManage')" >线路管理</el-checkbox></div>
+          <div class="add-role-item ">
+            <div class="left"><el-checkbox :disabled="!lineManage.status"  v-model="lineManage.editor.status">线路编辑</el-checkbox></div>
+            <div class="right">
+              <el-checkbox  :disabled="!lineManage.status || !lineManage.editor.status" v-model="lineManage.editor.china" >国内线路</el-checkbox>
+              <el-checkbox  :disabled="!lineManage.status"  v-model="lineManage.editor.international">国际线路</el-checkbox>
+            </div>
+          </div>
+      </div>-->
+
+
       <div class="remark">
         <label class=" remark-lable">备注  </label>
 
@@ -72,96 +63,197 @@
 
 <script>
 
+
   import axios from 'axios';
   export default {
     props: {
+      editData:{},
     },
     data() {
 
       return {
         roleName: "test",
-        lineManage:
-          {
-              status:true,
-              editor:false,
-              book:true
-          },
-        orderManage:{
-          status:true,
-          editor:true,
-          book:true
-        },
-        financeManage:{
-          status:true,
-          editor:true,
-          book:true
-        },
-        chartManage:{
-          status:true,
-          editor:true,
-          book:true
-        },
-        customerManage:{
-          status:true,
-          editor:true,
-          book:true
-        },
-        systemManage:{
-          status:true,
-          editor:true,
-          book:true
-        },
-        remarkInfo:'ssss'
+        roleMap:{},
+        remarkInfo:'',
+        checkedIdList:'',
+        optionName:'新增角色'
       }
     },
 
+    created: function () {
+      axios.post('https://172.17.9.13:3001/api/sys/auth/list',{token:11111}).then((res) => {
+        if(res.data.error){
+          this.$message.error(res.data.massage);
+        }
+        else {
+          let resData={};
+          resData.childs=res.data.obj;
+          this.transformDataFn(resData,true);
+
+          this.roleMap = Object.assign({}, resData);
+          if( this.$parent.operationType.type=='edit'){
+            this.optionName="编辑角色"
+            let data={
+                token:11111,
+                id:this.$parent.operationType.id,
+            }
+
+            axios.post('https://172.17.9.13:3001/api/sys/role/detail',data).then((res) => {
+              console.log(res)
+              if(res.data.error){
+                this.$message.error(res.data.massage);
+              }
+              else {
+                  this.transformDataFn(this.roleMap,false);
+                /*
+                 this.roleMap = Object.assign({}, tempData);
+                 if(this.$parent.operationType.type=='edit'){
+                 this.transformDataFn(tempData,false);
+                 this.transformDataFn(tempData2,true);
+                 this.deepCopyStatus(tempData,tempData2)
+                 console.log(tempData)
+                 //console.log(this.completeAssign({},tempData,tempData2))
+                 //console.log(tempData)
+                 //console.log(tempData2)
+                 }*/
+              }
+            })
+          }
+        }
+      })
+    },
     computed: {
       modalOpen(){
         return false;
       }
     },
     methods:{
-
-      handleHide: function() {
-        this.$emit('setMode', 'role');
-      },
-      handleCheck:function (){
-          if(!this.lineManage.status){
-            this.lineManage.status=false
-            return false
+        deepCopyStatus:function (target,sources) {
+          var newData=this.getData(sources).split(',')
+          newData.pop();
+          console.log(newData)
+          newData.map((value)=>{
+            target.child.forEach(singleChild=>{
+              console.log(value)
+              this.changeStatus(singleChild,value)
+              }
+            )
+          })
+        },
+        changeStatus:function (singleChild,key) {
+          if(singleChild.id == key){
+            singleChild.status=true;
+            return  true
           }
+          if(singleChild.child){
+            singleChild.child.forEach(newChild=>{
+              this.changeStatus(newChild,key);
+            })
+          }
+          return false
 
+        },
+
+      // This is an assign function that copies full descriptors
+       completeAssign:function(target, ...sources) {
+          sources.forEach(source => {
+            let descriptors = Object.keys(source).reduce((descriptors, key) => {
+              descriptors[key] = Object.getOwnPropertyDescriptor(source, key);
+              return descriptors;
+            }, {});
+            // by default, Object.assign copies enumerable Symbols too
+            Object.getOwnPropertySymbols(source).forEach(sym => {
+              let descriptor = Object.getOwnPropertyDescriptor(source, sym);
+              if (descriptor.enumerable) {
+                descriptors[sym] = descriptor;
+              }
+            });
+            Object.defineProperties(target, descriptors);
+          });
+          return target;
+        },
+      transformDataFn:function (oldObject,type) {
+        if(typeof oldObject== "object"){
+          oldObject.id?oldObject.status=type:'';
+          if(oldObject.childs.length>0)
+          {
+            for(let i=0;i<oldObject.childs.length;i++)
+            {
+              this.transformDataFn(oldObject.childs[i],type)
+            }
+          }
+        }
 
       },
+
+      handleHide: function(option) {
+        this.$emit('setMode', 'role',option);
+      },
+      handleCheck:function (newObject){
+          if(newObject.status){
+            this.transformDataFn(newObject,true)
+          }
+          else{
+            this.transformDataFn(newObject,false)
+          }
+      },
+      getData(mapDate){
+          var postList=''
+          for(let i=0;i<mapDate.childs.length;i++){
+            if(mapDate.childs[i].status == true){
+              postList+= mapDate.childs[i].id+','
+            }
+            if(mapDate.childs[i].childs&&mapDate.childs[i].childs.length>0&&mapDate.childs[i].status==true){
+              postList+=this.getData(mapDate.childs[i])
+            }
+          }
+          return postList
+        },
         //post date
       submitFn:function () {
         if (this.roleName.length == 0) {
           this.$message.error('请输入角色名！');
           return
         }
-        let postData = {
-          roleName: this.roleName,
-          remark: this.remark,
-          auths: {
-            lineManage: this.lineManage,
-            orderManage: this.orderManage,
-            financeManage: this.financeManage,
-            chartManage: this.chartManage,
-            customerManage: this.customerManage,
-            systemManage: this.systemManage
-          }
-        };
-        axios.post('https://172.17.9.13:3001/sys/role/save', postData).then((backData) => {
+        let newAuths=this.getData(this.roleMap).split(',')
+        newAuths.pop();
+        if( this.$parent.operationType.type!='edit'){
+            let addPostData = {
+              token:1111,
+              name: this.roleName,
+              remark: this.remarkInfo,
+              auths: newAuths
+            };
+            axios.post('https://172.17.9.13:3001/api/sys/role/save', addPostData).then((backData) => {
+                if(backData.error){
+                  this.$message.error(backData.massage);
+                }
+                else {
+                    this.handleHide('add');
+                }
+            })
+        }
+        else {
+          let editPostData = {
+            token:1111,
+            name: this.roleName,
+            remark: this.remarkInfo,
+            auths: newAuths,
+            id:this.$parent.operationType.id,
+
+          };
+          axios.post('https://172.17.9.13:3001/api/sys/role/update', editPostData).then((backData) => {
             if(backData.error){
               this.$message.error(backData.massage);
             }
             else {
-                this.$emit(addRoleBackData,obj);
-                this.handleHide();
+              this.handleHide('edit');
             }
-        })
-      }
+          })
 
+        }
+
+      }
     }
   }
 </script>
@@ -203,9 +295,8 @@
       border-top-right-radius: 5px;
       color: #333;
     }
-
-
   }
+
   *{  box-sizing: border-box;}
   section{
     background-color: white;
@@ -216,34 +307,48 @@
     .first{
       border-top: dotted 1px #7e8c8d ;
       border-bottom: dotted 1px #7e8c8d ;
-
     }
-    .add-role-item{
-      margin: 0 40px;
-      border-bottom: dotted 1px #7e8c8d ;
-      padding: 10px 30px;
+
+    .bigItem {
+      margin-top: 10px;
       overflow: hidden;
-      .left{
-        width: 20%;
-        padding: 20px 20px 20px 60px;
-        font-weight: bold !important;
-        float:left;
-        .el-checkbox{
-          .el-checkbox__label{
-            font-size: 16px;
-          }
-        }
+      .bigTitle {
+        border-top: 1px solid #eaeded;
+        border-bottom: 1px solid #eaeded;
+        background-color: rgba(131, 242, 243, 0.13);
+        padding: 10px 20px 10px 70px;
+        margin: 0 40px;
 
       }
-      .right{
-        float: left;
-        border-left: dotted 1px #7e8c8d ;
-        width: 80%;
-        padding: 0 20px 20px ;
-        .el-checkbox{
-          padding: 20px 40px 0 40px;
-          margin-left: 0px;
-          min-width: 260px;
+      .add-role-item {
+        margin: 0 40px;
+        border-bottom: dotted 1px rgba(126, 140, 141, 0.34);
+        padding: 0 30px;
+        overflow: hidden;
+        min-height: 38px;
+        .left {
+          width: 20%;
+          padding: 10px 20px 0 60px;
+          float: left;
+          .el-checkbox {
+            .el-checkbox__label {
+              font-size: 16px;
+              font-weight: bold !important;
+            }
+          }
+
+        }
+        .right {
+          float: left;
+          border-left: dotted 1px rgba(126, 140, 141, 0.34);
+          width: 80%;
+          padding: 0 20px 10px 0;
+          min-height: 38px;
+          .el-checkbox {
+            padding: 10px 40px 0 40px;
+            margin-left: 0px;
+            min-width: 260px;
+          }
         }
       }
     }
@@ -257,7 +362,6 @@
       padding: 30px 110px 80px ;
       .el-button{padding: 10px 50px}
     }
-
 
   }
 
