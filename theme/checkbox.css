@@ -117,7 +117,7 @@
 
 .el-checkbox__input.is-indeterminate .el-checkbox__inner{
     background-color: #3ec3c8;
-    border-color: rgb(1, 226, 233)
+    border-color: #3ec3c8
 }
 
 .el-checkbox__input.is-indeterminate .el-checkbox__inner::before{
@@ -141,7 +141,7 @@
 
 .el-checkbox__input.is-checked .el-checkbox__inner{
     background-color: #3ec3c8;
-    border-color: rgb(1, 226, 233)
+    border-color: #3ec3c8
 }
 
 .el-checkbox__input.is-checked .el-checkbox__inner::after{
@@ -285,7 +285,7 @@
     background: #fff;
     border: 1px solid rgb(191, 214, 217);
     border-left: 0;
-    color: rgb(31, 57, 61);
+    color: #3ec3c8;
     -webkit-appearance: none;
     text-align: center;
     box-sizing: border-box;
@@ -326,7 +326,7 @@
 .el-checkbox-button--large{}
 
 .el-checkbox-button--large .el-checkbox-button__inner{
-    padding: 11px 19px;
+    padding: 10px 40px;
     font-size: 16px;
     border-radius: 0
 }
