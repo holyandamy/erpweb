@@ -14,7 +14,7 @@ import Companyset from './views/systemset/company/companyset.vue'  //公司信�
 import Approval from './views/systemset/approval/approval.vue' //审批设置
 import Addapproval from './views/systemset/approval/addapproval.vue'  //添加审批
 //角色管理
-//import Role from './views/systemset/role/role.vue' //角色管理
+import Role from './views/systemset/role/role.vue' //角色管理
 //import Addrole from './views/systemset/role/addrole.vue'  //新增角色
 //员工管理
 import Staff from './views/systemset/staff/staff.vue' //员工管理
@@ -22,8 +22,9 @@ import Addstaff from './views/systemset/staff/addstaff.vue'  //新增员工
 //操作日志
 import Log from './views/systemset/log/log.vue'  //新增员工
 //图片库
-import Role from './views/systemset/role/role.vue'  //角色管理
 
+//操作日志
+import Log from './views/systemset/log/log.vue'  //操作日志
 
 let routes = [
 //  {
@@ -61,11 +62,14 @@ let routes = [
 
         ]
     },
-    {
+     {
         path: '/',
         component: Home,
         name: '报表管理',
-
+         children: [
+        	{path: '/visitor', component: Visitor, name: '游客管理'},
+         ]
+        
     },
     {
         path: '/',
