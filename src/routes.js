@@ -24,7 +24,7 @@ import Log from './views/systemset/log/log.vue'  //新增员工
 //图片库
 
 //操作日志
-import Log from './views/systemset/log/log.vue'  //操作日志
+import Visitor from './views/customer/visitor/visitor.vue'   //游客管理
 
 let routes = [
 //  {
