@@ -62,7 +62,7 @@
         activeIndex: "2",
         total:0,
         token:123,
-        currentPage:0,
+        currentPage:1,
         pagesize:15,
         showFormVisible:false,
         operationType:{type:'add',id:''},
@@ -78,18 +78,19 @@
       }
     },
     created(){
-      this.getList(0)
+      this.getList()
     },
     methods:{
       setMode(type,option){
+          console.log(option)
           this.modeType=type;
           if(type=='role') {
-            if (option == "new") {
+            if (option == "add") {
              // this.currentPage = ((this.total + 1) / this.pagesize).floor;
-              this.getList(0)
+              this.getList()
             }
             else {
-              this.getList(0)
+              this.getList()
             }
           }
 
@@ -98,7 +99,6 @@
           this.operationType.type='edit';
           this.operationType.id=rows.id;
           this.modeType='addRole';
-
       },
       deleteRow(index, rows){
         this.roleList.splice(index, 1);
@@ -107,22 +107,17 @@
             this.$message.error(res.data.massage);
           }
           else {
-            this.getList(0)
+            this.getList()
           }
         })
       },
-      getList(length,massage){
-        this.pageset.pageIndex = this.currentPage-length;
+      getList(){
+        this.pageset.pageIndex = this.currentPage-1;
         this.pageset.pageSize = this.pagesize;
         let page = this.pageset;
-        console.log(page)
         axios.post("https://172.17.9.13:3001/api/sys/role/list",page).then((res) => {
           this.total = Number(res.data.obj.total);
-          console.log()
           this.roleList =Object.assign([],res.data.obj.datas);
-          console.log(res.data.obj.datas)
-          //console.log(this.roleList)
-          arguments.length>1?this.$message(massage):'';
         })
       },
 
@@ -130,7 +125,7 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        this.getList(1)
+        this.getList()
       }
     }
   }

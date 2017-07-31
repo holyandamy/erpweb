@@ -16,9 +16,9 @@
         <el-input v-model="roleName" class="role-name-input" placeholder="请输入内容" ></el-input>
       </div>
       <div class="bigItem" v-for="value in roleMap.childs">
-        <div class="bigTitle"><el-checkbox v-model="value.status" v-on:change="handleCheck(value)" >{{value.authname}}</el-checkbox></div>
+        <div class="bigTitle"><el-checkbox v-model="value.status" v-on:change="clickChangeChildState(value)" >{{value.authname}}</el-checkbox></div>
         <div class="add-role-item " v-for="sValue in value.childs">
-          <div class="left"><el-checkbox :disabled="!value.status"  v-model="sValue.status" v-on:change="handleCheck(sValue)">{{sValue.authname}}</el-checkbox></div>
+          <div class="left"><el-checkbox :disabled="!value.status"  v-model="sValue.status" v-on:change="clickChangeChildState(sValue)">{{sValue.authname}}</el-checkbox></div>
           <div class="right" >
               <div v-for="tValue in sValue.childs" style="float: left">
                 <el-checkbox  :disabled="!value.status || !sValue.status" v-model="tValue.status" >{{tValue.authname}}</el-checkbox>
@@ -30,7 +30,7 @@
 
       <!--
       <div class="bigItem">
-          <div class="bigTitle"><el-checkbox v-model="lineManage.status" v-on:change="handleCheck('lineManage')" >线路管理</el-checkbox></div>
+          <div class="bigTitle"><el-checkbox v-model="lineManage.status" v-on:change="clickChangeChildState('lineManage')" >线路管理</el-checkbox></div>
           <div class="add-role-item ">
             <div class="left"><el-checkbox :disabled="!lineManage.status"  v-model="lineManage.editor.status">线路编辑</el-checkbox></div>
             <div class="right">
@@ -66,11 +66,8 @@
 
   import axios from 'axios';
   export default {
-    props: {
-      editData:{},
-    },
-    data() {
 
+    data() {
       return {
         roleName: "test",
         roleMap:{},
@@ -88,7 +85,7 @@
         else {
           let resData={};
           resData.childs=res.data.obj;
-          this.transformDataFn(resData,true);
+          this.changeStateOfChildNodes(resData,true);
 
           this.roleMap = Object.assign({}, resData);
           if( this.$parent.operationType.type=='edit'){
@@ -97,19 +94,18 @@
                 token:11111,
                 id:this.$parent.operationType.id,
             }
-
             axios.post('https://172.17.9.13:3001/api/sys/role/detail',data).then((res) => {
               console.log(res)
               if(res.data.error){
                 this.$message.error(res.data.massage);
               }
               else {
-                  this.transformDataFn(this.roleMap,false);
+                  this.changeStateOfChildNodes(this.roleMap,false);
                 /*
                  this.roleMap = Object.assign({}, tempData);
                  if(this.$parent.operationType.type=='edit'){
-                 this.transformDataFn(tempData,false);
-                 this.transformDataFn(tempData2,true);
+                 this.changeStateOfChildNodes(tempData,false);
+                 this.changeStateOfChildNodes(tempData2,true);
                  this.deepCopyStatus(tempData,tempData2)
                  console.log(tempData)
                  //console.log(this.completeAssign({},tempData,tempData2))
@@ -133,25 +129,24 @@
           newData.pop();
           console.log(newData)
           newData.map((value)=>{
-            target.child.forEach(singleChild=>{
+            target.childs.forEach(singleChild=>{
               console.log(value)
-              this.changeStatus(singleChild,value)
+              this.changeChildStateForDeepCopy(singleChild,value)
               }
             )
           })
         },
-        changeStatus:function (singleChild,key) {
+        changeChildStateForDeepCopy:function (singleChild,key) {
           if(singleChild.id == key){
             singleChild.status=true;
             return  true
           }
-          if(singleChild.child){
-            singleChild.child.forEach(newChild=>{
-              this.changeStatus(newChild,key);
+          if(singleChild.childs){
+            singleChild.childs.forEach(newChild=>{
+              this.changeChildStateForDeepCopy(newChild,key);
             })
           }
           return false
-
         },
 
       // This is an assign function that copies full descriptors
@@ -172,30 +167,23 @@
           });
           return target;
         },
-      transformDataFn:function (oldObject,type) {
+      changeStateOfChildNodes:function (oldObject,type) {
         if(typeof oldObject== "object"){
           oldObject.id?oldObject.status=type:'';
           if(oldObject.childs.length>0)
           {
             for(let i=0;i<oldObject.childs.length;i++)
             {
-              this.transformDataFn(oldObject.childs[i],type)
+              this.changeStateOfChildNodes(oldObject.childs[i],type)
             }
           }
         }
-
       },
-
       handleHide: function(option) {
         this.$emit('setMode', 'role',option);
       },
-      handleCheck:function (newObject){
-          if(newObject.status){
-            this.transformDataFn(newObject,true)
-          }
-          else{
-            this.transformDataFn(newObject,false)
-          }
+      clickChangeChildState:function (newObject){
+        this.changeStateOfChildNodes(newObject,newObject.status)
       },
       getData(mapDate){
           var postList=''
@@ -250,9 +238,7 @@
               this.handleHide('edit');
             }
           })
-
         }
-
       }
     }
   }
