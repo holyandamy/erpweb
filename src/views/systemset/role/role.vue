@@ -50,7 +50,7 @@
 
 <script>
   import axios from 'axios';
-  import AddRole from './addRole';
+  import AddRole from './addrole';
   export default {
     components: {
       AddRole, // add role
