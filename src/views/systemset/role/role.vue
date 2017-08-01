@@ -15,7 +15,6 @@
       </el-row>
     </header>
     <section class="padding30">
-
       <el-table :data="roleList" style="text-align: left; font-size: 12px;">
         <el-table-column prop="id" label="角色ID">
         </el-table-column>
@@ -44,7 +43,7 @@
       </div>
     </section>
   </div>
-    <AddRole v-else  v-on:setMode="setMode" :operationType="operationType"></AddRole>
+    <AddRole v-else  @setMode="setMode" :operationType="operationType"></AddRole>
   </div>
 </template>
 
@@ -57,24 +56,18 @@
     },
     data() {
       return {
-        modeType:'role',
         roleList: [],
-        activeIndex: "2",
+        modeType:'role',
         total:0,
         token:123,
         currentPage:1,
         pagesize:15,
-        showFormVisible:false,
         operationType:{type:'add',id:''},
         pageset:{
           token:'ssssss',
           pageIndex:0,
           pageSize:''
         },
-        editRole: {
-          roleId: '',
-          roleName: '',
-        }
       }
     },
     created(){
