@@ -10,7 +10,7 @@
           </el-breadcrumb>
         </el-col>
         <el-col :span="12">
-          <el-button class="defaultbutton" @click="setMode('addrole')">新增角色</el-button>
+          <el-button class="defaultbutton" @click="setMode('addrole','add')">新增角色</el-button>
         </el-col>
       </el-row>
     </header>
@@ -26,7 +26,7 @@
 
         <el-table-column  label="操作">
           <template scope="scope">
-            <el-button @click="editorFn(scope.$index, scope.row)" type="text" size="small">编辑</el-button>
+            <el-button @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
             <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -82,7 +82,7 @@
     },
     methods:{
       setMode(type,option){
-          console.log(option)
+        this.operationType.type=option;
           this.modeType=type;
           if(type=='role') {
             if (option == "add") {
@@ -95,7 +95,7 @@
           }
 
       },
-      editorFn(index, rows){
+      editorFn(rows){
           this.operationType.type='edit';
           this.operationType.id=rows.id;
           this.modeType='addRole';

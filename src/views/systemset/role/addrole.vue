@@ -5,7 +5,7 @@
         <el-col :span="12">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item>系统设置</el-breadcrumb-item>
-            <el-breadcrumb-item  ><span v-on:click="handleHide()">角色管理</span></el-breadcrumb-item>
+            <el-breadcrumb-item  ><span @click="handleHide()">角色管理</span></el-breadcrumb-item>
             <el-breadcrumb-item>{{optionName}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
@@ -16,9 +16,9 @@
         <el-input v-model="roleName" class="role-name-input" placeholder="请输入内容" ></el-input>
       </div>
       <div class="bigItem" v-for="value in roleMap.childs">
-        <div class="bigTitle"><el-checkbox v-model="value.status" v-on:change="clickChangeChildState(value)" >{{value.authname}}</el-checkbox></div>
+        <div class="bigTitle"><el-checkbox v-model="value.status" @change="clickChangeChildState(value)" >{{value.authname}}</el-checkbox></div>
         <div class="add-role-item " v-for="sValue in value.childs">
-          <div class="left"><el-checkbox :disabled="!value.status"  v-model="sValue.status" v-on:change="clickChangeChildState(sValue)">{{sValue.authname}}</el-checkbox></div>
+          <div class="left"><el-checkbox :disabled="!value.status"  v-model="sValue.status" @change="clickChangeChildState(sValue)">{{sValue.authname}}</el-checkbox></div>
           <div class="right" >
               <div v-for="tValue in sValue.childs" style="float: left">
                 <el-checkbox  :disabled="!value.status || !sValue.status" v-model="tValue.status" >{{tValue.authname}}</el-checkbox>
@@ -30,7 +30,7 @@
 
       <!--
       <div class="bigItem">
-          <div class="bigTitle"><el-checkbox v-model="lineManage.status" v-on:change="clickChangeChildState('lineManage')" >线路管理</el-checkbox></div>
+          <div class="bigTitle"><el-checkbox v-model="lineManage.status" @change="clickChangeChildState('lineManage')" >线路管理</el-checkbox></div>
           <div class="add-role-item ">
             <div class="left"><el-checkbox :disabled="!lineManage.status"  v-model="lineManage.editor.status">线路编辑</el-checkbox></div>
             <div class="right">
@@ -52,8 +52,8 @@
           </el-input>
       </div>
       <div class="save">
-        <el-button type="primary" v-on:click="submitFn()">保存</el-button>
-        <el-button  v-on:click="handleHide()" >取消</el-button>
+        <el-button type="primary" @click="submitFn()">保存</el-button>
+        <el-button  @click="handleHide()" >取消</el-button>
       </div>
 
     </section>
@@ -69,11 +69,12 @@
 
     data() {
       return {
-        roleName: "test",
+        roleName:'',
         roleMap:{},
         remarkInfo:'',
         checkedIdList:'',
-        optionName:'新增角色'
+        optionName:'新增角色',
+        optionType:this.$parent.operationType.type
       }
     },
 
@@ -86,7 +87,6 @@
           let resData={};
           resData.childs=res.data.obj;
           this.changeStateOfChildNodes(resData,true);
-
           this.roleMap = Object.assign({}, resData);
           if( this.$parent.operationType.type=='edit'){
             this.optionName="编辑角色"
@@ -95,23 +95,17 @@
                 id:this.$parent.operationType.id,
             }
             axios.post('https://172.17.9.13:3001/api/sys/role/detail',data).then((res) => {
-              console.log(res)
               if(res.data.error){
                 this.$message.error(res.data.massage);
               }
               else {
+                  let tempEditList={};
+                  this.roleName=res.data.obj.rolename;
+                  this.remarkInfo=res.data.obj.remark;
+                  tempEditList.childs=res.data.obj.auths;
                   this.changeStateOfChildNodes(this.roleMap,false);
-                /*
-                 this.roleMap = Object.assign({}, tempData);
-                 if(this.$parent.operationType.type=='edit'){
-                 this.changeStateOfChildNodes(tempData,false);
-                 this.changeStateOfChildNodes(tempData2,true);
-                 this.deepCopyStatus(tempData,tempData2)
-                 console.log(tempData)
-                 //console.log(this.completeAssign({},tempData,tempData2))
-                 //console.log(tempData)
-                 //console.log(tempData2)
-                 }*/
+                  this.changeStateOfChildNodes(tempEditList,true);
+                  this.deepCopyStatus(this.roleMap,tempEditList);
               }
             })
           }
@@ -127,10 +121,8 @@
         deepCopyStatus:function (target,sources) {
           var newData=this.getData(sources).split(',')
           newData.pop();
-          console.log(newData)
           newData.map((value)=>{
             target.childs.forEach(singleChild=>{
-              console.log(value)
               this.changeChildStateForDeepCopy(singleChild,value)
               }
             )
@@ -170,7 +162,7 @@
       changeStateOfChildNodes:function (oldObject,type) {
         if(typeof oldObject== "object"){
           oldObject.id?oldObject.status=type:'';
-          if(oldObject.childs.length>0)
+          if(oldObject.childs&&oldObject.childs.length>0)
           {
             for(let i=0;i<oldObject.childs.length;i++)
             {
@@ -228,7 +220,6 @@
             remark: this.remarkInfo,
             auths: newAuths,
             id:this.$parent.operationType.id,
-
           };
           axios.post('https://172.17.9.13:3001/api/sys/role/update', editPostData).then((backData) => {
             if(backData.error){
