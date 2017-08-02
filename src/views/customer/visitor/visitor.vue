@@ -128,7 +128,7 @@
       },
       deleteRow(index, rows){
         this.visitorList.splice(index, 1);
-        axios.post('https://172.17.9.13:3001/api/sys/role/del',{token:1111,id:rows.id} ).then((res) => {
+        axios.post('http://172.17.9.13:3001/api/sys/role/del',{token:1111,id:rows.id} ).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);
           }
@@ -146,7 +146,7 @@
         this.pageset.pageIndex = this.currentPage-1
         this.pageset.pageSize = this.pagesize
         let page = this.pageset
-        axios.post("https://172.17.9.13:3001/api/cust/list",page).then((res) => {
+        axios.post("http://172.17.9.13:3001/api/cust/list",page).then((res) => {
           this.visitorList = res.data.obj.datas
           this.total = Number(res.data.obj.total)
           console.log(res)
@@ -159,7 +159,7 @@
         }
         let newDate
         if(this.searchList.date!=''){
-          let mouth={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sept:'09',Oct:'10',Nov:'11',Dec:'12' }
+          const mouth={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sept:'09',Oct:'10',Nov:'11',Dec:'12' }
           let start=String(this.searchList.date[0]).split(' ')
           let end=String(this.searchList.date[1]).split(' ')
           newDate=start[3]+'-'+mouth[start[1]]+'-'+start[2]+'|'+end[3]+'-'+mouth[end[1]]+'-'+end[2]
@@ -180,7 +180,7 @@
             date:newDate,
             mobile:this.searchList.mobile,
           };
-          axios.post("https://172.17.9.13:3001/api/cust/list",templateSeacrchList).then((res) => {
+          axios.post("http://172.17.9.13:3001/api/cust/list",templateSeacrchList).then((res) => {
             this.visitorList = res.data.obj.datas
             this.total = Number(res.data.obj.total)
             console.log(res)

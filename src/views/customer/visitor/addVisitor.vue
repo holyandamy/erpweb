@@ -99,10 +99,10 @@
               <el-form-item label="游客生日" prop="code">
                 <div class="block">
                   <el-date-picker
-                    v-model="value1"
+                    v-model="visitorList.birthday"
                     type="date"
                     placeholder="选择日期"
-                    :picker-options="pickerOptions0">
+                    :picker-options="visitorList.birthday">
                   </el-date-picker>
                 </div>
               </el-form-item>
@@ -258,7 +258,53 @@
           }
         this.visitorList.districtid=this.address.districtList[0].value
         },
-      submitForm(formName) {
+      submitForm() {
+          let newDate='';
+        if(this.visitorList.birthday!=''){
+          const mouth={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sept:'09',Oct:'10',Nov:'11',Dec:'12' }
+          let start=String(this.visitorList.birthday).split(' ');
+          newDate=start[3]+'-'+mouth[start[1]]+'-'+start[2]
+        }
+        let newPostDate=Object.assign({},this.visitorList)
+        newPostDate.birthday=newDate
+          axios.post('http://172.17.9.13:3001/api/cust/save',newPostDate).then((backData) => {
+            if(backData.error){
+              this.$message.error(backData.massage);
+            }
+            else {
+              this.handleHide('list');
+            }
+          })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       }
    }
   }

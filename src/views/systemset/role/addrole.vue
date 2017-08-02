@@ -79,7 +79,7 @@
     },
 
     created: function () {
-      axios.post('https://172.17.9.13:3001/api/sys/auth/list',{token:11111}).then((res) => {
+      axios.post('http://172.17.9.13:3001/api/sys/auth/list',{token:11111}).then((res) => {
         if(res.data.error){
           this.$message.error(res.data.massage);
         }
@@ -94,7 +94,7 @@
                 token:11111,
                 id:this.$parent.operationType.id,
             }
-            axios.post('https://172.17.9.13:3001/api/sys/role/detail',data).then((res) => {
+            axios.post('http://172.17.9.13:3001/api/sys/role/detail',data).then((res) => {
               if(res.data.error){
                 this.$message.error(res.data.massage);
               }
@@ -204,7 +204,7 @@
               remark: this.remarkInfo,
               auths: newAuths
             };
-            axios.post('https://172.17.9.13:3001/api/sys/role/save', addPostData).then((backData) => {
+            axios.post('http://172.17.9.13:3001/api/sys/role/save', addPostData).then((backData) => {
                 if(backData.error){
                   this.$message.error(backData.massage);
                 }
@@ -221,7 +221,7 @@
             auths: newAuths,
             id:this.$parent.operationType.id,
           };
-          axios.post('https://172.17.9.13:3001/api/sys/role/update', editPostData).then((backData) => {
+          axios.post('http://172.17.9.13:3001/api/sys/role/update', editPostData).then((backData) => {
             if(backData.error){
               this.$message.error(backData.massage);
             }
