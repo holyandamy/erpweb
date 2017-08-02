@@ -1,6 +1,5 @@
 <template>
 	<div>
-	
 		<section class="bg-white margin30 padding30">
 			<el-col :span="15">
 				<el-form :model="companyForm" :rules="rules" ref="companyForm" label-width="100px" class="demo-ruleForm">
@@ -9,37 +8,25 @@
 							<el-input v-model="companyForm.companyName"></el-input>
 						</el-col>
 					</el-form-item>
-					<el-form-item label="所在城市"   prop="province">
- 							<el-col :span="4">
- 								 <el-select v-model="companyForm.provinceId" placeholder="请选择" @change = "changecity">
-								    <el-option
-								      v-for="item in province"
-								      :key="item.name"
-								      :label="item.name"
-								      :value="item.id">
-								    </el-option>
-								  </el-select>
- 							</el-col>
- 							<el-col :span="4">
- 								 <el-select v-model="companyForm.cityId" placeholder="请选择" @change = "changecity">
-								    <el-option
-								      v-for="item in city"
-								      :key="item.name"
-								      :label="item.name"
-								      :value="item.id">
-								    </el-option>
-								  </el-select>
- 							</el-col>
- 							<el-col :span="4">
- 								 <el-select v-model="companyForm.districtId" placeholder="请选择">
-								    <el-option
-								      v-for="item in district"
-								      :key="item.name"
-								      :label="item.name"
-								      :value="item.id">
-								    </el-option>
-								  </el-select>
- 							</el-col>
+					<el-form-item label="所在城市" prop="province">
+						<el-col :span="4">
+							<el-select v-model="companyForm.provinceId" placeholder="请选择" @change="changecity">
+								<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
+								</el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="4">
+							<el-select v-model="companyForm.cityId" placeholder="请选择" @change="changecity">
+								<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
+								</el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="4">
+							<el-select v-model="companyForm.districtId" placeholder="请选择">
+								<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
+								</el-option>
+							</el-select>
+						</el-col>
 					</el-form-item>
 					<el-form-item label="详细地址" prop="address">
 						<el-input v-model="companyForm.address"></el-input>
@@ -85,6 +72,7 @@
 </template>
 <script>
 	import axios from 'axios';
+	import { companyupdate, province, city, district } from '../../../common/js/config';
 	export default {
 		data() {
 			//验证手机号码
@@ -116,18 +104,18 @@
 				}],
 				//提交数据
 				companyForm: {
-					token:'',
+					token: '',
 					companyName: '',
-					countryId:'fb0828b148bc48afbab8ef03c55d153b',
-					provinceId:'',
-					cityId:'',
-					districtId:'',
+					countryId: 'fb0828b148bc48afbab8ef03c55d153b',
+					provinceId: '',
+					cityId: '',
+					districtId: '',
 					address: '',
 					person: '',
 					mobile: '',
 					tel: '',
 					fax: '',
-					companyId:''
+					companyId: ''
 				},
 				//验证数据
 				rules: {
@@ -143,8 +131,10 @@
 							trigger: 'blur'
 						}
 					],
-					province:[{
-						 required: false, message: '请选择地址', trigger: 'change' 
+					province: [{
+						required: false,
+						message: '请选择地址',
+						trigger: 'change'
 					}],
 					address: [{
 							required: true,
@@ -187,13 +177,13 @@
 						required: false,
 					}]
 				},
-				province:[],
-				city:[],
-				district:[]
-				
+				province: [],
+				city: [],
+				district: []
+
 			}
 		},
-		created(){
+		created() {
 			this.getprovince()
 		},
 		methods: {
@@ -202,13 +192,13 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let parses = this.companyForm
-						axios.post("https://172.17.9.13:3001/api/sys/company/update",parses).then((res) => {
-							 this.$message('提交成功！');
-							 console.log(parses,res)
+						companyupdate(parses).then((res) => {
+							this.$message('提交成功！');
+							console.log(parses, res)
 						})
 					} else {
-						 this.$message.error('提交错误！');
-						 return false;
+						this.$message.error('提交错误！');
+						return false;
 					}
 				});
 			},
@@ -223,46 +213,52 @@
 			handlePreview(file) {
 				console.log(file);
 			},
-			
+
 			//获取省级列表
-			getprovince(){
+			getprovince() {
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
-				let para = {id:count,token:''}
-				axios.post("https://172.17.9.13:3001/api/sys/province/list",para).then((res) => {
-							this.province = res.data.obj
-							
+				let para = {
+					id: count,
+					token: ''
+				}
+				province(para).then((res) => {
+					this.province = res.data.obj
+
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
 			},
 			//获取市列表
-			getcity(pro){
-				axios.post("https://172.17.9.13:3001/api/sys/city/list",pro).then((res) => {
-							this.city = res.data.obj
-							
+			getcity(pro) {
+				city(pro).then((res) => {
+					this.city = res.data.obj
+
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
 			},
 			//获取区列表
-			getdistrict(city){
-				axios.post("https://172.17.9.13:3001/api/sys/district/list",city).then((res) => {
-								this.district = res.data.obj
-								
+			getdistrict(city) {
+				district(city).then((res) => {
+					this.district = res.data.obj
+
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
 			},
 			//选择城市
-			changecity(){
-				let pro = {id:this.companyForm.provinceId}
+			changecity() {
+				let pro = {
+					id: this.companyForm.provinceId
+				}
 				this.getcity(pro)
-				let city = {id:this.companyForm.cityId}
+				let city = {
+					id: this.companyForm.cityId
+				}
 				this.getdistrict(city)
-				
-				
+
 			}
-			
+
 		}
 	}
 </script>
@@ -313,5 +309,8 @@
 			color: #333;
 		}
 	}
-	.el-select{margin-right: 15px;}
+	
+	.el-select {
+		margin-right: 15px;
+	}
 </style>

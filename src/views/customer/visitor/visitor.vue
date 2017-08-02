@@ -83,6 +83,7 @@
 <script>
   import AddVisitor from './addVisitor'
   import axios from 'axios';
+  import {custlist,roledel} from '../../../common/js/config';
   export default {
     components:{
       AddVisitor
@@ -128,7 +129,8 @@
       },
       deleteRow(index, rows){
         this.visitorList.splice(index, 1);
-        axios.post('http://172.17.9.13:3001/api/sys/role/del',{token:1111,id:rows.id} ).then((res) => {
+        let para={token:1111,id:rows.id}
+        roledel(para).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);
           }
@@ -146,7 +148,8 @@
         this.pageset.pageIndex = this.currentPage-1
         this.pageset.pageSize = this.pagesize
         let page = this.pageset
-        axios.post("http://172.17.9.13:3001/api/cust/list",page).then((res) => {
+        custlist(page).then((res) => {
+        	console.log(res)
           this.visitorList = res.data.obj.datas
           this.total = Number(res.data.obj.total)
           console.log(res)
@@ -180,7 +183,7 @@
             date:newDate,
             mobile:this.searchList.mobile,
           };
-          axios.post("http://172.17.9.13:3001/api/cust/list",templateSeacrchList).then((res) => {
+         custlist(templateSeacrchList).then((res) => {
             this.visitorList = res.data.obj.datas
             this.total = Number(res.data.obj.total)
             console.log(res)

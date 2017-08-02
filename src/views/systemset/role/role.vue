@@ -50,6 +50,7 @@
 <script>
   import axios from 'axios';
   import AddRole from './addrole';
+  import {rolelist,roledel} from '../../../common/js/config';
   export default {
     components: {
       AddRole, // add role
@@ -95,7 +96,8 @@
       },
       deleteRow(index, rows){
         this.roleList.splice(index, 1);
-        axios.post('http://172.17.9.13:3001/api/sys/role/del',{token:1111,id:rows.id} ).then((res) => {
+        let para ={token:1111,id:rows.id}
+        roledel(para).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);
           }
@@ -108,7 +110,7 @@
         this.pageset.pageIndex = this.currentPage-1;
         this.pageset.pageSize = this.pagesize;
         let page = this.pageset;
-        axios.post("http://172.17.9.13:3001/api/sys/role/list",page).then((res) => {
+        rolelist(page).then((res) => {
           this.total = Number(res.data.obj.total);
           this.roleList =Object.assign([],res.data.obj.datas);
         })

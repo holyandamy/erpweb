@@ -6,7 +6,7 @@
 					<el-breadcrumb separator="/">
 						<el-breadcrumb-item>系统设置</el-breadcrumb-item>
 						<el-breadcrumb-item><span @click="handleHide()">审批配置</span></el-breadcrumb-item>
-						<el-breadcrumb-item>新增审批</el-breadcrumb-item>
+						<el-breadcrumb-item>编辑审批</el-breadcrumb-item>
 					</el-breadcrumb>
 				</el-col>
 
@@ -16,11 +16,11 @@
 			<el-row class="bg_white">
 				<el-col :span="8">
 					<el-form ref="appform" :model="appform" :rules="rules" label-width="110px" style="text-align: left;">
-						<el-form-item label="被审批人员" prop='executorid'>
+						<el-form-item label="被审批人员" prop='executor'>
 							<el-row>
 								<el-col :span="19">
 
-									<el-input v-model="appform.executorid"></el-input>
+									<el-input v-model="appform.executor"></el-input>
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
 								<el-col :span="4">
@@ -35,7 +35,7 @@
 							<el-row>
 								<el-col :span="19">
 
-									<el-input v-model="appform.approverid"></el-input>
+									<el-input v-model="appform.approver"></el-input>
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
 								<el-col :span="4">
@@ -44,7 +44,7 @@
 							</el-row>
 						</el-form-item>
 						<el-form-item label="审批状态">
-							<el-radio-group v-model="appform.isenable">
+							<el-radio-group v-model="appform.status">
 								<el-radio label="启用"></el-radio>
 								<el-radio label="禁用"></el-radio>
 							</el-radio-group>
@@ -62,7 +62,7 @@
 			<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
 			<div style="margin: 15px 0;"></div>
 			<el-checkbox-group :min="1" :max="10" v-model="checkedCities" @change="handleCheckedCitiesChange">
-				<el-checkbox v-for="approval in approvals" :label="approval.username" :key="approval.id">{{approval.username}}</el-checkbox>
+				<el-checkbox v-for="approval in approvals" :label="approval.username" :key="approval.username">{{approval.username}}</el-checkbox>
 			</el-checkbox-group>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -71,10 +71,10 @@
 		</el-dialog>
 		<!-- 审批人员 -->
 		<el-dialog title="选择审批人员" size="tiny" :visible.sync="approvalVisible" style="text-align: left;">
-			<el-checkbox :indeterminate="isIndeterminate" v-model="checkAllapp" @change="appCheckAllChange">全选</el-checkbox>
+			<el-checkbox  :indeterminate="isIndeterminate" v-model="checkAllapp" @change="appCheckAllChange">全选</el-checkbox>
 			<div style="margin: 15px 0;"></div>
 			<el-checkbox-group :min="1" :max="10" v-model="checkedapproval" @change="appCheckedCitiesChange">
-				<el-checkbox v-for="approval in approvaleds" :label="approval.username" :key="approval.id">{{approval.username}}</el-checkbox>
+				<el-checkbox v-for="approval in approvaleds" :label="approval.username" :key="approval.username">{{approval.username}}</el-checkbox>
 			</el-checkbox-group>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="approvalVisible = false">取 消</el-button>
@@ -86,16 +86,20 @@
 
 <script>
 	import axios from 'axios';
-	import { addapprove, userenablelist } from '../../../common/js/config';
+	import {approveupdate, userenablelist} from '../../../common/js/config';
 	export default {
-		props: ['banklist'],
+		props: ['edit'],
 		data() {
 			return {
 				appform: {
 					token: '',
+					approver: '',
 					executorid: '',
+					executor: '',
 					approverid: '',
-					isenable: ''
+					isenable: '',
+					status: '',
+					id: ''
 				},
 				dialogFormVisible: false,
 				checkAll: true,
@@ -104,8 +108,6 @@
 				checkedapproval: [],
 				approvals: [],
 				approvaleds: [],
-				approvallist: [],
-				approvaledlist: [],
 				isIndeterminate: true,
 				approvalVisible: false,
 				rules: {
@@ -115,11 +117,17 @@
 					}]
 				},
 				approvalsid: [],
-				approvalsedid: []
+				approvalsedid: [],
+				approvallist:[],
+				approvaledlist:[]
+
 			}
 		},
 		created() {
 			this.getuser()
+			this.appform = this.edit.row
+			this.checkedCities = this.edit.row.executor.split(',')
+			this.checkedapproval = this.edit.row.approver.split(',')
 
 		},
 		methods: {
@@ -130,7 +138,8 @@
 							token: '',
 							executorid: '',
 							approverid: '',
-							isenable: ''
+							isenable: '',
+							id: this.edit.row.id
 						}
 						this.appform.isenable == "启用" ? para.isenable = true : para.isenable = false
 						for(let i = 0; i < this.checkedCities.length; i++) {
@@ -149,12 +158,22 @@
 						}
 						para.executorid = this.approvalsid.join(',')
 						para.approverid = this.approvalsedid.join(',')
-						addapprove(para).then((res) => {
-							this.$message({
-								message: "添加成功！",
-								type: 'success'
-							});
-							this.handleHide()
+						approveupdate(para).then((res) => {
+							if(res.data.error = 1) {
+								this.$notify({
+									title: '错误',
+									message: res.data.err.message,
+									type: 'error'
+								});
+							} else {
+								this.$notify({
+									title: '成功',
+									message: '编辑成功！',
+									type: 'success'
+								});
+								this.handleHide()
+							}
+
 						})
 					} else {
 						this.$notify.error({
@@ -171,7 +190,7 @@
 			handleCheckAllChange(event) {
 				this.checkedCities = event.target.checked ? this.approvallist : [];
 				this.isIndeterminate = false;
-				console.log(this.approvallist)
+				
 			},
 			handleCheckedCitiesChange(value) {
 				let checkedCount = value.length;
@@ -179,12 +198,12 @@
 				this.isIndeterminate = checkedCount > 0 && checkedCount < this.approvallist.length;
 			},
 			comfirm() {
-				this.appform.executorid = this.checkedCities.join(",")
+				this.appform.executor = this.checkedCities.join(",")
 				this.dialogFormVisible = false
 			},
 			//审批人员选择
 			comfirmapp() {
-				this.appform.approverid = this.checkedapproval.join(",")
+				this.appform.approver = this.checkedapproval.join(",")
 				this.approvalVisible = false
 			},
 			appCheckAllChange(event) {
@@ -205,7 +224,6 @@
 					token: ''
 				}
 				userenablelist(para).then((res) => {
-					console.log(res)
 					if(res.data.error == 1) {
 						this.$message({
 							message: res.data.message,
@@ -214,11 +232,12 @@
 					} else {
 						this.approvals = res.data.obj
 						this.approvaleds = res.data.obj
-						for(let i = 0; i < res.data.obj.length; i++) {
+						
+						for(let i=0;i<res.data.obj.length;i++){
 							this.approvallist.push(res.data.obj[i].username)
 							this.approvaledlist.push(res.data.obj[i].username)
 						}
-
+						
 					}
 				})
 			}

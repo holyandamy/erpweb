@@ -6,7 +6,7 @@
 					<el-breadcrumb separator="/">
 						<el-breadcrumb-item>系统设置</el-breadcrumb-item>
 						<el-breadcrumb-item><span @click="handleHide()">员工管理</span></el-breadcrumb-item>
-						<el-breadcrumb-item>新增人员</el-breadcrumb-item>
+						<el-breadcrumb-item>人员编辑</el-breadcrumb-item>
 					</el-breadcrumb>
 				</el-col>
 
@@ -29,15 +29,9 @@
 						</el-form-item>
 						<el-form-item label="密码" prop="password">
 							<el-col :span="4">
-								<el-input type="password" v-model="addstaff.password" auto-complete="off"></el-input>
+								<el-button @click="changepassword()">修改密码</el-button>
 							</el-col>
 						</el-form-item>
-						<el-form-item label="确认密码" prop="checkPass">
-							<el-col :span="4">
-								<el-input type="password" v-model="addstaff.checkPass" auto-complete="off"></el-input>
-							</el-col>
-						</el-form-item>
-
 						<el-form-item label="真实姓名" prop="realname">
 							<el-col :span="4">
 								<el-input v-model="addstaff.realname"></el-input>
@@ -53,7 +47,7 @@
 							<el-col :span="10">
 								<el-form-item label="手机号码" prop="mobile">
 									<el-col :span="11">
-										<el-input v-model="addstaff.mobile"></el-input>
+										<el-input v-model.number="addstaff.mobile"></el-input>
 									</el-col>
 
 								</el-form-item>
@@ -86,9 +80,10 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-						<el-form-item label="选择部门" prop="deptid">
+
+						<el-form-item label="选择部门" prop="deptname">
 							<el-col :span="4">
-								<el-select v-model="addstaff.deptid" placeholder="选择部门">
+								<el-select v-model="addstaff.deptname" placeholder="选择部门">
 									<el-option v-for="department in departments" :key="department.id" :label="department.name" :value="department.id"></el-option>
 								</el-select>
 							</el-col>
@@ -126,19 +121,27 @@
 				<el-checkbox v-for="role in rolelist" :label="role" :key="role.id">{{role.rolename}}</el-checkbox>
 			</el-checkbox-group>
 			<span slot="footer" class="dialog-footer">
-    <el-button @click="finddepartment = false">取 消</el-button>
-    <el-button type="primary" @click="comfirmrole">确 定</el-button>
-  </span>
+		    <el-button @click="finddepartment = false">取 消</el-button>
+		    <el-button type="primary" @click="comfirmrole">确 定</el-button>
+		  </span>
+		</el-dialog>
+		<!--修改密码-->
+		<el-dialog title="提示" :visible.sync="changepass" size="tiny"
+			<span>这是一段信息</span>
+			<span slot="footer" class="dialog-footer">
+		    <el-button @click="changepass = false">取 消</el-button>
+		    <el-button type="primary" @click="changepass = false">确 定</el-button>
+		  </span>
 		</el-dialog>
 	</div>
 </template>
 
 <script>
 	import axios from 'axios';
-	import md5 from 'js-md5';
 	import util from '../../../common/js/util'
-	import { usersave,getdeplist,rolelist} from '../../../common/js/config';
+	import { editusersave,getdeplist,userdetail,rolelist} from '../../../common/js/config';
 	export default {
+		props: ['edituser'],
 		data() {
 			//验证手机号码
 			var checkmobile = (rule, value, callback) => {
@@ -147,40 +150,19 @@
 				}
 				setTimeout(() => {
 					let mobilereg = /^[0-9]{11}$/;
-						if(mobilereg.test(value)) {
-							callback();
-						} else {
-							callback(new Error('请输入正确的手机号码'));
-						}
-					
+					if(mobilereg.test(value)) {
+						callback();
+					} else {
+						callback(new Error('请输入正确的手机号码'));
+					}
 				}, 1000);
 			};
-			var validatePass = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请输入密码'));
-				} else {
-					if(this.addstaff.checkPass !== '') {
-						this.$refs.addstaff.validateField('checkPass');
-					}
-					callback();
-				}
-			};
-			var validatePass2 = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请再次输入密码'));
-				} else if(value !== this.addstaff.password) {
-					callback(new Error('两次输入密码不一致!'));
-				} else {
-					callback();
-				}
-			};
+
 			return {
+				changepass:false,
 				addstaff: {
 					token: '',
 					username: '',
-					code: '',
-					password: '',
-					checkPass: '',
 					realname: '',
 					mobile: '',
 					tel: '',
@@ -188,7 +170,8 @@
 					birthday: '',
 					deptid: '',
 					roleid: [],
-					status: '1'
+					status: '1',
+					deptname: ''
 				},
 				pickerOptions0: {},
 				checkdepartment: [],
@@ -235,16 +218,6 @@
 						required: true,
 						message: '请选择状态',
 						trigger: 'change'
-					}],
-					pass: [{
-						required: true,
-						validator: validatePass,
-						trigger: 'blur'
-					}],
-					checkPass: [{
-						required: true,
-						validator: validatePass2,
-						trigger: 'blur'
 					}]
 
 				},
@@ -256,8 +229,10 @@
 			}
 		},
 		created() {
+			this.getinfo()
 			this.getdepartment()
 			this.getrole()
+
 		},
 		methods: {
 			submitForm(formName) {
@@ -267,7 +242,6 @@
 							token: '',
 							username: this.addstaff.username,
 							code: this.addstaff.code,
-							password: '',
 							realname: this.addstaff.realname,
 							mobile: '',
 							tel: this.addstaff.tel,
@@ -275,25 +249,27 @@
 							birthday: '',
 							deptid: this.addstaff.deptid,
 							roleid: this.addstaff.roleid,
-							status: ''
+							status: '',
+							id: this.addstaff.id,
+							password: this.addstaff.password
 						}
 						this.addstaff.status == "1" ? para.status = true : para.status = false
 						this.addstaff.sex == "男" ? para.sex = "1" : para.sex = "2"
 						para.birthday = (!this.addstaff.birthday || this.addstaff.birthday == '') ? '' : util.formatDate.format(new Date(this.addstaff.birthday), 'yyyy-MM-dd');
 						para.mobile = String(this.addstaff.mobile)
-						para.password = md5(this.addstaff.password)
-						usersave(para).then((res) => {
-			if(res.data.error == 0) {
+						editusersave(para).then((res) => {
+							console.log(para, res)
+							if(res.data.error == 0) {
 
-				this.$message({
-					message: "添加成功！",
-					type: 'success'
-				});
-				this.handleHide()
-			} else {
-				this.$message({
-							message: res.data.message,
-							type:'error'
+								this.$message({
+									message: "编辑成功！",
+									type: 'success'
+								});
+								this.handleHide()
+							} else {
+								this.$message({
+									message: res.data.message,
+									type: 'error'
 								});
 
 							}
@@ -316,7 +292,7 @@
 			},
 			//获取部门
 			getdepartment() {
-				let para={
+				let para = {
 					token:''
 				}
 				getdeplist(para).then((data) => {
@@ -327,6 +303,7 @@
 			comfirmrole() {
 				this.finddepartment = false
 				let role = [];
+
 				for(let i = 0; i < this.checkdepartment.length; i++) {
 					this.addstaff.roleid.push(this.checkdepartment[i].id)
 					role.push(this.checkdepartment[i].rolename)
@@ -344,7 +321,27 @@
 					this.rolelist = res.data.obj.datas
 				})
 			},
-		}
+			//传值
+			getinfo() {
+				let para = {
+					token: '',
+					id: this.edituser.row.id
+				}
+			userdetail(para).then((res) => {
+					console.log(res)
+					this.addstaff = res.data.obj
+					res.data.obj.sex = 1 ? this.addstaff.sex = "男" : this.addstaff.sex = "女"
+					res.data.obj.status = true ? this.addstaff.status = "启用" : this.addstaff.status = "禁用"
+				})
+			},
+			//修改密码
+			changepassword() {
+				console.log(1)
+					this.changepass = true
+			}
+
+		},
+
 	}
 </script>
 

@@ -1,7 +1,7 @@
 <template>
 	<el-row>
 		<el-breadcrumb separator="/">
-			<el-breadcrumb-item :to="{ path: '/collectlist' }">收款管理</el-breadcrumb-item>
+			<el-breadcrumb-item><span @click="handleHide">收款管理</span></el-breadcrumb-item>
 			<el-breadcrumb-item>收款登记</el-breadcrumb-item>
 		</el-breadcrumb>
 
@@ -130,6 +130,7 @@
 <script>
 	import axios from 'axios';
 	import util from '../../common/js/util'
+	import {collectsave,banlist} from '../../common/js/config';
 	export default {
 
 		data() {
@@ -209,7 +210,9 @@
 
 		},
 		methods: {
-			
+			handleHide: function() {
+		        this.$emit('setMode', 'collectlist');
+		    },
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
@@ -224,7 +227,7 @@
 								}
 							}
 						}
-						axios.post("https://172.17.9.13:3001/api/finance/collect/save", para).then((res) => {
+						collectsave(para).then((res) => {
 							console.log(para, res)
 							this.$message({
 								message: '提交成功',
@@ -289,16 +292,16 @@
 				}
 			},
 			checkbanklist(){
-				axios.post("https://172.17.9.13:3001/api/sys/bank/accounts").then((res) => {
+				banlist
+				let para = {token:''}
+				banlist(para).then((res) => {
 					this.banklist = res.data.obj
-					//console.log(this.banklist)
+				
 				})
 			}
-			
-
 		}
 	}
-	//			/sys/bank/accounts
+
 </script>
 <style scoped lang="scss">
 	.bg-white {

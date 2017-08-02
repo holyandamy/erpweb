@@ -78,6 +78,7 @@
 
 <script>
 	import axios from 'axios';
+	import { getbanklist,addbank,updatebank,updatestatus } from '../../../common/js/config';
 	export default {
 		data() {
 			return {
@@ -165,7 +166,7 @@
 				this.pageset.pageSize = this.pagesize
 				let page = this.pageset
 
-				axios.post("https://172.17.9.13:3001/api/sys/bank/list", page).then((res) => {
+				getbanklist(page).then((res) => {
 					this.banklist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
 					console.log(res)
@@ -197,12 +198,13 @@
 					if(valid) {
 
 						if(this.addBank.isEnable == "禁用") {
-							this.addBank.isEnable = 0
+							this.addBank.isEnable = '0'
 						} else {
-							this.addBank.isEnable = 1
+							this.addBank.isEnable = '1'
 						}
+
 						let para = this.addBank
-						axios.post('https://172.17.9.13:3001/api/sys/bank/save', para).then((res) => {
+						addbank(para).then((res) => {
 							this.addbankuser = false
 							this.$message('保存成功！');
 							this.getlist()
@@ -218,7 +220,7 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.editbank
-						axios.post('https://172.17.9.13:3001/api/sys/bank/update', para).then((res) => {
+						updatebank(para).then((res) => {
 							//console.log(para)
 							this.showFormVisible = false
 							this.$message('保存成功！');
@@ -235,7 +237,7 @@
 				this.updatestatus.isEnable = i
 				this.updatestatus.id = id
 				let status = this.updatestatus
-				axios.post('https://172.17.9.13:3001/api/sys/bank/status', status).then((res) => {
+				updatestatus(status).then((res) => {
 					this.$notify({
 						title: '成功',
 						message: '状态改变成功',

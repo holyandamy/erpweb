@@ -14,17 +14,20 @@
 			</header>
 			<el-form :inline="true" :model="formInline" class="demo-form-inline" style="text-align: left; padding-left: 30px;">
 				<el-form-item label="操作模块">
-					<el-input v-model="formInline.user" placeholder="操作模块"></el-input>
+					<el-input v-model="formInline.moudle" placeholder="操作模块"></el-input>
 				</el-form-item>
 				<el-form-item label="操作时间">
-					<el-date-picker v-model="search" type="daterange" placeholder="选择日期范围">
+					<el-date-picker v-model="formInline.date" type="daterange" placeholder="选择日期范围">
 					</el-date-picker>
 				</el-form-item>
-				<el-form-item label="操作内容">
-					<el-input v-model="formInline.user" placeholder="操作内容"></el-input>
+				<el-form-item label="操作类型">
+					<el-select v-model="formInline.type" clearable placeholder="操作类型">
+						<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="操作人">
-					<el-input v-model="formInline.user" placeholder="操作人"></el-input>
+					<el-input v-model="formInline.operator" placeholder="操作人"></el-input>
 				</el-form-item>
 
 				<el-form-item>
@@ -32,19 +35,19 @@
 				</el-form-item>
 			</el-form>
 			<section class="padding30">
-				<el-table :data="roleList" style="width: 100%">
-					<el-table-column prop="date" label="操作人">
+				<el-table :data="roleList" style="width: 100%; text-align: left;">
+					<el-table-column prop="operator" label="操作人">
 					</el-table-column>
-					<el-table-column prop="name" label="操作模块" width="180">
+					<el-table-column prop="mod" label="操作模块" width="180">
 					</el-table-column>
-					<el-table-column prop="address" label="操作内容">
+					<el-table-column prop="content" label="操作内容">
 					</el-table-column>
-					<el-table-column prop="address" label="操作日期">
+					<el-table-column prop="createdAt" label="操作日期">
 					</el-table-column>
 				</el-table>
 
 				<div class="page">
-					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pagesize" layout="total, prev, pager, next" :total="total">
+					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="formInline.pageSize" layout="total, prev, pager, next" :total="total">
 					</el-pagination>
 
 				</div>
@@ -57,22 +60,34 @@
 
 <script>
 	import axios from 'axios';
+	import util from '../../../common/js/util'
+	import { loglist,getdeplist,rolelist} from '../../../common/js/config';
 	export default {
 		data() {
 			return {
 				formInline: {
-					user: '',
-					region: ''
+					token: '',
+					moudle: '',
+					date: '',
+					type: 1,
+					operator: '',
+					pageIndex: 0,
+					pageSize: 10
 				},
 				roleList: [],
 				total: 0,
 				currentPage: 1,
-				pagesize: 15,
-				pageset: {
-					pageIndex: '',
-					pageSize: ''
-				},
-				search: ''
+				search: '',
+				options: [{
+					value: '1',
+					label: '新增'
+				}, {
+					value: '2',
+					label: '编辑'
+				}, {
+					value: '3',
+					label: '删除'
+				}],
 
 			}
 		},
@@ -81,13 +96,16 @@
 		},
 		methods: {
 			getList() {
-				this.pageset.pageIndex = this.currentPage - length;
-				this.pageset.pageSize = this.pagesize;
-				let page = this.pageset;
-				axios.post("https://172.17.9.13:3001/api/sys/log/list", page).then((res) => {
-					this.roleList = res.data.obj.datas;
-					this.total = Number(res.data.obj.total);
-
+				let page = this.formInline;
+				let startday = page.date[0]
+				let endday = page.date[1]
+				startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
+				endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
+				page.date = startday + "|" + endday
+				loglist(page).then((res) => {
+					console.log(page,res)
+					//this.roleList = res.data.obj.rows;
+					//this.total = Number(res.data.obj.total);
 				})
 			},
 			handleSizeChange(val) {
@@ -97,7 +115,7 @@
 				this.getList(1)
 			},
 			onSubmit() {
-				console.log('submit!');
+				this.getList()
 			}
 		}
 	}

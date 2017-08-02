@@ -65,6 +65,7 @@
 
 
   import axios from 'axios';
+   import {roledetail,authlist} from '../../../common/js/config';
   export default {
 
     data() {
@@ -79,7 +80,8 @@
     },
 
     created: function () {
-      axios.post('http://172.17.9.13:3001/api/sys/auth/list',{token:11111}).then((res) => {
+    	let para={token:''}
+      authlist(para).then((res) => {
         if(res.data.error){
           this.$message.error(res.data.massage);
         }
@@ -94,7 +96,7 @@
                 token:11111,
                 id:this.$parent.operationType.id,
             }
-            axios.post('http://172.17.9.13:3001/api/sys/role/detail',data).then((res) => {
+           roledetail(data).then((res) => {
               if(res.data.error){
                 this.$message.error(res.data.massage);
               }

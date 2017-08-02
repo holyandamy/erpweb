@@ -133,6 +133,7 @@
 <script>
   import {address} from '../../../common/js/address'
   import axios from 'axios';
+  import {custsave} from '../../../common/js/config';
   export default {
     data() {
 
@@ -267,7 +268,7 @@
         }
         let newPostDate=Object.assign({},this.visitorList)
         newPostDate.birthday=newDate
-          axios.post('http://172.17.9.13:3001/api/cust/save',newPostDate).then((backData) => {
+          custsave(newPostDate).then((backData) => {
             if(backData.error){
               this.$message.error(backData.massage);
             }
