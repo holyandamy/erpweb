@@ -65,7 +65,7 @@
 
 
   import axios from 'axios';
-   import {roledetail,authlist} from '../../../common/js/config';
+   import {token,roledetail,authlist,rolesave,roleupdate} from '../../../common/js/config';
   export default {
 
     data() {
@@ -78,9 +78,8 @@
         optionType:this.$parent.operationType.type
       }
     },
-
     created: function () {
-    	let para={token:''}
+    	let para={token}
       authlist(para).then((res) => {
         if(res.data.error){
           this.$message.error(res.data.massage);
@@ -93,7 +92,7 @@
           if( this.$parent.operationType.type=='edit'){
             this.optionName="编辑角色"
             let data={
-                token:11111,
+                token,
                 id:this.$parent.operationType.id,
             }
            roledetail(data).then((res) => {
@@ -201,12 +200,12 @@
         newAuths.pop();
         if( this.$parent.operationType.type!='edit'){
             let addPostData = {
-              token:1111,
+              token,
               name: this.roleName,
               remark: this.remarkInfo,
               auths: newAuths
             };
-            axios.post('http://172.17.9.13:3001/api/sys/role/save', addPostData).then((backData) => {
+            rolesave(addPostData).then((backData) => {
                 if(backData.error){
                   this.$message.error(backData.massage);
                 }
@@ -217,13 +216,13 @@
         }
         else {
           let editPostData = {
-            token:1111,
+            token,
             name: this.roleName,
             remark: this.remarkInfo,
             auths: newAuths,
             id:this.$parent.operationType.id,
           };
-          axios.post('http://172.17.9.13:3001/api/sys/role/update', editPostData).then((backData) => {
+          roleupdate(editPostData).then((backData) => {
             if(backData.error){
               this.$message.error(backData.massage);
             }

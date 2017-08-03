@@ -50,7 +50,7 @@
 <script>
   import axios from 'axios';
   import AddRole from './addrole';
-  import {rolelist,roledel} from '../../../common/js/config';
+  import {token,rolelist,roledel} from '../../../common/js/config';
   export default {
     components: {
       AddRole, // add role
@@ -60,12 +60,12 @@
         roleList: [],
         modeType:'role',
         total:0,
-        token:123,
+        token,
         currentPage:1,
         pagesize:15,
         operationType:{type:'add',id:''},
         pageset:{
-          token:'ssssss',
+          token,
           pageIndex:0,
           pageSize:''
         },
@@ -96,7 +96,7 @@
       },
       deleteRow(index, rows){
         this.roleList.splice(index, 1);
-        let para ={token:1111,id:rows.id}
+        let para ={token,id:rows.id}
         roledel(para).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);

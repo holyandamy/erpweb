@@ -89,6 +89,7 @@
       return {
         lineList:[],
         addcategory:{
+          token,
           type:'1',
           name:''
         },
@@ -138,11 +139,6 @@
       editorFn(rows){
         this.editcategory.id=rows.id;
         this.editcategory.name=rows.name;
-      },
-      checkValue(formName){
-        this.$refs[formName].validate((valid) => {
-          return valid?true:false
-        });
       },
       saveEdit(){
 

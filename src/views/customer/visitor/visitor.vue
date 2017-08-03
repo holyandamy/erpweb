@@ -55,7 +55,7 @@
 
           <el-table-column  label="操作">
             <template scope="scope">
-              <el-button @click="handleShow(scope.row)" type="text" size="small">编辑</el-button>
+              <el-button @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
               <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
@@ -83,7 +83,7 @@
 <script>
   import AddVisitor from './addVisitor'
   import axios from 'axios';
-  import {custlist,roledel} from '../../../common/js/config';
+  import {token,custlist,custdel} from '../../../common/js/config';
   export default {
     components:{
       AddVisitor
@@ -98,11 +98,12 @@
         pagesize:15,
         operationType:{type:'add',id:''},
         pageset:{
-          token:'ssssss',
+          token,
           pageIndex:0,
           pageSize:''
         },
         searchList:{
+            token,
             name:'',
             mobile:'',
             date:''
@@ -110,7 +111,7 @@
       }
     },
     created(){
-      this.getlist()
+      this.getList()
     },
     methods:{
       setMode(type,option){
@@ -129,7 +130,7 @@
       },
       deleteRow(index, rows){
         this.visitorList.splice(index, 1);
-        let para={token:1111,id:rows.id}
+        let para={token,id:rows.id}
         custdel(para).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);
@@ -144,19 +145,17 @@
         this.operationType.id=rows.id;
         this.modeType='add';
       },
-      getlist(){
+      getList(){
         this.pageset.pageIndex = this.currentPage-1
         this.pageset.pageSize = this.pagesize
         let page = this.pageset
         custlist(page).then((res) => {
-        	console.log(res)
           this.visitorList = res.data.obj.datas
           this.total = Number(res.data.obj.total)
-          console.log(res)
         })
       },
       searchGetList(){
-        if(this.searchList.mobile ||this.searchList.date||this.searchList.name){
+        if(this.searchList.mobile &&this.searchList.date&&this.searchList.name){
           this.$message.error('输入搜索条件');
           return
         }
@@ -178,7 +177,7 @@
         let templateSeacrchList={
             pageIndex:this.currentPage-1,
             pageSize:this.pagesize,
-            token:"111111111111",
+            token,
             name:this.searchList.name,
             date:newDate,
             mobile:this.searchList.mobile,
@@ -186,7 +185,7 @@
          custlist(templateSeacrchList).then((res) => {
             this.visitorList = res.data.obj.datas
             this.total = Number(res.data.obj.total)
-            console.log(res)
+
           })
       },
       handleSizeChange(val) {

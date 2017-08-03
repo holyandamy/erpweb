@@ -10,13 +10,13 @@
 					</el-form-item>
 					<el-form-item label="所在城市" prop="province">
 						<el-col :span="4">
-							<el-select v-model="companyForm.provinceId" placeholder="请选择" @change="changecity">
+							<el-select v-model="companyForm.provinceId" placeholder="请选择" @change="changecity()">
 								<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 								</el-option>
 							</el-select>
 						</el-col>
 						<el-col :span="4">
-							<el-select v-model="companyForm.cityId" placeholder="请选择" @change="changecity">
+							<el-select v-model="companyForm.cityId" placeholder="请选择" @change="changecity()">
 								<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 								</el-option>
 							</el-select>
@@ -251,6 +251,7 @@
 				let pro = {
 					id: this.companyForm.provinceId
 				}
+				console.log(pro)
 				this.getcity(pro)
 				let city = {
 					id: this.companyForm.cityId
@@ -266,19 +267,19 @@
 	.clearfix {
 		clear: both;
 	}
-	
+
 	.bg-white {
 		background: white;
 	}
-	
+
 	.padding30 {
 		padding: 20px;
 	}
-	
+
 	.margin30 {
 		margin: 30px;
 	}
-	
+
 	header {
 		padding: 0 40px;
 		background: white;
@@ -309,7 +310,7 @@
 			color: #333;
 		}
 	}
-	
+
 	.el-select {
 		margin-right: 15px;
 	}

@@ -23,6 +23,8 @@ export const paysave = params => { return axios.post(`${base}/finance/pay/save`,
 export const custlist = params => { return axios.post(`${base}/cust/list`, params) };//获取游客列表
 export const custsave = params => { return axios.post(`${base}/cust/save`, params) };//获取游
 export const custdel = params => { return axios.post(`${base}/cust/del`, params); };//删除
+export const custupdate = params => { return axios.post(`${base}/cust/update`, params) };//获取游
+export const custdetail = params => { return axios.post(`${base}/cust/detail`, params) };//获取游
 
 //产品管理
 /*产品分类*/
@@ -60,6 +62,8 @@ export const rolelist = params => { return axios.post(`${base}/sys/role/list`, p
 export const roledel = params => { return axios.post(`${base}/sys/role/del`, params) };//删除列表
 export const authlist = params => { return axios.post(`${base}/sys/auth/list`, params) };//权限列表
 export const roledetail = params => { return axios.post(`${base}/sys/role/detail`, params) };//角色详情
+export const rolesave = params => { return axios.post(`${base}/sys/role/save`, params) };//权限列表
+export const roleupdate = params => { return axios.post(`${base}/sys/role/update`, params) };//角色详情
 /* 员工管理 */
 export const getuserlist = params => { return axios.post(`${base}/sys/user/list`, params) };//获取员工列表
 export const userstatus = params => { return axios.post(`${base}/sys/user/status`, params) };//更新员工状态

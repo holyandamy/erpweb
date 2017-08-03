@@ -6,7 +6,7 @@
           <el-breadcrumb separator="/">
             <el-breadcrumb-item>系统设置</el-breadcrumb-item>
             <el-breadcrumb-item><span @click="handleHide()">游客管理</span></el-breadcrumb-item>
-            <el-breadcrumb-item>新增游客</el-breadcrumb-item>
+            <el-breadcrumb-item>{{optionName}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
 
@@ -15,7 +15,7 @@
     <section class="padding30">
       <el-row class="bg_white">
         <el-col :span="20">
-          <el-form :model="visitorList"  ref="visitorList" label-width="100px" class="demo-ruleForm" style="text-align: left;">
+          <el-form :model="visitorList"  ref="visitorList"   :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;">
             <div style="width:50%;float: left;overflow:hidden">
             <el-form-item label="游客姓名" prop="name">
               <el-col :span="4">
@@ -24,24 +24,24 @@
             </el-form-item>
             <el-form-item label="游客性别" prop="sexid">
               <el-radio-group v-model="visitorList.sexid">
-                <el-radio label="男" value="1"></el-radio>
-                <el-radio label="女" value="2"></el-radio>
+                <el-radio label='1' >男</el-radio>
+                <el-radio label='2'>女</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="游客手机" prop="mobile">
               <el-col :span="4">
-                <el-input v-model="visitorList.mobile"></el-input>
+                <el-input v-model.number="visitorList.mobile"></el-input>
               </el-col>
             </el-form-item>
-            <el-form-item label="证件类型" prop="certtype" >
+            <el-form-item label="证件类型" prop="certno" >
               <el-col :span="4" style="width: 100px;margin-right: 10px">
                 <el-select v-model="visitorList.certtype" >
-                  <el-option label="身份证" value="1" ></el-option>
-                  <el-option label="护照" value="2"></el-option>
+                  <el-option label="身份证" :value=1 ></el-option>
+                  <el-option label="护照" :value=2></el-option>
                 </el-select>
               </el-col>
               <el-col :span="11">
-                <el-input v-model.number="visitorList.certno"></el-input>
+                <el-input v-model="visitorList.certno" max="18"></el-input>
               </el-col>
             </el-form-item>
             <el-form-item label="游客QQ" prop="qq">
@@ -52,39 +52,30 @@
             <el-form-item label="游客类型" prop="type" >
               <el-col :span="4">
                 <el-select v-model="visitorList.type"  >
-                  <el-option label="高品质游客" value="1"></el-option>
-                  <el-option label="中级游客" value="2"></el-option>
-                  <el-option label="普通游客" value="3"></el-option>
+                  <el-option label="高品质游客" :value=1></el-option>
+                  <el-option label="中级游客" :value=2></el-option>
+                  <el-option label="普通游客" :value=3></el-option>
                 </el-select>
               </el-col>
 
             </el-form-item>
             <el-form-item label="游客区域" prop="">
               <el-col :span="4" style="width: 110px;margin-right: 10px">
-                <el-select v-model="visitorList.provinceid"  @change="loadCity(visitorList.provinceid)">
-                  <el-option  v-for="item in address.provinceList"
-                             :key="item.value"
-                             :label="item.label"
-                             :value="item.value"
-                  ></el-option>
+                <el-select v-model="visitorList.provinceid" placeholder="请选择" @change="changecity">
+                  <el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
+                  </el-option>
                 </el-select>
               </el-col>
               <el-col :span="4" style="width: 110px;margin-right: 10px">
-                <el-select v-model="visitorList.cityid" @change="loadArea(visitorList.cityid)"  >
-                  <el-option  v-for="item in address.cityList"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value"
-                  ></el-option>
+                <el-select v-model="visitorList.cityid" placeholder="请选择" @change="changecity">
+                  <el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
+                  </el-option>
                 </el-select>
               </el-col>
               <el-col :span="4" style="width: 110px;margin-right: 10px">
-                <el-select v-model="visitorList.districtid" >
-                  <el-option  v-for="item in address.districtList"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value"
-                  ></el-option>
+                <el-select v-model="visitorList.districtid" placeholder="请选择">
+                  <el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
+                  </el-option>
                 </el-select>
               </el-col>
             </el-form-item>
@@ -96,7 +87,7 @@
 
             </div>
             <div style="width:40%;float: left;border-left:1px solid rgba(153, 153, 153, 0.17);margin-top: 120px;overflow:hidden">
-              <el-form-item label="游客生日" prop="code">
+              <el-form-item label="游客生日" prop="code"  v-show="birthdayFlag">
                 <div class="block">
                   <el-date-picker
                     v-model="visitorList.birthday"
@@ -133,21 +124,38 @@
 <script>
   import {address} from '../../../common/js/address'
   import axios from 'axios';
-  import {custsave} from '../../../common/js/config';
+  import {token,custsave,custupdate,custdetail, province, city, district } from '../../../common/js/config';
   export default {
     data() {
-
+      //验证手机号码
+      var checkmobile = (rule, value, callback) => {
+        if(!value) {
+          return callback(new Error('手机号码不能为空'));
+        }
+        setTimeout(() => {
+          if(!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+          } else {
+            let mobilereg = /^[0-9]{11}$/;
+            if(mobilereg.test(value)) {
+              callback();
+            } else {
+              callback(new Error('请输入正确的手机号码'));
+            }
+          }
+        }, 1000);
+      };
       return {
         visitorList: {
-          token: '',
+          token,
           name: '',
-          sexid: '',
+          sexid:'1',
           mobile:'',
-          certtype:'',
+          certtype:2,
           certno: '',
           qq: '',
           weixin: '',
-          type: '',
+          type: 2,
           provinceid: '',
           cityid: '',
           districtid: '',
@@ -159,155 +167,160 @@
           cityList:[],
           districtList:[],
 
-        }
+        },
+        optionName:'新增游客',
+        birthdayFlag:true,
+        rules: {
+          name: [
+            { required: true, message: '请输入名称', trigger: 'blur' },
+            { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+          ],
+          sexid: [
+            { required: true, message: '请选择活动资源', trigger: 'change' }
+          ],
+          mobile: [{
+            validator: checkmobile,
+            trigger: 'blur',
+            required: true,
+          }],
+          certno:[
+            { required: false,  min: 7, max: 18, message: '请输入正确的格式', trigger: 'blur' }
+          ],
 
+        },
+        province: [],
+        city: [],
+        district: []
       }
     },
     created(){
-      this.loadProvince('310104')
+      this.getprovince()
+      if( this.$parent.operationType.type=='edit') {
+        this.optionName = "编辑游客";
+        this.birthdayFlag=false;
+        let data = {
+          token,
+          id: this.$parent.operationType.id,
+        }
+        custdetail(data).then((res) => {
+          if (res.data.error) {
+            this.$message.error(res.data.massage);
+          }
+          else {
+            let tempEditList = {};
+            tempEditList = res.data.obj;
+            tempEditList.sexid=String(tempEditList.sexid);
+            this.visitorList=Object.assign({},tempEditList)
+
+          }
+        })
+      }
     },
     methods: {
-      handleHide: function(option) {
-        this.$emit('setMode', 'list',option);
+      handleHide: function (option) {
+        this.$emit('setMode', 'list', option);
       },
-
-      //select area function by Aklliy.mou 2017/8/1
-      getAddress:function(regionId,type) {
-          let array = {};
-          if(type==0) {//province list
-            let obj = address['0'];
-            let len = obj.length;
-            for(let i=0; i<len; i++) {
-              let key = obj[i][0];
-              let value = obj[i][1];
-              array[key] = value;
-            }
-          } else if(type==1) {// city list
-            let str = regionId.substring(0,2);
-            let obj = address['1'];
-            let len = obj.length;
-            for(let i=0; i<len; i++) {
-              let key = obj[i][0];
-              let value = obj[i][1];
-              if(key.substring(0,2)==str) {array[key] = value;}
-            }
-          } else if(type==2) {//district list
-            let str = regionId.substring(0,4);
-            let obj = address['2'];
-            let len = obj.length;
-            for(let i=0; i<len; i++) {
-              let key = obj[i][0];
-              let value = obj[i][1];
-              if(key.substring(0,4)==str) {array[key] = value;}
-            }
-          }
-          return array;
-      },
-      loadProvince:function (regionId){
-          let jsonStr = this.getAddress(regionId,0);
-          this.address.provinceList=[];
-          for(var k in jsonStr) {
-            let item={value:k,label:jsonStr[k]};
-            this.address.provinceList.push(item)
-          }
-        if(regionId.length!=6) {
-          this.address.cityList=[]
-          this.address.districtList=[]
-          let cityItem={value:0,label:'请选择区域'};
-          let districtItem={value:0,label:'请选择区域'};
-          this.address.cityList.push(cityItem);
-          this.address.districtList.push(districtItem);
-        } else {
-         this.visitorList.provinceid=regionId.substring(0,2)+"0000"
-        }
-        this.loadCity(regionId)
-      },
-      loadCity:function(regionId){
-        if(regionId.length!=6) {
-          this.address.districtList=[]
-          let districtItem={value:0,label:'请选择区域'}
-          this.address.districtList.push(districtItem);
-        } else {
-          var jsonStr = this.getAddress(regionId,1);
-          this.address.cityList=[]
-          for(var k in jsonStr) {
-            let item={value:k,label:jsonStr[k]};
-            this.address.cityList.push(item)
-          }
-          if(regionId.substring(2,6)=="0000") {
-            let item={value:0,label:'请选择区域'}
-            this.address.districtList=[]
-            this.address.districtList.push(item)
-          } else {
-            this.visitorList.cityid=regionId.substring(0,4)+"00";
-            this.loadArea(regionId);
-          }
-         this.visitorList.cityid=this.address.cityList[0].value
-        }
-      },
-      loadArea: function(regionId){
-          if(regionId.length==6) {
-            var jsonStr = this.getAddress(regionId,2);
-            this.address.districtList=[]
-            for(var k in jsonStr) {
-              let item={value:k,label:jsonStr[k]};
-              this.address.districtList.push(item)
-            }
-            if(regionId.substring(4,6)!="00") {
-              this.visitorList.districtid=regionId
-            }
-          }
-        this.visitorList.districtid=this.address.districtList[0].value
-        },
       submitForm() {
-          let newDate='';
-        if(this.visitorList.birthday!=''){
-          const mouth={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sept:'09',Oct:'10',Nov:'11',Dec:'12' }
-          let start=String(this.visitorList.birthday).split(' ');
-          newDate=start[3]+'-'+mouth[start[1]]+'-'+start[2]
+          let newDate = '';
+          if (this.visitorList.birthday != '') {
+            const mouth = {
+              Jan: '01',
+              Feb: '02',
+              Mar: '03',
+              Apr: '04',
+              May: '05',
+              Jun: '06',
+              Jul: '07',
+              Aug: '08',
+              Sept: '09',
+              Oct: '10',
+              Nov: '11',
+              Dec: '12'
+            }
+            let start = String(this.visitorList.birthday).split(' ');
+            newDate = start[3] + '-' + mouth[start[1]] + '-' + start[2]
+          }
+          let newPostDate = Object.assign({}, this.visitorList)
+          newPostDate.birthday = newDate;
+          newPostDate.sexid = parseInt(newPostDate.sexid);
+          newPostDate.mobile = String(newPostDate.mobile);
+          this.$refs['visitorList'].validate((valid) => {
+            if (valid) {
+              if( this.$parent.operationType.type=='edit') {
+                newPostDate.id=this.$parent.operationType.id;
+                delete  newPostDate.birthday;
+                custupdate(newPostDate).then((backData) => {
+                  if (backData.error) {
+                    this.$message.error(backData.massage);
+                  }
+                  else {
+                    this.handleHide('list');
+                  }
+                })
+
+              }
+              else{
+                custsave(newPostDate).then((backData) => {
+                  if (backData.error) {
+                    this.$message.error(backData.massage);
+                  }
+                  else {
+                    this.handleHide('list');
+                  }
+                })
+
+              }
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
+      },
+      //获取省级列表
+      getprovince() {
+        let count = "fb0828b148bc48afbab8ef03c55d153b"
+        let para = {
+          id: count,
+          token: ''
         }
-        let newPostDate=Object.assign({},this.visitorList)
-        newPostDate.birthday=newDate
-          custsave(newPostDate).then((backData) => {
-            if(backData.error){
-              this.$message.error(backData.massage);
-            }
-            else {
-              this.handleHide('list');
-            }
-          })
+        province(para).then((res) => {
+          this.province = res.data.obj
 
+        }).catch(function (err) {
+          console.log("连接错误")
+        })
+      },
+      //获取市列表
+      getcity(pro) {
+        city(pro).then((res) => {
+          this.city = res.data.obj
 
+        }).catch(function (err) {
+          console.log("连接错误")
+        })
+      },
+      //获取区列表
+      getdistrict(city) {
+        district(city).then((res) => {
+          this.district = res.data.obj
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        }).catch(function (err) {
+          console.log("连接错误")
+        })
+      },
+      //选择城市
+      changecity() {
+        let pro = {
+          id: this.visitorList.provinceid
+        }
+        this.getcity(pro)
+        let city = {
+          id: this.visitorList.cityid
+        }
+        this.getdistrict(city)
       }
-   }
+    }
+
   }
 </script>
 
