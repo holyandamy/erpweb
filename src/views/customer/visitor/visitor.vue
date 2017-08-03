@@ -130,7 +130,7 @@
       deleteRow(index, rows){
         this.visitorList.splice(index, 1);
         let para={token:1111,id:rows.id}
-        roledel(para).then((res) => {
+        custdel(para).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);
           }
