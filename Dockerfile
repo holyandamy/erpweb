@@ -7,7 +7,7 @@ RUN apk --update add wget
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . /usr/src/app
-RUN npm install
+RUN yarn
 
 ENTRYPOINT ["npm","run","dev"] 
 EXPOSE 8080
