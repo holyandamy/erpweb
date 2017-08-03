@@ -155,7 +155,7 @@
           certno: '',
           qq: '',
           weixin: '',
-          type: 2,
+          type: 1,
           provinceid: '',
           cityid: '',
           districtid: '',
@@ -210,6 +210,7 @@
             let tempEditList = {};
             tempEditList = res.data.obj;
             tempEditList.sexid=String(tempEditList.sexid);
+            tempEditList.mobile=parseInt(tempEditList.mobile);
             this.visitorList=Object.assign({},tempEditList)
 
           }

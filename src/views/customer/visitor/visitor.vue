@@ -155,10 +155,6 @@
         })
       },
       searchGetList(){
-        if(this.searchList.mobile &&this.searchList.date&&this.searchList.name){
-          this.$message.error('输入搜索条件');
-          return
-        }
         let newDate
         if(this.searchList.date!=''){
           const mouth={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sept:'09',Oct:'10',Nov:'11',Dec:'12' }
@@ -168,7 +164,7 @@
         }
         if(this.searchList.mobile){
           let mobileReg = /^[0-9]{11}$/;
-          if(mobileReg.test(this.searchList.mobile)) {
+          if(!mobileReg.test(this.searchList.mobile)) {
             this.$message.error('输入正确手机号码');
             return
           }
