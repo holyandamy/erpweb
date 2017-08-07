@@ -7,6 +7,10 @@ import 'element-ui/lib/theme-default/index.css'
 import VueRouter from 'vue-router'
 import routes from './routes'
 import '../theme/index.css'
+import '../static/umeditor/ueditor.config.js'
+import '../static/umeditor/ueditor.all.js'
+import '../static/umeditor/lang/zh-cn/zh-cn.js'
+import '../static/umeditor/ueditor.parse.min.js'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueRouter)
