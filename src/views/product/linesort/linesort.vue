@@ -16,11 +16,11 @@
       </header>
       <section class="padding30">
         <el-table :data="lineList" style="text-align: left; font-size: 12px;">
-          <el-table-column prop="code" label="系统分类">
+          <el-table-column prop="typeName" label="系统分类">
           </el-table-column>
           <el-table-column prop="name" label="分类名称">
           </el-table-column>
-          <el-table-column prop="sex" label="线路数量">
+          <el-table-column prop="total" label="线路数量">
           </el-table-column>
 
           <el-table-column  label="操作">
@@ -139,6 +139,7 @@
       editorFn(rows){
         this.editcategory.id=rows.id;
         this.editcategory.name=rows.name;
+        this.showEdit=true;
       },
       saveEdit(){
 
