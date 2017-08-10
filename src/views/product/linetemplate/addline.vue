@@ -30,9 +30,6 @@
 									</el-option>
 								</el-select>
 							</el-form-item>
-							<el-form-item label="模板导入">
-								<el-button @click="addtemplate">添加模板</el-button>
-							</el-form-item>
 							<el-form-item label="线路名称" prop="name">
 								<el-input v-model="baseForm.name"></el-input>
 							</el-form-item>
@@ -163,8 +160,8 @@
 				<h2 class="d_jump">编辑行程</h2>
 
 				<div class="tablemenu">
-					<el-button @click="editor = false; menucheck1=true; menucheck2=false">普通方式录入<i :class="[{'el-icon-check': menucheck1},'el-icon--right']"></i></el-button>
-					<el-button @click="editor = true; menucheck1=false; menucheck2=true">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
+					<el-button style="float: left;" @click="editor = false; menucheck1=true; menucheck2=false;basetype">普通方式录入<i :class="[{'el-icon-check': menucheck1},'el-icon--right']"></i></el-button>
+					<el-button  style="float: left;"  @click="editor = true; menucheck1=false; menucheck2=true;selftype">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
 					<el-form-item label="行程天数" style="float: left; margin-bottom: 0;">
 								<el-input v-model="baseForm.days" v-if="editor"></el-input>
 								<div class="el-input-number" v-else>
@@ -245,7 +242,7 @@
 							<el-row>
 								<el-col :span="14">
 									<el-form-item label="图片" prop="titleimages">
-										<el-upload :action="actionurl" list-type="picture-card" :before-upload="imgupload" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+										<el-upload action="http://v0.api.upyun.com/" :data="uploadform" list-type="picture-card" :before-upload="imgupload" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
 											<i class="el-icon-plus"></i>
 										</el-upload>
 										<el-dialog v-model="dialogVisible" size="tiny">
@@ -311,48 +308,14 @@
 				</div>
 
 			</el-form>
-			<el-dialog title="提示" :visible.sync="templatevisiable" size="small">
-				<el-form :inline="true" :model="addtemplateform" class="demo-form-inline" ref="addtemplateforms">
 
-					<el-form-item label="选择线路分类">
-						<el-select v-model="categorytypetem" placeholder="请选择" @change="checklinetem">
-							<el-option v-for="item in categoryids" :key="item.value" :label="item.label" :value="item.value">
-							</el-option>
-						</el-select>
-						<el-select v-model="addtemplateform.categoryid" placeholder="请选择">
-							<el-option v-for="item in temcates" :key="item.id" :label="item.name" :value="item.id">
-							</el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="模板标题">
-						<el-input v-model="addtemplateform.linename"></el-input>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" @click="templatesubmit">查询</el-button>
-					</el-form-item>
-					<el-form-item label="选择模板">
-			    
-			 
-  
-			<el-radio-group v-model="templateselectid">
-		    <el-radio :label="template.id" :key="template.name"  v-for="template in templatelists">{{template.name}}</el-radio>
-		   </el-radio-group>
-			  </el-form-item>
-				</el-form>
-
-				<span slot="footer" class="dialog-footer">
-    <el-button @click="templatevisiable = false">取 消</el-button>
-    <el-button type="primary" @click="confirmtemplate">确 定</el-button>
-  </span>
-			</el-dialog>
 		</section>
 	</div>
 </template>
 
 <script>
-	import axios from 'axios';
 	import UE from '../../common/ue.vue';
-	import { linesave, province, city, district, categoryall, linecategorytype, templatelist,templatdetail} from '../../../common/js/config';
+	import { province, city, district, categoryall, linecategorytype,templatsave } from '../../../common/js/config';
 	export default {
 		components: {
 			UE
@@ -360,23 +323,7 @@
 		props: ['scope'],
 		data() {
 			return {
-				templateselectid:'',
-				temcates:'',
-				categorytypetem:'',
-				templatelists:[],
-				//模板列表请求参数
-				addtemplateform: {
-					token: '',
-					pageindex: 0,
-					pagesize: 889888,
-					categoryid: '',
-					toid: '',
-					status: -1,
-					linename: '',
-					type: ''
-				},
-				templatevisiable: false,
-				headerqq: {},
+				headerqq:{},
 				traffics: [{
 					value: '1',
 					label: '飞机'
@@ -521,14 +468,15 @@
 				city: [],
 				district: [],
 				deafultnumber: 2,
-				actionurl: '',
-				uploadform: {},
-
+				actionurl:'',
+				uploadform:{},
+				
 			}
 		},
 		mounted: function() {
 			this.getprovince()
-
+			
+			
 		},
 		methods: {
 			jump(index) {
@@ -576,35 +524,21 @@
 					}
 				}
 			},
-
 			//选择分类
 			checkline() {
 				let para = {
 					token: '',
-					type:this.baseForm.categorytype
+					type: this.baseForm.categorytype
 				}
 				linecategorytype(para).then((res) => {
 					this.categorytypes = res.data.obj
-				})
-			},
-			checklinetem(){
-				let para = {
-					token: '',
-					type:this.categorytypetem
-				}
-				linecategorytype(para).then((res) => {
-					this.temcates = res.data.obj
 				})
 			},
 			//返回线路列表
 			handleHide: function() {
 				this.$emit('setMode', 'linelist');
 				this.$emit('getlinelist');
-
-			},
-			//添加模板
-			addtemplate() {
-				this.templatevisiable = true
+				
 			},
 			//保存表单
 			submitForm(formName) {
@@ -621,10 +555,10 @@
 							para.routes[0].content = html
 							para.edittype = 1
 						}
-
-						linesave(para).then((res) => {
+						
+						templatsave(para).then((res) => {
+							console.log(JSON.stringify(para))
 							if(res.data.error == 1) {
-
 								this.$message({
 									showClose: true,
 									message: res.data.message,
@@ -646,6 +580,18 @@
 						return false;
 					}
 				});
+			},
+			//普通方式录入
+			basetype(){
+				this.baseForm.routes[0].content = ""
+				for(let i = 0 ; i <this.baseForm.routes.length;i++){
+					this.baseForm.days = i+1
+				}
+					
+			},
+			//自定义录入
+			selftype(){
+				this.baseForm.days = this.oldday
 			},
 			//重置表单
 			resetForm(formName) {
@@ -673,7 +619,7 @@
 			addday() {
 				this.baseForm.days += 1
 				this.baseForm.routes.push({
-					'number': this.deafultnumber++,
+					'number': this.baseForm.days,
 					'title': '',
 					'titleimages': '',
 					'isbreakfast': false,
@@ -695,26 +641,14 @@
 				this.dialogImageUrl = file.url;
 				this.dialogVisible = true;
 			},
-			imgupload() {
-				axios.post('http://172.17.9.13:3001/file/upyun/getSign').then((res) => {
-					let fromdata = {
-						authorization:res.data.Authorization
-					}
-//					let formData = new FormData();
-//					formData.append("policy", "");
-//					formData.append("authorization", res.data.Authorization);
-//					formData.append("file", );
-					console.log(res)
-				})
-				
-
-//				this.uploadform = {}
-//				this.uploadform.bucket = '';
-//				this.uploadform['save-key'] = '/file/upyun/getSign';
-//				this.uploadform.expiration = Math.floor(new Date().getTime() / 1000) + 86400;
-//				console.log(formData)
-//				this.actionurl = 'http://v0.api.upyun.com/'
-				//				console.log(this.actionurl)
+			imgupload(){
+				this.uploadform = {}
+				this.uploadform.bucket = '';
+				this.uploadform['save-key'] = '/file/upyun/getSign';
+				this.uploadform.expiration = Math.floor(new Date().getTime() / 1000) + 86400;
+				console.log(this.uploadform)
+//				this.actionurl = 'http://v0.api.upyun.com/' 
+//				console.log(this.actionurl)
 			},
 			//获取省级列表
 			getprovince() {
@@ -783,30 +717,7 @@
 				} else {
 					ts.value = ts.value.substr(0, ts.selectionStart) + str + ts.value.substring(ts.selectionStart, tclen);
 				}
-			},
-			//模板查询
-			templatesubmit() {
-				let para = this.addtemplateform
-				templatelist(para).then((res) => {
-					this.templatelists = res.data.obj.datas
-				console.log(this.templatelists)
-				})
-			},
-			//确认选择模板
-			confirmtemplate(){
-				this.templatevisiable= false
-				let para = {
-					token:'',
-					id:this.templateselectid
-				}
-				templatdetail(para).then((res) => {
-					console.log(res.data.obj)
-					this.baseForm =res.data.obj
-				})
-	
-				
 			}
-			
 
 		}
 	}

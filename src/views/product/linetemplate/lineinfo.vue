@@ -106,36 +106,14 @@
 					<li><span>内部备注</span><div class="xc"><pre>{{detail.innerremark}}</pre></div></li>
 				</ul>
 			</div>
-			<h2 class="d_jump">操作日志 </h2>
 			
-				<el-table
-    :data="loglist"
-    border
-    style="width: 100%">
-    <el-table-column
-      prop="creater"
-      label="操作人"
-       width="180"
-     >
-    </el-table-column>
-    <el-table-column
-      prop="createtime"
-      label="操作时间"
-       width="180"
-     >
-    </el-table-column>
-    <el-table-column
-      prop="content"
-      label="操作内容">
-    </el-table-column>
-  </el-table>
 			
 		</section>
 	</div>
 </template>
 
 <script>
-	import {linedetail} from '../../../common/js/config';
+	import {templatdetail} from '../../../common/js/config';
 	export default {
 		props:['lineid'],
 		data() {
@@ -143,7 +121,6 @@
 				menus: ['基本信息', '行程', '预定须知', '发布平台'],
 				active:0,
 				detail:{},
-				loglist:[],
 				edittype:true
 			}
 		},
@@ -156,7 +133,7 @@
 					token:'',
 					id:this.lineid
 				}
-				linedetail(para).then((res) => {
+				templatdetail(para).then((res) => {
 					this.detail = res.data.obj
 					if(this.detail.edittype == 0 ){
 						this.edittype = true
@@ -166,7 +143,6 @@
 					this.detail.routes[0].content = str
                     
 					}
-					this.loglist = res.data.obj.logs
 					let categorytype =  res.data.obj.categorytype
 					switch (categorytype){
 						case 0:

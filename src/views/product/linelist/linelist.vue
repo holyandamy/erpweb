@@ -26,7 +26,7 @@
 						<el-col :span="20">
 							<ul>
 								<li>全部</li>
-								<li v-for="(linesort,index) in linesorts" :class="{checked:ischecked == index}" @click="changecondition(index)">{{linesort}}</li>
+								<li v-for="(linesort,index) in linesorts" :class="{checked:ischecked == index}" @click="changecondition(index,linesort)">{{linesort.name}}</li>
 							</ul>
 						</el-col>
 					</el-row>
@@ -38,7 +38,7 @@
 						<el-col :span="20">
 							<ul>
 								<li>全部</li>
-								<li v-for="(destination,index) in destinations" :class="{checked:checkeddest == index}" @click="changedest(index)">{{destination}}</li>
+								<li v-for="(destination,index) in destinations" :class="{checked:checkeddest == index}" @click="changedest(index,destination)">{{destination.name}}</li>
 							</ul>
 						</el-col>
 					</el-row>
@@ -69,23 +69,23 @@
 					</el-row>
 				</div>
 				<el-table :data="linelist" border style="width: 100%">
-					<el-table-column fixed prop="lineid" label="线路ID">
+					<el-table-column fixed prop="code" label="线路ID" width="90">
 					</el-table-column>
-					<el-table-column prop="linename" label="线路名称">
+					<el-table-column prop="name" label="线路名称">
 					</el-table-column>
-					<el-table-column prop="linesort" label="线路分类">
+					<el-table-column prop="categoryName" label="线路分类"  width="200">
 					</el-table-column>
-					<el-table-column prop="departure" label="出发地">
+					<el-table-column prop="depart" label="出发地" width="110">
 					</el-table-column>
-					<el-table-column prop="destination" label="目的地">
+					<el-table-column prop="dest" label="目的地" width="110">
 					</el-table-column>
-					<el-table-column prop="day" label="天数">
+					<el-table-column prop="days" label="天数" width="90">
 					</el-table-column>
-					<el-table-column prop="establish" label="创建人">
+					<el-table-column prop="creater" label="创建人" width="100">
 					</el-table-column>
-					<el-table-column prop="status" label="审批状态">
+					<el-table-column prop="approve" label="审批状态" width="110">
 					</el-table-column>
-					<el-table-column fixed="right" label="操作">
+					<el-table-column fixed="right" label="操作" width="110">
 						<template scope="scope">
 							<el-button @click="setMode('lineinfo'),lineinfo(scope)" type="text" size="small">查看</el-button>
 							<a href="javascript:;" class="operation">
@@ -95,8 +95,8 @@
 						      </span>
 									<el-dropdown-menu slot="dropdown">
 										<!--<el-dropdown-item > <a href="javascript:;" @click="handleEdit(scope.$index, scope.row)">编辑</a></el-dropdown-item>-->
-										<el-dropdown-item><span @click="examine(scope)">线路审核</span></el-dropdown-item>
-										<el-dropdown-item><span @click="setMode('addline'),lineinfo(scope)">编辑线路</span></el-dropdown-item>
+										<el-dropdown-item v-if="scope.row.isApprove=true"><span @click="examine(scope)">线路审核</span></el-dropdown-item>
+										<el-dropdown-item><span @click="setMode('editline'),lineinfo(scope)">编辑线路</span></el-dropdown-item>
 										<el-dropdown-item><span @click="settop(scope)">线路置顶</span></el-dropdown-item>
 										<el-dropdown-item><span @click="updatastatus(scope,4)">查看团期</span></el-dropdown-item>
 										<el-dropdown-item><span @click="updatastatus(scope,4)">操作日志</span></el-dropdown-item>
@@ -115,8 +115,9 @@
 			</section>
 		</div>
 		
-		<LineInfo v-else-if="modeType == 'lineinfo'" :scope="scope" :lineid = 'lineid' @setMode="setMode"></LineInfo>
-		<AddIine v-else="modeType == 'addline'" :scope="scope"  @setMode="setMode"></AddIine>
+		<LineInfo v-else-if="modeType == 'lineinfo'"  :lineid = 'lineid' @setMode="setMode"></LineInfo>
+		<EditInfo v-else-if="modeType == 'editline'" @getlinelist="getlinelist" :lineid = 'lineid'  :scope = "scope"  @setMode="setMode"></EditInfo>
+		<AddIine v-else="modeType == 'addline'" @getlinelist="getlinelist"  @setMode="setMode"></AddIine>
 		
 		<el-dialog title="线路审核" size="tiny" :visible.sync="examinevisiable">
 			<el-form label-width="80px" :model="examineform" style="text-align: left;">
@@ -159,16 +160,18 @@
 	import {linelist,destlist,categoryall,lineapprove,linetop} from '../../../common/js/config';
 	import LineInfo from './lineinfo'
 	import AddIine from './addline'
+	import EditInfo from './editline'
 	export default {
 		components: {
 			LineInfo,
-			AddIine
+			AddIine,
+			EditInfo 
 		},
 		data() {
 			return {
 				total:0,
 				lineid:'',
-				scope:'',
+				scope:{},
 				examinevisiable: false, //线路审核
 				examineform: {
 					token:'',
@@ -189,88 +192,115 @@
 					type:'',//1.国内，2出境，3周边
 				},
 				currentPage:0,
-				linesorts: ['分类1', '分类2', '分类3'], //线路分类
-				destinations: ['上海', '北京', '广州'], //目的地
+				linesorts: [], //线路分类
+				destinations: [], //目的地
 				ischecked: 0,
 				checkeddest: 0,
-				linelist: [{
-					'lineid': '4545454',
-					'linename': '阿娇的发生',
-					'linesort': '国内长线',
-					'departure': '上海',
-					'destination': '北京',
-					'day': '3',
-					'establish': '张若昀',
-					'status': '待审批'
-
-				}] //线路列表
+				linelist: [], //线路列表
+				selectid:'',
+				examineid:''
 			}
 		},
 		created(){
 			this.getlinelist()
 			this.getcategoryall()
-			this.changecondition()
-			
 		},
 		methods: {
 			//筛选线路分类
-			changecondition(index) {
+			changecondition(index,list) {
 				this.ischecked = index
-				let para = this.search.categoryid
+				this.search.categoryid = list.id
+			
+				let para = {token:'',ategoryid:list.id}
 				destlist(para).then((res) => {
-					console.log(res,"目的地列表")
+					this.destinations = res.data.obj
 				})
-
 			},
 			//获取线路列表
 			getlinelist(){
 				let para = this.search
 				linelist(para).then((res) => {
-					console.log(para,res,"线路列表")
+					this.linelist = res.data.obj.datas
+					for(let i = 0 ; i <res.data.obj.datas.length;i++){
+						let list = res.data.obj.datas
+						console.log(list)
+						if(list[i].approve == 0){
+							this.linelist[i].approve = "无须审批"
+						}else if(list[i].approve == 1){
+							this.linelist[i].approve = "待审批"
+						}else if(list[i].approve == 2){
+							this.linelist[i].approve = "通过"
+						}else{
+							this.linelist[i].approve = "拒绝"
+						}
+					}
+					this.total = Number(res.data.obj.total)
+//					console.log(para)
 				})
 			},
 			//获取分类列表
 			getcategoryall(){
 				let para= {token:''}
 				categoryall(para).then(res =>{
-					console.log(res,"分类列表")
+					this.linesorts = res.data.obj
 				})
 			},
-			changedest(index) {
+			changedest(index,destination) {
 				this.checkeddest = index
+				this.search.toid = destination.id
 			},
 			//查看线路
 			setMode(type) {
 				this.modeType = type
 			},
 			lineinfo(scope){
+				this.lineid = scope.row.id
 				this.scope = scope.row
 			},
 			//线路审核
 			examine(scope) {
 				this.examinevisiable = true
+				this.examineid = scope.row.id
 			},
 			//确定审批
 			examineinfo(){
 				this.examinevisiable = false
 				let para = this.examineform
+				para.id = this.examineid
 				lineapprove(para).then((res) => {
-					console.log(para,res,"线路审核")
+					if(res.data.error == 1){
+						 this.$message.error(res.data.message);
+					}else{
+						this.$message({
+				          message: '审核状态改变成功',
+				          type: 'success'
+				        });
+				        this.getlinelist()
+					}
 				})
 			},
 			//线路置顶
 			settop(scope){
 				this.topvisiable = true
+				this.selectid = scope.row.id
 			},
 			comfirmtop(){
 				this.topvisiable = false
 				let para = {
 					token:'',
-					id:'',
-					isTop:''
+					id:this.selectid,
+					isTop:true
 				}
 				linetop(para).then((res) => {
-					console.log(para,res,"线路审核")
+					if(res.data.error == 1){
+						 this.$message.error(res.data.message);
+					}else{
+						this.$message({
+				          message: '置顶成功',
+				          type: 'success'
+				        });
+				        this.getlinelist()
+					}
 				})
 			},
 			handleCurrentChange(){
