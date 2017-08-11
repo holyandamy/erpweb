@@ -476,7 +476,8 @@
 				district: [],
 				editor:'',
 				editorhtml:'',
-				oldday:''
+				oldday:'',
+				deafultnumber:1
 			}
 		},
 		mounted: function() {

@@ -243,6 +243,7 @@
 				let para= {token:''}
 				categoryall(para).then(res =>{
 					this.linesorts = res.data.obj
+					console.log(this.linesorts)
 				})
 			},
 			changedest(index,destination) {

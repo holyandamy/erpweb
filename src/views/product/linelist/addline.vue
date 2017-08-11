@@ -163,8 +163,8 @@
 				<h2 class="d_jump">编辑行程</h2>
 
 				<div class="tablemenu">
-					<el-button @click="editor = false; menucheck1=true; menucheck2=false">普通方式录入<i :class="[{'el-icon-check': menucheck1},'el-icon--right']"></i></el-button>
-					<el-button @click="editor = true; menucheck1=false; menucheck2=true">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
+					<el-button style="float: left;" @click="editor = false; menucheck1=true; menucheck2=false">普通方式录入<i :class="[{'el-icon-check': menucheck1},'el-icon--right']"></i></el-button>
+					<el-button style="float: left;" @click="editor = true; menucheck1=false; menucheck2=true">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
 					<el-form-item label="行程天数" style="float: left; margin-bottom: 0;">
 								<el-input v-model="baseForm.days" v-if="editor"></el-input>
 								<div class="el-input-number" v-else>
@@ -612,6 +612,63 @@
 					if(valid) {
 						let para = this.baseForm
 						let html = this.$refs.ue.getUEContent()
+						let categorytype = para.categorytype
+					switch(categorytype) {
+						case "全部":
+							this.baseForm.categorytype = 0 ;
+							break;
+						case "国内游":
+							this.baseForm.categorytype = 1;
+							break;
+						case "出境游":
+							this.baseForm.categorytype = 2;
+							break;
+						case "周边游":
+							this.baseForm.categorytype = 3;
+							break;
+					}
+					let day = para.trafficgo
+					switch(day) {
+						case "飞机":
+							this.baseForm.trafficgo = 1;
+							break;
+						case "动车":
+							this.baseForm.trafficgo = 2;
+							break;
+						case "火车":
+							this.baseForm.trafficgo = 3;
+							break;
+						case "高铁":
+							this.baseForm.trafficgo = 4;
+							break;
+						case "大巴":
+							this.baseForm.trafficgo = 5;
+							break;
+						case "轮船":
+							this.baseForm.trafficgo = 6;
+							break;
+					}
+					let trafficback =para.trafficreturn
+					switch(trafficback) {
+						case "飞机":
+							this.baseForm.trafficreturn = 1;
+							break;
+						case "动车":
+							this.baseForm.trafficreturn = 2;
+							break;
+						case "火车":
+							this.baseForm.trafficreturn = 3;
+							break;
+						case "高铁":
+							this.baseForm.trafficreturn = 4;
+							break;
+						case "大巴":
+							this.baseForm.trafficreturn = 5;
+							break;
+						case "轮船":
+							this.baseForm.trafficreturn = 6;
+							break;
+					}
 						if(this.editor == false) {
 							//基本录入
 							para.routes = this.baseForm.routes
@@ -802,6 +859,63 @@
 				templatdetail(para).then((res) => {
 					console.log(res.data.obj)
 					this.baseForm =res.data.obj
+					let categorytype = res.data.obj.categorytype
+					switch(categorytype) {
+						case 0:
+							this.baseForm.categorytype = "全部";
+							break;
+						case 1:
+							this.baseForm.categorytype = "国内游";
+							break;
+						case 2:
+							this.baseForm.categorytype = "出境游";
+							break;
+						case 3:
+							this.baseForm.categorytype = "周边游";
+							break;
+					}
+					let day = res.data.obj.trafficgo
+					switch(day) {
+						case 1:
+							this.baseForm.trafficgo = "飞机";
+							break;
+						case 2:
+							this.baseForm.trafficgo = "动车";
+							break;
+						case 3:
+							this.baseForm.trafficgo = "火车";
+							break;
+						case 4:
+							this.baseForm.trafficgo = "高铁";
+							break;
+						case 5:
+							this.baseForm.trafficgo = "大巴";
+							break;
+						case 6:
+							this.baseForm.trafficgo = "轮船";
+							break;
+					}
+					let trafficback = res.data.obj.trafficreturn
+					switch(trafficback) {
+						case 1:
+							this.baseForm.trafficreturn = "飞机";
+							break;
+						case 2:
+							this.baseForm.trafficreturn = "动车";
+							break;
+						case 3:
+							this.baseForm.trafficreturn = "火车";
+							break;
+						case 4:
+							this.baseForm.trafficreturn = "高铁";
+							break;
+						case 5:
+							this.baseForm.trafficreturn = "大巴";
+							break;
+						case 6:
+							this.baseForm.detail = "轮船";
+							break;
+					}
 				})
 	
 				
