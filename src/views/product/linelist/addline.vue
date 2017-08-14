@@ -245,7 +245,7 @@
 							<el-row>
 								<el-col :span="14">
 									<el-form-item label="图片" prop="titleimages">
-										<el-upload id="file"  action="" list-type="picture-card" :before-upload="imguploadbefore"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+										<el-upload  action="" list-type="picture-card" :on-change="changeuoload" :before-upload="imguploadbefore"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
 											<i class="el-icon-plus"></i>
 										</el-upload>
 										<el-dialog v-model="dialogVisible" size="tiny">
@@ -529,7 +529,7 @@
 		},
 		mounted: function() {
 			this.getprovince()
-			this.getHeaderSign()
+			
 			
 		},
 		methods: {
@@ -752,33 +752,34 @@
 				this.dialogImageUrl = file.url;
 				this.dialogVisible = true;
 			},
-			imguploadbefore(){
+			changeuoload(file, fileList){
+				
+			},
+			imguploadbefore(file){
 				var bucket = new upyun.Bucket('xtimg')
 				function  getHeaderSign(bucket, method, path){
-					var params = 'bucket=' + 'xtimg' + '&method=' + method + '&path=' + path
-			    	return fetch('http://172.17.9.13:3001/file/upyun/getSign'+ params)
+					 axios.post('http://172.17.9.13:3001/file/upyun/getSign',{bucket, method, path})
 				    	.then(function (response) {
 	                    if (response.status !== 200) {
 	                        console.error('gen header sign faild!')
 	                        return;
 	                    }
-	                    return response.json()
+	                    return response
 	               		})
 				}
 				function bodySignCallback(bucket, params) {
-				  var params = 'bucket=' + 'xtimg' + '&method=POST&path=' + params['save-key']
-		           return fetch('http://172.17.9.13:3001/file/upyun/bodySign?' + params)
+					 return axios.post('http://172.17.9.13:3001/file/upyun/bodySign',{bucket, params})
 		                .then(function (response) {
 		                    if (response.status !== 200) {
 		                        console.error('gen header sign faild!')
 		                        return;
 		                    }
-		                     response.text()
+		                   return response
 		                })
 		        }
+				
 				var client = new upyun.Client(bucket,getHeaderSign)
 				client.setBodySignCallback(bodySignCallback)
-				var file = document.getElementById('file')
 				client.formPutFile('/{year}/{mon}/{day}/upload_{random32}', file).then(function(result) {
 				       	console.log(1)
 				}).catch(function(err){
