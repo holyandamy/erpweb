@@ -245,7 +245,7 @@
 							<el-row>
 								<el-col :span="14">
 									<el-form-item label="图片" prop="titleimages">
-										<el-upload id="file"  action="#" list-type="picture-card" :before-upload="imguploadbefore"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+										<el-upload id="file"  action="" list-type="picture-card" :before-upload="imguploadbefore"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
 											<i class="el-icon-plus"></i>
 										</el-upload>
 										<el-dialog v-model="dialogVisible" size="tiny">
@@ -754,16 +754,36 @@
 			},
 			imguploadbefore(){
 				var bucket = new upyun.Bucket('xtimg')
-				function  getHeaderSign(){
-			    	axios.post('http://172.17.9.13:3001/file/upyun/getSign').then((res) =>{
-				       	return res.data
-				     })
+				function  getHeaderSign(bucket, method, path){
+					var params = 'bucket=' + 'xtimg' + '&method=' + method + '&path=' + path
+			    	return fetch('http://172.17.9.13:3001/file/upyun/getSign'+ params)
+				    	.then(function (response) {
+	                    if (response.status !== 200) {
+	                        console.error('gen header sign faild!')
+	                        return;
+	                    }
+	                    return response.json()
+	               		})
 				}
-				var client = new upyun.Client({bucketName: "xtimg"},getHeaderSign)
+				function bodySignCallback(bucket, params) {
+				  var params = 'bucket=' + 'xtimg' + '&method=POST&path=' + params['save-key']
+		           return fetch('http://172.17.9.13:3001/file/upyun/bodySign?' + params)
+		                .then(function (response) {
+		                    if (response.status !== 200) {
+		                        console.error('gen header sign faild!')
+		                        return;
+		                    }
+		                     response.text()
+		                })
+		        }
+				var client = new upyun.Client(bucket,getHeaderSign)
+				client.setBodySignCallback(bodySignCallback)
 				var file = document.getElementById('file')
-				client.putFile('/{year}/{mon}/{day}/upload_{random32}' + file.name, file).then(function(result) {
+				client.formPutFile('/{year}/{mon}/{day}/upload_{random32}', file).then(function(result) {
 				       	console.log(1)
-				})
+				}).catch(function(err){
+                console.log(err)
+            })
 			},
 		 //获取省级列表
 			getprovince() {
