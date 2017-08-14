@@ -25,7 +25,7 @@
 					</span>
 						<el-col :span="20">
 							<ul>
-								<li>全部</li>
+								<li @click="changecondition('-1')" :class="{checked:ischecked == -1}">全部</li>
 								<li v-for="(linesort,index) in linesorts" :class="{checked:ischecked == index}" @click="changecondition(index,linesort)">{{linesort.name}}</li>
 							</ul>
 						</el-col>
@@ -37,7 +37,7 @@
 
 						<el-col :span="20">
 							<ul>
-								<li>全部</li>
+								<li @click="changedest(-1)" :class="{checked:checkeddest == -1}">全部</li>
 								<li v-for="(destination,index) in destinations" :class="{checked:checkeddest == index}" @click="changedest(index,destination)">{{destination.name}}</li>
 							</ul>
 						</el-col>
@@ -194,8 +194,8 @@
 				currentPage:0,
 				linesorts: [], //线路分类
 				destinations: [], //目的地
-				ischecked: 0,
-				checkeddest: 0,
+				ischecked: -2,
+				checkeddest: -2,
 				linelist: [], //线路列表
 				selectid:'',
 				examineid:''
@@ -209,21 +209,32 @@
 			//筛选线路分类
 			changecondition(index,list) {
 				this.ischecked = index
-				this.search.categoryid = list.id
-			
-				let para = {token:'',ategoryid:list.id}
-				destlist(para).then((res) => {
+				
+				let listid = '0'
+				if(index == '-1'){
+					
+					listid = '0'
+					this.ischecked = -1
+					this.search.categoryid = ''
+					
+				}else{
+					listid = list.id
+					this.search.categoryid = list.id
+				}
+			let para = {token:'',categoryid:listid}
+			destlist(para).then((res) => {
 					this.destinations = res.data.obj
 				})
 			},
 			//获取线路列表
 			getlinelist(){
 				let para = this.search
+				console.log(para)
 				linelist(para).then((res) => {
 					this.linelist = res.data.obj.datas
+					
 					for(let i = 0 ; i <res.data.obj.datas.length;i++){
 						let list = res.data.obj.datas
-						console.log(list)
 						if(list[i].approve == 0){
 							this.linelist[i].approve = "无须审批"
 						}else if(list[i].approve == 1){
@@ -243,12 +254,17 @@
 				let para= {token:''}
 				categoryall(para).then(res =>{
 					this.linesorts = res.data.obj
-					console.log(this.linesorts)
 				})
 			},
 			changedest(index,destination) {
-				this.checkeddest = index
-				this.search.toid = destination.id
+				if(index == -1){
+					this.checkeddest = -1
+					this.search.toid = ''
+				}else{
+					this.checkeddest = index
+					this.search.toid = destination.id
+				}
+				
 			},
 			//查看线路
 			setMode(type) {
