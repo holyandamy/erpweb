@@ -245,7 +245,7 @@
 							<el-row>
 								<el-col :span="14">
 									<el-form-item label="图片" prop="titleimages">
-										<el-upload :action="actionurl" list-type="picture-card" :before-upload="imgupload" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+										<el-upload id="file"  action="#" list-type="picture-card" :before-upload="imguploadbefore"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
 											<i class="el-icon-plus"></i>
 										</el-upload>
 										<el-dialog v-model="dialogVisible" size="tiny">
@@ -351,6 +351,7 @@
 
 <script>
 	import axios from 'axios';
+	import upyun from 'upyun';
 	import UE from '../../common/ue.vue';
 	import { linesave, province, city, district, categoryall, linecategorytype, templatelist,templatdetail} from '../../../common/js/config';
 	export default {
@@ -520,15 +521,16 @@
 				province: [],
 				city: [],
 				district: [],
-				deafultnumber: 2,
+				deafultnumber: 1,
 				actionurl: '',
 				uploadform: {},
-
+				authorization:'',
 			}
 		},
 		mounted: function() {
 			this.getprovince()
-
+			this.getHeaderSign()
+			
 		},
 		methods: {
 			jump(index) {
@@ -742,8 +744,6 @@
 				})
 
 			},
-			//早中晚
-			handlecheckedeat() {},
 			//图片上传
 			handleRemove(file, fileList) {
 				console.log(file, fileList);
@@ -752,28 +752,20 @@
 				this.dialogImageUrl = file.url;
 				this.dialogVisible = true;
 			},
-			imgupload() {
-				axios.post('http://172.17.9.13:3001/file/upyun/getSign').then((res) => {
-					let fromdata = {
-						authorization:res.data.Authorization
-					}
-//					let formData = new FormData();
-//					formData.append("policy", "");
-//					formData.append("authorization", res.data.Authorization);
-//					formData.append("file", );
-					console.log(res)
+			imguploadbefore(){
+				var bucket = new upyun.Bucket('xtimg')
+				function  getHeaderSign(){
+			    	axios.post('http://172.17.9.13:3001/file/upyun/getSign').then((res) =>{
+				       	return res.data
+				     })
+				}
+				var client = new upyun.Client({bucketName: "xtimg"},getHeaderSign)
+				var file = document.getElementById('file')
+				client.putFile('/{year}/{mon}/{day}/upload_{random32}' + file.name, file).then(function(result) {
+				       	console.log(1)
 				})
-				
-
-//				this.uploadform = {}
-//				this.uploadform.bucket = '';
-//				this.uploadform['save-key'] = '/file/upyun/getSign';
-//				this.uploadform.expiration = Math.floor(new Date().getTime() / 1000) + 86400;
-//				console.log(formData)
-//				this.actionurl = 'http://v0.api.upyun.com/'
-				//				console.log(this.actionurl)
 			},
-			//获取省级列表
+		 //获取省级列表
 			getprovince() {
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
