@@ -150,7 +150,7 @@
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
 							<el-form-item label="上传图片" prop="images">
-								<el-upload class="upload-demo" action="http://172.17.9.13:3001/api/images" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList">
+								<el-upload class="upload-demo" action="http://v0.api.upyun.com/xtimg" :file-list="fileList" :before-upload="upload">
 									<el-button size="small" type="primary">点击上传</el-button>
 									<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
 								</el-upload>
@@ -166,16 +166,16 @@
 					<el-button style="float: left;" @click="editor = false; menucheck1=true; menucheck2=false">普通方式录入<i :class="[{'el-icon-check': menucheck1},'el-icon--right']"></i></el-button>
 					<el-button style="float: left;" @click="editor = true; menucheck1=false; menucheck2=true">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
 					<el-form-item label="行程天数" style="float: left; margin-bottom: 0;">
-								<el-input v-model="baseForm.days" v-if="editor"></el-input>
-								<div class="el-input-number" v-else>
-						<!--is-disabled-->
-								<span class="el-input-number__decrease" @click="minuday"><i class="el-icon-minus"></i></span>
-								<span class="el-input-number__increase" @click="addday"><i class="el-icon-plus"></i></span>
-								<div class="el-input"><input v-model="baseForm.days" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
-		
-								</div>
+						<el-input v-model="baseForm.days" v-if="editor"></el-input>
+						<div class="el-input-number" v-else>
+							<!--is-disabled-->
+							<span class="el-input-number__decrease" @click="minuday"><i class="el-icon-minus"></i></span>
+							<span class="el-input-number__increase" @click="addday"><i class="el-icon-plus"></i></span>
+							<div class="el-input"><input v-model="baseForm.days" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
+
 							</div>
-							</el-form-item>
+						</div>
+					</el-form-item>
 					<div style="clear: both;"></div>
 				</div>
 				<div class="baseinfo" v-show="editor">
@@ -244,13 +244,12 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
+
 									<el-form-item label="图片" prop="titleimages">
-										<el-upload  action="" list-type="picture-card" :on-change="changeuoload" :before-upload="imguploadbefore"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+										<el-upload action="http://v0.api.upyun.com/xtimg"  v-model="route.titleimages" :http-request="upload" :on-success="uploadsuccess"  :on-remove="handleRemove" list-type="picture-card"  :file-list="route.imglist" multiple>
 											<i class="el-icon-plus"></i>
 										</el-upload>
-										<el-dialog v-model="dialogVisible" size="tiny">
-											<img width="100%" :src="dialogImageUrl" alt="">
-										</el-dialog>
+										
 									</el-form-item>
 								</el-col>
 
@@ -331,13 +330,11 @@
 						<el-button type="primary" @click="templatesubmit">查询</el-button>
 					</el-form-item>
 					<el-form-item label="选择模板">
-			    
-			 
-  
-			<el-radio-group v-model="templateselectid">
-		    <el-radio :label="template.id" :key="template.name"  v-for="template in templatelists">{{template.name}}</el-radio>
-		   </el-radio-group>
-			  </el-form-item>
+
+						<el-radio-group v-model="templateselectid">
+							<el-radio :label="template.id" :key="template.name" v-for="template in templatelists">{{template.name}}</el-radio>
+						</el-radio-group>
+					</el-form-item>
 				</el-form>
 
 				<span slot="footer" class="dialog-footer">
@@ -351,9 +348,9 @@
 
 <script>
 	import axios from 'axios';
-	import upyun from 'upyun';
 	import UE from '../../common/ue.vue';
-	import { linesave, province, city, district, categoryall, linecategorytype, templatelist,templatdetail} from '../../../common/js/config';
+	import { linesave, province, city, district, categoryall, linecategorytype, templatelist, templatdetail } from '../../../common/js/config';
+	import { imgupload } from '../../../common/js/upload'
 	export default {
 		components: {
 			UE
@@ -361,10 +358,10 @@
 		props: ['scope'],
 		data() {
 			return {
-				templateselectid:'',
-				temcates:'',
-				categorytypetem:'',
-				templatelists:[],
+				templateselectid: '',
+				temcates: '',
+				categorytypetem: '',
+				templatelists: [],
 				//模板列表请求参数
 				addtemplateform: {
 					token: '',
@@ -461,6 +458,7 @@
 					routes: [{
 						'number': 1,
 						'title': '',
+						'imglist':[],
 						'titleimages': '',
 						'isbreakfast': false,
 						'islunch': false,
@@ -524,13 +522,12 @@
 				deafultnumber: 1,
 				actionurl: '',
 				uploadform: {},
-				authorization:'',
+				authorization: '',
 			}
 		},
 		mounted: function() {
 			this.getprovince()
-			
-			
+
 		},
 		methods: {
 			jump(index) {
@@ -583,16 +580,16 @@
 			checkline() {
 				let para = {
 					token: '',
-					type:this.baseForm.categorytype
+					type: this.baseForm.categorytype
 				}
 				linecategorytype(para).then((res) => {
 					this.categorytypes = res.data.obj
 				})
 			},
-			checklinetem(){
+			checklinetem() {
 				let para = {
 					token: '',
-					type:this.categorytypetem
+					type: this.categorytypetem
 				}
 				linecategorytype(para).then((res) => {
 					this.temcates = res.data.obj
@@ -614,63 +611,64 @@
 					if(valid) {
 						let para = this.baseForm
 						let html = this.$refs.ue.getUEContent()
+						console.log(para)
 						let categorytype = para.categorytype
-					switch(categorytype) {
-						case "全部":
-							this.baseForm.categorytype = 0 ;
-							break;
-						case "国内游":
-							this.baseForm.categorytype = 1;
-							break;
-						case "出境游":
-							this.baseForm.categorytype = 2;
-							break;
-						case "周边游":
-							this.baseForm.categorytype = 3;
-							break;
-					}
-					let day = para.trafficgo
-					switch(day) {
-						case "飞机":
-							this.baseForm.trafficgo = 1;
-							break;
-						case "动车":
-							this.baseForm.trafficgo = 2;
-							break;
-						case "火车":
-							this.baseForm.trafficgo = 3;
-							break;
-						case "高铁":
-							this.baseForm.trafficgo = 4;
-							break;
-						case "大巴":
-							this.baseForm.trafficgo = 5;
-							break;
-						case "轮船":
-							this.baseForm.trafficgo = 6;
-							break;
-					}
-					let trafficback =para.trafficreturn
-					switch(trafficback) {
-						case "飞机":
-							this.baseForm.trafficreturn = 1;
-							break;
-						case "动车":
-							this.baseForm.trafficreturn = 2;
-							break;
-						case "火车":
-							this.baseForm.trafficreturn = 3;
-							break;
-						case "高铁":
-							this.baseForm.trafficreturn = 4;
-							break;
-						case "大巴":
-							this.baseForm.trafficreturn = 5;
-							break;
-						case "轮船":
-							this.baseForm.trafficreturn = 6;
-							break;
-					}
+						switch(categorytype) {
+							case "全部":
+								this.baseForm.categorytype = 0;
+								break;
+							case "国内游":
+								this.baseForm.categorytype = 1;
+								break;
+							case "出境游":
+								this.baseForm.categorytype = 2;
+								break;
+							case "周边游":
+								this.baseForm.categorytype = 3;
+								break;
+						}
+						let day = para.trafficgo
+						switch(day) {
+							case "飞机":
+								this.baseForm.trafficgo = 1;
+								break;
+							case "动车":
+								this.baseForm.trafficgo = 2;
+								break;
+							case "火车":
+								this.baseForm.trafficgo = 3;
+								break;
+							case "高铁":
+								this.baseForm.trafficgo = 4;
+								break;
+							case "大巴":
+								this.baseForm.trafficgo = 5;
+								break;
+							case "轮船":
+								this.baseForm.trafficgo = 6;
+								break;
+						}
+						let trafficback = para.trafficreturn
+						switch(trafficback) {
+							case "飞机":
+								this.baseForm.trafficreturn = 1;
+								break;
+							case "动车":
+								this.baseForm.trafficreturn = 2;
+								break;
+							case "火车":
+								this.baseForm.trafficreturn = 3;
+								break;
+							case "高铁":
+								this.baseForm.trafficreturn = 4;
+								break;
+							case "大巴":
+								this.baseForm.trafficreturn = 5;
+								break;
+							case "轮船":
+								this.baseForm.trafficreturn = 6;
+								break;
+						}
 						if(this.editor == false) {
 							//基本录入
 							para.routes = this.baseForm.routes
@@ -710,12 +708,7 @@
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
 			},
-			handleRemove(file, fileList) {
-				console.log(file, fileList);
-			},
-			handlePreview(file) {
-				console.log(file);
-			},
+			
 			//天数减少
 			minuday() {
 				let index = this.baseForm.length
@@ -745,48 +738,26 @@
 
 			},
 			//图片上传
-			handleRemove(file, fileList) {
-				console.log(file, fileList);
-			},
-			handlePictureCardPreview(file) {
-				this.dialogImageUrl = file.url;
-				this.dialogVisible = true;
-			},
-			changeuoload(file, fileList){
-				
-			},
-			imguploadbefore(file){
-				var bucket = new upyun.Bucket('xtimg')
-				function  getHeaderSign(bucket, method, path){
-					 axios.post('http://172.17.9.13:3001/file/upyun/getSign',{bucket, method, path})
-				    	.then(function (response) {
-	                    if (response.status !== 200) {
-	                        console.error('gen header sign faild!')
-	                        return;
-	                    }
-	                    return response
-	               		})
+			upload(file) {
+				imgupload(file)
+				let line = file.file
+				for(let i = 0 ; i <this.baseForm.routes.length;i++){
+					this.baseForm.routes[i].imglist.push(line)
+					for(let j = 0; j <this.baseForm.routes[i].imglist.length;j++){
+						this.baseForm.routes[i].titleimages += this.baseForm.routes[i].imglist[j].url + ','
+						//console.log(this.baseForm.routes[i].titleimages)
+						console.log(1)
+					}
 				}
-				function bodySignCallback(bucket, params) {
-					 return axios.post('http://172.17.9.13:3001/file/upyun/bodySign',{bucket, params})
-		                .then(function (response) {
-		                    if (response.status !== 200) {
-		                        console.error('gen header sign faild!')
-		                        return;
-		                    }
-		                   return response
-		                })
-		        }
-				
-				var client = new upyun.Client(bucket,getHeaderSign)
-				client.setBodySignCallback(bodySignCallback)
-				client.formPutFile('/{year}/{mon}/{day}/upload_{random32}', file).then(function(result) {
-				       	console.log(1)
-				}).catch(function(err){
-                console.log(err)
-            })
 			},
-		 //获取省级列表
+			
+			uploadsuccess(esponse, file, fileList){
+				console.log(esponse, file, fileList)
+			},
+			handleRemove(file, fileList) {
+	        console.log(file, fileList);
+	      },
+			//获取省级列表
 			getprovince() {
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
@@ -859,19 +830,19 @@
 				let para = this.addtemplateform
 				templatelist(para).then((res) => {
 					this.templatelists = res.data.obj.datas
-				console.log(this.templatelists)
+					console.log(this.templatelists)
 				})
 			},
 			//确认选择模板
-			confirmtemplate(){
-				this.templatevisiable= false
+			confirmtemplate() {
+				this.templatevisiable = false
 				let para = {
-					token:'',
-					id:this.templateselectid
+					token: '',
+					id: this.templateselectid
 				}
 				templatdetail(para).then((res) => {
 					console.log(res.data.obj)
-					this.baseForm =res.data.obj
+					this.baseForm = res.data.obj
 					let categorytype = res.data.obj.categorytype
 					switch(categorytype) {
 						case 0:
@@ -930,10 +901,8 @@
 							break;
 					}
 				})
-	
-				
+
 			}
-			
 
 		}
 	}
@@ -1045,5 +1014,34 @@
 	
 	.linetype li:last-child {
 		border-right: 0!important;
+	}
+	
+	.file {
+		position: relative;
+		display: inline-block;
+		background: #3ec3c8;
+		border-radius: 4px;
+		overflow: hidden;
+		color: #fff;
+		text-decoration: none;
+		text-indent: 0;
+		line-height: 28px;
+		width: 68px;
+		height: 28px;
+		font-size: 12px;
+		text-align: center;
+		float: left;
+		margin-top: 5px;
+	}
+	
+	.file input {
+		position: absolute;
+		font-size: 100px;
+		right: 0;
+		top: 0;
+		opacity: 0;
+	}
+	.el-upload-list__item-actions{
+		display: none;
 	}
 </style>

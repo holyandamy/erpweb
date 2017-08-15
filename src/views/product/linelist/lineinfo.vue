@@ -81,6 +81,15 @@
 						</div>
 
 					</li>
+					<li>
+						<span>图片</span>
+						<div class="xc">
+							<div v-for="img in route.titleimages">
+							<img :src="img"/>
+							</div>
+						</div>
+
+					</li>
 				</ul>
 			</div>
 			<div class="content" v-else>
@@ -144,7 +153,9 @@
 				active:0,
 				detail:{},
 				loglist:[],
-				edittype:true
+				edittype:true,
+				imglist:[]
+				
 			}
 		},
 		mounted: function() {
@@ -158,6 +169,15 @@
 				}
 				linedetail(para).then((res) => {
 					this.detail = res.data.obj
+					
+					for(let i = 0 ; i <this.detail.routes.length;i++){
+						let arr = []
+						arr = res.data.obj.routes[i].titleimages.split(',')
+						console.log(arr)
+						this.detail.routes[i].titleimages = arr
+						console.log(this.detail.routes[i].titleimages)
+					}
+					
 					if(this.detail.edittype == 0 ){
 						this.edittype = true
 					}else{
