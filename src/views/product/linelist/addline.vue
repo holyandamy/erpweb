@@ -246,7 +246,7 @@
 								<el-col :span="14">
 
 									<el-form-item label="图片" prop="titleimages">
-										<el-upload action="http://v0.api.upyun.com/xtimg"  v-model="route.titleimages" :http-request="upload" :on-success="uploadsuccess"  :on-remove="handleRemove" list-type="picture-card"  :file-list="route.imglist" multiple>
+										<el-upload action="http://v0.api.upyun.com/xtimg" :file-list="route.imglist" :http-request="upload" :on-success="uploadsuccess"  :on-remove="handleRemove" list-type="picture-card"  multiple>
 											<i class="el-icon-plus"></i>
 										</el-upload>
 										
@@ -519,7 +519,7 @@
 				province: [],
 				city: [],
 				district: [],
-				deafultnumber: 1,
+				deafultnumber: 2,
 				actionurl: '',
 				uploadform: {},
 				authorization: '',
@@ -727,6 +727,7 @@
 				this.baseForm.routes.push({
 					'number': this.deafultnumber++,
 					'title': '',
+					'imglist':[],
 					'titleimages': '',
 					'isbreakfast': false,
 					'islunch': false,
@@ -738,21 +739,15 @@
 
 			},
 			//图片上传
-			upload(file) {
-				imgupload(file)
-				let line = file.file
-				for(let i = 0 ; i <this.baseForm.routes.length;i++){
-					this.baseForm.routes[i].imglist.push(line)
-					for(let j = 0; j <this.baseForm.routes[i].imglist.length;j++){
-						this.baseForm.routes[i].titleimages += this.baseForm.routes[i].imglist[j].url + ','
-						//console.log(this.baseForm.routes[i].titleimages)
-						console.log(1)
-					}
-				}
+			async upload(file) {
+				const files = await imgupload(file)
+				return files.file
 			},
 			
-			uploadsuccess(esponse, file, fileList){
-				console.log(esponse, file, fileList)
+			uploadsuccess(response, file, fileList){
+				console.log(this.baseForm)
+				console.log("uploadsuccess",response, file, fileList)
+				//fileList.push(file)
 			},
 			handleRemove(file, fileList) {
 	        console.log(file, fileList);
