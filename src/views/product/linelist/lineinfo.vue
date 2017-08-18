@@ -41,6 +41,15 @@
 						<p>
 							<span>集合地点</span>{{detail.station}}
 						</p>
+						<div class="topimglist">
+							<span style="float: left;">图片</span><div class="xc" style="float: left; line-height: 26px;">
+								<ul>
+									<li v-for="img in toplist">
+										<img :src="img"/>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</el-row>
 				</div>
 
@@ -154,7 +163,8 @@
 				detail:{},
 				loglist:[],
 				edittype:true,
-				imglist:[]
+				imglist:[],
+				toplist:[]
 				
 			}
 		},
@@ -169,6 +179,7 @@
 				}
 				linedetail(para).then((res) => {
 					this.detail = res.data.obj
+					this.toplist = this.detail.images.split(',')
 					
 					for(let i = 0 ; i <this.detail.routes.length;i++){
 						let arr = []
@@ -474,6 +485,15 @@
 				font-size: 14px;
 				font-family: 'Avenir', Helvetica, Arial, sans-serif;
 				color: #333;
+				white-space:pre-wrap;
 			}
 	.content{padding: 20px 30px; background: #fff;}
+	.topimglist{
+		span{
+			font-size: 14px;
+			color: #666;
+			width: 90px;
+			display: inline-block;
+		}
+	}
 </style>

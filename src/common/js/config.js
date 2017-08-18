@@ -1,7 +1,7 @@
 import axios from 'axios';
 let base = 'http://172.17.9.13:3001/api';
 export let token='1111'
-export let bases = "http://172.17.9.13:3001/api"
+export let bases = "http://172.17.9.13:3001/"
 export const setToken=value=>{ token= value };
 //财务管理
 //登陆接口
@@ -23,7 +23,8 @@ export const linecategoryadd = params => { return axios.post(`${base}/line/categ
 export const linecategoryupdate = params => { return axios.post(`${base}/line/category/update`, params); };//编辑
 export const linecategorydelete = params => { return axios.post(`${base}/line/category/del`, params); };//删除
 export const linecategorytype = params => { return axios.post(`${base}/line/category/type`, params); };//通过分类类型获取分类列表接口
-
+/*订单中心*/
+export const orderlist = params => { return axios.post(`${base}/order/list`, params); };//通过分类类型获取分类列表接口
 
 
 //产品中心

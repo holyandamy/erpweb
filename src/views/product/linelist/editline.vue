@@ -149,12 +149,7 @@
 							<el-form-item label="集合地点" prop="station">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-							<el-form-item label="上传图片" prop="images">
-								<el-upload class="upload-demo" action="http://172.17.9.13:3001/api/images" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList">
-									<el-button size="small" type="primary">点击上传</el-button>
-									<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-								</el-upload>
-							</el-form-item>
+							<ImgLoad :paras="paras" @geturl = "geturl" :checktop="checktop"></ImgLoad>
 
 						</el-col>
 					</el-row>
@@ -247,14 +242,7 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-									<el-form-item label="图片" prop="titleimages">
-										<el-upload action="http://172.17.9.13:3001/api/titleimages" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
-											<i class="el-icon-plus"></i>
-										</el-upload>
-										<el-dialog v-model="dialogVisible" size="tiny">
-											<img width="100%" :src="dialogImageUrl" alt="">
-										</el-dialog>
-									</el-form-item>
+									<ImgLoad :route="route" :editimg="editimg"></ImgLoad>
 								</el-col>
 
 							</el-row>
@@ -322,9 +310,11 @@
 <script>
 	import UE from '../../common/ue.vue';
 	import { linesave, province, city, district, categoryall, linecategorytype, lineupdate, linedetail } from '../../../common/js/config';
+	import ImgLoad from './upload'
 	export default {
 		components: {
-			UE
+			UE,
+			ImgLoad
 		},
 		props: ['lineid', 'scope'],
 		data() {
@@ -378,7 +368,6 @@
 				active: 0,
 				fileList: [],
 				customtext: '', //自定义文本内容
-
 				baseForm: {
 					token: '',
 					id: this.lineid,
@@ -477,16 +466,21 @@
 				editor:'',
 				editorhtml:'',
 				oldday:'',
-				deafultnumber:1
+				deafultnumber:1,
+				editimg:true,
+				paras:'',
+				checktop:true
 			}
 		},
-		mounted: function() {
+		created(){
+			
 			this.getlineinfo()
 			this.getprovince()
-		
 		},
 		methods: {
-		
+			geturl(url){
+				 this.baseForm.images = url
+			},
 			getlineinfo() {
 				let para = {
 					token: '',
@@ -494,6 +488,8 @@
 				}
 				linedetail(para).then((res) => {
 					this.baseForm = res.data.obj
+					this.paras = this.baseForm.images
+					//console.log(this.paras,2222)
 					res.data.obj.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
 					this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0){
@@ -502,7 +498,6 @@
 					}else{
 						this.editor = true
 						this.editorhtml = res.data.obj.routes[0].content
-						
 						
 					}
 					let categorytype = res.data.obj.categorytype

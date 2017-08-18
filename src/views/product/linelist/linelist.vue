@@ -229,8 +229,9 @@
 			//获取线路列表
 			getlinelist(){
 				let para = this.search
-				console.log(para)
+				console.log(11)
 				linelist(para).then((res) => {
+					console.log(res)
 					this.linelist = res.data.obj.datas
 					
 					for(let i = 0 ; i <res.data.obj.datas.length;i++){

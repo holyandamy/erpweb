@@ -58,7 +58,6 @@
 											</el-option>
 										</el-select>
 									</el-form-item>
-
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
@@ -149,12 +148,9 @@
 							<el-form-item label="集合地点" prop="station">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-							<el-form-item label="上传图片" prop="images">
-								<el-upload class="upload-demo" action="http://v0.api.upyun.com/xtimg" :file-list="fileList" :before-upload="upload">
-									<el-button size="small" type="primary">点击上传</el-button>
-									<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-								</el-upload>
-							</el-form-item>
+							
+							<ImgLoad @geturl = "geturl" :checktop="checktop" ></ImgLoad>
+							
 
 						</el-col>
 					</el-row>
@@ -244,22 +240,14 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-
-									<el-form-item label="图片" prop="titleimages">
-										<el-upload action="http://v0.api.upyun.com/xtimg" :file-list="route.imglist" :http-request="upload" :on-success="uploadsuccess"  :on-remove="handleRemove" list-type="picture-card"  multiple>
-											<i class="el-icon-plus"></i>
-										</el-upload>
-										
-									</el-form-item>
+										<ImgLoad :route="route"></ImgLoad>
 								</el-col>
 
 							</el-row>
 
 						</li>
 					</ul>
-					<!--<div class="daylist" v-for="route in baseForm.routes" >
-						
-					</div>-->
+				
 				</div>
 				<h2 class="d_jump">备注说明</h2>
 				<div class="baseinfo">
@@ -351,9 +339,11 @@
 	import UE from '../../common/ue.vue';
 	import { linesave, province, city, district, categoryall, linecategorytype, templatelist, templatdetail } from '../../../common/js/config';
 	import { imgupload } from '../../../common/js/upload'
+	import ImgLoad from './upload'
 	export default {
 		components: {
-			UE
+			UE,
+			ImgLoad
 		},
 		props: ['scope'],
 		data() {
@@ -523,6 +513,9 @@
 				actionurl: '',
 				uploadform: {},
 				authorization: '',
+				checktop:true
+				
+				
 			}
 		},
 		mounted: function() {
@@ -530,6 +523,9 @@
 
 		},
 		methods: {
+			geturl(url){
+				 this.baseForm.images = url
+			},
 			jump(index) {
 				this.active = index
 
@@ -546,7 +542,6 @@
 					step = newTotal / 50
 					smoothUp()
 				}
-
 				function smoothDown() {
 					if(distance < total) {
 						distance += step　　　　　　　
@@ -607,11 +602,12 @@
 			},
 			//保存表单
 			submitForm(formName) {
+				
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.baseForm
 						let html = this.$refs.ue.getUEContent()
-						console.log(para)
+						
 						let categorytype = para.categorytype
 						switch(categorytype) {
 							case "全部":
@@ -678,8 +674,9 @@
 							para.routes[0].content = html
 							para.edittype = 1
 						}
-
+						console.log(para)
 						linesave(para).then((res) => {
+						
 							if(res.data.error == 1) {
 
 								this.$message({
@@ -738,20 +735,7 @@
 				})
 
 			},
-			//图片上传
-			async upload(file) {
-				const files = await imgupload(file)
-				return files.file
-			},
-			
-			uploadsuccess(response, file, fileList){
-				console.log(this.baseForm)
-				console.log("uploadsuccess",response, file, fileList)
-				//fileList.push(file)
-			},
-			handleRemove(file, fileList) {
-	        console.log(file, fileList);
-	      },
+
 			//获取省级列表
 			getprovince() {
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
@@ -1029,13 +1013,7 @@
 		margin-top: 5px;
 	}
 	
-	.file input {
-		position: absolute;
-		font-size: 100px;
-		right: 0;
-		top: 0;
-		opacity: 0;
-	}
+	
 	.el-upload-list__item-actions{
 		display: none;
 	}
