@@ -1,23 +1,23 @@
-//import Login from './views/Login.vue'
+import Login from './views/Login.vue'
 //import NotFound from './views/404.vue'
 import Home from './views/home.vue'
 import Main from './views/Main.vue'
 import Collectlist from './views/finance/collectlist.vue'
-import Collectedit from './views/finance/collectedit.vue'
 import Paylist from './views/finance/pay.vue'
 //产品中心
 import Linelist from './views/product/linelist/linelist.vue'  //线路列表
 import Grouplist from './views/product/grouplist/grouplist.vue'   //发团列表
 import Linesort from './views/product/linesort/linesort.vue' //线路分类
 import Linetemplate from './views/product/linetemplate/linetemplate.vue'  //线路模板
+import Docking from './views/product/docking/docking.vue'
 
-
+//订单管理
+import orderLineft  from './views/order/line/line.vue'  //公司管理菜单
+import orderList from './views/order/order/orderlist.vue'  //公司管理菜单
 
 //公司管理
 import Cmanagement from './views/systemset/company/menu.vue'  //公司管理菜单
-import Department from './views/systemset/company/department.vue'   //部门管理
-import Bankaccount from './views/systemset/company/bankaccount.vue' //银行账户管理
-import Companyset from './views/systemset/company/companyset.vue'  //公司信息设置
+
 //审批设置
 import Approval from './views/systemset/approval/approval.vue' //审批设置
 //角色管理
@@ -33,19 +33,26 @@ import Log from './views/systemset/log/log.vue'  //操作日志
 //客户管理  
 import Visitor from './views/customer/visitor/visitor.vue'   //游客管理
 let routes = [
-//  {
-//      path: '/login',
-//      component: Login,
-//      name: '',
-//      hidden: true
-//  },
+    {
+        path: '/login',
+        component: Login,
+        name: '',
+        hidden: true
+    },
 //  {
 //      path: '/404',
 //      component: NotFound,
 //      name: '',
 //      hidden: true
 //  },
-	{ path: '/main', component: Main, name: '主页', hidden: true },
+	{ path: '/', component: Home, name: '主页', hidden: true ,
+	children: [
+        	{path: '/main', component: Main, name: '主页'},
+           
+           
+      
+        ]
+	},
     {
         path: '/',
         component: Home,
@@ -54,7 +61,8 @@ let routes = [
         	{path: '/linelist', component: Linelist, name: '线路列表'},
            	{path: '/linesort', component: Linesort, name: '线路分类'},
           	{path: '/grouplist', component: Grouplist, name: '发团列表'},
-           {path: '/linetemplate', component: Linetemplate, name: '行程模板'}
+           {path: '/linetemplate', component: Linetemplate, name: '行程模板'},
+           
       
         ]
         
@@ -63,6 +71,12 @@ let routes = [
         path: '/',
         component: Home,
         name: '订单管理',
+        children:[
+        	{path: '/orderlineft', component: orderLineft, name: '线路收客',},
+        	{path: '/orderlist', component: orderList, name: '订单列表' },
+        	
+        ]
+        
         
     },
     {
@@ -97,6 +111,7 @@ let routes = [
             {path: '/role', component: Role, name: '角色管理'},
           
             {path: '/staff', component: Staff, name: '员工管理'},
+            {path: '/docking', component: Docking, name: '对接平台设置'},
            
             {path: '/log', component: Log, name: '操作日志'}
       
