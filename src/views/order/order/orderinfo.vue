@@ -16,66 +16,33 @@
 				<div class="title">
 					<el-row>
 						<el-col :span="12">
-							订单编号：hp1308402805892408029830480
+							订单编号：{{detail.code}}
 						</el-col>
 						<el-col :span="12">
-							下单时间：2017-01-13 14:43
+							下单时间：{{detail.createtime}}
 						</el-col>
 					</el-row>
 
 				</div>
 				<div class="info">
-
 					<el-row>
 						<el-col :span="24">
 							<span>
 									线路/团号
-								</span> 桂林訾州、漓江风光、榕杉湖、阳朔十里画廊、少数民族寨、西街 双飞4日游 / shanghai2381408340982904850824
+								</span> {{detail.linename}} / {{detail.teamno}}
 						</el-col>
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							游客人数：12 大 2 小 4 婴
+							游客人数：{{detail.totaladult}} 大 {{detail.totalchild}} 小 {{detail.totalbaby}} 婴
 						</el-col>
 						<el-col :span="12" class="pl-20">
-							出团日期：2017-07-17
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="12">
-							游客人数：12 大 2 小 4 婴
-						</el-col>
-						<el-col :span="12" class="pl-20">
-							出团日期：2017-07-17
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="12">
-							游客人数：12 大 2 小 4 婴
-						</el-col>
-						<el-col :span="12" class="pl-20">
-							出团日期：2017-07-17
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="12">
-							游客人数：12 大 2 小 4 婴
-						</el-col>
-						<el-col :span="12" class="pl-20">
-							出团日期：2017-07-17
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="12">
-							游客人数：12 大 2 小 4 婴
-						</el-col>
-						<el-col :span="12" class="pl-20">
-							出团日期：2017-07-17
+							出团日期：{{detail.starttime}}
 						</el-col>
 					</el-row>
 					<el-row>
 						<el-col>
-							应收金额
+							应收金额 {{detail.orderpay}}
 						</el-col>
 
 					</el-row>
@@ -83,80 +50,78 @@
 				<div class="infobottom">
 					<el-row>
 						<el-col>
-							集合通知
+							集合通知 {{detail.notify}}
 						</el-col>
 
 					</el-row>
 					<el-row>
 						<el-col>
-							备注
+							备注 {{detail.remark}}
 						</el-col>
 
 					</el-row>
 				</div>
 			</div>
 			<h2>
-					收款详情
-				</h2>
-			<el-table :data="paylist" border style="width: 100%">
-				<el-table-column prop="date" label="创建日期">
-				</el-table-column>
-				<el-table-column prop="name" label="收款单号">
-				</el-table-column>
-				<el-table-column prop="province" label="金额">
-				</el-table-column>
-				<el-table-column prop="city" label="确认状态">
-				</el-table-column>
-				<el-table-column prop="address" label="核销状态">
-				</el-table-column>
-				<el-table-column prop="zip" label="备注">
-				</el-table-column>
-			</el-table>
-			<h2>
-					付款详情
-				</h2>
+			收款详情
+			</h2>
 			<el-table :data="collectionlist" border style="width: 100%">
-				<el-table-column prop="date" label="创建日期">
+				<el-table-column prop="type" label="收款类型">
 				</el-table-column>
-				<el-table-column prop="name" label="收款单号">
+				<el-table-column prop="accountid" label="收款账户">
 				</el-table-column>
-				<el-table-column prop="province" label="金额">
+				<el-table-column prop="linetime" label="到账日期">
 				</el-table-column>
-				<el-table-column prop="city" label="确认状态">
-				</el-table-column>
-				<el-table-column prop="address" label="核销状态">
-				</el-table-column>
-				<el-table-column prop="zip" label="备注">
+				<el-table-column prop="fee" label="金额">
 				</el-table-column>
 			</el-table>
 			<h2>
-					游客信息
-				</h2>
+			付款详情
+			</h2>
+			<el-table :data="paylist" border style="width: 100%">
+                <el-table-column prop="type" label="收款类型">
+                    </el-table-column>
+                    <el-table-column prop="accountid" label="收款账户">
+                    </el-table-column>
+                    <el-table-column prop="linetime" label="到账日期">
+                    </el-table-column>
+                    <el-table-column prop="fee" label="金额">
+                    </el-table-column>
+                </el-table>
+			<h2>
+			游客信息
+			</h2>
 		</section>
 	</div>
 </template>
 
 <script>
+	import axios from 'axios';
+	import { orderdetail } from '../../../common/js/config';
 	export default {
+		props:['orderid'],
 		data() {
 			return {
-				collectionlist: [{
-					date: '2016-05-03',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}],
-				paylist: [{
-					date: '2016-05-03',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}]
+				detail:{},
+				collectionlist: [],
+				paylist: []
 			}
+		},
+		mounted: function() {
+			this.getorderinfo()
+		},
+		methods: {
+		    getorderinfo(){
+		       let para = {
+        		   token:'',
+        		   id:this.orderid
+        	   }
+        	   orderdetail(para).then((res) => {
+        	      this.detail = res.data.obj
+				  this.collectionlist = res.data.obj.collections
+				  this.paylist = res.data.obj.pays
+        	   })
+        	}
 		}
 	}
 </script>

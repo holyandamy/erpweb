@@ -65,7 +65,7 @@
 							<td width="10%">订单金额</td>
 							<td width="10%">应收</td>
 							<td width="10%">已收</td>
-							<td width="10%">退款</td>
+							<td width="10%">已付</td>
 							<td width="10%">状态</td>
 							<td width="10%">负责人 / 操作</td>
 						</tr>
@@ -73,25 +73,25 @@
 					</thead>
 				</table>
 
-				<dl class="list">
-					<dt>订单编号：HP20180101000000 / 馨途订单编号：hp230910299837</dt>
+				<dl class="list" v-for="(order,index) in orderlist">
+					<dt>订单编号：{{order.code}} / 馨途订单编号：{{order.sourceid}} / 团号：{{order.teamno}}</dt>
 					<dd>
 						<ul>
-							<li style="width: 20%;">shanghai20180v403889 <br /> 福临天厦•双岛畅游记 厦门&金门海峡两岸舒心之旅四日游<br /> 下单时间：2017-01-01 / 2017-01-02</li>
-							<li style="width: 10%;">出团：2018-08-11 <br /> 人数：1 大 0 小 0 婴</li>
-							<li style="width: 10%;">舒游国际旅行社 <br /> 13888203872
+							<li style="width: 20%;">{{order.platformname}} <br />{{order.linename}}<br /> 下单时间：{{order.createtime}} / 2017-01-02</li>
+							<li style="width: 10%;">出团：{{order.starttime}} <br /> 人数：{{order.custnumber}} 大 {{order.custnumber}} 小 {{order.custnumber}} 婴</li>
+							<li style="width: 10%;">{{order.companyname}} <br /> {{order.creater}}
 							</li>
-							<li style="width: 10%;">￥10383</li>
-							<li style="width: 10%;">￥10383</li>
-							<li style="width: 10%;">￥10383</li>
-							<li style="width: 10%;">￥10383</li>
-							<li style="width: 10%;">未确认</li>
+							<li style="width: 10%;">￥{{order.orderfee}}</li>
+							<li style="width: 10%;">￥{{order.orderpay}}</li>
+							<li style="width: 10%;">￥{{order.collection}}</li>
+							<li style="width: 10%;">￥{{order.pay}}</li>
+							<li style="width: 10%;">{{order.status}}</li>
 							<li style="width: 10%;">
 								<el-button type="text">确认订单</el-button>
 								<el-button type="text">出团单</el-button>
 								<el-button type="text">导出行程</el-button>
 								<el-button type="text">确认单</el-button>
-								<el-button type="text" @click="setmode('orderinfo')">查看</el-button>
+								<el-button type="text" @click="setmode('orderinfo'),getinfo(order)">查看</el-button>
 							</li>
 						</ul>
 					</dd>
@@ -101,7 +101,7 @@
 			</section>
 
 		</div>
-		<OrderInfo v-else></OrderInfo>
+		<OrderInfo v-else="setmode == 'orderinfo'"  :orderid = 'orderid' @setMode="setMode"></OrderInfo>
 	</div>
 </template>
 
@@ -124,9 +124,9 @@
 					source: '',
 					hide: false,
 					token: ''
-
 				},
-				orderLists: [],
+				orderid:'',
+				orderlist: [], //订单列表
 				total: 0,
 				currentPage: 1,
 				pagesize: 10,
@@ -141,8 +141,10 @@
 					label: '删除'
 				}],
 				setMode:'orderlist'
-
 			}
+		},
+		created(){
+			this.getList()
 		},
 		
 		methods: {
@@ -160,14 +162,14 @@
 				} else {
 					dates = startday + '|' + endday
 				}
-
 				let page = this.orderinfo
 				page.date = dates
 				orderlist(page).then((res) => {
-					console.log(page, res)
-					//					this.roleLists = res.data.obj.rows
-					//					this.total = Number(res.data.obj.total)
+					this.orderlist = res.data.obj.list
 				})
+			},
+			getinfo(order){
+				this.orderid = order.id
 			},
 			handleCurrentChange(val) {
 				this.getList()
