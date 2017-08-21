@@ -24,8 +24,7 @@ export const linecategoryupdate = params => { return axios.post(`${base}/line/ca
 export const linecategorydelete = params => { return axios.post(`${base}/line/category/del`, params); };//删除
 export const linecategorytype = params => { return axios.post(`${base}/line/category/type`, params); };//通过分类类型获取分类列表接口
 /*订单中心*/
-export const orderlist = params => { return axios.post(`${base}/order/list`, params); };//获取订单列表
-export const orderdetail = params => { return axios.post(`${base}/order/detail`, params); };//获取订单详情
+export const orderlist = params => { return axios.post(`${base}/order/list`, params); };//通过分类类型获取分类列表接口
 
 
 //产品中心

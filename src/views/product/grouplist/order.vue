@@ -1,67 +1,39 @@
 <template>
   <div>
-    <div  v-if="modeType == 'list'" >
+    <div >
       <header>
         <el-row>
           <el-col :span="12">
             <el-breadcrumb separator="/">
               <el-breadcrumb-item>产品管理</el-breadcrumb-item>
               <el-breadcrumb-item>发团列表</el-breadcrumb-item>
+              <el-breadcrumb-item>下单</el-breadcrumb-item>
             </el-breadcrumb>
-          </el-col>
-          <el-col :span="12">
-            <el-button class="defaultbutton" @click="setMode('newGroup','add')">新增发团计划</el-button>
           </el-col>
         </el-row>
       </header>
       <section class="padding30">
-        <el-form    ref="searchList" label-width="100px" class="demo-ruleForm" style="text-align: left;">
-          <el-form-item label="出发时间"   style="margin-left: 10px">
-            <div class="block">
-              <el-date-picker
-                v-model="searchList.date"
-                type="daterange"
-                placeholder="选择日期范围">
-              </el-date-picker>
-            </div>
-          </el-form-item>
-          <el-form-item label="线路类型" prop="type"  style="width: 190px" >
-            <el-select v-model="searchList.type"  >
-              <el-option  v-for="item in type"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="状态" prop="type"  style="width: 190px" >
-            <el-select v-model="searchList.stateType"  >
-              <el-option value="0">全部</el-option>
-              <el-option value="1">正常</el-option>
-              <el-option value="2">停止</el-option>
-              <el-option value="3">待发团</el-option>
-              <el-option value="4">已发团</el-option>
-              <el-option value="5">已结团</el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="线路名称"  >
-            <el-col :span="4"   >
-              <el-input v-model="searchList.name"></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="团号"  style="margin-left: 10px">
-            <el-col :span="4" style="width: 150px">
-              <el-input v-model="searchList.groupNumber"></el-input>
-            </el-col>
-          </el-form-item>
+        <div>
+          <table border="1">
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
 
-          <el-form-item   style="margin-left: -70px">
-            <el-button type="primary" @click="searchGetList">查询</el-button>
-          </el-form-item>
-          <el-form-item   style="margin-left: -70px">
-            <el-button type="primary" @click="searchGetList">清空查询</el-button>
-          </el-form-item>
-        </el-form>
+        </div>
+
 
         <el-table :data="lineList" style="text-align: left; font-size: 12px;">
           <el-table-column prop="name" label=" 团号/线路名称">
@@ -101,24 +73,16 @@
         </div>
       </section>
     </div>
-    <Grouporder v-else-if="modeType == 'order'"  @setMode="setMode" :operationType="operationType" ></Grouporder>
-    <NewGroup v-else  @setMode="setMode" :operationType="operationType" ></NewGroup>
   </div>
 </template>
 <script>
-  import Grouporder from './grouporder'
-  import NewGroup from './newgroup'
   import axios from 'axios';
+  import util from '../../../common/js/util'
   import {token,linecategorylist,linecategoryadd,linecategoryupdate,linecategorydelete} from '../../../common/js/config';
   export default {
-    components:{
-      Grouporder,
-      NewGroup,
-    },
     data() {
       return {
         searchList:{},
-        modeType:'list',
         showAdd:false,
         showEdit:false,
         type:[{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
@@ -131,28 +95,12 @@
           pageIndex:0,
           pageSize:''
         },
-        lineList:[],
-        editcategory:{}
       }
     },
     created(){
       this.getList()
     },
     methods:{
-      setMode(type,option){
-        this.operationType.type=option;
-        this.modeType=type;
-        if(type=='list') {
-          if (option == "add") {
-            // this.currentPage = ((this.total + 1) / this.pagesize).floor;
-            this.getList()
-          }
-          else {
-            this.getList()
-          }
-        }
-
-      },
       deleteRow(index, rows){
         this.lineList.splice(index, 1);
         linecategorydelete({token,id:rows.id}).then((res) => {
@@ -223,10 +171,6 @@
       //分页
       handleCurrentChange(val) {
         this.getList()
-      },
-      //查询
-      searchGetList(){
-      	
       }
 
     }
