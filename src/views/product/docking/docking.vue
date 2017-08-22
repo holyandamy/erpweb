@@ -8,14 +8,14 @@
 							<el-breadcrumb-item>对接平台设置</el-breadcrumb-item>
 						</el-breadcrumb>
 					</el-col>
-					
+
 				</el-row>
 			</header>
 			<section class="padding30">
 				<div class="bg_white">
 					<el-row>
 						<el-col style="width: 60px;display: inline-block; line-height:35px; margin-right: 15px;">
-							馨·驰誉
+							{{ cyform.name }}
 						</el-col>
 						<el-col :span="20">
 							<el-form :inline="true" :model="cyform" class="demo-form-inline">
@@ -23,7 +23,7 @@
 							    <el-input v-model="cyform.username" placeholder="用户名"></el-input>
 							  </el-form-item>
 							  <el-form-item label="密码">
-							    <el-input v-model="cyform.password" placeholder="密码"></el-input>
+							    <el-input type="password" v-model="cyform.password" placeholder="密码"></el-input>
 							  </el-form-item>
 							  </el-form-item><el-form-item>
 							    <el-button type="primary" @click="onSubmit(1)">编辑</el-button>
@@ -33,7 +33,7 @@
 					</el-row>
 					<el-row>
 						<el-col style="width: 60px;display: inline-block; line-height:35px; margin-right: 15px;">
-							馨·欢途
+              {{ htform.name }}
 						</el-col>
 						<el-col :span="20">
 							<el-form :inline="true" :model="htform" class="demo-form-inline">
@@ -41,7 +41,7 @@
 							    <el-input v-model="htform.username" placeholder="用户名"></el-input>
 							  </el-form-item>
 							  <el-form-item label="密码">
-							    <el-input v-model="htform.password" placeholder="密码"></el-input>
+							    <el-input type="password" v-model="htform.password" placeholder="密码"></el-input>
 							  </el-form-item>
 							  </el-form-item><el-form-item>
 							    <el-button type="primary" @click="onSubmit(2)">编辑</el-button>
@@ -49,7 +49,6 @@
 							</el-form>
 						</el-col>
 					</el-row>
-					
 				</div>
 			</section>
 	</div>
@@ -57,46 +56,66 @@
 
 <script>
 	import {openlist,opensave} from '../../../common/js/config';
+  import md5 from 'js-md5';
 	export default {
 		data() {
 			return {
-				cyform:{
-					token:'',
-					username:'',
-					password:'',
-					platform:''
-				},
-				htform:{
-					token:'',
-					username:'',
-					password:'',
-					platform:''
-				}
+        cyform:{
+          name: '',
+          token:'',
+          username:'',
+          password:'',
+          platform:''
+        },
+        htform:{
+          name: '',
+          token:'',
+          username:'',
+          password:'',
+          platform:''
+        }
 			}
 		},
 		created(){
 			this.getlist()
 		},
 		methods: {
+		    open(text, type){
+		      this.$message({
+            message: text,
+            type: type
+          })
+        },
 				getlist(){
 					let para = {token:''}
 					openlist(para).then((res) =>{
-						console.log(res)
+						res.data.obj.forEach((item)=>{
+						    if(item.platform == 1)
+                  this.cyform = item;
+                else
+                  this.htform = item;
+            });
 					})
 				},
 				onSubmit(str){
+				    console.log(this.htform);
 					let para = {}
 					if(str == 1){
-						para = this.cyform
+						para = Object.assign({},this.cyform);
 						para.platform = 1
 					}else{
-						para = this.htform
+            para = Object.assign({},this.htform);
 						para.platform = 2
 					}
+
+          para.password = para.password ? md5(para.password) : '';
 					opensave(para).then((res) => {
-						console.log(res)
+						if(res.data.error){
+						  this.open(res.data.message, 'error')
+              return;
+            }
+            this.open('同步成功！', 'success')
 					})
-					
 				},
 			}
 	}
@@ -139,7 +158,7 @@
 			color: #333;
 		}
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 		.bg_white{
