@@ -81,12 +81,17 @@
 							</el-col>
 						</el-row>
 
-						<el-form-item label="选择部门" prop="deptname">
-							<el-col :span="4">
-								<el-select v-model="addstaff.deptname" placeholder="选择部门">
-									<el-option v-for="department in departments" :key="department.id" :label="department.name" :value="department.id"></el-option>
-								</el-select>
-							</el-col>
+						<el-form-item label="选择部门" prop="deptid">
+							<el-row>
+								<el-col :span="4">
+									<el-input v-model="checkeddepar"></el-input>
+								</el-col>
+								<el-col :span="1">&nbsp;</el-col>
+								<el-col :span="4">
+									<el-button @click="finddep = true">查找</el-button>
+
+								</el-col>
+							</el-row>
 						</el-form-item>
 						<el-form-item label="选择角色">
 							<el-row>
@@ -99,15 +104,15 @@
 								</el-col>
 							</el-row>
 						</el-form-item>
-						<el-form-item label="状态">
+						<el-form-item label="状态" prop="status">
 							<el-radio-group v-model="addstaff.status">
-								<el-radio label="1">启用</el-radio>
-								<el-radio label="2">禁用</el-radio>
+								<el-radio label="启用">启用</el-radio>
+								<el-radio label="禁用">禁用</el-radio>
 							</el-radio-group>
 						</el-form-item>
 
 						<el-form-item label-width="100px">
-							<el-button type="primary" @click="submitForm('addstaff')">立即创建</el-button>
+							<el-button type="primary" @click="submitForm('addstaff')">保存</el-button>
 							<el-button @click="resetForm('addstaff')">重置</el-button>
 						</el-form-item>
 					</el-form>
@@ -117,21 +122,58 @@
 
 		<!--角色选择-->
 		<el-dialog title="选择角色" :visible.sync="finddepartment" size="tiny">
-			<el-checkbox-group v-model="checkdepartment" :min="1" :max="10">
-				<el-checkbox v-for="role in rolelist" :label="role" :key="role.id">{{role.rolename}}</el-checkbox>
-			</el-checkbox-group>
+			
+			  <div style="margin: 15px 0;"></div>
+			  <el-checkbox-group v-model="checkdepartment" @change="handleCheckedCitiesChange">
+			    <el-checkbox v-for="role in rolelists" :label="role.id" :key="role.id">{{role.rolename}}</el-checkbox>
+			  </el-checkbox-group>
 			<span slot="footer" class="dialog-footer">
-		    <el-button @click="finddepartment = false">取 消</el-button>
-		    <el-button type="primary" @click="comfirmrole">确 定</el-button>
-		  </span>
+			    <el-button @click="finddepartment = false">取 消</el-button>
+			    <el-button type="primary" @click="comfirmrole">确 定</el-button>
+			  </span>
+		</el-dialog>
+		<!--部门选择-->
+		<el-dialog title="选择角色" :visible.sync="finddep" size="tiny">
+			<ul class="dapul">
+				<li v-for="department in departments">
+					<el-radio class="radio" v-model="addstaff.deptid" :label="department.id">{{department.name}}</el-radio>
+					<ul>
+						<li v-for="depar in department.childs">
+							<el-radio class="radio" v-model="addstaff.deptid" :label="depar.id">{{depar.name}}</el-radio>
+							<ul>
+								<li v-for="de in depar.childs">
+									<el-radio class="radio" v-model="addstaff.deptid" :label="de.id">{{de.name}}</el-radio>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<span slot="footer" class="dialog-footer">
+    <el-button @click="finddep = false">取 消</el-button>
+    <el-button type="primary" @click="comfirmdepa">确 定</el-button>
+  </span>
 		</el-dialog>
 		<!--修改密码-->
-		<el-dialog title="提示" :visible.sync="changepass" size="tiny"
-			<span>这是一段信息</span>
-			<span slot="footer" class="dialog-footer">
-		    <el-button @click="changepass = false">取 消</el-button>
-		    <el-button type="primary" @click="changepass = false">确 定</el-button>
-		  </span>
+		<el-dialog title="提示" :visible.sync="resetPassword" size="tiny">
+			<el-row>
+				<el-col :span='20'>
+
+					<el-form :model="resetpassword" :rules="rules2" ref="changepass" label-width="100px" class="demo-ruleForm">
+						<el-form-item label="密码" prop="pass">
+							<el-input type="password" v-model="resetpassword.pass" auto-complete="off"></el-input>
+						</el-form-item>
+						<el-form-item label="确认密码" prop="checkPass">
+							<el-input type="password" v-model="resetpassword.checkPass" auto-complete="off"></el-input>
+						</el-form-item>
+
+						<el-button type="primary" @click="savepass('changepass')">提交</el-button>
+						<el-button @click="resetPassword = false">取消</el-button>
+						</el-form-item>
+					</el-form>
+					
+				</el-col>
+			</el-row>
 		</el-dialog>
 	</div>
 </template>
@@ -139,7 +181,9 @@
 <script>
 	import axios from 'axios';
 	import util from '../../../common/js/util'
-	import { editusersave,getdeplist,userdetail,rolelist} from '../../../common/js/config';
+	import { editusersave, getdeplist, rolelist,userdetail,userpwd } from '../../../common/js/config'
+	
+	import md5 from 'js-md5';
 	export default {
 		props: ['edituser'],
 		data() {
@@ -157,9 +201,27 @@
 					}
 				}, 1000);
 			};
-
+			var validatePass = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请输入密码'));
+				} else {
+					if(this.resetpassword.checkPass !== '') {
+						this.$refs.changepass.validateField('checkPass');
+					}
+					callback();
+				}
+			};
+			var validatePass2 = (rule, value, callback) => {
+				if(value === '') {
+					callback(new Error('请再次输入密码'));
+				} else if(value !== this.resetpassword.pass) {
+					callback(new Error('两次输入密码不一致!'));
+				} else {
+					callback();
+				}
+			};
 			return {
-				changepass:false,
+				finddep:false,
 				addstaff: {
 					token: '',
 					username: '',
@@ -170,11 +232,24 @@
 					birthday: '',
 					deptid: '',
 					roleid: [],
-					status: '1',
+					status: '',
 					deptname: ''
 				},
+				resetpassword: {
+					pass: '',
+					checkPass: ''
+				},
+				rules2: {
+					pass: [{
+						validator: validatePass,
+						trigger: 'blur'
+					}],
+					checkPass: [{
+						validator: validatePass2,
+						trigger: 'blur'
+					}]
+				},
 				pickerOptions0: {},
-				checkdepartment: [],
 				rules: {
 					username: [{
 							required: true,
@@ -222,17 +297,19 @@
 
 				},
 				finddepartment: false,
+				resetPassword: false,
 				departments: [],
-				rolelist: [],
-				roleids: ''
+				rolelists: [],
+				roleids: '',
+				checkdepartment: [],
+				roleid:[],
+				checkeddepar:''
 
 			}
 		},
 		created() {
 			this.getinfo()
 			this.getdepartment()
-			this.getrole()
-
 		},
 		methods: {
 			submitForm(formName) {
@@ -253,19 +330,19 @@
 							id: this.addstaff.id,
 							password: this.addstaff.password
 						}
-						this.addstaff.status == "1" ? para.status = true : para.status = false
+						this.addstaff.status == "启用" ? para.status = true : para.status = false
 						this.addstaff.sex == "男" ? para.sex = "1" : para.sex = "2"
 						para.birthday = (!this.addstaff.birthday || this.addstaff.birthday == '') ? '' : util.formatDate.format(new Date(this.addstaff.birthday), 'yyyy-MM-dd');
 						para.mobile = String(this.addstaff.mobile)
 						editusersave(para).then((res) => {
 							console.log(para, res)
 							if(res.data.error == 0) {
-
 								this.$message({
 									message: "编辑成功！",
 									type: 'success'
 								});
 								this.handleHide()
+
 							} else {
 								this.$message({
 									message: res.data.message,
@@ -293,7 +370,7 @@
 			//获取部门
 			getdepartment() {
 				let para = {
-					token:''
+					token: ''
 				}
 				getdeplist(para).then((data) => {
 					this.departments = data.data.obj
@@ -303,42 +380,135 @@
 			comfirmrole() {
 				this.finddepartment = false
 				let role = [];
-
+				this.addstaff.roleid = this.checkdepartment
 				for(let i = 0; i < this.checkdepartment.length; i++) {
-					this.addstaff.roleid.push(this.checkdepartment[i].id)
-					role.push(this.checkdepartment[i].rolename)
-					this.roleids = role.join(',')
+					for(let j =0;j<this.rolelists.length;j++){
+						console.log(this.rolelists[j].id)
+						if(this.rolelists[j].id == this.checkdepartment[i]){
+							role.push(this.rolelists[j].rolename)
+						this.roleids = role.join(',')
+						}
+					}
+
 				}
 			},
-			//获取角色
-			getrole() {
-				let para={
-					token: '',
-					pageIndex: 0,
-					pageSize: '30'
-				}
-				rolelist(para).then((res) => {
-					this.rolelist = res.data.obj.datas
-				})
-			},
-			//传值
+			findrole(){
+				this.finddepartment = true
+					let para = {
+						token: '',
+						pageIndex: 0,
+						pageSize: 10
+					}
+					rolelist(para).then((res) => {
+						this.rolelists = res.data.obj.datas
+					})
+					
+					},//传值
 			getinfo() {
 				let para = {
 					token: '',
 					id: this.edituser.row.id
 				}
-			userdetail(para).then((res) => {
-					console.log(res)
+				userdetail(para).then((res) => {
 					this.addstaff = res.data.obj
-					res.data.obj.sex = 1 ? this.addstaff.sex = "男" : this.addstaff.sex = "女"
-					res.data.obj.status = true ? this.addstaff.status = "启用" : this.addstaff.status = "禁用"
+					res.data.obj.sex == 1 ? this.addstaff.sex = "男" : this.addstaff.sex = "女"
+					res.data.obj.status == true ? this.addstaff.status = "启用" : this.addstaff.status = "禁用"
+					this.checkeddepar = res.data.obj.deptname
+					this.roleid = res.data.obj.roleid
+					console.log(res.data.obj)
+					
+
+				}).then(()=>{
+					let para = {
+						token: '',
+						pageIndex: 0,
+						pageSize: 10
+					}
+					rolelist(para).then((res) => {
+						this.rolelists = res.data.obj.datas
+						let role = []
+						for(let i = 0 ; i <this.roleid.length;i++){
+							for(let j=0;j<this.rolelists.length;j++){
+								if(this.roleid[i] == this.rolelists[j].id){
+									role.push(this.rolelists[j].rolename)
+									this.roleids = role.join(',')
+									this.checkdepartment.push(this.rolelists[j].id)
+								}
+							}
+						}
+					})
 				})
+				
+				
 			},
 			//修改密码
 			changepassword() {
 				console.log(1)
-					this.changepass = true
-			}
+				this.resetPassword = true
+			},
+			savepass(formName) {
+				this.$refs[formName].validate((valid) => {
+					if(valid) {
+						let para ={
+							pwd:this.resetpassword.pass,
+							token:'',
+							id:this.addstaff.id
+						}
+						para.pwd = md5(this.resetpassword.pass)
+						userpwd(para).then((res) =>{
+							if(res.data.error == "0"){
+								this.$message({
+									message: "修改成功！",
+									type: 'success'
+								});
+								this.resetPassword = false
+							}else{
+								this.$message({
+									message: res.data.message,
+									type: 'error'
+								});
+							}
+						})
+					} else {
+						console.log('error submit!!');
+						return false;
+					}
+				});
+			},
+			resetFormpass(formName) {
+				this.$refs[formName].resetFields();
+			},
+			//角色单选
+		      handleCheckedCitiesChange(value) {
+		       let checkedCount = value.length;
+		      this.isIndeterminate = checkedCount > 0 && checkedCount < this.rolelists.length;
+		      },
+		      			//选择部门
+			comfirmdepa() {
+				//console.log(this.addstaff.deptid)
+				this.finddep = false
+				//this.checkeddepar = this.addstaff.deptid
+				let list = this.departments
+				for(let i = 0; i < list.length; i++) {
+					if(this.addstaff.deptid == list[i].id) {
+						this.checkeddepar = list[i].name
+					} else {
+						for(let j = 0; j < list[i].childs.length; j++) {
+							if(this.addstaff.deptid == list[i].childs[j].id) {
+								this.checkeddepar = list[i].childs[j].name
+							} else {
+								for(let k = 0; k < list[i].childs[j].childs.length; k++) {
+									if(this.addstaff.deptid == list[i].childs[j].childs[k].id) {
+										this.checkeddepar = list[i].childs[j].childs[k].name
+									}
+								}
+							}
+						}
+					}
+
+				}
+
+			},
 
 		},
 

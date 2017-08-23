@@ -27,11 +27,7 @@
 					</el-table-column>
 					<el-table-column prop="mobile" label="电话号码">
 					</el-table-column>
-					<el-table-column prop="status" label="所属部门">
-					</el-table-column>
 					<el-table-column prop="statusname" label="状态">
-					</el-table-column>
-					<el-table-column prop="roleid" label="角色">
 					</el-table-column>
 					<el-table-column label="操作">
 						<template scope="scope">
@@ -53,7 +49,7 @@
 
 			</section>
 		</div>
-		<AddStaff v-else-if="modetype == 'addstaff'" @setMode="setMode"></AddStaff>
+		<AddStaff v-else-if="modetype == 'addstaff'" @setMode="setMode" @getlist="getlist"></AddStaff>
 		<EditStaff :edituser='edituser' v-else="modetype == 'editstaff'" @setMode="setMode"></EditStaff>
 	</div>
 
@@ -123,7 +119,6 @@
 				this.pageset.pageSize = this.pagesize
 				let page = this.pageset
 				getuserlist(page).then((res) => {
-					console.log(res)
 					this.stafflist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
 

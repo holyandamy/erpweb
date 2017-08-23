@@ -87,11 +87,16 @@
 							</el-col>
 						</el-row>
 						<el-form-item label="选择部门" prop="deptid">
-							<el-col :span="4">
-								<el-select v-model="addstaff.deptid" placeholder="选择部门">
-									<el-option v-for="department in departments" :key="department.id" :label="department.name" :value="department.id"></el-option>
-								</el-select>
-							</el-col>
+							<el-row>
+								<el-col :span="4">
+									<el-input v-model="checkeddepar"></el-input>
+								</el-col>
+								<el-col :span="1">&nbsp;</el-col>
+								<el-col :span="4">
+									<el-button @click="finddep = true">查找</el-button>
+
+								</el-col>
+							</el-row>
 						</el-form-item>
 						<el-form-item label="选择角色">
 							<el-row>
@@ -110,26 +115,49 @@
 								<el-radio label="2">禁用</el-radio>
 							</el-radio-group>
 						</el-form-item>
-
 						<el-form-item label-width="100px">
-							<el-button type="primary" @click="submitForm('addstaff')">立即创建</el-button>
+							<el-button type="primary" @click="submitForm('addstaff')">保存</el-button>
 							<el-button @click="resetForm('addstaff')">重置</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
 			</el-row>
 		</section>
-
 		<!--角色选择-->
 		<el-dialog title="选择角色" :visible.sync="finddepartment" size="tiny">
-			<el-checkbox-group v-model="checkdepartment" :min="1" :max="10">
-				<el-checkbox v-for="role in rolelist" :label="role" :key="role.id">{{role.rolename}}</el-checkbox>
-			</el-checkbox-group>
+			
+			  <div style="margin: 15px 0;"></div>
+			  <el-checkbox-group v-model="checkdepartment" @change="handleCheckedCitiesChange">
+			    <el-checkbox v-for="role in rolelist" :label="role.id" :key="role.id">{{role.rolename}}</el-checkbox>
+			  </el-checkbox-group>
 			<span slot="footer" class="dialog-footer">
-    <el-button @click="finddepartment = false">取 消</el-button>
-    <el-button type="primary" @click="comfirmrole">确 定</el-button>
+			    <el-button @click="finddepartment = false">取 消</el-button>
+			    <el-button type="primary" @click="comfirmrole">确 定</el-button>
+			  </span>
+		</el-dialog>
+		<!--部门选择-->
+		<el-dialog title="选择角色" :visible.sync="finddep" size="tiny">
+			<ul class="dapul">
+				<li v-for="department in departments">
+					<el-radio class="radio" v-model="addstaff.deptid" :label="department.id">{{department.name}}</el-radio>
+					<ul>
+						<li v-for="depar in department.childs">
+							<el-radio class="radio" v-model="addstaff.deptid" :label="depar.id">{{depar.name}}</el-radio>
+							<ul>
+								<li v-for="de in depar.childs">
+									<el-radio class="radio" v-model="addstaff.deptid" :label="de.id">{{de.name}}</el-radio>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<span slot="footer" class="dialog-footer">
+    <el-button @click="finddep = false">取 消</el-button>
+    <el-button type="primary" @click="comfirmdepa">确 定</el-button>
   </span>
 		</el-dialog>
+
 	</div>
 </template>
 
@@ -137,7 +165,7 @@
 	import axios from 'axios';
 	import md5 from 'js-md5';
 	import util from '../../../common/js/util'
-	import { usersave,getdeplist,rolelist} from '../../../common/js/config';
+	import { usersave, getdeplist, rolelist } from '../../../common/js/config';
 	export default {
 		data() {
 			//验证手机号码
@@ -147,12 +175,12 @@
 				}
 				setTimeout(() => {
 					let mobilereg = /^[0-9]{11}$/;
-						if(mobilereg.test(value)) {
-							callback();
-						} else {
-							callback(new Error('请输入正确的手机号码'));
-						}
-					
+					if(mobilereg.test(value)) {
+						callback();
+					} else {
+						callback(new Error('请输入正确的手机号码'));
+					}
+
 				}, 1000);
 			};
 			var validatePass = (rule, value, callback) => {
@@ -191,7 +219,8 @@
 					status: '1'
 				},
 				pickerOptions0: {},
-				checkdepartment: [],
+			
+				finddep: false,
 				rules: {
 					username: [{
 							required: true,
@@ -250,8 +279,11 @@
 				},
 				finddepartment: false,
 				departments: [],
+				checkeddepar: '',
 				rolelist: [],
-				roleids: ''
+				roleids: '',
+				isIndeterminate:true,
+				checkdepartment: [],
 
 			}
 		},
@@ -283,17 +315,17 @@
 						para.mobile = String(this.addstaff.mobile)
 						para.password = md5(this.addstaff.password)
 						usersave(para).then((res) => {
-			if(res.data.error == 0) {
-
-				this.$message({
-					message: "添加成功！",
-					type: 'success'
-				});
-				this.handleHide()
-			} else {
-				this.$message({
-							message: res.data.message,
-							type:'error'
+							console.log(para)
+							if(res.data.error == 0) {
+								this.$message({
+									message: "添加成功！",
+									type: 'success'
+								});
+								this.handleHide()
+							} else {
+								this.$message({
+									message: res.data.message,
+									type: 'error'
 								});
 
 							}
@@ -313,11 +345,12 @@
 			},
 			handleHide: function() {
 				this.$emit('setMode', 'staff');
+				this.$emit('getlist')
 			},
 			//获取部门
 			getdepartment() {
-				let para={
-					token:''
+				let para = {
+					token: ''
 				}
 				getdeplist(para).then((data) => {
 					this.departments = data.data.obj
@@ -326,16 +359,23 @@
 			//选择角色
 			comfirmrole() {
 				this.finddepartment = false
-				let role = [];
-				for(let i = 0; i < this.checkdepartment.length; i++) {
-					this.addstaff.roleid.push(this.checkdepartment[i].id)
-					role.push(this.checkdepartment[i].rolename)
-					this.roleids = role.join(',')
+				
+				this.addstaff.roleid = this.checkdepartment
+				let roleidlist= []
+				for(let i = 0; i < this.rolelist.length; i++) {
+					
+					for(let j = 0 ; j <this.checkdepartment.length;j++){
+					if(this.checkdepartment[j] == this.rolelist[i].id){
+					roleidlist.push(this.rolelist[i].rolename)
+					this.roleids = roleidlist.join(',')
+					}
+}
+						//this.roleids = 
 				}
 			},
 			//获取角色
 			getrole() {
-				let para={
+				let para = {
 					token: '',
 					pageIndex: 0,
 					pageSize: '30'
@@ -344,6 +384,38 @@
 					this.rolelist = res.data.obj.datas
 				})
 			},
+			//选择部门
+			comfirmdepa() {
+				//console.log(this.addstaff.deptid)
+				this.finddep = false
+				//this.checkeddepar = this.addstaff.deptid
+				let list = this.departments
+				for(let i = 0; i < list.length; i++) {
+					if(this.addstaff.deptid == list[i].id) {
+						this.checkeddepar = list[i].name
+					} else {
+						for(let j = 0; j < list[i].childs.length; j++) {
+							if(this.addstaff.deptid == list[i].childs[j].id) {
+								this.checkeddepar = list[i].childs[j].name
+							} else {
+								for(let k = 0; k < list[i].childs[j].childs.length; k++) {
+									if(this.addstaff.deptid == list[i].childs[j].childs[k].id) {
+										this.checkeddepar = list[i].childs[j].childs[k].name
+									}
+								}
+							}
+						}
+					}
+
+				}
+
+			},
+			 //角色单选
+		      handleCheckedCitiesChange(value) {
+		      let checkedCount = value.length;
+		      this.isIndeterminate = checkedCount > 0 && checkedCount < this.rolelist.length;
+		      }
+		      
 		}
 	}
 </script>
@@ -398,5 +470,16 @@
 	.bg_white {
 		background: #fff;
 		padding: 20px 35px;
+	}
+	
+	.dapul {
+		li {
+			width: 100%;
+			text-align: left;
+			margin-bottom: 10px;
+			ul {
+				margin-left: 40px;
+			}
+		}
 	}
 </style>
