@@ -14,25 +14,25 @@
             <el-col :span="12">
               <ul>
                 <li><span>线路名称</span> {{detail.categorytype}} -- {{detail.categoryName}}</li>
-                <li><span>团号</span>{{detail.type == 1?'跟团游':'自由行'}}</li>
+                <li><span>团号</span>{{detail.teamno }}</li>
                 <!--出行方式:1跟团游，2自由行-->
                 <li><span>结算价格</span>
-                  <el-checkbox label="成人" prop="isadult" disabled v-model="detail.isadult"></el-checkbox>
-                  <el-checkbox label="儿童" prop="ischild" disabled v-model="detail.ischild"></el-checkbox>
-                  <el-checkbox label="老人" prop="isbaby" disabled v-model="detail.isbaby"></el-checkbox>
+                  成人 {{detail.sltaudilt}} /
+                  儿童 {{detail.sltchild}} /
+                  婴儿 {{detail.sltbaby}}
                 </li>
 
               </ul>
             </el-col>
             <el-col :span="12">
               <ul style="padding-left: 30px;">
-                <li><span>出发时间</span>{{detail.depart}}</li>
-                <li><span>回团时间</span>{{detail.dest}}</li>
+                <li><span>出发时间</span>{{detail.starttime}}</li>
+                <li><span>回团时间</span>{{detail.endtime}}</li>
               </ul>
             </el-col>
             <div style="clear: both;"></div>
             <p>
-              <span>集合通知</span>{{detail.station}}
+              <span>集合通知</span>{{detail.notify}}
             </p>
           </el-row>
           <el-table>
