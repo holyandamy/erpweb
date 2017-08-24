@@ -103,3 +103,5 @@ export const opensave = params => { return axios.post(`${base}/sys/open/save`, p
 
 /* 操作日志*/
 export const loglist = params => { return axios.post(`${base}/sys/log/list`, params).then(res => res); };//获取员工详情
+
+export const orderdetail = params => { return axios.post(`${base}/line/team/order/detail`, params).then(res => res); };//获取订单详情
