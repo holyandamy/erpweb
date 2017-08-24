@@ -82,7 +82,7 @@
           </el-table-column>
           <el-table-column  label="操作">
             <template scope="scope">
-              <el-button @click="editorFn(scope.row)" type="text" size="small">下单</el-button>
+              <el-button @click="setMode('groupinfo'),editorFn(scope.row)" type="text" size="small">下单</el-button>
               <el-button @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
               <el-button @click="editorFn(scope.row)" type="text" size="small">详情</el-button>
               <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row)">停止</el-button>
@@ -101,6 +101,8 @@
         </div>
       </section>
     </div>
+    <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="setMode" :categoryId="editcategory.id"></GroupInfo>
+    <GroupReserve v-else-if="modeType == 'groupreserve'" @setMode="setMode" :categoryId="editcategory.id"></GroupReserve>
     <Grouporder v-else-if="modeType == 'order'"  @setMode="setMode" :operationType="operationType" ></Grouporder>
     <NewGroup v-else  @setMode="setMode" :operationType="operationType" ></NewGroup>
   </div>
@@ -108,12 +110,16 @@
 <script>
   import Grouporder from './grouporder'
   import NewGroup from './newgroup'
+  import GroupInfo from './groupinfo'
+  import GroupReserve from './groupreserve'
   import axios from 'axios';
   import {token,linecategorylist,linecategoryadd,linecategoryupdate,linecategorydelete} from '../../../common/js/config';
   export default {
     components:{
       Grouporder,
       NewGroup,
+      GroupInfo,
+      GroupReserve
     },
     data() {
       return {
@@ -167,6 +173,7 @@
       editorFn(rows){
         this.editcategory.id=rows.id;
         this.editcategory.name=rows.name;
+        this.modeType = 'groupinfo';
       },
       saveEdit(){
         this.$refs['editcategory'].validate((valid) => {
@@ -226,7 +233,7 @@
       },
       //查询
       searchGetList(){
-      	
+
       }
 
     }

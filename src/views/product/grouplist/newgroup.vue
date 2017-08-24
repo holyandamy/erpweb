@@ -17,26 +17,44 @@
         <el-col :span="20" style="width: 100%">
           <el-form :model="groupList"  ref="visitorList"   :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;">
             <div style="width:100%;float: left;overflow:hidden">
-            <el-form-item label="线路选择" prop="name">
-              <el-select
-                v-model="groupList.lineid"
-                filterable
-                allow-create>
-                <el-option
-                  v-for="item in linelist"
-                  :key="item.lineid"
-                  :label="item.linename"
-                  :value="item.lineid">
-                </el-option>
-              </el-select>
-            </el-form-item>
+              <el-form-item label="选择线路">
+                <el-button @click="getcategoryall()">选择</el-button>
+              </el-form-item>
+              <!--<el-form-item label="线路分类" prop="name">-->
+                <!--<el-col :span="4" style="width: 100%;margin-right: 10px">-->
+                  <!--<ul>-->
+                    <!--<li @click="changecondition('-1')" :class="{checked:ischecked == -1}">全部</li>-->
+                    <!--<li v-for="(linesort,index) in linesorts" :class="{checked:ischecked == index}" @click="changecondition(index,linesort)">{{linesort.name}}</li>-->
+                  <!--</ul>-->
+                <!--</el-col>-->
+              <!--</el-form-item>-->
+              <!--<el-form-item label="线路类型" prop="name">-->
+                <!--<el-select v-model="search.type" placeholder="线路类型">-->
+                  <!--<el-option label="国内" value="1"></el-option>-->
+                  <!--<el-option label="出境" value="2"></el-option>-->
+                  <!--<el-option label="周边" value="3"></el-option>-->
+                <!--</el-select>-->
+              <!--</el-form-item>-->
+            <!--<el-form-item label="线路名称" prop="name">-->
+              <!--<el-select-->
+                <!--v-model="groupList.lineid"-->
+                <!--filterable-->
+                <!--allow-create>-->
+                <!--<el-option-->
+                  <!--v-for="item in linelist"-->
+                  <!--:key="item.lineid"-->
+                  <!--:label="item.linename"-->
+                  <!--:value="item.lineid">-->
+                <!--</el-option>-->
+              <!--</el-select>-->
+            <!--</el-form-item>-->
             <el-form-item label="集合通知：" prop="name">
               <el-col :span="4" style="width: 100%;margin-right: 10px">
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 3, maxRows: 5}"
                   placeholder="请输入内容"
-                  v-model="textarea3">
+                  v-model="notice">
                 </el-input>
               </el-col>
             </el-form-item>
@@ -223,13 +241,36 @@
         </el-col>
       </el-row>
     </section>
+    <el-dialog title="提示" :visible.sync="lineFlag" size="small">
+      <el-form :inline="true" :model="search" class="demo-form-inline" ref="search">
+        <el-form-item label="线路分类">
+          <el-select v-model="search.categoryid" placeholder="请选择">
+            <el-option v-for="(linesort,index) in linesorts" :key="linesort.value" :label="linesort.name" :value="linesort.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="线路名称">
+          <el-input v-model="search.linename"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="queryLine()">查询</el-button>
+        </el-form-item>
+        <el-form-item label="选择线路">
+          <el-radio-group v-model="lineItemId">
+            <el-radio :label="item.id" :key="item.name" v-for="item in lineList">{{item.name}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script>
   import {address} from '../../../common/js/address'
   import axios from 'axios';
-  import {token,custsave,custupdate,custdetail, province, city, district } from '../../../common/js/config';
+  import {token,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist} from '../../../common/js/config';
+  import ElDialog from "../../../../node_modules/element-ui/packages/dialog/src/component";
   export default {
+    components: {ElDialog},
     data() {
       //验证手机号码
       var checkmobile = (rule, value, callback) => {
@@ -250,6 +291,17 @@
         }, 1000);
       };
       return {
+        lineFlag: false,
+        notice: '',
+        lineItemId: '',
+        search: {
+          token:'',
+          pageindex:0,
+          pagesize: 9999,
+          categoryid:'', //分类id
+          linename:'',//线路名称
+        },
+        destinations: [],
         groupList: {
           token,
           lineid: '',
@@ -271,26 +323,8 @@
           cityList:[],
           districtList:[],
         },
-        linelist: [{
-          'lineid': '4545454',
-          'linename': '阿娇的发生',
-          'linesort': '国内长线',
-          'departure': '上海',
-          'destination': '北京',
-          'day': '3',
-          'establish': '张若昀',
-          'status': '待审批'
-        },
-          {
-            'lineid': '45454ss54',
-            'linename': '阿ss娇的发生',
-            'linesort': '国内长线',
-            'departure': '上海',
-            'destination': '北京',
-            'day': '3',
-            'establish': '张若昀',
-            'status': '待审批'
-          }], //线路列表
+        linesorts: [],
+        linelist: [], //线路列表
         optionName:'新增团计划',
         rules: {
           name: [
@@ -316,8 +350,8 @@
       }
     },
     created(){
-      this.getlinelist()
-      this.getprovince()
+//      this.getlinelist()
+//      this.getprovince()
       if( this.$parent.operationType.type=='edit') {
         this.optionName = "编辑游客";
         this.birthdayFlag=false;
@@ -341,17 +375,41 @@
       }
     },
     methods: {
-
+      //获取线路列表
+      queryLine(){
+        linelist(this.search).then((res) => {
+          if(!res.err){
+            if(!res.error){
+              this.lineList = res.data.obj.datas;
+            }
+          }
+        })
+      },
+//      changecondition() {
+//        let listid = this.search.categoryid ? this.search.categoryid : '0';
+//        destlist({token: '', categoryid: listid}).then((res) => {
+//          this.destinations = res.data.obj
+//        })
+//      },
+      getcategoryall(){
+        this.lineFlag = true;
+        let para= {token:''}
+        categoryall(para).then(res =>{
+          this.linesorts = res.data.obj
+        })
+      },
       handleHide: function (option) {
         this.$emit('setMode', 'list', option);
       },
       //获取线路列表
-      getlinelist(){/*
-        let para = this.search
-        linelist(para).then((res) => {
-          console.log(para,res,"线路列表")
-        })*/
-      },
+//      getlinelist(){
+//          console.log(this.search);
+//          /*
+//        let para = this.search
+//        linelist(para).then((res) => {
+//          console.log(para,res,"线路列表")
+//        })*/
+//      },
       submitForm() {
           let newDate = '';
           if (this.visitorList.birthday != '') {
@@ -494,14 +552,27 @@
     }
   }
   section{
-
+    .el-col{
+      li{
+        float: left;
+        padding: 0px 10px;
+        margin: 0 5px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: 1px solid transparent;
+        &:hover,
+        .checked {
+          border: 1px solid #3ec3c8!important;
+          color: #3ec3c8;
+        }
+      }
+    }
     .demo-ruleForm{
-      .el-form-item{
-        .el-col-4{
+      .el-form-item {
+        .el-col-4 {
           width: 200px;
         }
       }
-
     }
   }
 
