@@ -148,9 +148,9 @@
 							<el-form-item label="集合地点" prop="station">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-							
+
 							<ImgLoad @geturl = "geturl" :checktop="checktop" ></ImgLoad>
-							
+
 
 						</el-col>
 					</el-row>
@@ -247,7 +247,7 @@
 
 						</li>
 					</ul>
-				
+
 				</div>
 				<h2 class="d_jump">备注说明</h2>
 				<div class="baseinfo">
@@ -514,8 +514,8 @@
 				uploadform: {},
 				authorization: '',
 				checktop:true
-				
-				
+
+
 			}
 		},
 		mounted: function() {
@@ -602,12 +602,12 @@
 			},
 			//保存表单
 			submitForm(formName) {
-				
+
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.baseForm
 						let html = this.$refs.ue.getUEContent()
-						
+
 						let categorytype = para.categorytype
 						switch(categorytype) {
 							case "全部":
@@ -676,7 +676,7 @@
 						}
 						console.log(para)
 						linesave(para).then((res) => {
-						
+
 							if(res.data.error == 1) {
 
 								this.$message({
@@ -705,7 +705,7 @@
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
 			},
-			
+
 			//天数减少
 			minuday() {
 				let index = this.baseForm.length
@@ -914,7 +914,7 @@
 			}
 		}
 	}
-	
+
 	section {
 		margin-top: 60px;
 		padding: 0 30px;
@@ -990,11 +990,11 @@
 			}
 		}
 	}
-	
+
 	.linetype li:last-child {
 		border-right: 0!important;
 	}
-	
+
 	.file {
 		position: relative;
 		display: inline-block;
@@ -1012,8 +1012,8 @@
 		float: left;
 		margin-top: 5px;
 	}
-	
-	
+
+
 	.el-upload-list__item-actions{
 		display: none;
 	}
