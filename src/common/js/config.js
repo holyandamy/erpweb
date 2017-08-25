@@ -8,13 +8,20 @@ export const setToken=value=>{ token= value };
 export const login = params => { return axios.post(`${base}/sys/user/login`, params).then(res => res); };
 /* 收款 */
 export const getcollectlist = params => { return axios.post(`${base}/finance/collect`, params).then(res => res); };//获取收款列表
-export const getcollectedit = params => { return axios.post(`${base}/finance/collect/status`, params).then(res => res); };//收款状态编辑
 export const collectsave = params => { return axios.post(`${base}/finance/collect/save`, params).then(res => res); };//收款登记
 export const banlist = params => { return axios.post(`${base}/sys/bank/accounts`, params).then(res => res); };//查询银行账号列表
+export const collectstatus = params => { return axios.post(`${base}/finance/collect/status`, params).then(res => res); };//状态变更
+
 /* 付款 */
 export const getpaylist = params => { return axios.post(`${base}/finance/pay`, params).then(res => res); };//获取付款列表
 export const getpayedit = params => { return axios.post(`${base}/finance/pay/status`, params).then(res => res); };//付款状态编辑
 export const paysave = params => { return axios.post(`${base}/finance/pay/save`, params).then(res => res); };//收款登记
+
+/* 发团列表 */
+export const teamlist = params => { return axios.post(`${base}/line/team/list`, params).then(res => res); };//发团列表
+
+
+
 
 
 /*产品分类*/
@@ -25,6 +32,11 @@ export const linecategorydelete = params => { return axios.post(`${base}/line/ca
 export const linecategorytype = params => { return axios.post(`${base}/line/category/type`, params); };//通过分类类型获取分类列表接口
 /*订单中心*/
 export const orderlist = params => { return axios.post(`${base}/order/list`, params); };//通过分类类型获取分类列表接口
+export const orderdetail = params => { return axios.post(`${base}/order/detail`, params); };//通过分类类型获取分类列表接口
+export const orderupdate = params => { return axios.post(`${base}/order/update`, params); };//更新订单
+export const ordercancel = params => { return axios.post(`${base}/order/cancel`, params); };//取消订单
+export const ordernamelistconfirm = params => { return axios.post(`${base}/order/namelist/confirm`, params); };//确认游客名单接口
+export const ordernamelistexport = params => { return axios.post(`${base}/order/namelist/export`, params); };//导出游客名单
 
 
 //产品中心
@@ -65,6 +77,8 @@ export const addbank = params => { return axios.post(`${base}/sys/bank/save`, pa
 export const updatebank = params => { return axios.post(`${base}/sys/bank/update`, params).then(res => res); };//编辑银行
 export const updatestatus = params => { return axios.post(`${base}/sys/bank/status`, params).then(res => res); };//更新银行状态
 /* 公司管理--公司信息设置 */
+
+export const companydetail = params => { return axios.post(`${base}/syscfg/company/detail`, params).then(res => res); };//获取公司信息
 export const companyupdate = params => { return axios.post(`${base}/sys/company/update`, params).then(res => res); };//更新公司设置
 export const province = params => { return axios.post(`${base}/sys/province/list`, params).then(res => res); };//获取省
 export const city = params => { return axios.post(`${base}/sys/city/list`, params).then(res => res); };//获取市
@@ -103,5 +117,3 @@ export const opensave = params => { return axios.post(`${base}/sys/open/save`, p
 
 /* 操作日志*/
 export const loglist = params => { return axios.post(`${base}/sys/log/list`, params).then(res => res); };//获取员工详情
-
-export const orderdetail = params => { return axios.post(`${base}/line/team/order/detail`, params).then(res => res); };//获取订单详情

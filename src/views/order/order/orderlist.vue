@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-if="setMode == 'orderlist'">
+		<div v-if="setmode == 'orderlistmodel'">
 			<header>
 				<el-row>
 					<el-col :span="12">
@@ -59,13 +59,13 @@
 				<table width="100%" class="table">
 					<thead>
 						<tr>
-							<td width="20%">订单编号 / 团号 / 线路名称</td>
+							<td width="40%">订单编号 / 团号 / 线路名称</td>
 							<td width="10%">出团 / 人数</td>
 							<td width="10%">客户信息</td>
-							<td width="10%">订单金额</td>
-							<td width="10%">应收</td>
-							<td width="10%">已收</td>
-							<td width="10%">已付</td>
+							<td width="5%">订单金额</td>
+							<td width="5%">应收</td>
+							<td width="5%">已收</td>
+							<td width="5%">退款</td>
 							<td width="10%">状态</td>
 							<td width="10%">负责人 / 操作</td>
 						</tr>
@@ -73,25 +73,25 @@
 					</thead>
 				</table>
 
-				<dl class="list" v-for="(order,index) in orderlist">
-					<dt>订单编号：{{order.code}} / 馨途订单编号：{{order.sourceid}} / 团号：{{order.teamno}}</dt>
+				<dl class="list" v-for="(list,index) in orderLists">
+					<dt>订单编号：{{list.code}} / 馨途订单编号：{{list.sourceid}}</dt>
 					<dd>
 						<ul>
-							<li style="width: 20%;">{{order.platformname}} <br />{{order.linename}}<br /> 下单时间：{{order.createtime}} / 2017-01-02</li>
-							<li style="width: 10%;">出团：{{order.starttime}} <br /> 人数：{{order.custnumber}} 大 {{order.custnumber}} 小 {{order.custnumber}} 婴</li>
-							<li style="width: 10%;">{{order.companyname}} <br /> {{order.creater}}
+							<li style="width: 40%;">{{list.teamno}} <br />{{list.linename}}<br /> 下单时间：{{list.createtime}}</li>
+							<li style="width: 10%;">出团：{{list.starttime}} <br /> 人数：{{list.custnumber}}</li>
+							<li style="width: 10%;">{{list.companyname}} <br /> {{list.contactmobile}}
 							</li>
-							<li style="width: 10%;">￥{{order.orderfee}}</li>
-							<li style="width: 10%;">￥{{order.orderpay}}</li>
-							<li style="width: 10%;">￥{{order.collection}}</li>
-							<li style="width: 10%;">￥{{order.pay}}</li>
-							<li style="width: 10%;">{{order.status}}</li>
-							<li style="width: 10%;">
-								<el-button type="text">确认订单</el-button>
-								<el-button type="text">出团单</el-button>
-								<el-button type="text">导出行程</el-button>
-								<el-button type="text">确认单</el-button>
-								<el-button type="text" @click="setmode('orderinfo'),getinfo(order)">查看</el-button>
+							<li style="width: 5%;">￥{{list.orderfee}}</li>
+							<li style="width: 5%;">￥{{list.orderpay}}</li>
+							<li style="width: 5%;">￥{{list.collection}}</li>
+							<li style="width: 5%;">￥{{list.pay}}</li>
+							<li style="width: 10%;">{{list.status}}</li>
+							<li style="width: 10%;" class="button">
+								<el-button type="text" style="margin-left: 10px;">确认名单</el-button>
+								<el-button type="text"><router-link to="/singlegroup">出团单</router-link></el-button>
+								<el-button type="text"><router-link :to="{path:'/singlegroup',query: {id: '111'}}">行程单</router-link></el-button>
+							   <el-button type="text"><router-link :to="{path:'/confirm',query: {id: '111'}}">确认单</router-link></el-button>
+								<el-button type="text" @click="setMode('orderinfo'),passinfo(list)">查看</el-button>
 							</li>
 						</ul>
 					</dd>
@@ -101,7 +101,7 @@
 			</section>
 
 		</div>
-		<OrderInfo v-else="setmode == 'orderinfo'"  :orderid = 'orderid' @setMode="setMode"></OrderInfo>
+		<OrderInfo v-else @setMode="setMode" :listid="listid"></OrderInfo>
 	</div>
 </template>
 
@@ -124,9 +124,9 @@
 					source: '',
 					hide: false,
 					token: ''
+
 				},
-				orderid:'',
-				orderlist: [], //订单列表
+				orderLists: [],
 				total: 0,
 				currentPage: 1,
 				pagesize: 10,
@@ -140,16 +140,17 @@
 					value: '3',
 					label: '删除'
 				}],
-				setMode:'orderlist'
+				setmode:'orderlistmodel',
+				listid:''
+
 			}
 		},
 		created(){
 			this.getList()
 		},
-		
 		methods: {
-			setmode(type){
-				this.setMode = type
+			setMode(type){
+				this.setmode = type
 			},
 			getList() {
 				let dates = ''
@@ -162,20 +163,26 @@
 				} else {
 					dates = startday + '|' + endday
 				}
+
 				let page = this.orderinfo
 				page.date = dates
 				orderlist(page).then((res) => {
-					this.orderlist = res.data.obj.list
+					
+					
+									this.orderLists = res.data.obj.datas
+									console.log(this.orderinfo)
+									
+					//					this.total = Number(res.data.obj.total)
 				})
-			},
-			getinfo(order){
-				this.orderid = order.id
 			},
 			handleCurrentChange(val) {
 				this.getList()
 			},
 			onSubmit() {
 				this.getList()
+			},
+			passinfo(val){
+				this.listid=val.id
 			}
 		}
 	}
@@ -307,6 +314,14 @@
 	}
 	
 	.list:hover {
-		border: 1px solid #000000;
+		border: 1px solid #9ad4d6;
+	}
+	.button{
+		.el-button{
+			padding: 7px 3px;
+			a{
+				color: #3ec3c8;
+			}
+		}
 	}
 </style>

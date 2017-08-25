@@ -69,17 +69,16 @@
 
 						<template scope="scope">
 							<el-button @click="handleShow(scope.$index, scope.row)" type="text" size="small">查看</el-button>
-							<a href="javascript:;">
+							<a href="javascript:;"  v-if="scope.row.cfmValue =='0' || scope.row.verfValue =='0'">
 								<el-dropdown>
 									<span class="el-dropdown-link">
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
 									<el-dropdown-menu slot="dropdown">
-										<!--<el-dropdown-item > <a href="javascript:;" @click="handleEdit(scope.$index, scope.row)">编辑</a></el-dropdown-item>-->
-										<el-dropdown-item><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
-										<el-dropdown-item><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
-										<el-dropdown-item><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
-										<el-dropdown-item><span @click="updatastatus(scope,4)">不核销</span></el-dropdown-item>
+										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
+										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
+										<el-dropdown-item v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
+										<el-dropdown-item v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">不核销</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 							</a>
@@ -334,7 +333,7 @@
 	
 	.el-dropdown-link {
 		font-size: 12px;
-		color: #20a0ff;
+		color: #3ec3c8;
 	}
 	
 	a {

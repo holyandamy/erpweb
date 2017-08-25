@@ -10,13 +10,13 @@
 					</el-form-item>
 					<el-form-item label="所在城市" prop="province">
 						<el-col :span="4">
-							<el-select v-model="companyForm.provinceId" placeholder="请选择" @change="changecity()">
+							<el-select v-model="companyForm.provinceId" placeholder="请选择" @change="changecity('pro')">
 								<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 								</el-option>
 							</el-select>
 						</el-col>
 						<el-col :span="4">
-							<el-select v-model="companyForm.cityId" placeholder="请选择" @change="changecity()">
+							<el-select v-model="companyForm.cityId" placeholder="请选择" @change="changecity('city')">
 								<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 								</el-option>
 							</el-select>
@@ -46,19 +46,17 @@
 							<el-input v-model="companyForm.tel"></el-input>
 						</el-col>
 					</el-form-item>
+					<el-form-item label="品牌" prop="brand">
+						<el-col :span="7">
+							<el-input v-model="companyForm.brand"></el-input>
+						</el-col>
+					</el-form-item>
 					<el-form-item label="公司传真" prop="fax">
 						<el-col :span="7">
 							<el-input v-model="companyForm.fax"></el-input>
 						</el-col>
 					</el-form-item>
-					<el-form-item label="公司logo">
-						<el-col :span="15" style="float: left;">
-							<el-upload class="upload-demo" style="float: left;" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList2" list-type="picture">
-								<el-button size="small" type="primary">点击上传</el-button>
-								<span slot="tip" class="el-upload__tip"> 建议图片格式：jpg、png。 图片大小在1M以内，宽高为200*80，比例为5:2</span>
-							</el-upload>
-						</el-col>
-					</el-form-item>
+					<ImgLoad @imagelistchange="imagelistchange" :logo="logo" ref='logos'></ImgLoad>
 					<el-form-item label-width="100px" style="text-align: left;">
 						<el-button type="primary" @click="submitForm('companyForm')">保存</el-button>
 						<el-button @click="resetForm('companyForm')">重置</el-button>
@@ -72,36 +70,33 @@
 </template>
 <script>
 	import axios from 'axios';
-	import { companyupdate, province, city, district } from '../../../common/js/config';
+	import { companyupdate, province, city, district,companydetail } from '../../../common/js/config';
+	import ImgLoad from './upload'
 	export default {
+		components: {
+			ImgLoad
+		},
 		data() {
 			//验证手机号码
-			var checkmobile = (rule, value, callback) => {
-				if(!value) {
-					return callback(new Error('手机号码不能为空'));
-				}
-				setTimeout(() => {
-					if(!Number.isInteger(value)) {
-						callback(new Error('请输入数字值'));
-					} else {
-						let mobilereg = /^[0-9]{11}$/;
-						if(mobilereg.test(value)) {
-							callback();
-						} else {
-							callback(new Error('请输入正确的手机号码'));
-						}
-					}
-				}, 1000);
-			};
+//			var checkmobile = (rule, value, callback) => {
+//				if(!value) {
+//					return callback(new Error('手机号码不能为空'));
+//				}
+//				setTimeout(() => {
+//					if(!Number.isInteger(value)) {
+//						callback(new Error('请输入数字值'));
+//					} else {
+//						let mobilereg = /^[0-9]{11}$/;
+//						if(mobilereg.test(value)) {
+//							callback();
+//						} else {
+//							callback(new Error('请输入正确的手机号码'));
+//						}
+//					}
+//				}, 1000);
+//			};
 			return {
 				activeIndex: '3',
-				fileList2: [{
-					name: 'food.jpeg',
-					url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-				}, {
-					name: 'food2.jpeg',
-					url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-				}],
 				//提交数据
 				companyForm: {
 					token: '',
@@ -115,7 +110,9 @@
 					mobile: '',
 					tel: '',
 					fax: '',
-					companyId: ''
+					companyId: '',
+					brand:'',
+					companyId:''
 				},
 				//验证数据
 				rules: {
@@ -160,7 +157,7 @@
 						}
 					],
 					mobile: [{
-						validator: checkmobile,
+//						validator: checkmobile,
 						trigger: 'blur',
 						required: true,
 					}],
@@ -179,22 +176,41 @@
 				},
 				province: [],
 				city: [],
-				district: []
+				district: [],
+				logo:''
 
 			}
 		},
 		created() {
+			this.getinfo()
 			this.getprovince()
+			
 		},
 		methods: {
+			//获取公司信息
+			getinfo(){
+				let para={token:''}
+				companydetail(para).then((res) =>{
+					this.companyForm = res.data.obj
+					this.logo = res.data.obj.logo
+					console.log(res.data.obj)
+					this.$refs.logos.loading(this.logo)
+				})
+			},
 			//保存数据
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let parses = this.companyForm
+					parses.companyId = this.companyForm.id
 						companyupdate(parses).then((res) => {
-							this.$message('提交成功！');
-							console.log(parses, res)
+							if(res.data.error == 1){
+								console.log(parses, res)
+								 this.$message.error(res.data.message);
+							}else{
+								this.$message('提交成功！');
+								console.log(parses, res)
+							}
 						})
 					} else {
 						this.$message.error('提交错误！');
@@ -207,13 +223,6 @@
 				this.$refs[formName].resetFields();
 			},
 			//
-			handleRemove(file, fileList) {
-				console.log(file, fileList);
-			},
-			handlePreview(file) {
-				console.log(file);
-			},
-
 			//获取省级列表
 			getprovince() {
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
@@ -247,17 +256,26 @@
 				})
 			},
 			//选择城市
-			changecity() {
-				let pro = {
+			changecity(val) {
+				if(val =="pro"){
+					let pro = {
 					id: this.companyForm.provinceId
-				}
-				console.log(pro)
-				this.getcity(pro)
-				let city = {
+					}
+					this.getcity(pro)
+					this.companyForm.cityId = ""
+				}else{
+					let city = {
 					id: this.companyForm.cityId
+					}
+					this.getdistrict(city)
+					this.companyForm.districtId=""
 				}
-				this.getdistrict(city)
+				
+				
 
+			},
+			imagelistchange(val){
+				this.companyForm.logo = val
 			}
 
 		}
@@ -267,19 +285,19 @@
 	.clearfix {
 		clear: both;
 	}
-
+	
 	.bg-white {
 		background: white;
 	}
-
+	
 	.padding30 {
 		padding: 20px;
 	}
-
+	
 	.margin30 {
 		margin: 30px;
 	}
-
+	
 	header {
 		padding: 0 40px;
 		background: white;
@@ -310,7 +328,7 @@
 			color: #333;
 		}
 	}
-
+	
 	.el-select {
 		margin-right: 15px;
 	}

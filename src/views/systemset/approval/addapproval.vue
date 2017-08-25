@@ -59,9 +59,9 @@
 		</section>
 		<!-- 被审批人员 -->
 		<el-dialog title="选择人被审批员" size="tiny" :visible.sync="dialogFormVisible" style="text-align: left;">
-			<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+			<!--<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
 			<div style="margin: 15px 0;"></div>
-			<el-checkbox-group :min="1" :max="10" v-model="checkedCities" @change="handleCheckedCitiesChange">
+			<el-checkbox-group :min="0" :max="1" v-model="checkedCities" @change="handleCheckedCitiesChange">
 				<el-checkbox v-for="approval in approvals" :label="approval.username" :key="approval.id">{{approval.username}}</el-checkbox>
 			</el-checkbox-group>
 			<div slot="footer" class="dialog-footer">
@@ -71,9 +71,9 @@
 		</el-dialog>
 		<!-- 审批人员 -->
 		<el-dialog title="选择审批人员" size="tiny" :visible.sync="approvalVisible" style="text-align: left;">
-			<el-checkbox :indeterminate="isIndeterminate" v-model="checkAllapp" @change="appCheckAllChange">全选</el-checkbox>
+			<!--<el-checkbox :indeterminate="isIndeterminate" v-model="checkAllapp" @change="appCheckAllChange">全选</el-checkbox>-->
 			<div style="margin: 15px 0;"></div>
-			<el-checkbox-group :min="1" :max="10" v-model="checkedapproval" @change="appCheckedCitiesChange">
+			<el-checkbox-group :min="0" :max="1" v-model="checkedapproval" @change="appCheckedCitiesChange">
 				<el-checkbox v-for="approval in approvaleds" :label="approval.username" :key="approval.id">{{approval.username}}</el-checkbox>
 			</el-checkbox-group>
 			<div slot="footer" class="dialog-footer">
@@ -95,7 +95,7 @@
 					token: '',
 					executorid: '',
 					approverid: '',
-					isenable: ''
+					isenable: '启用'
 				},
 				dialogFormVisible: false,
 				checkAll: true,
@@ -168,11 +168,11 @@
 			},
 
 			//被审批人员选择
-			handleCheckAllChange(event) {
-				this.checkedCities = event.target.checked ? this.approvallist : [];
-				this.isIndeterminate = false;
-				console.log(this.approvallist)
-			},
+//			handleCheckAllChange(event) {
+//				this.checkedCities = event.target.checked ? this.approvallist : [];
+//				this.isIndeterminate = false;
+//				console.log(this.approvallist)
+//			},
 			handleCheckedCitiesChange(value) {
 				let checkedCount = value.length;
 				this.checkAll = checkedCount === this.approvallist.length;
@@ -187,10 +187,10 @@
 				this.appform.approverid = this.checkedapproval.join(",")
 				this.approvalVisible = false
 			},
-			appCheckAllChange(event) {
-				this.checkedapproval = event.target.checked ? this.approvaledlist : [];
-				this.isIndeterminate = false;
-			},
+//			appCheckAllChange(event) {
+//				this.checkedapproval = event.target.checked ? this.approvaledlist : [];
+//				this.isIndeterminate = false;
+//			},
 			appCheckedCitiesChange(value) {
 				let checkedCount = value.length;
 				this.checkAllapp = checkedCount === this.approvaledlist.length;

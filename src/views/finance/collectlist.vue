@@ -13,7 +13,7 @@
 				<el-form :inline="true" id="search" class="demo-form-inline" @submit.prevent="submit">
 					<el-form-item label="创建日期">
 
-						<el-date-picker v-model="search.createtime" onPick type="daterange" placeholder="选择日期范围">
+						<el-date-picker v-model="search.date" onPick type="daterange" placeholder="选择日期范围">
 						</el-date-picker>
 
 					</el-form-item>
@@ -28,14 +28,20 @@
 						<el-input placeholder="订单号" v-model="search.orderno"></el-input>
 					</el-form-item>
 
-					<el-form-item label="状态">
-						<el-select v-model="search.state" placeholder="请选择">
+					<el-form-item label="确认状态">
+						<el-select v-model="search.confirmstatus" placeholder="请选择">
 							<el-option v-for="item in state" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
 					</el-form-item>
+					<el-form-item label="核销状态">
+						<el-select v-model="search.verifstatus" placeholder="请选择">
+							<el-option v-for="item in verifstatuss" :key="item.value" :label="item.label" :value="item.value">
+							</el-option>
+						</el-select>
+					</el-form-item>
 					<el-form-item label="业务类型">
-						<el-select v-model="search.busstypename" placeholder="请选择">
+						<el-select v-model="search.businesstype" placeholder="请选择">
 							<el-option v-for="item in type " :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
@@ -62,9 +68,12 @@
 					</el-table-column>
 					<el-table-column prop="totalfee" label="金额" width="120">
 					</el-table-column>
-					<el-table-column prop="confirm" label="确认状态" width="90">
+					<el-table-column prop="confirm" label="确认状态" width="120" ref="confirm" class="confirm">
+						<template scope="scope">
+							<span>{{scope.row.confirm}}</span>
+						 </template>
 					</el-table-column>
-					<el-table-column prop="verification" label="核销状态" width="90">
+					<el-table-column prop="verification" label="核销状态" width="120">
 					</el-table-column>
 					<el-table-column prop="operator" label="经办人" width="100">
 					</el-table-column>
@@ -72,17 +81,16 @@
 
 						<template scope="scope">
 							<el-button @click="handleShow(scope.$index, scope.row)" type="text" size="small">查看</el-button>
-							<a href="javascript:;">
+							<a href="javascript:;"  v-if="scope.row.cfmValue =='0' || scope.row.verfValue =='0'">
 								<el-dropdown>
 									<span class="el-dropdown-link">
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
 									<el-dropdown-menu slot="dropdown">
-										<!--<el-dropdown-item > <a href="javascript:;" @click="handleEdit(scope.$index, scope.row)">编辑</a></el-dropdown-item>-->
-										<el-dropdown-item><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
-										<el-dropdown-item><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
-										<el-dropdown-item><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
-										<el-dropdown-item><span @click="updatastatus(scope,4)">不核销</span></el-dropdown-item>
+										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
+										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
+										<el-dropdown-item v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
+										<el-dropdown-item v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">不核销</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 							</a>
@@ -144,7 +152,7 @@
 	import axios from 'axios';
 	import util from '../../common/js/util'
 	import CollectEdit from './collectedit'
-	import { getcollectlist, getcollectedit } from '../../common/js/config';
+	import { getcollectlist, collectstatus} from '../../common/js/config';
 	export default {
 		components: {
 			CollectEdit,
@@ -154,12 +162,15 @@
 				showedit: 'collectlist',
 				//搜索数据
 				search: {
-					createtime: '',
+					token:'',
+					date: '',
 					companyname: '',
 					teamno: '',
 					orderno: '',
-					state: '',
-					busstypename: ''
+					confirmstatus: '',
+					busstypename: '',
+					pageindex: '1',
+					pagesize: '10'
 				},
 				pageset: {
 					pageindex: '',
@@ -170,7 +181,7 @@
 				//确认状态
 				state: [{
 						value: '-1',
-						label: '取消选择'
+						label: '全部'
 					},
 					{
 						value: '1',
@@ -181,22 +192,28 @@
 					}, {
 						value: '3',
 						label: '确认不通过'
-					}, {
-						value: '4',
+					}
+				],
+				verifstatuss:[{
+						value: '-1',
+						label: '全部'
+					},
+					 {
+						value: '0',
 						label: '待核销'
 					}, {
-						value: '5',
+						value: '1',
 						label: '核销不通过'
 					},
 					{
-						value: '6',
+						value: '2',
 						label: '核销通过'
 					}
 				],
 				//类型
 				type: [{
 						value: '0',
-						label: '取消选择'
+						label: '全部'
 					},
 					{
 						value: '1',
@@ -228,7 +245,9 @@
 					}]
 				},
 				total: 0,
-				pagesize: 10
+				pagesize: 10,
+				qr:true,
+				hx:true
 
 			}
 
@@ -250,32 +269,38 @@
 			handleCurrentChange(val) {
 				this.getUsers();
 			},
-			//获取用户列表
-			getUsers() {
 
-				this.pageset.pageindex = this.currentPage - 1
-				this.pageset.pagesize = this.pagesize
-				let page = this.pageset
-				//console.log(para)
-				this.listLoading = true;
-				getcollectlist(page).then((data) => {
-					console.log(data)
-					this.total = Number(data.data.obj.total);
-					this.tableData = data.data.obj.datas
-					this.listLoading = false
-
-				})
-			},
 			onSubmit() {
-				let parses = this.search
+				
 				this.listLoading = true;
-				let startday = parses.createtime[0]
-				let endday = parses.createtime[1]
+				
+				let dates=''
+				let startday = this.search.date[0]
+				let endday = this.search.date[1]
 				startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
 				endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
-				parses.createtime = startday + "|" + endday
+				if(startday == '' && endday == ''){
+					dates = startday + endday
+					
+				}else{
+					dates = startday+'|'+endday
+				}
+				let parses = {
+					token:'',
+					date:dates,
+					companyname:this.search.companyname,
+					teamno: this.search.teamno,
+					orderno: this.search.orderno,
+					confirmstatus: this.search.confirmstatus,
+					busstypename:this.search.busstypename,
+					pageindex: '0',
+					pagesize: '10'
+				}
+				console.log(parses)
 				getcollectlist(parses).then((data) => {
+					console.log(data)
 					this.tableData = data.data.obj.datas
+					this.total = Number(data.data.obj.total);
 					this.listLoading = false
 				})
 			},
@@ -291,14 +316,36 @@
 					id: scope.row.id,
 					status: i
 				}
-				getcollectedit(para).then((res) => {})
+				collectstatus(para).then((res) => {
+					if(res.data.error == 1){
+						this.$message({
+			          showClose: true,
+			          message: res.data.message,
+			          type: 'error'
+			        });
+					}else{
+						 this.$message({
+				          showClose: true,
+				          message: '状态改变成功',
+				          type: 'success'
+				        });
+						this.onSubmit()
+					}
+					
+				})
 			}
 		},
-		mounted() {
-			//this.totalall()
-			this.getUsers();
-
-		}
+		filters: {
+	      statusFilter(status) {
+	        const statusMap = {
+	          published: 'success',
+	          draft: 'gray',
+	          deleted: 'danger'
+	        };
+	        return statusMap[status]
+	      }
+	    },
+		
 	}
 </script>
 <style scoped lang="scss">
@@ -336,10 +383,12 @@
 	
 	.el-dropdown-link {
 		font-size: 12px;
-		color: #20a0ff;
+		color: #3ec3c8;
 	}
 	
 	a {
 		color: #fff;
 	}
+	.el-dropdown-menu__item span{display: block;}
+	.abc{color: red;}
 </style>

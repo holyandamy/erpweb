@@ -9,17 +9,16 @@
 			<el-form :model="collectForm" ref="collectForm" :rules="rules" label-width="100px" class="demo-ruleForm">
 				<el-form-item label="创建日期">
 					<el-col :span="11" prop="createtime">
-						{{collectForm.createtime}}
+						{{createtime}}
 					</el-col>
 				</el-form-item>
-				<el-form-item label="业务类型" prop="businesstypename">
-					<el-select v-model="collectForm.businesstypename" placeholder="选择" @change="changemenu()">
-						<el-option label="预收款" value="0"></el-option>
-						<el-option label="订单预收款" value="1"></el-option>
-						<el-option label="预付款退款" value="2"></el-option>
+				<el-form-item label="业务类型" prop="businesstype">
+					<el-select v-model="collectForm.businesstype" placeholder="选择" @change="changemenu()">
+						<el-option label="预收款" value="1"></el-option>
+						<el-option label="订单预收款" value="2"></el-option>
+						<el-option label="预付款退款" value="3"></el-option>
 					</el-select>
 				</el-form-item>
-
 				<el-form-item label="订单编号" required prop="orderno" v-show="isshowall">
 					<el-col :span="10">
 						<el-input placeholder="HP23083098409283098028450" @blur="typethis" v-model="collectForm.orderno"></el-input>
@@ -40,13 +39,12 @@
 						<el-input v-model="collectForm.companyname" placeholder="搜索选择收款单位"></el-input>
 					</el-col>
 				</el-form-item>
-
-				<el-form-item label="备注" prop="remarks">
+				<el-form-item label="备注" prop="remark">
 					<el-col :span="10">
-						<el-input type="textarea" v-model="collectForm.remarks"></el-input>
+						<el-input type="textarea" v-model="collectForm.remark"></el-input>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="收款明细" prop="list">
+				<el-form-item label="收款明细" prop="detail">
 					<el-col :span="24">
 						<table border="" cellspacing="" cellpadding="" class="collecttable" width="90%">
 							<tr>
@@ -56,32 +54,21 @@
 								<th>金额</th>
 								<th>操作</th>
 							</tr>
-							<tr v-for="(domain, index) in dynamicValidateForm.domains">
+							<tr v-for="(domain,index) in collectForm.detail">
 								<td>
 									<el-col :span="20">
-										<el-select placeholder="选择" v-model="domain.businesstype">
-											<el-option label="预收款" value="0"></el-option>
-											<el-option label="订单预收款" value="1"></el-option>
-											<el-option label="预付款退款" value="2"></el-option>
-											
+										<el-select placeholder="收款账号" v-model="domain.type">
+											<el-option  v-for="bus in types" :key="bus.id" :label="bus.label" :value="bus.value">
+											</el-option>
 										</el-select>
-
 									</el-col>
 								</td>
 								<td>
 									<el-col :span="20">
-										<el-select placeholder="收款账号" v-model="domain.id" id="bankvalue">
-											 <el-option
-											      v-for="item in banklist"
-											      :key="item.bankNameAccount"
-											      :label="item.bankNameAccount"
-											      :value="item.id"
-											      >
-											     
+										<el-select placeholder="收款账号" v-model="domain.accountid" id="bankvalue">
+											<el-option v-for="item in banklist" :key="item.bankNameAccount" :label="item.bankNameAccount" :value="item.id">
 											</el-option>
 										</el-select>
-										
-
 									</el-col>
 
 								</td>
@@ -93,7 +80,7 @@
 								</td>
 								<td>
 									<el-col :span="20">
-										<el-input v-model="domain.remark" placeholder="请输入内容"></el-input>
+										<el-input v-model="domain.fee" placeholder="金额"></el-input>
 									</el-col>
 								</td>
 								<td>
@@ -109,14 +96,7 @@
 
 					</el-col>
 				</el-form-item>
-				<el-form-item>
-					<el-col :span="5">
-						<el-upload class="upload-demo" :show-file-list="true" :multiple="true" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList">
-							<el-button size="small" type="primary">点击上传</el-button>
-							<div slot="tip" class="el-upload__tip">单张图片大小不能超过1M，张数不能超过十张。</div>
-						</el-upload>
-					</el-col>
-				</el-form-item>
+				<ImgUpload @imagelistchange="imagelistchange"></ImgUpload>
 				<el-form-item>
 					<el-button type="primary" @click="submitForm('collectForm')">保 存</el-button>
 					<el-button @click="resetForm('collectForm')">重置</el-button>
@@ -131,8 +111,11 @@
 	import axios from 'axios';
 	import util from '../../common/js/util'
 	import {paysave,banlist} from '../../common/js/config';
+	import ImgUpload from './upload'
 	export default {
-
+		components:{
+			ImgUpload,
+		},
 		data() {
 			var validatePass = (rule, value, callback) => {
 				if(value === '') {
@@ -146,6 +129,9 @@
 				}
 			};
 			return {
+				createtime:'',
+				item: [],
+				banklist: [],
 				item:[],
 				banklist:[],
 		        isshow: false,
@@ -155,26 +141,22 @@
 						return time.getTime() < Date.now() - 8.64e7;
 					}
 				},
-				dynamicValidateForm: {
-					domains: [{
-						businesstype: '',
-						bank: '',
-						id:'',
-						linetime: '',
-						account:'',
-						remark: ''
-					}]
-				},
-
 				collectForm: {
-					createtime: '',
-					businesstypename: '',
+					token:'',
+					businesstype: '',
 					orderno: '',
 					teamno: '',
-					list: [],
-					remarks: '',
-					linename: '222'
-
+					lineid:'',
+					linename:'',
+					companyname:'',
+					remark: '',
+					attach:'',
+					detail: [{
+						type:'',
+						accountid: '',
+						linetime: '',
+						fee: '',
+					}],
 				},
 				rules: {
 					businesstypename: [{
@@ -189,54 +171,66 @@
 						trigger: 'blur'
 					}]
 				},
-				fileList: [{
-						name: 'food.jpeg',
-						url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+				
+				accounts:[],
+				types: [{ //1现金，2对公汇款，3刷卡，4支付宝，5微信，6网银，7其他
+						value: '1',
+						label: '现金'
 					},
 					{
-						name: 'food2.jpeg',
-						url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+						value: '2',
+						label: '对公汇款'
+					},
+					{
+						value: '3',
+						label: '刷卡'
+					},
+					{
+						value: '4',
+						label: '支付宝'
+					},
+					{
+						value: '5',
+						label: '微信'
+					},
+					{
+						value: '6',
+						label: '网银'
+					},
+					{
+						value: '7',
+						label: '其他'
 					}
 				],
-				accounts:[]
 				
 			}
 		},
 		created() {
 			let mydate = new Date()
 			let today = mydate.getFullYear() + "-" + (mydate.getMonth() + 1) + "-" + mydate.getDate()
-			this.collectForm.createtime = today
+			this.createtime = today
 			this.checkbanklist()
 
 		},
 		methods: {
 			handleHide: function() {
-		        this.$emit('setMode', 'collectlist');
+		        this.$emit('setMode', 'pay');
 		    },
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
-						let para = Object.assign({}, this.collectForm);
-						this.collectForm.list.push(this.dynamicValidateForm.domains)
-						para.linetime = (!para.linetime || para.linetime == '') ? '' : util.formatDate.format(new Date(para.linetime), 'yyyy-MM-dd');
-						for(let i = 0 ; i < this.banklist.length;i++){
-							for(let j = 0 ; j <para.list[0].length;j++){
-								if(this.banklist[i].id == para.list[0][j].id){
-								console.log(this.banklist[i].bankNameAccount)
-								para.list[0][j].account =  this.banklist[i].bankNameAccount
-								}
-							}
+						let para = this.collectForm
+						console.log(this.collectForm)
+						for(let i =0;i<this.collectForm.detail.length;i++){
+							para.detail[i].linetime = (!para.detail[i].linetime || para.detail[i].linetime == '') ? '' : util.formatDate.format(new Date(para.detail[i].linetime), 'yyyy-MM-dd');
 						}
 						paysave(para).then((res) => {
-							console.log(para, res)
 							this.$message({
 								message: '提交成功',
 								type: 'success'
 							});
-							this.$refs['collectForm'].resetFields();
-
+						this.handleHide()
 						});
-
 					} else {
 						console.log('error submit!!');
 						return false;
@@ -265,20 +259,25 @@
 				console.log(file);
 			},
 			addDomain() {
-				this.dynamicValidateForm.domains.push({
-					id: '',
-					businesstype: '',
-					linetime: '',
-					remark:'',
-					account:''
-				});
+				let list ={
+						type:'',
+						accountid: '',
+						linetime: '',
+						fee: '',
+					}
+				this.collectForm.detail.push(list);
 			},
 			removeDomain(item) {
-				var index = this.dynamicValidateForm.domains.indexOf(item)
+				var index = this.collectForm.detail.indexOf(item)
 				if(index !== -1) {
-					this.dynamicValidateForm.domains.splice(index, 1)
+					tthis.collectForm.detail.splice(index, 1)
 				}
 			},
+			imagelistchange (val) {
+                this.collectForm.attach = val;
+                
+                console.log(this.collectForm.attach)
+           },
 			changemenu() {
 				let changetype = this.collectForm.businesstypename
 				if(changetype==0 || changetype ==2){
@@ -292,7 +291,6 @@
 				}
 			},
 			checkbanklist(){
-				banlist
 				let para = {token:''}
 				banlist(para).then((res) => {
 					this.banklist = res.data.obj
