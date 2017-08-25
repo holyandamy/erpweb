@@ -1,16 +1,16 @@
 <template>
 	<el-row class="container">
-		<el-col :span="3" class="nav">
+		<div class="nav">
 			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
 				<el-row class="logo">
-					<el-col :span="3"> asd</el-col>
+					<el-col :span="3">&nbsp;</el-col>
 					<el-col :span="18">
 						<img src="../assets/images/logo.png"/>
 					</el-col>
-					<el-col :span="3"> adfs</el-col>
+					<el-col :span="3">&nbsp;</el-col>
 				</el-row>
 				<el-row class="userinfo">
-					<a class="headerimg"><img src="../assets/images/header.png"/></a>
+					<a class="headerimg" > <router-link to="/main"><img src="../assets/images/header.png"/></router-link></a>
 					<div class="clearfix"></div>
 					<el-dropdown trigger="hover">
 					<p class="el-dropdown-link userinfo-inner">张立新 <i class="el-icon-arrow-down"></i></p>
@@ -20,7 +20,7 @@
 						<el-dropdown-item>个人资料</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
-					<p class="out"><a href="javascript:;"  @click.native="logout">退出</a> | <a href="#">消息</a></p>
+					<p class="out"><a  @click="logout">退出</a> | <a href="#">消息</a></p>
 				</el-row>
 				<!--导航菜单-->
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" 
@@ -28,7 +28,7 @@
 					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
 						<el-submenu :index="index+''" v-if="!item.leaf">
 							<template slot="title"></i>{{item.name}}</template>
-							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
+							<el-menu-item v-for="child in item.children" :index="child.path" @click="showhome=false" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
 						</el-submenu>
 						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
 					</template>
@@ -50,10 +50,10 @@
 					</li>
 				</ul>
 			</aside>
-			</el-col>
-		<el-col :span="21">
+			</div>
+		<div class="containtermain">
 			<router-view></router-view>
-		</el-col>
+		</div>
 		
 		</el-col>
 		
@@ -67,7 +67,9 @@ export default {
         activeIndex: '1',
         activeIndex2: '1',
         collapsed:false,
-        thishow:true
+        thishow:true,
+        showhome:true
+      
         
       };
     },
@@ -78,22 +80,42 @@ export default {
         }else{
         	this.thishow = false
         }
-      }
+      },
+      logout(){
+      	let _this = this;
+				this.$confirm('确认退出吗?', '提示', {
+					//type: 'warning'
+				}).then(() => {
+					sessionStorage.removeItem('user');
+					_this.$router.push('/login');
+				}).catch(() => {
+
+				});	
+
+
+			}
     }
   }
 </script>
 
 <style scoped lang="scss">
 .clearfix{clear: both;}
-.nav{height: 100%;}
+.nav{height: 100%; 
+width: 180px;
+float: left;
+}
+.containtermain{
+	margin-left: 180px;
+}
  .container {
 		position: absolute;
 		top: 0px;
-		bottom: 0px;
 		width: 100%;
 		aside{
 			background: #353f4d;
 			height: 100%;
+			position: fixed;
+			width: 180px;
 			.logo{
 			padding: 15px 0 15px 0;
 			}
@@ -124,25 +146,14 @@ export default {
 					a{color: #b8c0cc;
 					font-size: 12px;
 					margin: 0 5px;
+					cursor: pointer;
 					}
 				}
 			}
-			.el-menu{
-				background: #353f4d!important;
-				li{
-					border-bottom: 1px solid #4b5565;
-				}
-				.el-submenu__title{
-					color: #fff;
-				}
+			.el-submenu{
+			border-bottom: 1px solid #4b5565;
 			}
-			.is-opened{
-				background: #3ec3c8;
-				div{
-					color: #fff!important;
-				}
-				
-			}
+			
 		}
 		
 		
@@ -165,4 +176,5 @@ export default {
 		}
 		
 	}
+
 </style>
