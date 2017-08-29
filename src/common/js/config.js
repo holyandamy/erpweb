@@ -1,9 +1,11 @@
 import axios from 'axios';
-let base = 'http://172.17.9.13:3001/api';
+let base = 'http://api.erp.we2tu.com/api';
 export let token='1111'
 export let bases = "http://172.17.9.13:3001/"
 export const setToken=value=>{ token= value };
-//财务管理
+
+/* 首页 */
+export const dashboard = params => { return axios.post(`${base}/sys/dashboard/info`, params).then(res => res); };//首页信息
 //登陆接口
 export const login = params => { return axios.post(`${base}/sys/user/login`, params).then(res => res); };
 /* 收款 */
@@ -37,6 +39,8 @@ export const orderupdate = params => { return axios.post(`${base}/order/update`,
 export const ordercancel = params => { return axios.post(`${base}/order/cancel`, params); };//取消订单
 export const ordernamelistconfirm = params => { return axios.post(`${base}/order/namelist/confirm`, params); };//确认游客名单接口
 export const ordernamelistexport = params => { return axios.post(`${base}/order/namelist/export`, params); };//导出游客名单
+export const orderexportdetail = params => { return axios.post(`${base}/order/export/detail`, params); };//获取确认单详情
+
 
 
 //产品中心

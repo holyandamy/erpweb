@@ -5,7 +5,9 @@
 				<el-col :span="12">
 					<el-breadcrumb separator="/">
 						<el-breadcrumb-item>订单管理</el-breadcrumb-item>
-						<el-breadcrumb-item ><a  @click="handleHide">订单列表</a></el-breadcrumb-item>
+						<el-breadcrumb-item>
+							<a @click="handleHide">订单列表</a>
+						</el-breadcrumb-item>
 						<el-breadcrumb-item>订单详情</el-breadcrumb-item>
 					</el-breadcrumb>
 				</el-col>
@@ -145,20 +147,46 @@
 					<el-col :span="3">
 						<el-col :span="5" style="line-height: 26px;">成人</el-col>
 						<el-col :span="19">
-							<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>
+							<!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
+							<div class="el-input-number">
+								<!--is-disabled-->
+								<span class="el-input-number__decrease" @click="minuday('adult')"><i class="el-icon-minus"></i></span>
+								<span class="el-input-number__increase" @click="addday('adult')"><i class="el-icon-plus"></i></span>
+								<div class="el-input"><input v-model="detail.totaladult" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
+
+								</div>
+							</div>
 						</el-col>
 					</el-col>
 					<el-col :span="3">
 						<el-col :span="5" style="line-height: 26px;">儿童</el-col>
 						<el-col :span="19">
-							<el-input-number v-model="detail.totalchild" size="small"  @change="changechildren" :min="0"></el-input-number>
+							<!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
+							<div class="el-input-number">
+								<!--is-disabled-->
+								<span class="el-input-number__decrease" @click="minuday('child')"><i class="el-icon-minus"></i></span>
+								<span class="el-input-number__increase" @click="addday('child')"><i class="el-icon-plus"></i></span>
+								<div class="el-input"><input v-model="detail.totalchild" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
+
+								</div>
+							</div>
 						</el-col>
+
 					</el-col>
 					<el-col :span="3">
 						<el-col :span="5" style="line-height: 26px;">婴儿</el-col>
 						<el-col :span="19">
-							<el-input-number v-model="detail.totalbaby" size="small" @change="changebaby" :min="0"></el-input-number>
+							<!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
+							<div class="el-input-number">
+								<!--is-disabled-->
+								<span class="el-input-number__decrease" @click="minuday('baby')"><i class="el-icon-minus"></i></span>
+								<span class="el-input-number__increase" @click="addday('baby')"><i class="el-icon-plus"></i></span>
+								<div class="el-input"><input v-model="detail.totalbaby" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
+
+								</div>
+							</div>
 						</el-col>
+
 					</el-col>
 				</el-row>
 				<table class="adulttable" width="100%">
@@ -197,9 +225,11 @@
 							<td>
 								<el-checkbox v-model="namelist.room">单房差</el-checkbox>
 							</td>
-							<td><el-input v-model="namelist.remark" placeholder="备注"></el-input></td>
 							<td>
-								<el-button type="text"  v-if="!detail.isconfirm" @click="deletepeople(index)">删除</el-button>
+								<el-input v-model="namelist.remark" placeholder="备注"></el-input>
+							</td>
+							<td>
+								<el-button type="text" v-if="!detail.isconfirm" @click="deletepeople(index)">删除</el-button>
 								<el-button type="text" v-else @click="(index)">申请退款</el-button>
 							</td>
 						</tr>
@@ -215,23 +245,25 @@
 						<el-col :span="2">操作日志
 						</el-col>
 						<el-col :span="12">
-							<el-button type="text" style="float: left;">更多</el-button><i class="el-icon-arrow-down" style="font-size: 12px; margin: 0 0 0 5px;"></i>
+							<el-button type="text" @click="showmore" style="float: left;">{{more}}</el-button>
+							<i v-if="more == '更多'" class="el-icon-arrow-down" style="font-size: 12px; margin: 0 0 0 5px;"></i>
+							<i v-else class="el-icon-arrow-up" style="font-size: 12px; margin: 0 0 0 5px;"></i>
 						</el-col>
 					</el-row>
 				</h2>
 			<el-table :data="detail.logs" style="width: 100%; text-align: left;">
-				<el-table-column prop="time" label="操作时间" width="180">
+				<el-table-column prop="createtime" label="操作时间" width="180">
 				</el-table-column>
 				<el-table-column prop="creater" label="创建人" width="180">
 				</el-table-column>
 				<el-table-column prop="content" label="操作内容">
 				</el-table-column>
 			</el-table>
-	<div class="button">
-		<el-button type="primary" size="large" @click="save">提交</el-button>	
-<el-button type="primary" size="large" @click="cancelorder">取消订单</el-button>
-<el-button size="large" @click="handleHide">返回</el-button>
-	</div>
+			<div class="button">
+				<el-button type="primary" size="large" @click="save">提交</el-button>
+				<el-button type="primary" size="large" @click="cancelorder">取消订单</el-button>
+				<el-button size="large" @click="handleHide">返回</el-button>
+			</div>
 		</section>
 		<el-dialog title="新增收款" :visible.sync="addcollection" size="large">
 			<table border="" cellspacing="" cellpadding="" width="100%" class="collecttable">
@@ -286,35 +318,28 @@
     <el-button type="primary" @click="savecollect">确 定</el-button>
   </span>
 		</el-dialog>
-<el-dialog
-  title="确认游客名单"
-  :visible.sync="confirmnamelist"
-  size="tiny">
-  确认游客名单后，游客名单无法删除 <br />
-和修改，并且同步确认馨途平台的订单！
-  <span slot="footer" class="dialog-footer">
+		<el-dialog title="确认游客名单" :visible.sync="confirmnamelist" size="tiny">
+			确认游客名单后，游客名单无法删除 <br /> 和修改，并且同步确认馨途平台的订单！
+			<span slot="footer" class="dialog-footer">
     <el-button @click="confirmnamelist = false">取 消</el-button>
     <el-button type="primary" @click="confirmvisitor">确 定</el-button>
   </span>
-</el-dialog>
-
+		</el-dialog>
 
 	</div>
 </template>
 <script>
 	import util from '../../../common/js/util'
-	import { orderdetail, banlist, collectsave,orderupdate,ordercancel,ordernamelistconfirm,ordernamelistexport,paysave} from '../../../common/js/config';
+	import { orderdetail, banlist, collectsave, orderupdate, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave } from '../../../common/js/config';
 	export default {
-		props:['listid'],
+		props: ['listid'],
 		data() {
 			return {
-				num1: 0,
-				num2: 0,
-				num3: 0,
+				more: '更多',
 				addcollection: false, //新增收款
-				confirmnamelist:false,
+				confirmnamelist: false,
 				detail: {
-					namelist:[]
+					namelist: []
 				},
 				pickerOptions0: {
 					disabledDate(time) {
@@ -372,9 +397,9 @@
 					token: '',
 					businesstype: '2',
 					orderno: '',
-					lineid:'',
-					linename:'',
-					teamno:'',
+					lineid: '',
+					linename: '',
+					teamno: '',
 					companyname: '',
 					detail: [{
 						type: '',
@@ -383,13 +408,13 @@
 						fee: ''
 					}]
 				},
-				baseform:{
-					id:'',
-					token:''
+				baseform: {
+					id: '',
+					token: ''
 				},
-				type:''
-				
-				
+				type: '',
+				alllogs: [],
+				oldtotal:0,
 			}
 		},
 		created() {
@@ -399,74 +424,101 @@
 		methods: {
 			//返回列表
 			handleHide: function() {
-		        this.$emit('setMode', 'orderlistmodel');
-		    },
-			//添加成人
-			changeaudlt(value) {
-				if(this.num1 < value){
-					this.detail.namelist.push({
-					
-					name:'',
-					mobile:'',
-					certtype:'',
-					cert:'',
-					room:false,
-					type:'成人',
-					remark:''
-					})
-				}else{
-					let index=""
-					for(let i = 0; i <this.detail.namelist.length;i++){
-						index = i
-					}
-					this.detail.namelist.splice(index, 1)
-				}
+				this.$emit('setMode', 'orderlistmodel');
 			},
-			//儿童
-			changechildren(value){
-				if(this.num2 < value){
-					this.detail.namelist.push({
-					
-					name:'',
-					mobile:'',
-					certtype:'',
-					cert:'',
-					room:false,
-					type:'儿童',
-					remark:''
+			//天数减少
+			minuday(type) {
+				let index = this.detail.namelist
 				
-					})
-				}else{
-					let index=""
-					for(let i = 0; i <this.detail.namelist.length;i++){
-						index = i
+				if(type == "adult") {
+					if(this.detail.totaladult <= 1) {
+						this.detail.totaladult == 1
+						index = 1
+					} else {
+						this.detail.totaladult -= 1
+						for(let i = 0; i < index.length; i++) {
+							if(index[i].type == "成人") {
+								index.splice(i + this.detail.totaladult, 1)
+							}
+						}
 					}
-					this.detail.namelist.splice(index, 1)
+				} else if(type == "child") {
+					if(this.detail.totalchild <= 1) {
+						this.detail.totalchild == 1
+						index = 1
+					} else {
+						this.detail.totalchild -= 1
+						for(let i = 0; i < index.length; i++) {
+							if(index[i].type == "儿童") {
+								index.splice(i + this.detail.totalchild, 1)
+							}
+						}
+					}
+				} else if(type == "baby") {
+					if(this.detail.totalbaby <= 1) {
+						this.detail.totalbaby == 1
+						index = 1
+					} else {
+						this.detail.totalbaby -= 1
+						for(let i = 0; i < index.length; i++) {
+							if(index[i].type == "婴儿") {
+								index.splice(i + this.detail.totalbaby, 1)
+							}
+						}
+					}
 				}
+
 			},
-			//婴儿
-			changebaby(value){
-				if(this.num3 < value){
-					this.detail.namelist.push({
-					name:'',
-					mobile:'',
-					certtype:'',
-					cert:'',
-					room:false,
-					type:'婴儿',
-					remark:''
-				
-					})
-				}else{
-					let index=""
-					for(let i = 0; i <this.detail.namelist.length;i++){
-						index = i
+			//天数增加
+			addday(type) {
+				let total = this.detail.totaladult + this.detail.totalchild + this.detail.totalbaby
+				let nowtotal = total - this.oldtotal+1
+				if(nowtotal > this.detail.surplus) {
+					this.$message({
+						message: '不能超出库存' + this.detail.surplus + '',
+						type: 'warning'
+					});
+				} else {
+					if(type == "adult") {
+						this.detail.totaladult += 1
+						this.detail.namelist.push({
+							name: '',
+							mobile: '',
+							certtype: '',
+							cert: '',
+							room: false,
+							remark: '',
+							type: '成人'
+						})
+
+					} else if(type == "child") {
+						this.detail.totalchild += 1
+						this.detail.namelist.push({
+							name: '',
+							mobile: '',
+							certtype: '',
+							cert: '',
+							room: false,
+							remark: '',
+							type: '儿童'
+						})
+					} else if(type == "baby") {
+						this.detail.totalbaby += 1
+						this.detail.namelist.push({
+							name: '',
+							mobile: '',
+							certtype: '',
+							cert: '',
+							room: false,
+							remark: '',
+							type: '婴儿'
+						})
 					}
-					this.detail.namelist.splice(index, 1)
 				}
+
 			},
 			//删除游客
-			deletepeople(index){
+			deletepeople(index) {
 				this.detail.namelist.splice(index, 1)
 			},
 			//获取详情
@@ -477,14 +529,17 @@
 				}
 				orderdetail(para).then((res) => {
 					console.log(res)
-					this.detail =res.data.obj
-					let type = this.detail.namelist
-					for(let i=0;i<type.length;i++){
-						if(type[i].type == 1){
+					this.detail = res.data.obj
+					let type = res.data.obj.namelist
+					this.alllogs = res.data.obj.logs
+					this.detail.logs = res.data.obj.logs.slice(0, 3)
+					this.oldtotal = res.data.obj.totaladult + res.data.obj.totalchild + res.data.obj.totalbaby
+					for(let i = 0; i < type.length; i++) {
+						if(type[i].type == 1) {
 							type[i].type = "成人"
-						}else if(type[i].type == 2){
+						} else if(type[i].type == 2) {
 							type[i].type = "儿童"
-						}else if(type[i].type == 3){
+						} else if(type[i].type == 3) {
 							type[i].type = "婴儿"
 						}
 					}
@@ -527,116 +582,126 @@
 				para.lineid = this.detail.lineid
 				para.teamno = this.detail.teamno
 				para.linename = this.detail.linename
-				for(let i =0;i<para.detail.length;i++){
-							para.detail[i].linetime = (!para.detail[i].linetime || para.detail[i].linetime == '') ? '' : util.formatDate.format(new Date(para.detail[i].linetime), 'yyyy-MM-dd');
-						}
-				
-				if(this.type == "collect"){
-					collectsave(para).then((res) => {
-					if(res.data.error == 1){
-						this.$message({
-							message: '提交失败',
-							type: 'error'
-							});	
-					}else{
-						this.$message({
-							message: '提交成功',
-							type: 'success'
-							});		
-							this.collectionsForm.detail =  [{
-						type: '',
-						accountid: '',
-						linetime: '',
-						fee: ''
-					}]
-						
-					}
-					this.getdetail()
-				});
-				}else{
-					paysave(para).then((res) => {
-					if(res.data.error == 1){
-						this.$message({
-							message: '提交失败',
-							type: 'error'
-							});	
-					}else{
-						this.$message({
-							message: '提交成功',
-							type: 'success'
-							});	
-							this.collectionsForm.detail =  [{
-						type: '',
-						accountid: '',
-						linetime: '',
-						fee: ''
-					}]
-					}
-					this.getdetail()
-				});
+				for(let i = 0; i < para.detail.length; i++) {
+					para.detail[i].linetime = (!para.detail[i].linetime || para.detail[i].linetime == '') ? '' : util.formatDate.format(new Date(para.detail[i].linetime), 'yyyy-MM-dd');
 				}
-				
+
+				if(this.type == "collect") {
+					collectsave(para).then((res) => {
+						if(res.data.error == 1) {
+							this.$message({
+								message: '提交失败',
+								type: 'error'
+							});
+						} else {
+							this.$message({
+								message: '提交成功',
+								type: 'success'
+							});
+							this.collectionsForm.detail = [{
+								type: '',
+								accountid: '',
+								linetime: '',
+								fee: ''
+							}]
+
+						}
+						this.getdetail()
+					});
+				} else {
+					paysave(para).then((res) => {
+						if(res.data.error == 1) {
+							this.$message({
+								message: '提交失败',
+								type: 'error'
+							});
+						} else {
+							this.$message({
+								message: '提交成功',
+								type: 'success'
+							});
+							this.collectionsForm.detail = [{
+								type: '',
+								accountid: '',
+								linetime: '',
+								fee: ''
+							}]
+						}
+						this.getdetail()
+					});
+				}
+
 			},
 			//提交表单
-			save(){
-				let para={
-					id:this.detail.id,
-					adultNum:this.detail.totaladult,
-					childNum:this.detail.totalchild,
-					babyNum:this.detail.totalbaby,
-					list:this.detail.namelist,
-					token:''
+			save() {
+				let para = {
+					id: this.detail.id,
+					adultNum: this.detail.totaladult,
+					childNum: this.detail.totalchild,
+					babyNum: this.detail.totalbaby,
+					list: this.detail.namelist,
+					token: ''
 				}
-				
-				for(let i=0;i<para.list.length;i++){
-					console.log(para.list[i].type)
-					if(para.list[i].type =="成人"){
+
+				for(let i = 0; i < this.detail.namelist.length; i++) {
+					if(this.detail.namelist[i].type == "成人") {
 						para.list[i].type = 1
 						console.log()
-					}else if(para.list[i].type =="儿童"){
+					} else if(this.detail.namelist[i].type == "儿童") {
 						para.list[i].type = 2
-					}else if((para.list[i].type =="婴儿")){
+					} else if((this.detail.namelist[i].type == "婴儿")) {
 						para.list[i].type = 3
 					}
 				}
-				orderupdate(para).then((res) =>{
-					if(res.data.error == 1){
+				orderupdate(para).then((res) => {
+					if(res.data.error == 1) {
 						this.$message({
-			          message: res.data.message,
-			          type: 'warning'
-			        });
-					}else{
-						 this.$message({
-				          message: '保存成功',
-				          type: 'success'
-				        });
-				        this.handleHide()
+							message: res.data.message,
+							type: 'warning'
+						});
+					} else {
+						this.handleHide()
+						this.$message({
+							message: '保存成功',
+							type: 'success'
+						});
+
 					}
-					console.log(para,res,'提交表单')
+					console.log(para, res, '提交表单')
 				})
 			},
 			//取消订单
-			cancelorder(){
-				ordercancel(this.baseform).then((res) =>{
-					console.log(this.baseform,res,'取消订单')
+			cancelorder() {
+				ordercancel(this.baseform).then((res) => {
+					console.log(this.baseform, res, '取消订单')
 				})
 			},
 			//确认游客名单
-			confirmvisitor(){
+			confirmvisitor() {
 				this.confirmnamelist = false
-				ordernamelistconfirm(this.baseform).then((res) =>{
-					console.log(res,"确认游客名单")
+				ordernamelistconfirm(this.baseform).then((res) => {
+					console.log(res, "确认游客名单")
 				})
 			},
 			//导出游客名单
-			exportnamelist(){
-				ordernamelistexport(this.baseform).then((res) =>{
-					console.log(this.baseform,res,"导出游客名单")
+			exportnamelist() {
+				ordernamelistexport(this.baseform).then((res) => {
+					console.log(this.baseform, res, "导出游客名单")
 				})
 			},
-			addcollpay(type){
+			addcollpay(type) {
 				this.addcollection = true
 				this.type = type
+			},
+			showmore(val) {
+				if(this.more == "更多") {
+					this.detail.logs = this.alllogs
+					this.more = "收起"
+				} else {
+					this.more = "更多"
+					this.detail.logs = this.detail.logs.slice(0, 3)
+				}
+
 			}
 		}
 	}
@@ -766,7 +831,23 @@
 			border-bottom: 1px solid #dee5ec;
 		}
 	}
-	.button{margin: 30px 0;
+	
+	.button {
+		margin: 30px 0;
 		text-align: left;
+	}
+	
+	.el-input-number {
+		width: 120px;
+		.el-input-number__increase,
+		.el-input-number__decrease {
+			line-height: 29px;
+			width: 30px;
+		}
+		.el-input {
+			input {
+				height: 30px;
+			}
+		}
 	}
 </style>

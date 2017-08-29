@@ -89,8 +89,8 @@
 							<li style="width: 10%;" class="button">
 								<el-button type="text" style="margin-left: 10px;">确认名单</el-button>
 								<el-button type="text"><router-link to="/singlegroup">出团单</router-link></el-button>
-								<el-button type="text"><router-link :to="{path:'/singlegroup',query: {id: '111'}}">行程单</router-link></el-button>
-							   <el-button type="text"><router-link :to="{path:'/confirm',query: {id: '111'}}">确认单</router-link></el-button>
+								<el-button type="text"><router-link :to="{path:'/singlegroup',query: {id: list.id}}">行程单</router-link></el-button>
+							    <el-button type="text"><router-link :to="{path:'/confirm',query: {id: list.id}}">确认单</router-link></el-button>
 								<el-button type="text" @click="setMode('orderinfo'),passinfo(list)">查看</el-button>
 							</li>
 						</ul>
@@ -167,10 +167,9 @@
 				let page = this.orderinfo
 				page.date = dates
 				orderlist(page).then((res) => {
-					
-					
-									this.orderLists = res.data.obj.datas
-									console.log(this.orderinfo)
+					console.log(res)
+					this.orderLists = res.data.obj.datas
+									
 									
 					//					this.total = Number(res.data.obj.total)
 				})
