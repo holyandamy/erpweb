@@ -17,8 +17,9 @@
         <el-col :span="20" style="width: 100%">
           <el-form :model="groupList"  ref="visitorList"   :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;">
             <div style="width:100%;float: left;overflow:hidden">
-              <el-form-item label="选择线路">
+              <el-form-item label="选择线路：">
                 <el-button @click="getcategoryall()">选择</el-button>
+                <span class='routeName' style='padding-left: 10px;' v-text='routeName'>222</span>
               </el-form-item>
               <!--<el-form-item label="线路分类" prop="name">-->
                 <!--<el-col :span="4" style="width: 100%;margin-right: 10px">-->
@@ -48,13 +49,13 @@
                 <!--</el-option>-->
               <!--</el-select>-->
             <!--</el-form-item>-->
-            <el-form-item label="集合通知：" prop="name">
+            <el-form-item label="集合通知：" prop="notify">
               <el-col :span="4" style="width: 100%;margin-right: 10px">
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 3, maxRows: 5}"
                   placeholder="请输入内容"
-                  v-model="notice">
+                  v-model="notify">
                 </el-input>
               </el-col>
             </el-form-item>
@@ -62,14 +63,22 @@
              <div style="color: #2cb1b6; font-size: 20px;padding-top: 20px;line-height: 40px;margin-bottom: 20px;border-bottom:1px solid rgba(151, 151, 151, 0.2)">
                发团时间</div>
 
-              <el-form-item label="发团时间：" prop="name">
+              <el-form-item label="发团时间：" prop="date">
                 <el-col :span="4" style="width: 100%;margin-right: 10px">
                   <el-date-picker
+                    @change='addTr'
                     v-model="value1"
-                    type="datecustom"
+                    type="date"
                     placeholder="选择日期"
+                    format="yyyy-MM-dd"
                     :picker-options="pickerOptions0">
                   </el-date-picker>
+                  <!--<el-date-picker-->
+                    <!--v-model="value1"-->
+                    <!--type="datecustom"-->
+                    <!--placeholder="选择日期"-->
+                    <!--:picker-options="pickerOptions0">-->
+                  <!--</el-date-picker>-->
 
                 </el-col>
               </el-form-item>
@@ -111,12 +120,13 @@
                   </tr>
                   </thead>
                   <tbody>
+
                   <tr class="el-table__row">
-                    <td class="el-table_1_column_123 el-table-column--selection">
-                      <el-checkbox v-model="checked"></el-checkbox>
+                    <td >
+                      <div class="cell el-tooltip" >---</div>
                     </td>
-                    <td  >
-                      <div class="cell">删除</div>
+                    <td >
+                      <div class="cell el-tooltip" >---</div>
                     </td>
                     <td >
                       <div class="cell el-tooltip" >---</div>
@@ -161,54 +171,107 @@
                       <div class="cell el-tooltip" >单房差</div>
                     </td>
                   </tr>
+
                   <tr class="el-table__row">
                     <td class="el-table_1_column_123 el-table-column--selection">
-                      <el-checkbox v-model="checked"></el-checkbox>
+                      <el-checkbox v-model="allChecked" @change='allCheck'>全选</el-checkbox>
                     </td>
                     <td  >
-                      <div class="cell">删除</div>
+                      <!--<div class="cell">删除</div>-->
+                      <div class="cell el-tooltip" >---</div>
                     </td>
                     <td >
-                      2017-12-02
+                      <div class="cell el-tooltip" >---</div>
                     </td>
                     <td>
-                      <div class="cell el-tooltip" ><el-input v-model="input"></el-input></div>
+                      <div class="cell el-tooltip" ><el-input v-model="allplan" @change='allPlan'></el-input></div>
                     </td>
                     <td >
-                      <div class="cell el-tooltip" ><el-checkbox v-model="checked"></el-checkbox></div>
+                      <div class="cell el-tooltip" ><el-checkbox v-model="allisorder" @change='allIsorder'></el-checkbox></div>
                     </td>
                     <td >
-                      <div class="cell el-tooltip" ><el-radio class="radio" v-model="radio" ></el-radio></div>
+                      <div class="cell el-tooltip" ><el-radio class="radio" v-model="allconfirm" label='0' >自动</el-radio></div>
                     </td>
                     <td  >
-                      <div class="cell el-tooltip" ><el-radio class="radio" v-model="radio" ></el-radio></div>
+                      <div class="cell el-tooltip" ><el-radio class="radio" v-model="allconfirm" label='1' >手动</el-radio></div>
                     </td>
                     <td >
-                      <div class="cell el-tooltip" ><el-input v-model="input"></el-input></div>
+                      <div class="cell el-tooltip" ><el-input v-model="alldeadline" @change='allDeadline'></el-input></div>
                     </td>
                     <td >
-                      <div class="cell el-tooltip" ><el-input v-model="input"></el-input></div>
+                      <div class="cell el-tooltip" ><el-input v-model="allmktbaby" @change='allMktbaby'></el-input></div>
                     </td>
                     <td >
-                      <div class="cell el-tooltip" ><el-input v-model="input"></el-input></div>
+                      <div class="cell el-tooltip" ><el-input v-model="allmktchild" @change='allMktchild'></el-input></div>
+                    </td>
+
+                    <td >
+                      <div class="cell el-tooltip" ><el-input v-model="allmktaduilt" @change='allMktaduilt'></el-input></div>
                     </td>
                     <td >
-                      <div class="cell el-tooltip" ><el-input v-model="input"></el-input></div>
+                      <div class="cell el-tooltip" ><el-input v-model="allmktroom" @change='allMktroom'></el-input></div>
                     </td>
                     <td  >
-                      <div class="cell el-tooltip" ><el-input v-model="input"></el-input></div>
+                      <div class="cell el-tooltip" ><el-input v-model="allsltbaby" @change='allSltbaby'></el-input></div>
                     </td>
                     <td  >
-                      <div class="cell el-tooltip" ><el-input v-model="input"></el-input></div>
+                      <div class="cell el-tooltip" ><el-input v-model="allsltchild" @change='allSltchild'></el-input></div>
                     </td>
                     <td  >
-                      <div class="cell el-tooltip" ><el-input v-model="input"></el-input></div>
+                      <div class="cell el-tooltip" ><el-input v-model="allsltaduilt" @change='allSltaduilt'></el-input></div>
                     </td>
                     <td >
-                      <div class="cell el-tooltip" ><el-input v-model="input"></el-input></div>
+                      <div class="cell el-tooltip" ><el-input v-model="allsltroom" @change='allSltroom'></el-input></div>
+                    </td>
+                  </tr>
+                  <tr class="el-table__row" v-for='(item,idx) in checkArr' v-if='checkArr.length>0'>
+                    <td class="el-table_1_column_123 el-table-column--selection">
+                      <el-checkbox v-model="item.checked" @change='sigCheck'></el-checkbox>
+                    </td>
+                    <td  >
+                      <div class="cell" style='cursor: pointer;' @click='sigDel(idx)'>删除</div>
                     </td>
                     <td >
-                      <div class="cell el-tooltip" ><el-input v-model="input"></el-input></div>
+                      {{item.starttime || '---'}}
+                    </td>
+                    <td>
+                      <div class="cell el-tooltip" ><el-input v-model="item.plan"></el-input></div>
+                    </td>
+                    <td >
+                      <div class="cell el-tooltip" ><el-checkbox v-model="item.isorder"></el-checkbox></div>
+                    </td>
+                    <td >
+                      <div class="cell el-tooltip" ><el-radio class="radio" v-model="item.confirm" label='0'>自动</el-radio></div>
+                    </td>
+                    <td  >
+                      <div class="cell el-tooltip" ><el-radio class="radio" v-model="item.confirm" label='1'>手动</el-radio></div>
+                    </td>
+                    <td >
+                      <div class="cell el-tooltip" ><el-input v-model="item.deadline"></el-input></div>
+                    </td>
+                    <td >
+                      <div class="cell el-tooltip" ><el-input v-model="item.mktbaby"></el-input></div>
+                    </td>
+                    <td >
+                      <div class="cell el-tooltip" ><el-input v-model="item.mktchild"></el-input></div>
+                    </td>
+                    <td >
+                      <div class="cell el-tooltip" ><el-input v-model="item.mktaduilt"></el-input></div>
+                    </td>
+                    <td  >
+                      <div class="cell el-tooltip" ><el-input v-model="item.mktroom"></el-input></div>
+                    </td>
+                    <td  >
+                      <div class="cell el-tooltip" ><el-input v-model="item.sltbaby"></el-input></div>
+                    </td>
+                    <td  >
+                      <div class="cell el-tooltip" ><el-input v-model="item.sltchild"></el-input></div>
+                    </td>
+                    <td >
+                      <div class="cell el-tooltip" ><el-input v-model="item.sltaduilt"></el-input></div>
+                    </td>
+                    <td >
+                      <div class="cell el-tooltip" ><el-input v-model="item.sltroom"></el-input></div>
                     </td>
                   </tr>
                <!----></tbody>
@@ -223,24 +286,22 @@
             </div>
               <div style="color: #2cb1b6; font-size: 20px;padding-top: 20px;line-height: 40px;margin-bottom: 20px;border-bottom:1px solid rgba(151, 151, 151, 0.2)">
                 同步到对接平台：</div>
-              <div style="overflow: hidden">
-              <el-form-item label="" prop="name" style="float: left">
-                <el-checkbox v-model="checked">线路选择</el-checkbox>
-              </el-form-item>
-              <el-form-item label="" prop="name" style="float: left">
-                <el-checkbox v-model="checked">线路选择</el-checkbox>
-              </el-form-item>
+              <div style="overflow: hidden;padding-left: 60px;">
+                <el-checkbox-group v-model="checkList">
+                  <el-checkbox :label="idx" :key="item.name" style="margin-right: 40px;" v-for='(item,idx) in pingtai'>{{item.name}}</el-checkbox>
+                </el-checkbox-group>
               </div>
               <el-form-item label-width="200px" style="margin-top: 50px">
-                <el-button type="primary" @click="submitForm('visitorList')" style="width: 120px">保存</el-button>
+                <!--<el-button type="primary" @click="submitForm('visitorList')" style="width: 120px">保存</el-button>-->
+                <el-button type="primary" @click="save" style="width: 120px">保存</el-button>
                 <el-button @click="handleHide()" style="width: 120px">取消</el-button>
               </el-form-item>
             </div>
-
           </el-form>
         </el-col>
       </el-row>
     </section>
+
     <el-dialog title="提示" :visible.sync="lineFlag" size="small">
       <el-form :inline="true" :model="search" class="demo-form-inline" ref="search">
         <el-form-item label="线路分类">
@@ -256,18 +317,22 @@
           <el-button type="primary" @click="queryLine()">查询</el-button>
         </el-form-item>
         <el-form-item label="选择线路">
-          <el-radio-group v-model="lineItemId">
-            <el-radio :label="item.id" :key="item.name" v-for="item in lineList">{{item.name}}</el-radio>
+          <el-radio-group v-model="checkItem" style='text-align: left;'>
+            <el-radio :label="item" :key="item.name" v-for="item in lineList">{{item.name}}</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="lineFlag = false">取 消</el-button>
+        <el-button type="primary" @click="checkRot()">确 定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 <script>
   import {address} from '../../../common/js/address'
   import axios from 'axios';
-  import {token,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist} from '../../../common/js/config';
+  import {token,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist} from '../../../common/js/config';
   import ElDialog from "../../../../node_modules/element-ui/packages/dialog/src/component";
   export default {
     components: {ElDialog},
@@ -291,6 +356,7 @@
         }, 1000);
       };
       return {
+        radio: '1',
         lineFlag: false,
         notice: '',
         lineItemId: '',
@@ -303,7 +369,7 @@
         },
         destinations: [],
         groupList: {
-          token,
+          token: '',
           lineid: '',
           sexid:'1',
           mobile:'',
@@ -325,6 +391,7 @@
         },
         linesorts: [],
         linelist: [], //线路列表
+        lineList: [], //线路列表
         optionName:'新增团计划',
         rules: {
           name: [
@@ -346,35 +413,213 @@
         },
         province: [],
         city: [],
-        district: []
+        district: [],
+        pickerOptions0: {
+          disabledDate(time) {
+            return time.getTime() < Date.now() - 8.64e7;
+          }
+        },
+        value1: '',
+        checkList: [],
+        input: '',
+        radio: '',
+        checked: '',
+        allChecked: '',
+        allplan: '',
+        plan: '',
+        allisorder: true,
+        isorder: true,
+        allconfirm: '0',
+        confirm: '0',
+        alldeadline: '',
+        deadline: '',
+        allmktbaby: '',
+        mktbaby: '',
+        allmktchild: '',
+        mktchild: '',
+        allmktaduilt: '',
+        mktaduilt: '',
+        allmktroom: '',
+        mktroom: '',
+        allsltbaby: '',
+        sltbaby: '',
+        allsltchild: '',
+        sltchild: '',
+        allsltaduilt: '',
+        sltaduilt: '',
+        allsltroom: '',
+        sltroom: '',
+        checkArr: [
+//          {checked: '',time: ''}
+        ],
+        notify: '',
+        routeName: '',
+        checkItem: '',
+        temTime: '',
+        startTimeArr: [],
+        idx: '',
+        pingtai: []
+      }
+    },
+//    created(){
+////      this.getlinelist()
+////      this.getprovince()
+//      if( this.$parent.operationType.type=='edit') {
+//        this.optionName = "编辑游客";
+//        this.birthdayFlag=false;
+//        let data = {
+//          token,
+//          id: this.$parent.operationType.id,
+//        }
+//        custdetail(data).then((res) => {
+//          if (res.data.error) {
+//            this.$message.error(res.data.massage);
+//          }
+//          else {
+//            let tempEditList = {};
+//            tempEditList = res.data.obj;
+//            tempEditList.sexid=String(tempEditList.sexid);
+//            tempEditList.mobile=parseInt(tempEditList.mobile);
+//            this.visitorList=Object.assign({},tempEditList)
+//
+//          }
+//        })
+//      }
+//    },
+    watch : {
+      // 自动 手动
+      allconfirm (newValue, oldValue) {
+         if(newValue == 0) {
+           this.checkArr.forEach(function (item, index) {
+             if(item.checked) item.confirm = '0'
+          })
+         }
+         if(newValue == 1) {
+           this.checkArr.forEach(function (item, index) {
+             if(item.checked) item.confirm = '1'
+           })
+         }
       }
     },
     created(){
-//      this.getlinelist()
-//      this.getprovince()
-      if( this.$parent.operationType.type=='edit') {
-        this.optionName = "编辑游客";
-        this.birthdayFlag=false;
-        let data = {
-          token,
-          id: this.$parent.operationType.id,
-        }
-        custdetail(data).then((res) => {
-          if (res.data.error) {
-            this.$message.error(res.data.massage);
-          }
-          else {
-            let tempEditList = {};
-            tempEditList = res.data.obj;
-            tempEditList.sexid=String(tempEditList.sexid);
-            tempEditList.mobile=parseInt(tempEditList.mobile);
-            this.visitorList=Object.assign({},tempEditList)
-
-          }
-        })
-      }
+      this.getPingtai();
     },
     methods: {
+      getPingtai () {
+        let _this = this;
+        openlist({token: ''}).then(function (res) {
+          // 平台列表
+          _this.pingtai = res.data.obj
+        })
+      },
+      allMktaduilt () {
+        this.changeParam('mktaduilt', 'allmktaduilt')
+      },
+      allMktroom () {
+        this.changeParam('mktroom', 'allmktroom')
+      },
+      allSltbaby () {
+        this.changeParam('sltbaby', 'allsltbaby')
+      },
+      allSltchild () {
+        this.changeParam('sltchild', 'allsltchild')
+      },
+      allSltaduilt () {
+        this.changeParam('sltaduilt', 'allsltaduilt')
+      },
+      allSltroom () {
+        this.changeParam('sltroom', 'allsltroom')
+      },
+      // 儿童
+      allMktchild () {
+        this.changeParam('mktchild', 'allmktchild')
+      },
+      // 婴儿
+      allMktbaby () {
+        this.changeParam('mktbaby', 'allmktbaby')
+      },
+      // 报名截止
+      allDeadline () {
+        this.changeParam('deadline', 'alldeadline')
+      },
+      // 是否接客
+      allIsorder (event){
+        if(event.target.checked){
+          this.checkArr.forEach(function (item, index) {
+            if(item.checked) item.isorder = true
+          })
+        }else {
+          this.checkArr.forEach(function (item, index) {
+            if(item.checked) item.isorder = false
+          })
+        }
+      },
+      // 计划人数
+      allPlan () {
+        this.changeParam('plan', 'allplan')
+      },
+//      allPlan () {
+//        let _this = this;
+//        this.checkArr.forEach(function (item) {
+//          if(item.checked) item.plan = _this.allplan
+//        })
+//      },
+      // 封装输入框全写
+      changeParam (param, allParam) {
+        let _this = this;
+        this.checkArr.forEach(function (item) {
+          if(item.checked) item[param] = _this[allParam]
+        })
+      },
+      // 全选单选删除
+      sigDel (idx) {
+        this.checkArr.splice(idx, 1)
+      },
+      sigCheck () {
+        let isAll = this.checkArr.every(function (item) {
+          return (item.checked == true);
+        })
+        isAll == true ? this.allChecked = true : this.allChecked = false
+      },
+      allCheck (event) {
+        if(event.target.checked){
+          this.checkArr.forEach(function (item, index) {
+            item.checked = true
+          })
+        }else {
+          this.checkArr.forEach(function (item, index) {
+            item.checked = false
+          })
+        }
+      },
+      // 选择日期添加一行
+      addTr () {
+        // 开始时间
+        this.startTimeArr.push(this.value1);
+        console.log(33, this.value1);
+        var M = (this.value1.getMonth()+1).toString().length==1 ? '0'+ (this.value1.getMonth()+1).toString() : (this.value1.getMonth()+1).toString();
+        var D = this.value1.getDate().toString().length==1 ? '0'+ this.value1.getDate().toString() : this.value1.getDate().toString();
+        var selectTime = this.value1.getFullYear().toString() +"-" + M+ "-" + D;
+        this.checkArr.push(
+          {checked: '',
+            starttime: selectTime,
+            plan: '',
+            isorder: true,
+            confirm: '0',
+            deadline:'',
+            mktbaby: '',
+            mktchild:'',
+            mktaduilt: '',
+            mktroom: '',
+            sltbaby: '',
+            sltchild: '',
+            sltaduilt: '',
+            sltroom: '',
+            book: 0,
+            sit: 0,
+            isenable: true
+          })
+      },
       //获取线路列表
       queryLine(){
         linelist(this.search).then((res) => {
@@ -385,17 +630,87 @@
           }
         })
       },
-//      changecondition() {
-//        let listid = this.search.categoryid ? this.search.categoryid : '0';
-//        destlist({token: '', categoryid: listid}).then((res) => {
-//          this.destinations = res.data.obj
-//        })
-//      },
+      //求截止日期
+      getDate (vall, dayy) {
+//        var now=new Date();
+//        var time=now.getTime();
+        var time = vall.getTime()
+        time+=1000*60*60*24*dayy;//加上3天
+        vall.setTime(time);
+        var M = (vall.getMonth()+1).toString().length == 1 ? '0' + (vall.getMonth()+1).toString(): (vall.getMonth()+1).toString()
+        var D = vall.getDate().toString().length == 1 ? '0' + vall.getDate().toString(): vall.getDate().toString()
+        return vall.getFullYear()+"-"+M+"-"+D;
+      },
+      // 弹出框确定
+      checkRot () {
+        this.lineFlag = false;
+        this.routeName = this.checkItem.name;
+        this.lineid = this.checkItem.id;
+      },
       getcategoryall(){
         this.lineFlag = true;
         let para= {token:''}
         categoryall(para).then(res =>{
           this.linesorts = res.data.obj
+        })
+      },
+      // 点击保存 取消
+      save () {
+        // 合作平台
+        let platforms = [];
+        var checkListNew = []
+        this.checkList.forEach(function (item) {
+          checkListNew.push(item+1)
+        })
+        this.pingtai.forEach(function (item,idx) {
+          if (checkListNew.indexOf(item.platform) != -1) {
+            platforms.push({platform: item.platform, isenable: true});
+          }else {
+            platforms.push({platform: item.platform, isenable: false});
+          }
+        })
+        // 结束时间
+        let TemStArr = [];
+        let _this = this;
+        this.startTimeArr.forEach(function (item) {
+          TemStArr.push(_this.getDate(item, _this.checkItem.days))
+        })
+        // 列表数据
+        if(!this.lineid) {
+          alert('请选择线路');
+          return;
+        }
+        if (this.checkArr.length == 0) {
+          alert('请添加发团信息');
+          return;
+        }
+        this.checkArr.forEach(function (item,idx) {
+          delete item.checked
+          item.endtime = TemStArr[idx]
+          if(!item.plan || !item.deadline || !item.mktbaby || !item.mktchild || !item.mktaduilt || !item.mktroom
+            || !item.sltbaby || !item.sltchild || !item.sltaduilt || !item.sltroom) {alert(item.starttime + '日信息填写有误')
+            return
+          }
+          if(platforms.length == 0) {
+            alert('请选择合作平台');
+            return;
+          }
+          groupsave({
+            token: '',
+            lineid: _this.lineid,
+            notify: _this.notify || '',
+            platforms: platforms,
+            details: _this.checkArr
+          }).then(res =>{
+            if(res.data.error) {
+              alert(res.data.message);
+              return
+            }
+            if(!res.data.error) {
+              console.log('创建成功');
+              _this.$emit('setMode', 'list');
+            }
+          })
         })
       },
       handleHide: function (option) {
@@ -588,5 +903,8 @@
   .bg_white {
     background: #fff;
     padding: 20px 35px;
+  }
+  table{
+    font-size:12px;
   }
 </style>

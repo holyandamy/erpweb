@@ -104,6 +104,10 @@
     <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="setMode" :categoryId="editcategory.id"></GroupInfo>
     <GroupReserve v-else-if="modeType == 'groupreserve'" @setMode="setMode" :categoryId="editcategory.id"></GroupReserve>
     <Grouporder v-else-if="modeType == 'order'"  @setMode="setMode" :operationType="operationType" ></Grouporder>
+<<<<<<< Updated upstream
+=======
+    <Reserve v-else-if="modeType == 'reserve'" @setMode="setMode" :categoryId="editcategory.id" :operationType="operationType"></Reserve>  <!-- @setMode="setMode"   :categoryId="editcategory.id"-->
+>>>>>>> Stashed changes
     <NewGroup v-else  @setMode="setMode" :operationType="operationType" ></NewGroup>
   </div>
 </template>
@@ -124,7 +128,11 @@
     data() {
       return {
         searchList:{},
+<<<<<<< Updated upstream
         modeType:'list',
+=======
+        modeType:'list', /*reserve*/
+>>>>>>> Stashed changes
         showAdd:false,
         showEdit:false,
         type:[{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],

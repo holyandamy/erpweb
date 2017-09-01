@@ -1,5 +1,6 @@
 <template>
   <div>
+<<<<<<< Updated upstream
     <header>
       <ul>
         <li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
@@ -21,6 +22,73 @@
                   儿童 {{detail.sltchild}} /
                   婴儿 {{detail.sltbaby}}
                 </li>
+=======
+    <div v-if="modeType= 'groupinfo'">
+      <header>
+        <ul>
+          <li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
+        </ul>
+      </header>
+      <section>
+        <h2 class="d_jump" @click="handleHide()">下单</h2>
+        <div class="bgfff">
+          <!--<h3>{{detail.name}}</h3>-->
+          <div class="linecenter">
+            <el-row>
+              <el-col :span="12">
+                <ul>
+                  <li><span>线路名称</span> {{detail.name || ''}}</li>  <!-- -- {{detail.categoryName}}-->
+                  <li><span>团号</span>{{detail.teamno }}</li>
+                  <!--出行方式:1跟团游，2自由行-->
+                  <li><span>结算价格</span>
+                    成人 {{detailOut.sltaduilt}} /
+                    儿童 {{detailOut.sltchild}} /
+                    婴儿 {{detailOut.sltbaby}}
+                  </li>
+
+                </ul>
+              </el-col>
+              <el-col :span="12">
+                <ul style="padding-left: 30px;">
+                  <li><span>出发时间</span>{{detailOut.starttime}}</li>
+                  <li><span>回团时间</span>{{detailOut.endtime}}</li>
+                </ul>
+              </el-col>
+              <div style="clear: both;"></div>
+              <p>
+                <span>集合通知</span>{{detail.notify}}
+              </p>
+            </el-row>
+            <el-table :data="groupList"
+                      border
+                      style="width: 100%">
+              <el-table-column
+                prop="plan"
+                label="计划人数"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="book"
+                label="预订人数"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="sit"
+                label="占位">
+              </el-table-column>
+              <el-table-column
+                prop="surplus"
+                label="余位">
+              </el-table-column>
+              <el-table-column label="操作">
+                <template scope="scope">
+                  <el-button @click="setModee(2)" type="text" size="small">预定</el-button>
+                  <el-button @click="setModee(1)" type="text" size="small">占位</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+>>>>>>> Stashed changes
 
               </ul>
             </el-col>
@@ -162,6 +230,7 @@
         <ul class="notes">
           <li><span style="line-height: 26px;">不含项目</span>
 
+<<<<<<< Updated upstream
             <div class="xc">
               {{detail.excludePkg}}
             </div>
@@ -175,6 +244,50 @@
         </ul>
       </div>
       <h2 class="d_jump">操作日志 </h2>
+=======
+              <div class="xc">
+                {{detail.excludePkg}}
+              </div>
+            </li>
+            <li><span>包含项目</span>
+              <div class="xc">
+                <pre>{{detail.includePkg}}</pre>
+              </div>
+            </li>
+            <li><span>购物安排</span>
+              <div class="xc">
+                <pre>{{detail.shopping}}</pre>
+              </div>
+            </li>
+            <li><span>温馨提示</span>
+              <div class="xc">
+                <pre>{{detail.reminder}}</pre>
+              </div>
+            </li>
+            <li><span>儿童/老人</span>
+              <div class="xc">
+                <pre>{{detail.childolder}}</pre>
+              </div>
+            </li>
+            <li><span>对外备注</span>
+              <div class="xc">
+                <pre>{{detail.outremark}}</pre>
+              </div>
+            </li>
+            <li><span>内部备注</span>
+              <div class="xc">
+                <pre>{{detail.innerremark}}</pre>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <h2 class="d_jump">发布平台 </h2>
+        <div class='pingtai'>
+          <el-checkbox-group v-model="checkList">
+            <el-checkbox :label="idx" :key="item.name" style="margin-right: 40px;" v-for='(item,idx) in pingtai'>{{item.name}}</el-checkbox>
+          </el-checkbox-group>
+        </div>
+>>>>>>> Stashed changes
 
       <el-table
         :data="loglist"
@@ -203,12 +316,18 @@
 </template>
 
 <script>
+<<<<<<< Updated upstream
   import {orderdetail} from '../../../common/js/config';
+=======
+  import {orderdetail,openlist} from '../../../common/js/config';
+
+>>>>>>> Stashed changes
   export default {
     props:['categoryId'],
     data() {
       return {
         menus: ['下单', '基本信息', '行程', '预定须知', '发布平台'],
+<<<<<<< Updated upstream
         active:0,
         detail:{},
         loglist:[],
@@ -216,22 +335,62 @@
         imglist:[],
         toplist:[]
 
+=======
+        active: 0,
+        detail: {},
+        detailOut: {},
+        groupList: [],
+        loglist: [],
+        edittype: true,
+        imglist: [],
+        toplist: [],
+        pingtai: [],
+        checkList: []
+>>>>>>> Stashed changes
       }
     },
     mounted: function() {
           this.getlineinfo()
     },
+    created(){
+      this.getPingtai();
+    },
     methods: {
+<<<<<<< Updated upstream
       getlineinfo(){
+=======
+      // 平台列表
+      getPingtai () {
+        let _this = this;
+        openlist({token: ''}).then(function (res) {
+          _this.pingtai = res.data.obj
+        })
+      },
+      setMode(type){
+        this.modeType=type;
+      },
+      getlineinfo() {
+>>>>>>> Stashed changes
         let para = {
           token:'',
           id:this.categoryId
         }
+        let _this = this;
         orderdetail(para).then((res) => {
+<<<<<<< Updated upstream
           console.log(res.data);
           return;
           this.detail = res.data.obj
+=======
+          this.detailOut = res.data.obj
+          this.detail = res.data.obj.line
+          this.groupList = [res.data.obj]
+>>>>>>> Stashed changes
           this.toplist = this.detail.images.split(',')
+          // 设置平台显示状态
+          this.detailOut.platforms.forEach(function (item,idx) {
+            if(item.isenable) _this.checkList.push(idx)
+          })
 
           for(let i = 0 ; i <this.detail.routes.length;i++){
             let arr = []
@@ -360,6 +519,12 @@
       handleHide: function() {
         this.$emit('setMode', 'groupreserve');
       },
+<<<<<<< Updated upstream
+=======
+      setModee: function (typ) {
+        this.$emit('setMode', 'reserve',typ);
+      }
+>>>>>>> Stashed changes
 //			onScroll() {
 //				let scrolled = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop　　　 // 586、1063分别为第二个和第三个锚点对应的距离
 //				let jump = document.querySelectorAll('.d_jump')
@@ -545,5 +710,8 @@
       width: 90px;
       display: inline-block;
     }
+  }
+  .pingtai{
+    padding: 0 0 30px 40px;
   }
 </style>
