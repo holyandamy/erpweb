@@ -63,22 +63,26 @@
           </el-form-item>
         </el-form>
 
-        <el-table :data="lineList" style="text-align: left; font-size: 12px;">
-          <el-table-column prop="name" label=" 团号/线路名称">
+        <el-table :data="lineList" border style="text-align: left; font-size: 12px;">
+          <el-table-column prop="teamno" label=" 团号">
           </el-table-column>
-          <el-table-column prop="time" label="出发日期/回团日期">
+          <el-table-column prop="linename" label="线路名称">
+          </el-table-column>
+          <el-table-column prop="starttime" label="出发日期">
+          </el-table-column>
+          <el-table-column prop="endtime" label="回团日期">
           </el-table-column>
           <el-table-column prop="plan" label="计划人数">
           </el-table-column>
-          <el-table-column prop="sex" label="余位">
+          <el-table-column prop="surplus" label="余位">
           </el-table-column>
-          <el-table-column prop="date" label="天数">
+          <el-table-column prop="days" label="天数">
           </el-table-column>
-          <el-table-column prop="sex" label="已售">
+          <el-table-column prop="book" label="已售">
           </el-table-column>
-          <el-table-column prop="sex" label="状态">
+          <el-table-column prop="status" label="状态">
           </el-table-column>
-          <el-table-column prop="sex" label="发布人">
+          <el-table-column prop="creater" label="发布人">
           </el-table-column>
           <el-table-column  label="操作">
             <template scope="scope">
@@ -104,10 +108,7 @@
     <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="setMode" :categoryId="editcategory.id"></GroupInfo>
     <GroupReserve v-else-if="modeType == 'groupreserve'" @setMode="setMode" :categoryId="editcategory.id"></GroupReserve>
     <Grouporder v-else-if="modeType == 'order'"  @setMode="setMode" :operationType="operationType" ></Grouporder>
-<<<<<<< Updated upstream
-=======
     <Reserve v-else-if="modeType == 'reserve'" @setMode="setMode" :categoryId="editcategory.id" :operationType="operationType"></Reserve>  <!-- @setMode="setMode"   :categoryId="editcategory.id"-->
->>>>>>> Stashed changes
     <NewGroup v-else  @setMode="setMode" :operationType="operationType" ></NewGroup>
   </div>
 </template>
@@ -116,23 +117,21 @@
   import NewGroup from './newgroup'
   import GroupInfo from './groupinfo'
   import GroupReserve from './groupreserve'
+  import Reserve from './reserve'
   import axios from 'axios';
-  import {token,linecategorylist,linecategoryadd,linecategoryupdate,linecategorydelete} from '../../../common/js/config';
+  import {token,grouplist,linecategoryadd,linecategoryupdate,linecategorydelete} from '../../../common/js/config';
   export default {
     components:{
       Grouporder,
       NewGroup,
       GroupInfo,
-      GroupReserve
+      GroupReserve,
+      Reserve
     },
     data() {
       return {
         searchList:{},
-<<<<<<< Updated upstream
-        modeType:'list',
-=======
         modeType:'list', /*reserve*/
->>>>>>> Stashed changes
         showAdd:false,
         showEdit:false,
         type:[{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
@@ -142,8 +141,8 @@
         operationType:{type:'add',id:''},
         pageset:{
           token,
-          pageIndex:0,
-          pageSize:''
+          pageindex:0,
+          pagesize:''
         },
         lineList:[],
         editcategory:{}
@@ -223,10 +222,10 @@
         });
       },
       getList(){
-        this.pageset.pageIndex = this.currentPage-1
-        this.pageset.pageSize = this.pagesize
+        this.pageset.pageindex = this.currentPage-1
+        this.pageset.pagesize = this.pagesize
         let page = this.pageset
-        linecategorylist(page).then((res) => {
+        grouplist(JSON.stringify(page)).then((res) => {
           this.lineList = res.data.obj.datas
           this.total = Number(res.data.obj.total)
         })

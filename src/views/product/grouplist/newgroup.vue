@@ -22,46 +22,46 @@
                 <span class='routeName' style='padding-left: 10px;' v-text='routeName'>222</span>
               </el-form-item>
               <!--<el-form-item label="线路分类" prop="name">-->
-                <!--<el-col :span="4" style="width: 100%;margin-right: 10px">-->
-                  <!--<ul>-->
-                    <!--<li @click="changecondition('-1')" :class="{checked:ischecked == -1}">全部</li>-->
-                    <!--<li v-for="(linesort,index) in linesorts" :class="{checked:ischecked == index}" @click="changecondition(index,linesort)">{{linesort.name}}</li>-->
-                  <!--</ul>-->
-                <!--</el-col>-->
+              <!--<el-col :span="4" style="width: 100%;margin-right: 10px">-->
+              <!--<ul>-->
+              <!--<li @click="changecondition('-1')" :class="{checked:ischecked == -1}">全部</li>-->
+              <!--<li v-for="(linesort,index) in linesorts" :class="{checked:ischecked == index}" @click="changecondition(index,linesort)">{{linesort.name}}</li>-->
+              <!--</ul>-->
+              <!--</el-col>-->
               <!--</el-form-item>-->
               <!--<el-form-item label="线路类型" prop="name">-->
-                <!--<el-select v-model="search.type" placeholder="线路类型">-->
-                  <!--<el-option label="国内" value="1"></el-option>-->
-                  <!--<el-option label="出境" value="2"></el-option>-->
-                  <!--<el-option label="周边" value="3"></el-option>-->
-                <!--</el-select>-->
-              <!--</el-form-item>-->
-            <!--<el-form-item label="线路名称" prop="name">-->
-              <!--<el-select-->
-                <!--v-model="groupList.lineid"-->
-                <!--filterable-->
-                <!--allow-create>-->
-                <!--<el-option-->
-                  <!--v-for="item in linelist"-->
-                  <!--:key="item.lineid"-->
-                  <!--:label="item.linename"-->
-                  <!--:value="item.lineid">-->
-                <!--</el-option>-->
+              <!--<el-select v-model="search.type" placeholder="线路类型">-->
+              <!--<el-option label="国内" value="1"></el-option>-->
+              <!--<el-option label="出境" value="2"></el-option>-->
+              <!--<el-option label="周边" value="3"></el-option>-->
               <!--</el-select>-->
-            <!--</el-form-item>-->
-            <el-form-item label="集合通知：" prop="notify">
-              <el-col :span="4" style="width: 100%;margin-right: 10px">
-                <el-input
-                  type="textarea"
-                  :autosize="{ minRows: 3, maxRows: 5}"
-                  placeholder="请输入内容"
-                  v-model="notify">
-                </el-input>
-              </el-col>
-            </el-form-item>
+              <!--</el-form-item>-->
+              <!--<el-form-item label="线路名称" prop="name">-->
+              <!--<el-select-->
+              <!--v-model="groupList.lineid"-->
+              <!--filterable-->
+              <!--allow-create>-->
+              <!--<el-option-->
+              <!--v-for="item in linelist"-->
+              <!--:key="item.lineid"-->
+              <!--:label="item.linename"-->
+              <!--:value="item.lineid">-->
+              <!--</el-option>-->
+              <!--</el-select>-->
+              <!--</el-form-item>-->
+              <el-form-item label="集合通知：" prop="notify">
+                <el-col :span="4" style="width: 100%;margin-right: 10px">
+                  <el-input
+                    type="textarea"
+                    :autosize="{ minRows: 3, maxRows: 5}"
+                    placeholder="请输入内容"
+                    v-model="notify">
+                  </el-input>
+                </el-col>
+              </el-form-item>
 
-             <div style="color: #2cb1b6; font-size: 20px;padding-top: 20px;line-height: 40px;margin-bottom: 20px;border-bottom:1px solid rgba(151, 151, 151, 0.2)">
-               发团时间</div>
+              <div style="color: #2cb1b6; font-size: 20px;padding-top: 20px;line-height: 40px;margin-bottom: 20px;border-bottom:1px solid rgba(151, 151, 151, 0.2)">
+                发团时间</div>
 
               <el-form-item label="发团时间：" prop="date">
                 <el-col :span="4" style="width: 100%;margin-right: 10px">
@@ -74,216 +74,216 @@
                     :picker-options="pickerOptions0">
                   </el-date-picker>
                   <!--<el-date-picker-->
-                    <!--v-model="value1"-->
-                    <!--type="datecustom"-->
-                    <!--placeholder="选择日期"-->
-                    <!--:picker-options="pickerOptions0">-->
+                  <!--v-model="value1"-->
+                  <!--type="datecustom"-->
+                  <!--placeholder="选择日期"-->
+                  <!--:picker-options="pickerOptions0">-->
                   <!--</el-date-picker>-->
 
                 </el-col>
               </el-form-item>
 
-            <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition"
-                 style="width: 100%;">
-              <div class="el-table__body-wrapper">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style=" width: 100%;text-align: center">
-                  <thead>
-                  <tr style="text-align: center">
-                    <th colspan="1" rowspan="1" class="is-leaf"  >
-                      <div class="cell">序号</div>
-                    </th>
-                    <th colspan="1" rowspan="1" class="is-leaf"   >
-                      <div class="cell">操作</div>
-                    </th>
-                    <th colspan="1" rowspan="1" class="is-leaf" width="100">
-                      <div class="cell">发团日期</div>
-                    </th>
-                    <th colspan="1" rowspan="1" class="is-leaf">
-                      <div class="cell">计划人数</div>
-                    </th>
-                    <th colspan="1" rowspan="1" class="is-leaf">
-                      <div class="cell">是否收客</div>
-                    </th>
-                    <th colspan="2" rowspan="1" class="is-leaf" style="text-align: center">
-                     确认方式
-                    </th>
-                    <th colspan="1" rowspan="1" class="is-leaf">
-                      <div class="cell">报名截止</div>
-                    </th>
-                    <th colspan="4" rowspan="1" class="is-leaf"  style="text-align: center" >
-                      <div class="cell">市场价/元</div>
-                    </th>
-                    <th colspan="4" rowspan="1" class="is-leaf"  style="text-align: center"  >
-                      <div class="cell">结算价/元</div>
-                    </th>
-                    <th class="gutter" style="width: 0px;"></th>
-                  </tr>
-                  </thead>
-                  <tbody>
+              <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition"
+                   style="width: 100%;">
+                <div class="el-table__body-wrapper">
+                  <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style=" width: 100%;text-align: center">
+                    <thead>
+                    <tr style="text-align: center">
+                      <th colspan="1" rowspan="1" class="is-leaf"  >
+                        <div class="cell">序号</div>
+                      </th>
+                      <th colspan="1" rowspan="1" class="is-leaf"   >
+                        <div class="cell">操作</div>
+                      </th>
+                      <th colspan="1" rowspan="1" class="is-leaf" width="100">
+                        <div class="cell">发团日期</div>
+                      </th>
+                      <th colspan="1" rowspan="1" class="is-leaf">
+                        <div class="cell">计划人数</div>
+                      </th>
+                      <th colspan="1" rowspan="1" class="is-leaf">
+                        <div class="cell">是否收客</div>
+                      </th>
+                      <th colspan="2" rowspan="1" class="is-leaf" style="text-align: center">
+                        确认方式
+                      </th>
+                      <th colspan="1" rowspan="1" class="is-leaf">
+                        <div class="cell">报名截止</div>
+                      </th>
+                      <th colspan="4" rowspan="1" class="is-leaf"  style="text-align: center" >
+                        <div class="cell">市场价/元</div>
+                      </th>
+                      <th colspan="4" rowspan="1" class="is-leaf"  style="text-align: center"  >
+                        <div class="cell">结算价/元</div>
+                      </th>
+                      <th class="gutter" style="width: 0px;"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-                  <tr class="el-table__row">
-                    <td >
-                      <div class="cell el-tooltip" >---</div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" >---</div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" >---</div>
-                    </td>
-                    <td>
-                      <div class="cell el-tooltip" >---</div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" >---</div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" >自动确认</div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" >手动确认</div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" >天</div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" >婴儿</div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" >儿童</div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" >成人</div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" >单房差</div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" >婴儿</div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" >儿童</div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" >成人</div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" >单房差</div>
-                    </td>
-                  </tr>
+                    <tr class="el-table__row">
+                      <td >
+                        <div class="cell el-tooltip" >---</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >---</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >---</div>
+                      </td>
+                      <td>
+                        <div class="cell el-tooltip" >---</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >---</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >自动确认</div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" >手动确认</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >天</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >婴儿</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >儿童</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >成人</div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" >单房差</div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" >婴儿</div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" >儿童</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >成人</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >单房差</div>
+                      </td>
+                    </tr>
 
-                  <tr class="el-table__row">
-                    <td class="el-table_1_column_123 el-table-column--selection">
-                      <el-checkbox v-model="allChecked" @change='allCheck'>全选</el-checkbox>
-                    </td>
-                    <td  >
-                      <!--<div class="cell">删除</div>-->
-                      <div class="cell el-tooltip" >---</div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" >---</div>
-                    </td>
-                    <td>
-                      <div class="cell el-tooltip" ><el-input v-model="allplan" @change='allPlan'></el-input></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-checkbox v-model="allisorder" @change='allIsorder'></el-checkbox></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-radio class="radio" v-model="allconfirm" label='0' >自动</el-radio></div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" ><el-radio class="radio" v-model="allconfirm" label='1' >手动</el-radio></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="alldeadline" @change='allDeadline'></el-input></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="allmktbaby" @change='allMktbaby'></el-input></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="allmktchild" @change='allMktchild'></el-input></div>
-                    </td>
+                    <tr class="el-table__row">
+                      <td class="el-table_1_column_123 el-table-column--selection">
+                        <el-checkbox v-model="allChecked" @change='allCheck'>全选</el-checkbox>
+                      </td>
+                      <td  >
+                        <!--<div class="cell">删除</div>-->
+                        <div class="cell el-tooltip" >---</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >---</div>
+                      </td>
+                      <td>
+                        <div class="cell el-tooltip" ><el-input v-model="allplan" @change='allPlan'></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-checkbox v-model="allisorder" @change='allIsorder'></el-checkbox></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-radio class="radio" v-model="allconfirm" label='0' >自动</el-radio></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-radio class="radio" v-model="allconfirm" label='1' >手动</el-radio></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="alldeadline" @change='allDeadline'></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allmktbaby" @change='allMktbaby'></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allmktchild" @change='allMktchild'></el-input></div>
+                      </td>
 
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="allmktaduilt" @change='allMktaduilt'></el-input></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="allmktroom" @change='allMktroom'></el-input></div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" ><el-input v-model="allsltbaby" @change='allSltbaby'></el-input></div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" ><el-input v-model="allsltchild" @change='allSltchild'></el-input></div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" ><el-input v-model="allsltaduilt" @change='allSltaduilt'></el-input></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="allsltroom" @change='allSltroom'></el-input></div>
-                    </td>
-                  </tr>
-                  <tr class="el-table__row" v-for='(item,idx) in checkArr' v-if='checkArr.length>0'>
-                    <td class="el-table_1_column_123 el-table-column--selection">
-                      <el-checkbox v-model="item.checked" @change='sigCheck'></el-checkbox>
-                    </td>
-                    <td  >
-                      <div class="cell" style='cursor: pointer;' @click='sigDel(idx)'>删除</div>
-                    </td>
-                    <td >
-                      {{item.starttime || '---'}}
-                    </td>
-                    <td>
-                      <div class="cell el-tooltip" ><el-input v-model="item.plan"></el-input></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-checkbox v-model="item.isorder"></el-checkbox></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-radio class="radio" v-model="item.confirm" label='0'>自动</el-radio></div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" ><el-radio class="radio" v-model="item.confirm" label='1'>手动</el-radio></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="item.deadline"></el-input></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="item.mktbaby"></el-input></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="item.mktchild"></el-input></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="item.mktaduilt"></el-input></div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" ><el-input v-model="item.mktroom"></el-input></div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" ><el-input v-model="item.sltbaby"></el-input></div>
-                    </td>
-                    <td  >
-                      <div class="cell el-tooltip" ><el-input v-model="item.sltchild"></el-input></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="item.sltaduilt"></el-input></div>
-                    </td>
-                    <td >
-                      <div class="cell el-tooltip" ><el-input v-model="item.sltroom"></el-input></div>
-                    </td>
-                  </tr>
-               <!----></tbody>
-                </table><!----></div><!----><!----><!----><!---->
-              <div class="el-table__column-resize-proxy" style="display: none;"></div>
-              <div class="resize-triggers">
-                <div class="expand-trigger">
-                  <div style="width: 761px; height: 321px;"></div>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allmktaduilt" @change='allMktaduilt'></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allmktroom" @change='allMktroom'></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="allsltbaby" @change='allSltbaby'></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="allsltchild" @change='allSltchild'></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="allsltaduilt" @change='allSltaduilt'></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allsltroom" @change='allSltroom'></el-input></div>
+                      </td>
+                    </tr>
+                    <tr class="el-table__row" v-for='(item,idx) in checkArr' v-if='checkArr.length>0'>
+                      <td class="el-table_1_column_123 el-table-column--selection">
+                        <el-checkbox v-model="item.checked" @change='sigCheck'></el-checkbox>
+                      </td>
+                      <td  >
+                        <div class="cell" style='cursor: pointer;' @click='sigDel(idx)'>删除</div>
+                      </td>
+                      <td >
+                        {{item.starttime || '---'}}
+                      </td>
+                      <td>
+                        <div class="cell el-tooltip" ><el-input v-model="item.plan"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-checkbox v-model="item.isorder"></el-checkbox></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-radio class="radio" v-model="item.confirm" label='0'>自动</el-radio></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-radio class="radio" v-model="item.confirm" label='1'>手动</el-radio></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="item.deadline"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="item.mktbaby"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="item.mktchild"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="item.mktaduilt"></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="item.mktroom"></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="item.sltbaby"></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="item.sltchild"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="item.sltaduilt"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="item.sltroom"></el-input></div>
+                      </td>
+                    </tr>
+                    <!----></tbody>
+                  </table><!----></div><!----><!----><!----><!---->
+                <div class="el-table__column-resize-proxy" style="display: none;"></div>
+                <div class="resize-triggers">
+                  <div class="expand-trigger">
+                    <div style="width: 761px; height: 321px;"></div>
+                  </div>
+                  <div class="contract-trigger"></div>
                 </div>
-                <div class="contract-trigger"></div>
               </div>
-            </div>
               <div style="color: #2cb1b6; font-size: 20px;padding-top: 20px;line-height: 40px;margin-bottom: 20px;border-bottom:1px solid rgba(151, 151, 151, 0.2)">
                 同步到对接平台：</div>
               <div style="overflow: hidden;padding-left: 60px;">
@@ -489,16 +489,16 @@
     watch : {
       // 自动 手动
       allconfirm (newValue, oldValue) {
-         if(newValue == 0) {
-           this.checkArr.forEach(function (item, index) {
-             if(item.checked) item.confirm = '0'
+        if(newValue == 0) {
+          this.checkArr.forEach(function (item, index) {
+            if(item.checked) item.confirm = '0'
           })
-         }
-         if(newValue == 1) {
-           this.checkArr.forEach(function (item, index) {
-             if(item.checked) item.confirm = '1'
-           })
-         }
+        }
+        if(newValue == 1) {
+          this.checkArr.forEach(function (item, index) {
+            if(item.checked) item.confirm = '1'
+          })
+        }
       }
     },
     created(){
@@ -726,60 +726,60 @@
 //        })*/
 //      },
       submitForm() {
-          let newDate = '';
-          if (this.visitorList.birthday != '') {
-            const mouth = {
-              Jan: '01',
-              Feb: '02',
-              Mar: '03',
-              Apr: '04',
-              May: '05',
-              Jun: '06',
-              Jul: '07',
-              Aug: '08',
-              Sept: '09',
-              Oct: '10',
-              Nov: '11',
-              Dec: '12'
-            }
-            let start = String(this.visitorList.birthday).split(' ');
-            newDate = start[3] + '-' + mouth[start[1]] + '-' + start[2]
+        let newDate = '';
+        if (this.visitorList.birthday != '') {
+          const mouth = {
+            Jan: '01',
+            Feb: '02',
+            Mar: '03',
+            Apr: '04',
+            May: '05',
+            Jun: '06',
+            Jul: '07',
+            Aug: '08',
+            Sept: '09',
+            Oct: '10',
+            Nov: '11',
+            Dec: '12'
           }
-          let newPostDate = Object.assign({}, this.visitorList)
-          newPostDate.birthday = newDate;
-          newPostDate.sexid = parseInt(newPostDate.sexid);
-          newPostDate.mobile = String(newPostDate.mobile);
-          this.$refs['visitorList'].validate((valid) => {
-            if (valid) {
-              if( this.$parent.operationType.type=='edit') {
-                newPostDate.id=this.$parent.operationType.id;
-                delete  newPostDate.birthday;
-                custupdate(newPostDate).then((backData) => {
-                  if (backData.error) {
-                    this.$message.error(backData.massage);
-                  }
-                  else {
-                    this.handleHide('list');
-                  }
-                })
+          let start = String(this.visitorList.birthday).split(' ');
+          newDate = start[3] + '-' + mouth[start[1]] + '-' + start[2]
+        }
+        let newPostDate = Object.assign({}, this.visitorList)
+        newPostDate.birthday = newDate;
+        newPostDate.sexid = parseInt(newPostDate.sexid);
+        newPostDate.mobile = String(newPostDate.mobile);
+        this.$refs['visitorList'].validate((valid) => {
+          if (valid) {
+            if( this.$parent.operationType.type=='edit') {
+              newPostDate.id=this.$parent.operationType.id;
+              delete  newPostDate.birthday;
+              custupdate(newPostDate).then((backData) => {
+                if (backData.error) {
+                  this.$message.error(backData.massage);
+                }
+                else {
+                  this.handleHide('list');
+                }
+              })
 
-              }
-              else{
-                custsave(newPostDate).then((backData) => {
-                  if (backData.error) {
-                    this.$message.error(backData.massage);
-                  }
-                  else {
-                    this.handleHide('list');
-                  }
-                })
-
-              }
-            } else {
-              console.log('error submit!!');
-              return false;
             }
-          });
+            else{
+              custsave(newPostDate).then((backData) => {
+                if (backData.error) {
+                  this.$message.error(backData.massage);
+                }
+                else {
+                  this.handleHide('list');
+                }
+              })
+
+            }
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
       //获取省级列表
       getprovince() {

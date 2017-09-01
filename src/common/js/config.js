@@ -21,6 +21,10 @@ export const paysave = params => { return axios.post(`${base}/finance/pay/save`,
 
 /* 发团列表 */
 export const teamlist = params => { return axios.post(`${base}/line/team/list`, params).then(res => res); };//发团列表
+export const grouplist = params => { return axios.post(`${base}/line/team/list`, params).then(res => res); };//模板列表
+export const reserveNum = params => { return axios.post(`${base}/sys/user/match`, params).then(res => res); };//预定输入手机号或公司名
+export const groupsave = params => { return axios.post(`${base}/line/team/save`, params).then(res => res); };//新增发团计划
+export const orderSave = params => { return axios.post(`${base}/order/save`, params).then(res => res); };//发团 预定
 
 
 
@@ -121,3 +125,4 @@ export const opensave = params => { return axios.post(`${base}/sys/open/save`, p
 
 /* 操作日志*/
 export const loglist = params => { return axios.post(`${base}/sys/log/list`, params).then(res => res); };//获取员工详情
+export const orderdet = params => { return axios.post(`${base}/line/team/order/detail`, params).then(res => res); }//发团 下单详情  TODO
