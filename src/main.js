@@ -6,6 +6,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import VueRouter from 'vue-router'
 import routes from './routes'
+import store from './store';
 import '../theme/index.css'
 import '../static/umeditor/ueditor.config.js'
 import '../static/umeditor/ueditor.all.js'
@@ -20,21 +21,22 @@ const router = new VueRouter({
   routes
 })
 
-//router.beforeEach((to, from, next) => {
-////NProgress.start();
-//if (to.path == '/login') {
-//  sessionStorage.removeItem('user');
-//}
-//let user = JSON.parse(sessionStorage.getItem('user'));
-//
-//if (!user && to.path != '/login') {
-//	next({ path: '/login' })
-//} else {
-//  next()
-// 
-//}
-//})
+const whiteList = ['/login'];
+router.beforeEach((to, from, next) => {
+	let type =  sessionStorage.getItem('token')
+	if(type){
+	 next()
+	}else{
+	if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
 
+            next()
+        } else {
+            next('/login'); // 否则全部重定向到登录页
+       
+        }
+		
+	}
+})
 new Vue({
   //el: '#app',
   //template: '<App/>',
