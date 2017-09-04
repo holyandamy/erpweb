@@ -27,7 +27,7 @@
 <script>
 	//import { requestLogin } from '../api/api';
 	//import NProgress from 'nprogress'
-
+import Cookies from 'js-cookie';
 	import { login } from '../common/js/config';
 	import md5 from 'js-md5';
 	export default {
@@ -67,10 +67,14 @@
                   	if(res.data.error == 0){
                   		let info = res.data.obj
                   		let data = JSON.stringify(info)
-                  		console.log()
-            		sessionStorage.setItem('info',data)
-            		sessionStorage.setItem('token',res.data.obj.token)
-                	 this.$router.push({ path: '/main'});
+	                  	localStorage.setItem('info',data)
+	                  	if(this.checked == true){
+	                  		Cookies.set('token', res.data.obj.token,{ expires: 1/3});
+	                  	}else{
+	                  		sessionStorage.setItem('token',res.data.obj.token)
+	                  	}
+	            		
+            		this.$router.push({ path: '/main'});
  //                 	 this.$router.push({ path: '/'});
                   	}else{
                   		this.$message.error(res.data.message);

@@ -52,7 +52,7 @@
 					<el-table-column prop="createdAt" label="操作日期">
 					</el-table-column>
 				</el-table>
-				<div class="page">
+				<div class="page" style="margin-top: 40px;">
 					<el-pagination  @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pagesize" layout="total, prev, pager, next" :total="total">
 					</el-pagination>
 
@@ -80,9 +80,6 @@
 			this.getinfo()
 			this.getloglist()
 			this.getuserinfo()
-			console.log("main")
-			
-			
 		},
 		methods:{
 			getinfo(){
@@ -92,8 +89,8 @@
 				})
 			},
 			getuserinfo(){
-		  		let name = sessionStorage.getItem('info')
-					this.userinfos = JSON.parse(name)
+		  		let name = localStorage.getItem('info')
+				this.userinfos = JSON.parse(name)
 					
 		    	},
 			getloglist(){
@@ -103,7 +100,7 @@
 					date: '',
 					type: '',
 					operator:'' ,
-					pageindex:0,
+					pageindex:this.currentPage,
 					pagesize: 10
 				}
 				loglist(page).then((res) => {

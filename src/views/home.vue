@@ -13,14 +13,14 @@
 					<a class="headerimg" > <router-link to="/main"><img src="../assets/images/header.png"/></router-link></a>
 					<div class="clearfix"></div>
 					<el-dropdown trigger="hover">
-					<p class="el-dropdown-link userinfo-inner">{{userinfos.username}}<i class="el-icon-arrow-down"></i></p>
-					<el-dropdown-menu slot="dropdown">
+					<p class="el-dropdown-link userinfo-inner">{{userinfos.username}}<!--<i class="el-icon-arrow-down"></i>--></p>
+					<!--<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>我的审批</el-dropdown-item>
 						<el-dropdown-item>审批列表</el-dropdown-item>
 						<el-dropdown-item>个人资料</el-dropdown-item>
-					</el-dropdown-menu>
+					</el-dropdown-menu>-->
 				</el-dropdown>
-					<p class="out"><a  @click="logout">退出</a> | <a href="#">消息</a></p>
+					<p class="out"><a  @click="logout">退出</a><!-- | <a href="#">消息</a>--></p>
 				</el-row>
 				<!--导航菜单-->
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" 
@@ -63,7 +63,7 @@
 </template>
 
 <script> 
-
+import Cookies from 'js-cookie';
 export default {
     data() {
       return {
@@ -82,7 +82,7 @@ export default {
 },
     methods: {
     	getuserinfo(){
-			let name = sessionStorage.getItem('info')
+			let name = localStorage.getItem('info')
 			this.userinfos = JSON.parse(name)
 			this.menu = this.userinfos.menu
 			console.log(this.userinfos)
@@ -100,7 +100,8 @@ export default {
 				this.$confirm('确认退出吗?', '提示', {
 					//type: 'warning'
 				}).then(() => {
-					sessionStorage.removeItem('info'); 
+					localStorage.removeItem('info');
+					Cookies.remove('token');
 					_this.$router.push('/login');
 				}).catch(() => {
 
