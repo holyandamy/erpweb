@@ -6,7 +6,6 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import VueRouter from 'vue-router'
 import routes from './routes'
-import store from './store';
 import '../theme/index.css'
 import '../static/umeditor/ueditor.config.js'
 import '../static/umeditor/ueditor.all.js'
