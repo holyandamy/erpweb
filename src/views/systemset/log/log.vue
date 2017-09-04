@@ -12,7 +12,7 @@
 
 				</el-row>
 			</header>
-			<el-form :inline="true" :model="formInline" class="demo-form-inline" style="text-align: left; padding-left: 30px;">
+			<el-form :inline="true" :model="formInline" class="demo-form-inline hasid" style="text-align: left!important; padding-left: 30px; float: left;" id="54bfe60304f84742bd37e2d93c3924da"> 
 				<el-form-item label="操作模块">
 					<el-input v-model="formInline.moudle" placeholder="操作模块"></el-input>
 				</el-form-item>
@@ -31,14 +31,14 @@
 				</el-form-item>
 
 				<el-form-item>
-					<el-button type="primary" @click="onSubmit">搜索</el-button>
+					<el-button type="primary"  @click="onSubmit">搜索</el-button>
 				</el-form-item>
 			</el-form>
 			<section class="padding30">
-				<el-table :data="roleList" style="width: 100%; text-align: left;">
+				<el-table :data="roleLists" style="width: 100%; text-align: left;">
 					<el-table-column prop="operator" label="操作人">
 					</el-table-column>
-					<el-table-column prop="mod" label="操作模块" width="180">
+					<el-table-column prop="mod" label="操作模块">
 					</el-table-column>
 					<el-table-column prop="content" label="操作内容">
 					</el-table-column>
@@ -47,7 +47,7 @@
 				</el-table>
 
 				<div class="page">
-					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="formInline.pageSize" layout="total, prev, pager, next" :total="total">
+					<el-pagination  @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pagesize" layout="total, prev, pager, next" :total="total">
 					</el-pagination>
 
 				</div>
@@ -61,24 +61,26 @@
 <script>
 	import axios from 'axios';
 	import util from '../../../common/js/util'
-	import { loglist,getdeplist,rolelist} from '../../../common/js/config';
+	import { showorhide } from '../../../common/js/showorhid'
+	import {loglist,getdeplist,rolelist,token} from '../../../common/js/config';
 	export default {
 		data() {
 			return {
 				formInline: {
-					token: '',
 					moudle: '',
 					date: '',
-					type: 1,
+					type: '',
 					operator: '',
-					pageIndex: 0,
-					pageSize: 10
+					
 				},
-				roleList: [],
+				roleLists: [],
 				total: 0,
 				currentPage: 1,
-				search: '',
+				pagesize:10,
 				options: [{
+					value: '0',
+					label: '全部'
+				}, {
 					value: '1',
 					label: '新增'
 				}, {
@@ -91,28 +93,40 @@
 
 			}
 		},
-		created() {
-			this.getList()
+		 updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
 		},
 		methods: {
 			getList() {
-				let page = this.formInline;
-				let startday = page.date[0]
-				let endday = page.date[1]
+				let dates=''
+				let startday = this.formInline.date[0]
+				let endday = this.formInline.date[1]
 				startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
 				endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
-				page.date = startday + "|" + endday
+				if(startday == '' && endday == ''){
+					dates = startday + endday
+				}else{
+					dates = startday+'|'+endday
+				}
+				let page = {
+					token: token,
+					moudle: this.formInline.moudle,
+					date: dates,
+					type: this.formInline.type,
+					operator: this.formInline.operator,
+					pageindex: this.currentPage-1,
+					pagesize: this.pagesize
+				}
 				loglist(page).then((res) => {
 					console.log(page,res)
-					//this.roleList = res.data.obj.rows;
-					//this.total = Number(res.data.obj.total);
+					this.roleLists = res.data.obj.rows
+					this.total = Number(res.data.obj.total)
 				})
 			},
-			handleSizeChange(val) {
-				console.log(`每页 ${val} 条`);
-			},
 			handleCurrentChange(val) {
-				this.getList(1)
+				this.getList()
 			},
 			onSubmit() {
 				this.getList()

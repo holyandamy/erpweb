@@ -58,7 +58,7 @@
 	import axios from 'axios';
 	import AppRoval from './addapproval.vue'
 	import EditRoval from './editapproval.vue'
-	import {getapprovelist, approvestatus} from '../../../common/js/config';
+	import {getapprovelist, approvestatus,token} from '../../../common/js/config';
 	export default {
 		components: {
 			AppRoval, // add role
@@ -78,14 +78,14 @@
 				pagesize: 15,
 				isenable: false,
 				pageset: {
-					token: '',
+					token: token,
 					executor: '',
 					pageIndex: '',
 					pageSize: ''
 				},
 				updatestatus: {
 					isEnable: '',
-					token: '',
+					token: token,
 					id: ''
 				},
 				edit: {}

@@ -10,7 +10,7 @@
           </el-breadcrumb>
         </el-col>
         <el-col :span="12">
-          <el-button class="defaultbutton" @click="setMode('addrole','add')">新增角色</el-button>
+          <el-button class="defaultbutton hasid" id="444b97a172bc11e7aad70242ac120006" @click="setMode('addrole','add')">新增角色</el-button>
         </el-col>
       </el-row>
     </header>
@@ -25,8 +25,8 @@
 
         <el-table-column  label="操作">
           <template scope="scope">
-            <el-button @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
-            <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
+            <el-button class="hasid" id="487ae10e72bc11e7aad70242ac120006" @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
+            <el-button type="text"  class="hasid"  id="4ca1ba0f72bc11e7aad70242ac120006" size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+	import { showorhide } from '../../../common/js/showorhid'
   import axios from 'axios';
   import AddRole from './addrole';
   import {token,rolelist,roledel} from '../../../common/js/config';
@@ -60,12 +61,12 @@
         roleList: [],
         modeType:'role',
         total:0,
-        token,
+        token:token,
         currentPage:1,
         pagesize:15,
         operationType:{type:'add',id:''},
         pageset:{
-          token,
+          token:token,
           pageIndex:0,
           pageSize:''
         },
@@ -74,6 +75,11 @@
     created(){
       this.getList()
     },
+    updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
+		},
     methods:{
       setMode(type,option){
         this.operationType.type=option;
@@ -96,7 +102,7 @@
       },
       deleteRow(index, rows){
         this.roleList.splice(index, 1);
-        let para ={token,id:rows.id}
+        let para ={token:token,id:rows.id}
         roledel(para).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);

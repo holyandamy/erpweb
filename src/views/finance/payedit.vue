@@ -110,7 +110,7 @@
 <script>
 	import axios from 'axios';
 	import util from '../../common/js/util'
-	import {paysave,banlist} from '../../common/js/config';
+	import {paysave,banlist,token} from '../../common/js/config';
 	import ImgUpload from './upload'
 	export default {
 		components:{
@@ -142,7 +142,7 @@
 					}
 				},
 				collectForm: {
-					token:'',
+					token:token,
 					businesstype: '',
 					orderno: '',
 					teamno: '',
@@ -291,7 +291,7 @@
 				}
 			},
 			checkbanklist(){
-				let para = {token:''}
+				let para = {token:token}
 				banlist(para).then((res) => {
 					this.banklist = res.data.obj
 				

@@ -86,13 +86,13 @@
 
 <script>
 	import axios from 'axios';
-	import { addapprove, userenablelist } from '../../../common/js/config';
+	import { addapprove, userenablelist,token } from '../../../common/js/config';
 	export default {
 		props: ['banklist'],
 		data() {
 			return {
 				appform: {
-					token: '',
+					token: token,
 					executorid: '',
 					approverid: '',
 					isenable: '启用'
@@ -127,7 +127,7 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = {
-							token: '',
+							token: token,
 							executorid: '',
 							approverid: '',
 							isenable: ''
@@ -202,7 +202,7 @@
 			//获取被审批人员
 			getuser() {
 				let para = {
-					token: ''
+					token: token
 				}
 				userenablelist(para).then((res) => {
 					console.log(res)

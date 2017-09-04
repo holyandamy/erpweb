@@ -11,8 +11,8 @@
 						</el-breadcrumb>
 					</el-col>
 					<el-col :span="12">
-						<!--<el-button class="defaultbutton" @click="setMode('addline')">发布线路</el-button>-->
-						<el-button class="defaultbutton" @click="setMode('addline')" size="large" type="primary" style="color: #fff;">发布线路</el-button>
+						
+						<el-button class="defaultbutton hasid" id="42a741aa734711e788410242ac120009" @click="setMode('addline')" size="large" type="primary" style="color: #fff;">发布线路</el-button>
 					</el-col>
 				</el-row>
 			</header>
@@ -46,9 +46,9 @@
 						<el-form :inline="true" :model="search" class="demo-form-inline">
 							<el-form-item label="状态">
 								<el-select v-model="search.status" placeholder="状态">
+									<el-option label="全部" value="-1"></el-option>
 									<el-option label="正常" value="1"></el-option>
 									<el-option label="停止" value="0"></el-option>
-									<el-option label="全部" value="-1"></el-option>
 								</el-select>
 							</el-form-item>
 							<el-form-item label="线路名称">
@@ -56,6 +56,7 @@
 							</el-form-item>
 							<el-form-item label="线路类型">
 								<el-select v-model="search.type" placeholder="线路类型">
+									<el-option label="全部" value="0"></el-option>
 									<el-option label="国内" value="1"></el-option>
 									<el-option label="出境" value="2"></el-option>
 									<el-option label="周边" value="3"></el-option>
@@ -63,7 +64,7 @@
 								</el-select>
 							</el-form-item>
 							<el-form-item>
-								<el-button type="primary" @click="getlinelist">搜索</el-button>
+								<el-button type="primary" class="hasid" id="398e1080734711e788410242ac120009"  @click="getlinelist">搜索</el-button>
 							</el-form-item>
 						</el-form>
 					</el-row>
@@ -87,7 +88,8 @@
 					</el-table-column>
 					<el-table-column fixed="right" label="操作" width="110">
 						<template scope="scope">
-							<el-button @click="setMode('lineinfo'),lineinfo(scope)" type="text" size="small">查看</el-button>
+							
+							<el-button @click="setMode('lineinfo')" type="text" size="small">查看</el-button>
 							<a href="javascript:;" class="operation">
 								<el-dropdown>
 									<span class="el-dropdown-link">
@@ -96,14 +98,19 @@
 									<el-dropdown-menu slot="dropdown">
 										<!--<el-dropdown-item > <a href="javascript:;" @click="handleEdit(scope.$index, scope.row)">编辑</a></el-dropdown-item>-->
 										<el-dropdown-item v-if="scope.row.isApprove=true"><span @click="examine(scope)">线路审核</span></el-dropdown-item>
-										<el-dropdown-item><span @click="setMode('editline'),lineinfo(scope)">编辑线路</span></el-dropdown-item>
-										<el-dropdown-item><span @click="settop(scope)">线路置顶</span></el-dropdown-item>
-										<el-dropdown-item><span @click="updatastatus(scope,4)">查看团期</span></el-dropdown-item>
+										<el-dropdown-item class="hasid"  id="4dcba294734711e788410242ac120009"><span @click="setMode('editline'),lineinfo(scope)">编辑线路</span></el-dropdown-item>
+										<el-dropdown-item class="hasid"  id="9079b8af734711e788410242ac120009"><span @click="settop(scope)">线路置顶</span></el-dropdown-item>
+										<el-dropdown-item class="hasid"  id="6e3c1a72734711e788410242ac120009"><span @click="updatastatus(scope,4)">查看团期</span></el-dropdown-item>
 										<el-dropdown-item><span @click="updatastatus(scope,4)">操作日志</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
+								
+								
+								
 							</a>
+							
 						</template>
+					
 					</el-table-column>
 				</el-table>
 
@@ -157,10 +164,11 @@
 </template>
 
 <script>
-	import {linelist,destlist,categoryall,lineapprove,linetop} from '../../../common/js/config';
+	import {linelist,destlist,categoryall,lineapprove,linetop,token} from '../../../common/js/config';
 	import LineInfo from './lineinfo'
 	import AddIine from './addline'
 	import EditInfo from './editline'
+	import {showorhide} from '../../../common/js/showorhid'
 	export default {
 		components: {
 			LineInfo,
@@ -174,7 +182,7 @@
 				scope:{},
 				examinevisiable: false, //线路审核
 				examineform: {
-					token:'',
+					token:token,
 					id:'',
 					approve: '',
 					remark:''
@@ -182,7 +190,7 @@
 				topvisiable:false,//线路置顶
 				modeType: 'linelist',
 				search: {
-					token:'',
+					token:token,
 					pageindex:0,
 					pagesize:15,
 					categoryid:'', //分类id
@@ -198,12 +206,19 @@
 				checkeddest: -2,
 				linelist: [], //线路列表
 				selectid:'',
-				examineid:''
+				examineid:'',
+			
 			}
 		},
 		created(){
 			this.getlinelist()
 			this.getcategoryall()
+		},
+		
+		updated: function () {
+		  this.$nextTick(function () {
+		    showorhide()
+		  })
 		},
 		methods: {
 			//筛选线路分类
@@ -221,7 +236,7 @@
 					listid = list.id
 					this.search.categoryid = list.id
 				}
-			let para = {token:'',categoryid:listid}
+			let para = {token:token,categoryid:listid}
 			destlist(para).then((res) => {
 					this.destinations = res.data.obj
 				})
@@ -229,11 +244,11 @@
 			//获取线路列表
 			getlinelist(){
 				let para = this.search
-				console.log(11)
+				
 				linelist(para).then((res) => {
 					console.log(res)
 					this.linelist = res.data.obj.datas
-					
+					console.log(document.getElementsByClassName('el-dropdown-menu'))
 					for(let i = 0 ; i <res.data.obj.datas.length;i++){
 						let list = res.data.obj.datas
 						if(list[i].approve == 0){
@@ -247,12 +262,13 @@
 						}
 					}
 					this.total = Number(res.data.obj.total)
+					
 //					console.log(para)
 				})
 			},
 			//获取分类列表
 			getcategoryall(){
-				let para= {token:''}
+				let para= {token:token}
 				categoryall(para).then(res =>{
 					this.linesorts = res.data.obj
 				})
@@ -305,7 +321,7 @@
 			comfirmtop(){
 				this.topvisiable = false
 				let para = {
-					token:'',
+					token:token,
 					id:this.selectid,
 					isTop:true
 				}
@@ -341,7 +357,7 @@
 		padding-top: 20px;
 		.defaultbutton {
 			border-color: #9ad4d6;
-			color: #2cb1b6;
+			color: #fff;
 			float: right;
 			margin-top: -10px;
 		}

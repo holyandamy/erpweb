@@ -11,7 +11,7 @@
 						</el-breadcrumb>
 					</el-col>
 					<el-col :span="12">
-						<el-button class="defaultbutton" @click="setMode('addline')" size="large" type="primary" style="color: #fff;">发布模板</el-button>
+						<el-button class="defaultbutton hasid" id="c9494719734711e788410242ac120009" @click="setMode('addline')" size="large" type="primary" style="color: #fff;">发布模板</el-button>
 					</el-col>
 				</el-row>
 			</header>
@@ -24,7 +24,7 @@
 					</span>
 						<el-col :span="20">
 							<ul>
-								<li>全部</li>
+								<li @click="changecondition('-1')" :class="{checked:ischecked == -1}">全部</li>
 								<li v-for="(linesort,index) in linesorts" :class="{checked:ischecked == index}" @click="changecondition(index,linesort)">{{linesort.name}}</li>
 							</ul>
 						</el-col>
@@ -36,7 +36,7 @@
 
 						<el-col :span="20">
 							<ul>
-								<li>全部</li>
+								<li @click="changedest(-1)" :class="{checked:checkeddest == -1}">全部</li>
 								<li v-for="(destination,index) in destinations" :class="{checked:checkeddest == index}" @click="changedest(index,destination)">{{destination.name}}</li>
 							</ul>
 						</el-col>
@@ -58,6 +58,7 @@
 							</el-form-item>
 							<el-form-item label="线路类型">
 								<el-select v-model="search.type" placeholder="线路类型">
+									<el-option label="全部" value="0"></el-option>
 									<el-option label="国内" value="1"></el-option>
 									<el-option label="出境" value="2"></el-option>
 									<el-option label="周边" value="3"></el-option>
@@ -65,7 +66,7 @@
 								</el-select>
 							</el-form-item>
 							<el-form-item>
-								<el-button type="primary" @click="getlinelist">搜索</el-button>
+								<el-button type="primary" @click="getlinelist" class="hasid" id="b6c64c62734711e788410242ac120009">搜索</el-button>
 							</el-form-item>
 						</el-form>
 					</el-row>
@@ -87,8 +88,8 @@
 					
 					<el-table-column fixed="right" label="操作" width="110">
 						<template scope="scope">
-							<el-button @click="setMode('lineinfo'),lineinfo(scope)" type="text" size="small">查看</el-button>
-							<el-button @click="setMode('editline'),lineinfo(scope)" type="text" size="small">编辑</el-button>
+							<el-button class="hasid" id="d245d97b734711e788410242ac120009" @click="setMode('lineinfo'),lineinfo(scope)" type="text" size="small">查看</el-button>
+							<el-button class="hasid" id="ce9c845e734711e788410242ac120009" @click="setMode('editline'),lineinfo(scope)" type="text" size="small">编辑</el-button>
 							
 						</template>
 					</el-table-column>
@@ -112,10 +113,11 @@
 </template>
 
 <script>
-	import {templatelist,destlist,categoryall} from '../../../common/js/config';
+	import {templatelist,destlist,categoryall,token} from '../../../common/js/config';
 	import LineInfo from './lineinfo'
 	import AddIine from './addline'
 	import EditInfo from './editline'
+	import { showorhide } from '../../../common/js/showorhid'
 	export default {
 		components: {
 			LineInfo,
@@ -124,30 +126,32 @@
 		},
 		data() {
 			return {
-				statuses:[{
+				statuses:[
+				{
+					 value: '-1',
+            		label: '全部'
+				},
+				{
 					 value: '1',
             		label: '正常'
 				},
 				{
 					 value: '0',
             		label: '停止'
-				},
-				{
-					 value: '-1',
-            		label: '全部'
-				}],
+				}
+				],
 				total:0,
 				lineid:'',
 				scope:{},
 				examineform: {
-					token:'',
+					token:token,
 					id:'',
 					approve: '',
 					remark:''
 				}, //审核表单
 				modeType: 'linelist',
 				search: {
-					token:'',
+					token:token,
 					pageindex:0,
 					pagesize:15,
 					categoryid:'', //分类id
@@ -170,14 +174,32 @@
 			this.getlinelist()
 			this.getcategoryall()
 		},
+		updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
+		},
 		methods: {
 			//筛选线路分类
 			changecondition(index,list) {
 				this.ischecked = index
-				this.search.categoryid = list.id
-				let para = {token:'',ategoryid:list.id}
-				destlist(para).then((res) => {
+				
+				let listid = '0'
+				if(index == '-1'){
+					
+					listid = '0'
+					this.ischecked = -1
+					this.search.categoryid = ''
+					
+				}else{
+					listid = list.id
+					this.search.categoryid = list.id
+				}
+			let para = {token:token,categoryid:listid}
+			destlist(para).then((res) => {
 					this.destinations = res.data.obj
+				
+					
 				})
 			},
 			//获取线路列表
@@ -192,15 +214,23 @@
 			},
 			//获取分类列表
 			getcategoryall(){
-				let para= {token:''}
+				let para= {token:token}
 				categoryall(para).then(res =>{
 					this.linesorts = res.data.obj
 				})
 			},
 			changedest(index,destination) {
-				this.checkeddest = index
-				this.search.toid = destination.id
+				if(index == -1){
+					this.checkeddest = -1
+					this.search.toid = ''
+				}else{
+					this.checkeddest = index
+					this.search.toid = destination.id
+					console.log(destination.id)
+				}
+				
 			},
+			
 			//查看线路
 			setMode(type) {
 				this.modeType = type

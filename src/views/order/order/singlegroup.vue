@@ -112,37 +112,25 @@
 						<th>餐</th>
 						<th>宿</th>
 					</tr>
-					<tr>
-						<td width="90">2017-08-15</td>
+					<tr v-for="info in detail.lVo.routes">
+						<!--v-for="info in detail.lVo.line.routes"-->
+						<td width="90">{{info.number}}</td>
 						<td>
-							<h3>标题：杭州-曼谷</h3>
-							<span>
-								乘机前往泰国首都、“天使之城”—曼谷，抵达后，送至酒店休息；（如有空闲时间可自由选择 Discovery Thai尊享服务）；
-							</span>
+							<h3>{{info.title}}</h3>
+							<pre>
+								{{info.content}}
+							</pre>
 						</td>
-						<td width="40">早中晚</td>
-						<td width="127">曼谷当地五星酒店MAPLE HOTEL/枫叶酒店；<br />
-							The Twin Tower Hotel/双子星酒店；<br />
-							THE BAZAAR HOTEL/巴萨酒店，<br />
-							Chaophya Park Hotel/昭帕亚公园酒店或同级</td>
-					</tr>
-					<tr>
-						<td width="90">2017-08-15</td>
-						<td>
-							<h3>标题：杭州-曼谷</h3>
-							<span>
-								曼谷-芭提雅：大皇宫、玉佛寺（不少于90分钟）泰迪熊博物馆（不少于60分钟），3D错觉博物馆（不少于60分钟）；东芭乐园（不少于60分钟）骑大象（不少于15分钟）
-【大皇宫】泰国最具标志性的景点，是泰王朝历代君主的居所，是初次来泰游客必去的景点。【玉佛寺】由整块翡翠所雕刻而成的国宝玉佛，每到换季时节，泰国国王都亲自为玉佛更衣，以保国泰民安。【泰迪熊博物馆】是东南亚第一个成立的泰迪熊博物馆，由韩国设计者进行设计，整体风格与济州岛的泰迪熊博物馆十分相似。整个博物馆贯穿“泰迪熊奇妙探索大游玩”的理念，分为11个大区，从史前区到中国区、泰国区，圣诞王国区等，让泰迪熊的粉丝可以在小小世界里畅享欢乐时光。【3D错觉博物馆】发挥创意拍照的地方。博物馆里的3D背景是一些创意立体画，游客们可以在这些背景前摆出各种姿势，拍有趣的错位照片，尝试新鲜事物，这里非常值得一去。【东芭乐园】集泰国各式园林艺术创作精华于一体。内由泰国民俗表演、大象表演和植物园三部分组成。【骑大象】
-							</span>
+						<td width="40">
+							<span v-if="info.isbreakfast">早</span>
+							<span v-if="info.islunch">中</span>
+							<span v-if="info.isdinner">晚</span>
 						</td>
-						<td width="40">早中晚</td>
-						<td width="127">曼谷当地五星酒店MAPLE HOTEL/枫叶酒店；<br />
-							The Twin Tower Hotel/双子星酒店；<br />
-							THE BAZAAR HOTEL/巴萨酒店，<br />
-							Chaophya Park Hotel/昭帕亚公园酒店或同级</td>
+						<td width="127">
+							{{info.hotel}}
+						</td>
 					</tr>
-				</table>
-				<table border="1" cellspacing="" cellpadding="" class="tablebase">
+				</table><table border="1" cellspacing="" cellpadding="" class="tablebase">
 					<tr v-if="!costincludes">
 						<td class="title">费用包含</td>
 						<td><pre>{{detail.lVo.includePkg}}</pre></td>
@@ -214,7 +202,7 @@
 </template>
 
 <script>
-	import { orderexportdetail } from '../../../common/js/config';
+	import { orderexportdetail,token } from '../../../common/js/config';
 	export default{
 		data(){
 			return {
@@ -243,7 +231,7 @@
 			getdetail(){
 				console.log(111)
 				let para = {
-					token:'',
+					token:token,
 					id:this.id
 				}
 				orderexportdetail(para).then((res) =>{

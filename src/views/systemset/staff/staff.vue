@@ -10,7 +10,7 @@
 						</el-breadcrumb>
 					</el-col>
 					<el-col :span="12">
-						<el-button class="defaultbutton" @click="setMode('addstaff')">新增员工</el-button>
+						<el-button class="defaultbutton hasid" id="ac4a023d72bc11e7aad70242ac120006" @click="setMode('addstaff')">新增员工</el-button>
 					</el-col>
 				</el-row>
 			</header>
@@ -31,10 +31,10 @@
 					</el-table-column>
 					<el-table-column label="操作">
 						<template scope="scope">
-							<el-button @click="setMode('editstaff',scope)" type="text" size="small">编辑</el-button>
-							<el-button type="text" size="small" v-show="scope.row.statusname =='禁用'" @click="changestatus(1,scope.row.id)">启用</el-button>
-							<el-button type="text" size="small" v-show="scope.row.statusname =='启用'" class="not" @click="changestatus(0,scope.row.id)">禁用</el-button>
-							<el-button @click.native.prevent="deleteRow(scope.$index, stafflist)" type="text" size="small">
+							<el-button class="hasid" id="b051fd1c72bc11e7aad70242ac120006" @click="setMode('editstaff',scope)" type="text" size="small">编辑</el-button>
+							<el-button type="text" class="hasid" id="b32b330f72bc11e7aad70242ac120006" size="small" v-show="scope.row.statusname =='禁用'" @click="changestatus(1,scope.row.id)">启用</el-button>
+							<el-button type="text" size="small" v-show="scope.row.statusname =='启用'" id="b32b330f72bc11e7aad70242ac120006" class="not hasid" @click="changestatus(0,scope.row.id)">禁用</el-button>
+							<el-button class="hasid" id="ba92a97772bc11e7aad70242ac120006" @click.native.prevent="deleteRow(scope.$index, stafflist)" type="text" size="small">
 								移除
 							</el-button>
 						</template>
@@ -59,7 +59,8 @@
 	import AddStaff from './addstaff'
 	import EditStaff from './editstaff'
 	import axios from 'axios';
-	import { getuserlist, userstatus, userdel } from '../../../common/js/config';
+	import { getuserlist, userstatus, userdel,token } from '../../../common/js/config';
+	import { showorhide } from '../../../common/js/showorhid'
 	export default {
 		components: {
 			AddStaff, //添加用户
@@ -82,7 +83,7 @@
 				showFormVisible: false,
 				isenable: false,
 				pageset: {
-					token: '',
+					token: token,
 					pageIndex: '',
 					pageSize: ''
 				},
@@ -100,13 +101,18 @@
 				},
 				updatestatus: {
 					status: false,
-					token: '',
+					token: token,
 					id: ''
 				}
 			}
 		},
 		created() {
 			this.getlist()
+		},
+		updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
 		},
 		methods: {
 			setMode(type, scope) {
@@ -150,7 +156,7 @@
 			//删除
 			deleteRow(index, rows) {
 				let para = {
-					token: '',
+					token: token,
 					id: rows[index].id
 				}
 				userdel(para).then((res) => {

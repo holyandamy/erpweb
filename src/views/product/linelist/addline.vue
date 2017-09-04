@@ -148,9 +148,9 @@
 							<el-form-item label="集合地点" prop="station">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-
+							
 							<ImgLoad @geturl = "geturl" :checktop="checktop" ></ImgLoad>
-
+							
 
 						</el-col>
 					</el-row>
@@ -247,7 +247,7 @@
 
 						</li>
 					</ul>
-
+				
 				</div>
 				<h2 class="d_jump">备注说明</h2>
 				<div class="baseinfo">
@@ -337,7 +337,7 @@
 <script>
 	import axios from 'axios';
 	import UE from '../../common/ue.vue';
-	import { linesave, province, city, district, categoryall, linecategorytype, templatelist, templatdetail } from '../../../common/js/config';
+	import { linesave, province, city, district, categoryall, linecategorytype, templatelist, templatdetail,token} from '../../../common/js/config';
 	import { imgupload } from '../../../common/js/upload'
 	import ImgLoad from './upload'
 	export default {
@@ -354,7 +354,7 @@
 				templatelists: [],
 				//模板列表请求参数
 				addtemplateform: {
-					token: '',
+					token: token,
 					pageindex: 0,
 					pagesize: 889888,
 					categoryid: '',
@@ -415,7 +415,7 @@
 				fileList: [],
 				customtext: '', //自定义文本内容
 				baseForm: {
-					token: '',
+					token: token,
 					categoryid: '',
 					categorytype: '',
 					name: '',
@@ -514,8 +514,8 @@
 				uploadform: {},
 				authorization: '',
 				checktop:true
-
-
+				
+				
 			}
 		},
 		mounted: function() {
@@ -574,7 +574,7 @@
 			//选择分类
 			checkline() {
 				let para = {
-					token: '',
+					token: token,
 					type: this.baseForm.categorytype
 				}
 				linecategorytype(para).then((res) => {
@@ -583,7 +583,7 @@
 			},
 			checklinetem() {
 				let para = {
-					token: '',
+					token: token,
 					type: this.categorytypetem
 				}
 				linecategorytype(para).then((res) => {
@@ -602,12 +602,12 @@
 			},
 			//保存表单
 			submitForm(formName) {
-
+				
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.baseForm
 						let html = this.$refs.ue.getUEContent()
-
+						
 						let categorytype = para.categorytype
 						switch(categorytype) {
 							case "全部":
@@ -676,7 +676,7 @@
 						}
 						console.log(para)
 						linesave(para).then((res) => {
-
+						
 							if(res.data.error == 1) {
 
 								this.$message({
@@ -705,7 +705,7 @@
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
 			},
-
+			
 			//天数减少
 			minuday() {
 				let index = this.baseForm.length
@@ -741,7 +741,7 @@
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
 					id: count,
-					token: ''
+					token: token
 				}
 				province(para).then((res) => {
 					this.province = res.data.obj
@@ -816,7 +816,7 @@
 			confirmtemplate() {
 				this.templatevisiable = false
 				let para = {
-					token: '',
+					token: token,
 					id: this.templateselectid
 				}
 				templatdetail(para).then((res) => {
@@ -914,7 +914,7 @@
 			}
 		}
 	}
-
+	
 	section {
 		margin-top: 60px;
 		padding: 0 30px;
@@ -990,11 +990,11 @@
 			}
 		}
 	}
-
+	
 	.linetype li:last-child {
 		border-right: 0!important;
 	}
-
+	
 	.file {
 		position: relative;
 		display: inline-block;
@@ -1012,8 +1012,8 @@
 		float: left;
 		margin-top: 5px;
 	}
-
-
+	
+	
 	.el-upload-list__item-actions{
 		display: none;
 	}

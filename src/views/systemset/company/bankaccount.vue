@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div style="width: 100%;">
 		<section class="padding30">
 			<el-table :data="banklist" style="text-align: left; font-size: 12px;">
 				<el-table-column prop="bankName" label="开户行">
@@ -12,10 +12,13 @@
 				</el-table-column>
 				<el-table-column label="操作">
 					<template scope="scope">
-						<el-button @click="handleShow(scope.$index, scope.row)" type="text" size="small">编辑</el-button>
-						<el-button type="text" size="small" v-show="scope.row.status=='禁用'" @click="changestatus(1,scope.row.id)">启用</el-button>
-						<el-button type="text" size="small" v-show="scope.row.status=='启用'" class="not" @click="changestatus(0,scope.row.id)">禁用</el-button>
+						<el-button @click="handleShow(scope.$index, scope.row)" class="hasid" id="626f8c1472bb11e7aad70242ac120006" type="text" size="small">编辑</el-button>
+						<span class="hasid" id="8bcbe83a72bb11e7aad70242ac120006">
+							<el-button type="text" size="small" v-show="scope.row.status=='禁用'" style="margin-left:10px ;" @click="changestatus(1,scope.row.id)">启用</el-button>
+							<el-button type="text" size="small" v-show="scope.row.status=='启用'" class="not" @click="changestatus(0,scope.row.id)">禁用</el-button>
+						</span>
 					</template>
+
 				</el-table-column>
 			</el-table>
 			<div class="page">
@@ -77,8 +80,8 @@
 </template>
 
 <script>
-	import axios from 'axios';
-	import { getbanklist,addbank,updatebank,updatestatus } from '../../../common/js/config';
+	import { getbanklist, addbank, updatebank, updatestatus, token } from '../../../common/js/config';
+	import { showorhide } from '../../../common/js/showorhid'
 	export default {
 		data() {
 			return {
@@ -108,7 +111,7 @@
 				},
 				updatestatus: {
 					isEnable: '',
-					token: '',
+					token: token,
 					id: ''
 				},
 				bankrules: {
@@ -158,7 +161,13 @@
 			}
 		},
 		created() {
-			this.getlist()
+			this.getlist();
+
+		},
+		updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
 		},
 		methods: {
 			getlist() {
@@ -169,7 +178,7 @@
 				getbanklist(page).then((res) => {
 					this.banklist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
-					console.log(res)
+
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
