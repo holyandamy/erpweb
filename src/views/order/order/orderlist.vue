@@ -15,7 +15,7 @@
 				</el-row>
 			</header>
 
-			<el-form :inline="true" :model="orderinfo" class="demo-form-inline" style="text-align: left; padding-left: 30px;">
+			<el-form :inline="true" :model="orderinfo" class="demo-form-inline hasid" style="text-align: left; padding-left: 30px;" id="bc6051cd735911e788410242ac120009">
 				<el-row>
 					<el-col :span="18">
 
@@ -147,9 +147,10 @@
 			}
 		},
 		created(){
-			this.getList()
+			showorhide()
 		},
 		updated: function() {
+			
 			this.$nextTick(function() {
 				showorhide()
 			})
@@ -173,11 +174,9 @@
 				let page = this.orderinfo
 				page.date = dates
 				orderlist(page).then((res) => {
-					console.log(res)
+					console.log(page,res)
 					this.orderLists = res.data.obj.datas
-									
-									
-					//					this.total = Number(res.data.obj.total)
+					this.total = Number(res.data.obj.total)
 				})
 			},
 			handleCurrentChange(val) {
@@ -329,4 +328,5 @@
 			}
 		}
 	}
+	.demo-form-inline{float: left; text-align: left; padding-left: 30px;}
 </style>

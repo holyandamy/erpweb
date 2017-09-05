@@ -59,7 +59,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							应收金额：{{detail.orderpay}} <el-button style="margin-left: 50px;">调整价格</el-button>
+							应收金额：{{detail.orderpay}} <el-button style="margin-left: 50px;" @click="editprice = true">调整价格</el-button>
 						</el-col>
 						<el-col :span="12" class="pl-20">
 							客户类型：{{detail.custtypename}}
@@ -323,13 +323,34 @@
     <el-button type="primary" @click="confirmvisitor">确 定</el-button>
   </span>
 		</el-dialog>
-
+		<el-dialog
+  title="调整价格"
+  :visible.sync="editprice"
+  size="tiny"
+  >
+<el-form ref="form" :model="editpriceform" label-width="80px">
+	<el-form-item label="当前价格">
+   <span style="float: left;"> <b>{{detail.orderpay}}</b></span>
+  </el-form-item>
+  <el-form-item label="需调价为">
+    <el-input v-model="editpriceform.money"></el-input>
+  </el-form-item>
+  <el-form-item label="备注">
+    <el-input type="textarea" v-model="editpriceform.remark"></el-input>
+  </el-form-item>
+ 
+</el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="editprice = false">取 消</el-button>
+    <el-button type="primary" @click="confirmprice">确 定</el-button>
+  </span>
+</el-dialog>
 	</div>
 </template>
 <script>
 	import util from '../../../common/js/util'
 	import { showorhide } from '../../../common/js/showorhid'
-	import { orderdetail, banlist, collectsave, orderupdate, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave,token} from '../../../common/js/config';
+	import { orderdetail, banlist, collectsave, orderupdate,orderpay, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave,token} from '../../../common/js/config';
 	export default {
 		props: ['listid'],
 		data() {
@@ -337,6 +358,13 @@
 				more: '更多',
 				addcollection: false, //新增收款
 				confirmnamelist: false,
+				editprice:false,
+				editpriceform:{
+					id:'',
+					money:'',
+					remark:'',
+					token:token
+				},
 				detail: {
 					namelist: []
 				},
@@ -429,6 +457,26 @@
 			//返回列表
 			handleHide: function() {
 				this.$emit('setMode', 'orderlistmodel');
+			},
+			confirmprice(){
+				let para = this.editpriceform
+				para.id = this.detail.id
+				orderpay(para).then((res) =>{
+					console.log(res)
+					if(res.data.error == 1){
+						 this.$message.error(res.data.message);
+					}else{
+						 this.$message({
+				          message: '调价成功',
+				          type: 'success'
+				        });
+				        this.editprice = false
+						this.editpriceform.money = ""
+						this.editpriceform.remark = ""
+						this.getdetail()
+					}
+					
+				})
 			},
 			//天数减少
 			minuday(type) {
@@ -853,4 +901,5 @@
 			}
 		}
 	}
+	
 </style>

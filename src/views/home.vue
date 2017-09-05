@@ -96,6 +96,7 @@ export default {
 			tokenlogin(para).then((res) =>{
 				this.userinfo =res.data.obj.username
 				this.menu = res.data.obj.menu
+				console.log(res.data.obj)
 			})
 		
 			
@@ -158,7 +159,9 @@ float: left;
 					display: inline-block;
 					border-radius: 90%;
 					margin-bottom: 10px;
-					
+					img{width: 80px;
+						height: 80px;
+					}
 					}
 				.el-dropdown-link{
 					color: #fff;
@@ -203,6 +206,21 @@ float: left;
 			
 		}
 		
+	}
+	.el-submenu{position: relative;}
+	.el-submenu:after{
+		content: '';
+		position: absolute;
+		width: 5px;
+		height: 5px;
+		background: #fff;
+		top: 25px;
+		left: 40px;
+		opacity: .7;
+		transform: rotate(50deg);
+	}
+	.is-active:after{
+		opacity: 1;
 	}
 
 </style>

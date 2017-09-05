@@ -170,6 +170,7 @@
 		},
 		mounted: function() {
 			this.getlineinfo()
+			console.log(this.lineid)
 		},
 		methods: {
 			getlineinfo(){
@@ -179,14 +180,14 @@
 				}
 				linedetail(para).then((res) => {
 					this.detail = res.data.obj
+					console.log(para,res.data.obj,'111')
 					this.toplist = this.detail.images.split(',')
 					
 					for(let i = 0 ; i <this.detail.routes.length;i++){
 						let arr = []
 						arr = res.data.obj.routes[i].titleimages.split(',')
-						console.log(arr)
 						this.detail.routes[i].titleimages = arr
-						console.log(this.detail.routes[i].titleimages)
+						
 					}
 					
 					if(this.detail.edittype == 0 ){

@@ -88,8 +88,7 @@
 					</el-table-column>
 					<el-table-column fixed="right" label="操作" width="110">
 						<template scope="scope">
-							
-							<el-button @click="setMode('lineinfo')" type="text" size="small">查看</el-button>
+							<el-button @click="setMode('lineinfo'),lineinfo(scope)"  type="text" size="small">查看</el-button>
 							<a href="javascript:;" class="operation">
 								<el-dropdown>
 									<span class="el-dropdown-link">
@@ -246,9 +245,7 @@
 				let para = this.search
 				
 				linelist(para).then((res) => {
-					console.log(res)
 					this.linelist = res.data.obj.datas
-					console.log(document.getElementsByClassName('el-dropdown-menu'))
 					for(let i = 0 ; i <res.data.obj.datas.length;i++){
 						let list = res.data.obj.datas
 						if(list[i].approve == 0){
@@ -290,6 +287,7 @@
 			lineinfo(scope){
 				this.lineid = scope.row.id
 				this.scope = scope.row
+				console.log(scope,111)
 			},
 			//线路审核
 			examine(scope) {
