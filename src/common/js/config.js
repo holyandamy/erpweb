@@ -1,11 +1,23 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 let base = 'http://api.erp.we2tu.com/api';
-export let token='1111'
+
+export let token = ""
+if(sessionStorage.getItem('token')){
+	token = sessionStorage.getItem('token')
+}
+if(Cookies.get('token')){
+	token = Cookies.get('token')
+}
+
+
 export let bases = "http://172.17.9.13:3001/"
 export const setToken=value=>{ token= value };
 
+//////////0
 /* 首页 */
 export const dashboard = params => { return axios.post(`${base}/sys/dashboard/info`, params).then(res => res); };//首页信息
+export const tokenlogin = params => { return axios.post(`${base}/sys/user/token/login`, params).then(res => res); };
 //登陆接口
 export const login = params => { return axios.post(`${base}/sys/user/login`, params).then(res => res); };
 /* 收款 */
@@ -21,14 +33,6 @@ export const paysave = params => { return axios.post(`${base}/finance/pay/save`,
 
 /* 发团列表 */
 export const teamlist = params => { return axios.post(`${base}/line/team/list`, params).then(res => res); };//发团列表
-export const grouplist = params => { return axios.post(`${base}/line/team/list`, params).then(res => res); };//模板列表
-export const reserveNum = params => { return axios.post(`${base}/sys/user/match`, params).then(res => res); };//预定输入手机号或公司名
-export const groupsave = params => { return axios.post(`${base}/line/team/save`, params).then(res => res); };//新增发团计划
-export const orderSave = params => { return axios.post(`${base}/order/save`, params).then(res => res); };//发团 预定
-
-
-
-
 
 /*产品分类*/
 export const linecategorylist = params => { return axios.post(`${base}/line/category/list`, params); };//获取线路管理
@@ -125,4 +129,3 @@ export const opensave = params => { return axios.post(`${base}/sys/open/save`, p
 
 /* 操作日志*/
 export const loglist = params => { return axios.post(`${base}/sys/log/list`, params).then(res => res); };//获取员工详情
-export const orderdet = params => { return axios.post(`${base}/line/team/order/detail`, params).then(res => res); }//发团 下单详情  TODO

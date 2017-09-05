@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<header>
-			欢迎回来！ {{userinfos.username}}
+			欢迎回来！ {{userinfo}}
 		</header>
 		<div class="main">
 			<h2>
@@ -41,66 +41,82 @@
 			</h2>
 		</div>
 		<div class="padding30">
-		
-				<el-table :data="loglist" style="width: 100%; text-align: left;">
-					<el-table-column prop="operator" label="操作人">
-					</el-table-column>
-					<el-table-column prop="mod" label="操作模块">
-					</el-table-column>
-					<el-table-column prop="content" label="操作内容">
-					</el-table-column>
-					<el-table-column prop="createdAt" label="操作日期">
-					</el-table-column>
-				</el-table>
-				<div class="page" style="margin-top: 40px;">
-					<el-pagination  @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pagesize" layout="total, prev, pager, next" :total="total">
-					</el-pagination>
 
-				</div>
+			<el-table :data="loglist" style="width: 100%; text-align: left;">
+				<el-table-column prop="operator" label="操作人">
+				</el-table-column>
+				<el-table-column prop="mod" label="操作模块">
+				</el-table-column>
+				<el-table-column prop="content" label="操作内容">
+				</el-table-column>
+				<el-table-column prop="createdAt" label="操作日期">
+				</el-table-column>
+			</el-table>
+			<div class="page" style="margin-top: 40px;">
+				<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pagesize" layout="total, prev, pager, next" :total="total">
+				</el-pagination>
+
+			</div>
 
 		</div>
 	</section>
 </template>
 
 <script>
-	import { dashboard,loglist,token } from '../common/js/config';
+	import Cookies from 'js-cookie';
+	import { dashboard, loglist, token, tokenlogin } from '../common/js/config';
 	export default {
-		data(){
+		data() {
 			return {
-				lists:[],
-				loglist:[],
-				pagesize:10,
-				total:0,
-				currentPage:0,
-				userinfo:'',
-				userinfos:{}
+				lists: [],
+				loglist: [],
+				pagesize: 10,
+				total: 0,
+				currentPage: 0,
+				userinfo: '',
+				userinfos: {}
 			}
 		},
-		created(){
+		created() {
 			this.getinfo()
 			this.getloglist()
 			this.getuserinfo()
 		},
-		methods:{
-			getinfo(){
-				let para = {token:token}
-				dashboard(para).then((res) =>{
+		methods: {
+			getinfo() {
+				let para = {
+					token: token
+				}
+				dashboard(para).then((res) => {
 					this.lists = res.data.obj
 				})
 			},
-			getuserinfo(){
-		  		let name = localStorage.getItem('info')
-				this.userinfos = JSON.parse(name)
-					
-		    	},
-			getloglist(){
+			getuserinfo() {
+				let token = Cookies.get('token')
+				let tokensession = sessionStorage.getItem('token')
+				let para ={}
+				if(tokensession) {
+					 para = {
+						token: tokensession
+					}
+				} else {
+					 para = {
+						token: token
+					}
+				}
+				tokenlogin(para).then((res) => {
+					this.userinfo = res.data.obj.username
+					this.menu = res.data.obj.menu
+				})
+			},
+			getloglist() {
 				let page = {
 					token: token,
 					moudle: '',
 					date: '',
 					type: '',
-					operator:'' ,
-					pageindex:this.currentPage,
+					operator: '',
+					pageindex: this.currentPage,
 					pagesize: 10
 				}
 				loglist(page).then((res) => {
@@ -115,51 +131,53 @@
 	}
 </script>
 <style scoped lang="scss">
-header{
-	padding: 20px 40px;
-	background: white;
-	font-size: 16px;
-	text-align: left;
-}
-.main{
-	padding: 0 40px;
-	h2{
-		color: #2cb1b6;
-		font-size: 24px;
-		line-height: 60px;
-		margin-top: 20px;
+	header {
+		padding: 20px 40px;
+		background: white;
+		font-size: 16px;
 		text-align: left;
 	}
-	.list{
-		li{
-			float: left;
-			width: 15%;
-			margin-right: 1%;
-			background: white;
-			height: 68px;
-			border: 1px solid #fff;
-			padding-top: 20px;
-			line-height: 25px;
-			h3{
-				color: #2cb1b6;
-				font-size: 24px;
-			}
-			p{
-				font-size: 14px;
-				color: #999;
+	
+	.main {
+		padding: 0 40px;
+		h2 {
+			color: #2cb1b6;
+			font-size: 24px;
+			line-height: 60px;
+			margin-top: 20px;
+			text-align: left;
+		}
+		.list {
+			li {
+				float: left;
+				width: 15%;
+				margin-right: 1%;
+				background: white;
+				height: 68px;
+				border: 1px solid #fff;
+				padding-top: 20px;
+				line-height: 25px;
+				h3 {
+					color: #2cb1b6;
+					font-size: 24px;
+				}
+				p {
+					font-size: 14px;
+					color: #999;
+				}
 			}
 		}
-		
 	}
 	
-}
-.clearfix{
-	clear: both;
-}
-.list li:hover{
-			border: 1px solid #2cb1b6;
-		}
-.padding30{
-		padding:0 30px
+	.clearfix {
+		clear: both;
+	}
+	
+	.list li:hover {
+		border: 1px solid #2cb1b6;
+	}
+	
+	.padding30 {
+		padding: 0 30px
 	}
 </style>
