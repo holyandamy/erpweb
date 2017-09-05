@@ -1,7 +1,7 @@
 <template>
   <div>
     <header>
-      <h3 style='text-align: left;font-weight: bold;'>下单 >> 预定</h3>
+      <h3 style='text-align: left;font-weight: bold;'>下单 >> {{{1:'占位',2:'预定'}[operationType.type]}}</h3>
     </header>
     <section>
       <h2 class="d_jump"  @click="handleHide()"></h2>
