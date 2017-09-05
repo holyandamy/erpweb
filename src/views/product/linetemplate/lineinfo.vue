@@ -113,7 +113,7 @@
 </template>
 
 <script>
-	import {templatdetail} from '../../../common/js/config';
+	import {templatdetail,token} from '../../../common/js/config';
 	export default {
 		props:['lineid'],
 		data() {
@@ -130,7 +130,7 @@
 		methods: {
 			getlineinfo(){
 				let para = {
-					token:'',
+					token:token,
 					id:this.lineid
 				}
 				templatdetail(para).then((res) => {

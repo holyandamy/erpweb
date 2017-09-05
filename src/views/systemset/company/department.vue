@@ -15,11 +15,11 @@
 						<li>
 							<div class="name">{{one.name}}</div>
 							<div class="presonnum">{{one.total}}</div>
-							<div class="add" @click="addone(one)"><i class="el-icon-plus"></i></div>
+							<div class="add hasid" id="df01417372bb11e7aad70242ac120006" @click="addone(one)"><i class="el-icon-plus"></i></div>
 							<div>
 								<el-col :span="5">
-									<el-button type="text" @click="edit(one)">编辑</el-button>
-									<el-button type="text" @click="deletechild(index,one)">删除</el-button>
+									<el-button type="text" class="hasid" id="d85b361b72bb11e7aad70242ac120006" @click="edit(one)">编辑</el-button>
+									<el-button type="text" class="hasid" id="db72ae8872bb11e7aad70242ac120006"  @click="deletechild(index,one)">删除</el-button>
 								</el-col>
 							</div>
 						</li>
@@ -30,11 +30,11 @@
 							<li>
 								<div class="name">{{two.name}}</div>
 								<div class="presonnum">{{two.total}}</div>
-								<div class="add" @click="addone(two)"><i class="el-icon-plus"></i></div>
+								<div class="add hasid" id="df01417372bb11e7aad70242ac120006" @click="addone(two)"><i class="el-icon-plus"></i></div>
 								<div>
 									<el-col :span="5">
-										<el-button type="text" @click="edit(two)">编辑</el-button>
-										<el-button type="text" @click="deletechild(index,two)">删除</el-button>
+										<el-button type="text" class="hasid" id="d85b361b72bb11e7aad70242ac120006" @click="edit(two)">编辑</el-button>
+										<el-button type="text" class="hasid" id="db72ae8872bb11e7aad70242ac120006"  @click="deletechild(index,two)">删除</el-button>
 									</el-col>
 								</div>
 							</li>
@@ -44,11 +44,11 @@
 								<li>
 									<div class="name">{{three.name}}</div>
 									<div class="presonnum">{{three.total}}</div>
-									<div class="add" @click="addone(three)"><i class="el-icon-plus"></i></div>
+									<div class="add hasid" id="df01417372bb11e7aad70242ac120006" @click="addone(three)"><i class="el-icon-plus"></i></div>
 									<div>
 										<el-col :span="5">
-											<el-button type="text" @click="edit(three)">编辑</el-button>
-											<el-button type="text" @click="deletechild(index,three)">删除</el-button>
+											<el-button type="text" class="hasid" id="d85b361b72bb11e7aad70242ac120006" @click="edit(three)">编辑</el-button>
+											<el-button type="text" class="hasid" id="db72ae8872bb11e7aad70242ac120006"  @click="deletechild(index,three)">删除</el-button>
 										</el-col>
 									</div>
 								</li>
@@ -61,8 +61,8 @@
 										<div class="add">&nbsp;</div>
 										<div>
 											<el-col :span="5">
-												<el-button type="text" @click="edit(four)">编辑</el-button>
-												<el-button type="text" @click="deletechild(index,four)">删除</el-button>
+												<el-button type="text" class="hasid" id="d85b361b72bb11e7aad70242ac120006" @click="edit(four)">编辑</el-button>
+												<el-button type="text" class="hasid" id="db72ae8872bb11e7aad70242ac120006" @click="deletechild(index,four)">删除</el-button>
 											</el-col>
 										</div>
 									</li>
@@ -130,7 +130,8 @@
 
 <script>
 	import axios from 'axios';
-	import { getdeplist,adddep,deldep,editdep } from '../../../common/js/config';
+	import { getdeplist,adddep,deldep,editdep,token } from '../../../common/js/config';
+	import { showorhide } from '../../../common/js/showorhid'
 	export default {
 		data() {
 			return {
@@ -146,19 +147,19 @@
 				editpartment: false, //编辑
 				listLoading: false,
 				adddatas: {
-					token: '',
+					token: token,
 					name: '',
 					path: '',
 					parentid: ''
 				},
 				subordinates: {
-					token: '',
+					token:token,
 					name: '',
 					path: '',
 					parentid: ''
 				},
 				editpartmentmodel: {
-					token: '',
+					token: token,
 					name: '',
 					id: ''
 				}
@@ -167,12 +168,18 @@
 		created() {
 			this.getuser()
 		},
+		updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
+		},
 		methods: {
 			getuser() {
 				let para = {
-					token: ''
+					token: token
 				}
 				getdeplist(para).then((res) => {
+					console.log(res)
 					this.firstchilds = res.data.obj
 				}).catch((res) => {
 
@@ -223,7 +230,7 @@
 			//删除部门
 			deletechild(index, data) {
 				let para = {
-					token: '',
+					token:token,
 					id: data.id
 				}
 				deldep(para).then((res) => {

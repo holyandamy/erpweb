@@ -165,7 +165,7 @@
 	import axios from 'axios';
 	import md5 from 'js-md5';
 	import util from '../../../common/js/util'
-	import { usersave, getdeplist, rolelist } from '../../../common/js/config';
+	import { usersave, getdeplist, rolelist,token} from '../../../common/js/config';
 	export default {
 		data() {
 			//验证手机号码
@@ -204,7 +204,7 @@
 			};
 			return {
 				addstaff: {
-					token: '',
+					token: token,
 					username: '',
 					code: '',
 					password: '',
@@ -296,7 +296,7 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = {
-							token: '',
+							token: token,
 							username: this.addstaff.username,
 							code: this.addstaff.code,
 							password: '',
@@ -350,7 +350,7 @@
 			//获取部门
 			getdepartment() {
 				let para = {
-					token: ''
+					token: token
 				}
 				getdeplist(para).then((data) => {
 					this.departments = data.data.obj
@@ -376,7 +376,7 @@
 			//获取角色
 			getrole() {
 				let para = {
-					token: '',
+					token: token,
 					pageIndex: 0,
 					pageSize: '30'
 				}

@@ -88,9 +88,9 @@
 							<li style="width: 10%;">{{list.status}}</li>
 							<li style="width: 10%;" class="button">
 								<el-button type="text" style="margin-left: 10px;">确认名单</el-button>
-								<el-button type="text"><router-link to="/singlegroup">出团单</router-link></el-button>
-								<el-button type="text"><router-link :to="{path:'/singlegroup',query: {id: list.id}}">行程单</router-link></el-button>
-							    <el-button type="text"><router-link :to="{path:'/confirm',query: {id: list.id}}">确认单</router-link></el-button>
+								<el-button type="text" class="hasid" id="83b7ed61735d11e788410242ac120009"><router-link to="/singlegroup">出团单</router-link></el-button>
+								<el-button type="text" class="hasid" id="7db5db31735d11e788410242ac120009"><router-link :to="{path:'/singlegroup',query: {id: list.id}}">行程单</router-link></el-button>
+							    <el-button type="text" class="hasid" id="80c08aca735d11e788410242ac120009"><router-link :to="{path:'/confirm',query: {id: list.id}}">确认单</router-link></el-button>
 								<el-button type="text" @click="setMode('orderinfo'),passinfo(list)">查看</el-button>
 							</li>
 						</ul>
@@ -107,8 +107,9 @@
 
 <script>
 	import axios from 'axios';
-	import { orderlist } from '../../../common/js/config';
+	import { orderlist,token } from '../../../common/js/config';
 	import OrderInfo from './orderinfo'
+	import { showorhide } from '../../../common/js/showorhid'
 	export default {
 		components:{
 			OrderInfo
@@ -123,7 +124,7 @@
 					status: '',
 					source: '',
 					hide: false,
-					token: ''
+					token: token
 
 				},
 				orderLists: [],
@@ -147,6 +148,11 @@
 		},
 		created(){
 			this.getList()
+		},
+		updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
 		},
 		methods: {
 			setMode(type){

@@ -181,7 +181,7 @@
 <script>
 	import axios from 'axios';
 	import util from '../../../common/js/util'
-	import { editusersave, getdeplist, rolelist,userdetail,userpwd } from '../../../common/js/config'
+	import { editusersave, getdeplist, rolelist,userdetail,userpwd,token } from '../../../common/js/config'
 	
 	import md5 from 'js-md5';
 	export default {
@@ -223,7 +223,7 @@
 			return {
 				finddep:false,
 				addstaff: {
-					token: '',
+					token: token,
 					username: '',
 					realname: '',
 					mobile: '',
@@ -316,7 +316,7 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = {
-							token: '',
+							token: token,
 							username: this.addstaff.username,
 							code: this.addstaff.code,
 							realname: this.addstaff.realname,
@@ -370,7 +370,7 @@
 			//获取部门
 			getdepartment() {
 				let para = {
-					token: ''
+					token: token
 				}
 				getdeplist(para).then((data) => {
 					this.departments = data.data.obj
@@ -395,7 +395,7 @@
 			findrole(){
 				this.finddepartment = true
 					let para = {
-						token: '',
+						token: token,
 						pageIndex: 0,
 						pageSize: 10
 					}
@@ -406,7 +406,7 @@
 					},//传值
 			getinfo() {
 				let para = {
-					token: '',
+					token: token,
 					id: this.edituser.row.id
 				}
 				userdetail(para).then((res) => {
@@ -420,7 +420,7 @@
 
 				}).then(()=>{
 					let para = {
-						token: '',
+						token:token,
 						pageIndex: 0,
 						pageSize: 10
 					}
@@ -451,7 +451,7 @@
 					if(valid) {
 						let para ={
 							pwd:this.resetpassword.pass,
-							token:'',
+							token:token,
 							id:this.addstaff.id
 						}
 						para.pwd = md5(this.resetpassword.pass)

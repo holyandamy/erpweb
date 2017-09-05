@@ -4,11 +4,11 @@
 			<el-row>
 				<el-col :span="12">
 					<el-menu class="el-menu-demo" :default-active="activeIndex" mode="horizontal" style="background: #fff;">
-						<el-menu-item index="1">
-							<a @click="setmode('depart')">部门管理</a>
+						<el-menu-item index="1"  class="hasid"  id="d018149d72ba11e7aad70242ac120006">
+							<a @click="setmode('depart')" >部门管理</a>
 						</el-menu-item>
-						<el-menu-item index="2">
-							<a @click="setmode('bank')">银行账号设置</a>
+						<el-menu-item index="2" class="hasid"  id="a6c286e072ba11e7aad70242ac120006">
+							<a @click="setmode('bank')" >银行账号设置</a>
 						</el-menu-item>
 						<el-menu-item index="3">
 							<a @click="setmode('company')">公司信息设置</a>
@@ -16,17 +16,18 @@
 					</el-menu>
 				</el-col>
 				<el-col :span="12" style="text-align: right;">
-					<el-button class="defaultbutton" v-if="modeType == 'depart'" @click="addpartment">新增部门</el-button>
-					<el-button class="defaultbutton" v-else-if="modeType == 'bank'" @click="addbank">新增银行账户</el-button>
+					<el-button class="defaultbutton hasid" id="d4b9cb5372bb11e7aad70242ac120006" v-if="modeType == 'depart'" @click="addpartment">新增部门</el-button>
+					<el-button class="defaultbutton hasid" id="54e8373572bb11e7aad70242ac120006" v-else-if="modeType == 'bank'" @click="addbank">新增银行账户</el-button>
 				</el-col>
 			</el-row>
 		</header>
-		<!--部门管理-->
-		<DepartMent v-if="modeType == 'depart'" ref="Addpartment"></DepartMent>
-		<!--银行账号设置-->
-		<BankAccount v-else-if="modeType == 'bank'" ref="BankAccount"></BankAccount>
+		
 		<!--公司信息设置-->
-		<CompanySet v-else-if="modeType == 'company'"></CompanySet>
+		<CompanySet v-if="modeType == 'company'"></CompanySet>
+		<!--部门管理-->
+		<DepartMent  v-else-if="modeType == 'depart'" ref="Addpartment"></DepartMent>
+		<!--银行账号设置-->
+		<BankAccount  v-else-if="modeType == 'bank'" ref="BankAccount"></BankAccount>
 	</section>
 </template>
 
@@ -34,6 +35,7 @@
 	import DepartMent from './department'
 	import BankAccount from './bankaccount'
 	import CompanySet from './companyset'
+	import {showorhide} from '../../../common/js/showorhid'
 	export default {
 		components: {
 			DepartMent,
@@ -42,13 +44,19 @@
 		},
 		data() {
 			return {
-				modeType: 'depart',
-				activeIndex: '1',
+				modeType: 'company',
+				activeIndex: '3',
 			}
+		},
+		updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
 		},
 		methods: {
 			setmode(type) {
 				this.modeType = type
+				
 			},
 			//新增银行账户
 			addbank() {

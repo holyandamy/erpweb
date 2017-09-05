@@ -79,7 +79,7 @@
       }
     },
     created: function () {
-    	let para={token}
+    	let para={token:token}
       authlist(para).then((res) => {
         if(res.data.error){
           this.$message.error(res.data.massage);
@@ -92,7 +92,7 @@
           if( this.$parent.operationType.type=='edit'){
             this.optionName="编辑角色"
             let data={
-                token,
+                token:token,
                 id:this.$parent.operationType.id,
             }
            roledetail(data).then((res) => {

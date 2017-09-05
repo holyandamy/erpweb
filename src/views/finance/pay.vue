@@ -2,7 +2,7 @@
 	<section>
 		<div v-if="showedit == 'pay'">
 			<header>
-				<el-button type="primary" @click="setMode('payedit')">付款登记</el-button>
+				<el-button type="primary" @click="setMode('payedit')" class="hasid" id="fd05293f72b911e7aad70242ac120006">付款登记</el-button>
 				</el-button>
 				<el-button :plain="true" type="info">导出Excel</el-button>
 			</header>
@@ -38,7 +38,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="onSubmit">查询</el-button>
+						<el-button type="primary" @click="onSubmit" class="hasid" id="e1adf55a72b911e7aad70242ac120006">查询</el-button>
 					</el-form-item>
 				</el-form>
 
@@ -75,10 +75,10 @@
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
 									<el-dropdown-menu slot="dropdown">
-										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
+										<el-dropdown-item class="hasid" id="1246dc8c72ba11e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
 										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
-										<el-dropdown-item v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
-										<el-dropdown-item v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">不核销</span></el-dropdown-item>
+										<el-dropdown-item class="hasid" id="31ce8b2b72ba11e7aad70242ac120006"  v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
+										<el-dropdown-item class="hasid" id="40da0a9772ba11e7aad70242ac120006"  v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">不核销</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 							</a>
@@ -140,7 +140,8 @@
 	import axios from 'axios';
 	import util from '../../common/js/util'
 	import PayEdit from './payedit'
-	import { getpaylist, getpayedit } from '../../common/js/config';
+	import { getpaylist, getpayedit,token} from '../../common/js/config';
+	import {showorhide} from '../../common/js/showorhid'
 	export default {
 		components: {
 			PayEdit
@@ -232,14 +233,18 @@
 			}
 
 		},
+		mounted(){
+			showorhide()
+		},
 		methods: {
 			setMode(type) {
 				this.showedit = type
 			},
+			
 			//		状态编辑
 			updatastatus(scope, i) {
 				let para = {
-					token: '',
+					token: token,
 					id: scope.row.id,
 					status: i
 				}

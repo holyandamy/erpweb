@@ -98,7 +98,7 @@
 				</el-form-item>
 				<ImgUpload @imagelistchange="imagelistchange"></ImgUpload>
 				<el-form-item>
-					<el-button type="primary" @click="submitForm('collectForm')">保 存</el-button>
+					<el-button class="hasid" id="869cc288735d11e788410242ac120009" type="primary" @click="submitForm('collectForm')">保 存</el-button>
 					<el-button @click="resetForm('collectForm')">重置</el-button>
 				</el-form-item>
 
@@ -110,8 +110,9 @@
 <script>
 	import axios from 'axios';
 	import util from '../../common/js/util'
-	import { collectsave, banlist } from '../../common/js/config';
+	import { collectsave, banlist,token } from '../../common/js/config';
 	import ImgUpload from './upload'
+	import {showorhide} from '../../common/js/showorhid'
 	export default {
 		components:{
 			ImgUpload,
@@ -140,7 +141,7 @@
 					}
 				},
 				collectForm: {
-					token:'',
+					token:token,
 					businesstype: '',
 					orderno: '',
 					teamno: '',
@@ -206,7 +207,11 @@
 			let today = mydate.getFullYear() + "-" + (mydate.getMonth() + 1) + "-" + mydate.getDate()
 			this.createtime = today
 			this.checkbanklist()
+			
 
+		},
+		mounted(){
+			showorhide()
 		},
 		methods: {
 			handleHide: function() {
@@ -288,7 +293,7 @@
 			},
 			checkbanklist() {
 				let para = {
-					token: ''
+					token:token
 				}
 				banlist(para).then((res) => {
 					this.banklist = res.data.obj
@@ -333,4 +338,5 @@
 			border-bottom: 1px solid #dee5ec;
 		}
 	}
+	.hasid{display: none;}
 </style>

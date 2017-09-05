@@ -147,7 +147,7 @@
       };
       return {
         visitorList: {
-          token,
+          token:token,
           name: '',
           sexid:'1',
           mobile:'',
@@ -199,7 +199,7 @@
         this.optionName = "编辑游客";
         this.birthdayFlag=false;
         let data = {
-          token,
+          token:token,
           id: this.$parent.operationType.id,
         }
         custdetail(data).then((res) => {
@@ -282,7 +282,7 @@
         let count = "fb0828b148bc48afbab8ef03c55d153b"
         let para = {
           id: count,
-          token: ''
+          token: token
         }
         province(para).then((res) => {
           this.province = res.data.obj

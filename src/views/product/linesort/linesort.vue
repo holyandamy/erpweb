@@ -10,7 +10,7 @@
             </el-breadcrumb>
           </el-col>
           <el-col :span="12">
-            <el-button class="defaultbutton" @click="showAdd=true">新增线路</el-button>
+            <el-button class="defaultbutton hasid" @click="showAdd=true" id="a997d5fd735811e788410242ac120009">新增线路</el-button>
           </el-col>
         </el-row>
       </header>
@@ -25,7 +25,7 @@
 
           <el-table-column  label="操作">
             <template scope="scope">
-              <el-button @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
+              <el-button class="hasid" id="ad7954ba735811e788410242ac120009" @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
               <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
@@ -84,17 +84,18 @@
   import axios from 'axios';
   import util from '../../../common/js/util'
   import {token,linecategorylist,linecategoryadd,linecategoryupdate,linecategorydelete} from '../../../common/js/config';
+  import { showorhide } from '../../../common/js/showorhid'
   export default {
     data() {
       return {
         lineList:[],
         addcategory:{
-          token,
+          token:token,
           type:'1',
           name:''
         },
         editcategory:{
-            token,
+            token:token,
             id:'',
           name:''
         },
@@ -115,7 +116,7 @@
         pagesize:15,
         operationType:{type:'add',id:''},
         pageset:{
-          token,
+          token:token,
           pageIndex:0,
           pageSize:''
         },
@@ -124,10 +125,15 @@
     created(){
       this.getList()
     },
+    updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
+		},
     methods:{
       deleteRow(index, rows){
         this.lineList.splice(index, 1);
-        linecategorydelete({token,id:rows.id}).then((res) => {
+        linecategorydelete({token:token,id:rows.id}).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);
           }

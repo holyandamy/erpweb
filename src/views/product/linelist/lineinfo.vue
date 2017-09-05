@@ -153,7 +153,7 @@
 </template>
 
 <script>
-	import {linedetail} from '../../../common/js/config';
+	import {linedetail,token} from '../../../common/js/config';
 	export default {
 		props:['lineid'],
 		data() {
@@ -174,7 +174,7 @@
 		methods: {
 			getlineinfo(){
 				let para = {
-					token:'',
+					token:token,
 					id:this.lineid
 				}
 				linedetail(para).then((res) => {

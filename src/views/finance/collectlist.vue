@@ -3,7 +3,7 @@
 		<div v-if="showedit == 'collectlist'">
 			<header>
 
-				<el-button type="primary" @click="setMode('collectedit')">
+				<el-button type="primary" @click="setMode('collectedit')" class="hasid" id="5e47a82072b911e7aad70242ac120006">
 					收款登记
 				</el-button>
 				</el-button>
@@ -47,7 +47,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="onSubmit">查询</el-button>
+						<el-button type="primary" class="hasid" id="44e8ae4ae5324d82851719fcbbb6b106" @click="onSubmit">查询</el-button>
 					</el-form-item>
 				</el-form>
 
@@ -71,7 +71,7 @@
 					<el-table-column prop="confirm" label="确认状态" width="120" ref="confirm" class="confirm">
 						<template scope="scope">
 							<span>{{scope.row.confirm}}</span>
-						 </template>
+						</template>
 					</el-table-column>
 					<el-table-column prop="verification" label="核销状态" width="120">
 					</el-table-column>
@@ -81,16 +81,16 @@
 
 						<template scope="scope">
 							<el-button @click="handleShow(scope.$index, scope.row)" type="text" size="small">查看</el-button>
-							<a href="javascript:;"  v-if="scope.row.cfmValue =='0' || scope.row.verfValue =='0'">
+							<a href="javascript:;" v-if="scope.row.cfmValue =='0' || scope.row.verfValue =='0'">
 								<el-dropdown>
 									<span class="el-dropdown-link">
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
 									<el-dropdown-menu slot="dropdown">
-										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
+										<el-dropdown-item class="hasid" id="9250c2ef72b911e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
 										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
-										<el-dropdown-item v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
-										<el-dropdown-item v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">不核销</span></el-dropdown-item>
+										<el-dropdown-item class="hasid" id="a5ecf87872b911e7aad70242ac120006" v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
+										<el-dropdown-item class="hasid" id="b16981ef72b911e7aad70242ac120006" v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">不核销</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 							</a>
@@ -149,10 +149,10 @@
 </template>
 
 <script>
-	import axios from 'axios';
 	import util from '../../common/js/util'
 	import CollectEdit from './collectedit'
-	import { getcollectlist, collectstatus} from '../../common/js/config';
+	import { getcollectlist, collectstatus, token } from '../../common/js/config';
+	import { showorhide } from '../../common/js/showorhid'
 	export default {
 		components: {
 			CollectEdit,
@@ -162,7 +162,7 @@
 				showedit: 'collectlist',
 				//搜索数据
 				search: {
-					token:'',
+					token: token,
 					date: '',
 					companyname: '',
 					teamno: '',
@@ -194,11 +194,11 @@
 						label: '确认不通过'
 					}
 				],
-				verifstatuss:[{
+				verifstatuss: [{
 						value: '-1',
 						label: '全部'
 					},
-					 {
+					{
 						value: '0',
 						label: '待核销'
 					}, {
@@ -246,11 +246,18 @@
 				},
 				total: 0,
 				pagesize: 10,
-				qr:true,
-				hx:true
+				qr: true,
+				hx: true,
+				dataid: []
 
 			}
 
+		},
+		
+		updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
 		},
 		methods: {
 			setMode(type) {
@@ -271,34 +278,34 @@
 			},
 
 			onSubmit() {
-				
+
 				this.listLoading = true;
-				
-				let dates=''
+
+				let dates = ''
 				let startday = this.search.date[0]
 				let endday = this.search.date[1]
 				startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
 				endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
-				if(startday == '' && endday == ''){
+				if(startday == '' && endday == '') {
 					dates = startday + endday
-					
-				}else{
-					dates = startday+'|'+endday
+
+				} else {
+					dates = startday + '|' + endday
 				}
 				let parses = {
-					token:'',
-					date:dates,
-					companyname:this.search.companyname,
+					token: token,
+					date: dates,
+					companyname: this.search.companyname,
 					teamno: this.search.teamno,
 					orderno: this.search.orderno,
 					confirmstatus: this.search.confirmstatus,
-					busstypename:this.search.busstypename,
+					busstypename: this.search.busstypename,
 					pageindex: '0',
 					pagesize: '10'
 				}
-				console.log(parses)
+
 				getcollectlist(parses).then((data) => {
-					console.log(data)
+
 					this.tableData = data.data.obj.datas
 					this.total = Number(data.data.obj.total);
 					this.listLoading = false
@@ -312,40 +319,40 @@
 			//		状态编辑
 			updatastatus(scope, i) {
 				let para = {
-					token: '',
+					token: token,
 					id: scope.row.id,
 					status: i
 				}
 				collectstatus(para).then((res) => {
-					if(res.data.error == 1){
+					if(res.data.error == 1) {
 						this.$message({
-			          showClose: true,
-			          message: res.data.message,
-			          type: 'error'
-			        });
-					}else{
-						 this.$message({
-				          showClose: true,
-				          message: '状态改变成功',
-				          type: 'success'
-				        });
+							showClose: true,
+							message: res.data.message,
+							type: 'error'
+						});
+					} else {
+						this.$message({
+							showClose: true,
+							message: '状态改变成功',
+							type: 'success'
+						});
 						this.onSubmit()
 					}
-					
+
 				})
 			}
 		},
 		filters: {
-	      statusFilter(status) {
-	        const statusMap = {
-	          published: 'success',
-	          draft: 'gray',
-	          deleted: 'danger'
-	        };
-	        return statusMap[status]
-	      }
-	    },
-		
+			statusFilter(status) {
+				const statusMap = {
+					published: 'success',
+					draft: 'gray',
+					deleted: 'danger'
+				};
+				return statusMap[status]
+			}
+		},
+
 	}
 </script>
 <style scoped lang="scss">
@@ -389,6 +396,16 @@
 	a {
 		color: #fff;
 	}
-	.el-dropdown-menu__item span{display: block;}
-	.abc{color: red;}
+	
+	.el-dropdown-menu__item span {
+		display: block;
+	}
+	
+	.abc {
+		color: red;
+	}
+	
+	.hasid {
+		display: none;
+	}
 </style>

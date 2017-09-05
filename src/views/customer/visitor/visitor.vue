@@ -10,7 +10,7 @@
             </el-breadcrumb>
           </el-col>
           <el-col :span="12">
-            <el-button class="defaultbutton" @click="setMode('add','add')">新增游客</el-button>
+            <el-button class="defaultbutton hasid" @click="setMode('add','add')" id="33e69794734511e788410242ac120009">新增游客</el-button>
           </el-col>
         </el-row>
       </header>
@@ -36,7 +36,7 @@
             </div>
           </el-form-item>
           <el-form-item   style="margin-left: -70px">
-              <el-button type="primary" @click="searchGetList">搜索</el-button>
+              <el-button type="primary" class="hasid" id="23a15b23734511e788410242ac120009" @click="searchGetList">搜索</el-button>
           </el-form-item>
         </el-form>
         <el-table :data="visitorList" style="text-align: left; font-size: 12px;">
@@ -55,8 +55,8 @@
 
           <el-table-column  label="操作">
             <template scope="scope">
-              <el-button @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
-              <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
+              <el-button class="hasid" id="4565eeb0734511e788410242ac120009"  @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
+              <el-button type="text" class="hasid" id="4d8cbfe6734511e788410242ac120009"  size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -84,6 +84,7 @@
   import AddVisitor from './addVisitor'
   import axios from 'axios';
   import {token,custlist,custdel} from '../../../common/js/config';
+ import {showorhide} from '../../../common/js/showorhid'
   export default {
     components:{
       AddVisitor
@@ -98,12 +99,12 @@
         pagesize:15,
         operationType:{type:'add',id:''},
         pageset:{
-          token,
+          token:token,
           pageIndex:0,
           pageSize:''
         },
         searchList:{
-            token,
+            token:token,
             name:'',
             mobile:'',
             date:''
@@ -113,6 +114,9 @@
     created(){
       this.getList()
     },
+    mounted(){
+			showorhide()
+		},
     methods:{
       setMode(type,option){
         this.operationType.type=option;
@@ -130,7 +134,7 @@
       },
       deleteRow(index, rows){
         this.visitorList.splice(index, 1);
-        let para={token,id:rows.id}
+        let para={token:token,id:rows.id}
         custdel(para).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);
@@ -173,7 +177,7 @@
         let templateSeacrchList={
             pageIndex:this.currentPage-1,
             pageSize:this.pagesize,
-            token,
+            token:token,
             name:this.searchList.name,
             date:newDate,
             mobile:this.searchList.mobile,

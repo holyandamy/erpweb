@@ -30,9 +30,7 @@
 
 					<el-row>
 						<el-col :span="24">
-							<span>
-									线路/团号
-								</span> {{detail.linename}} / {{detail.teamno}}
+							<span>线路/团号</span> {{detail.linename}} / {{detail.teamno}}
 						</el-col>
 					</el-row>
 					<el-row>
@@ -53,7 +51,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							结算价格：成人{{detail.sltaduilt}} 儿童{{detail.sltchild}} 婴儿{{detail.sltbaby}} 单房差{{detail.endtime}}
+							结算价格：   {{detail.sltprice}}   <!--  成人{{detail.sltaduilt}} 儿童{{detail.sltchild}} 婴儿{{detail.sltbaby}} 单房差{{detail.endtime}}-->
 						</el-col>
 						<el-col :span="12" class="pl-20">
 							负责人：{{detail.creater}}
@@ -61,7 +59,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							应收金额：{{detail.orderpay}}
+							应收金额：{{detail.orderpay}} <el-button style="margin-left: 50px;">调整价格</el-button>
 						</el-col>
 						<el-col :span="12" class="pl-20">
 							客户类型：{{detail.custtypename}}
@@ -94,7 +92,7 @@
 			<h2>
 					<el-row>
 						<el-col :span="12">收款详情</el-col>
-						<el-col :span="12"><el-button @click="addcollpay('collect')">新增收款</el-button></el-col>
+						<el-col :span="12"><el-button @click="addcollpay('collect')" class="hasid" id="869cc288735d11e788410242ac120009">新增收款</el-button></el-col>
 					</el-row>
 				</h2>
 			<el-table :data="detail.collections" border style="width: 100%">
@@ -114,7 +112,7 @@
 			<h2>
 					<el-row>
 						<el-col :span="12">付款详情</el-col>
-						<el-col :span="12"><el-button @click="addcollpay('pay')">新增付款</el-button></el-col>
+						<el-col :span="12"><el-button @click="addcollpay('pay')"  class="hasid" id="89cec1b8735d11e788410242ac120009">新增付款</el-button></el-col>
 					</el-row>
 				</h2>
 			<el-table :data="detail.pays" border style="width: 100%">
@@ -138,7 +136,7 @@
 							<el-button @click="exportnamelist">导出游客名单</el-button>
 							<el-button>下载名单模版</el-button>
 							<el-button>导入游客名单</el-button> 
-							<el-button  v-if="!detail.isconfirm" @click="confirmnamelist=true">确认游客名单</el-button> 
+							<el-button  v-if="!detail.isconfirm" @click="confirmnamelist=true" class="hasid" id="8dcdad97735d11e788410242ac120009">确认游客名单</el-button> 
 						</el-col>
 					</el-row>
 				</h2>
@@ -261,7 +259,7 @@
 			</el-table>
 			<div class="button">
 				<el-button type="primary" size="large" @click="save">提交</el-button>
-				<el-button type="primary" size="large" @click="cancelorder">取消订单</el-button>
+				<el-button type="primary" size="large"  class="hasid"  id="91102d1d735d11e788410242ac120009" @click="cancelorder">取消订单</el-button>
 				<el-button size="large" @click="handleHide">返回</el-button>
 			</div>
 		</section>
@@ -330,7 +328,8 @@
 </template>
 <script>
 	import util from '../../../common/js/util'
-	import { orderdetail, banlist, collectsave, orderupdate, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave } from '../../../common/js/config';
+	import { showorhide } from '../../../common/js/showorhid'
+	import { orderdetail, banlist, collectsave, orderupdate, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave,token} from '../../../common/js/config';
 	export default {
 		props: ['listid'],
 		data() {
@@ -394,7 +393,7 @@
 				],
 				banklist: [], //银行列表
 				collectionsForm: {
-					token: '',
+					token: token,
 					businesstype: '2',
 					orderno: '',
 					lineid: '',
@@ -410,7 +409,7 @@
 				},
 				baseform: {
 					id: '',
-					token: ''
+					token: token
 				},
 				type: '',
 				alllogs: [],
@@ -420,6 +419,11 @@
 		created() {
 			this.getdetail()
 			this.checkbanklist()
+		},
+		 updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
 		},
 		methods: {
 			//返回列表
@@ -525,7 +529,7 @@
 			getdetail() {
 				let para = {
 					id: this.listid,
-					token: ''
+					token: token
 				}
 				orderdetail(para).then((res) => {
 					console.log(res)
@@ -549,7 +553,7 @@
 			//获取账号列表
 			checkbanklist() {
 				let para = {
-					token: ''
+					token: token
 				}
 				banlist(para).then((res) => {
 					this.banklist = res.data.obj
@@ -640,10 +644,9 @@
 					childNum: this.detail.totalchild,
 					babyNum: this.detail.totalbaby,
 					list: this.detail.namelist,
-					token: ''
+					token: token
 				}
-
-				for(let i = 0; i < this.detail.namelist.length; i++) {
+				for(let i = 0; i < this.detail.namelist.length; i++){
 					if(this.detail.namelist[i].type == "成人") {
 						para.list[i].type = 1
 						console.log()

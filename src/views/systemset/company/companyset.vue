@@ -58,7 +58,7 @@
 					</el-form-item>
 					<ImgLoad @imagelistchange="imagelistchange" :logo="logo" ref='logos'></ImgLoad>
 					<el-form-item label-width="100px" style="text-align: left;">
-						<el-button type="primary" @click="submitForm('companyForm')">保存</el-button>
+						<el-button type="primary" class="hasid" id="e10adc3949ba59abbe56e057f20f883e" @click="submitForm('companyForm')">保存</el-button>
 						<el-button @click="resetForm('companyForm')">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -70,8 +70,9 @@
 </template>
 <script>
 	import axios from 'axios';
-	import { companyupdate, province, city, district,companydetail } from '../../../common/js/config';
+	import { companyupdate, province, city, district,companydetail,token } from '../../../common/js/config';
 	import ImgLoad from './upload'
+	import {showorhide} from '../../../common/js/showorhid'
 	export default {
 		components: {
 			ImgLoad
@@ -99,7 +100,7 @@
 				activeIndex: '3',
 				//提交数据
 				companyForm: {
-					token: '',
+					token: token,
 					companyName: '',
 					countryId: 'fb0828b148bc48afbab8ef03c55d153b',
 					provinceId: '',
@@ -186,10 +187,15 @@
 			this.getprovince()
 			
 		},
+		updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
+		},
 		methods: {
 			//获取公司信息
 			getinfo(){
-				let para={token:''}
+				let para={token:token}
 				companydetail(para).then((res) =>{
 					this.companyForm = res.data.obj
 					this.logo = res.data.obj.logo
@@ -228,7 +234,7 @@
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
 					id: count,
-					token: ''
+					token: token
 				}
 				province(para).then((res) => {
 					this.province = res.data.obj
