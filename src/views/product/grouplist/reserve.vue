@@ -232,7 +232,7 @@
 </template>
 
 <script>
-  import {orderdet, reserveNum,orderSave} from '../../../common/js/config';
+  import {token,orderdet, reserveNum,orderSave} from '../../../common/js/config';
   export default {
     props:['categoryId','operationType'],
     data() {
@@ -274,7 +274,7 @@
           adultNum: '',
           childNum: '',
           babyNum: '',
-          token: ''
+          token: token
         },
         adjuster: '',
         rules: {
@@ -326,6 +326,7 @@
       },
       // 点击保存 取消
       submitForm () {
+        let _this = this;
         this.visitorList.adultNum = this.adultArr.length;
         this.visitorList.childNum = this.childArr.length;
         this.visitorList.babyNum = this.babyArr.length;
@@ -336,7 +337,10 @@
             if((item.name && item.certtype && item.cert && item.mobile && item.remark) || (!item.name && !item.certtype && !item.cert && !item.mobile && !item.remark)){
 //            console.log(1111, _this.visitorList);
             }else {
-              alert('信息填写有误');
+              _this.$message({
+                message: '信息填写有误',
+                type: 'warning'
+              });
               throw false
             }
           })
@@ -345,10 +349,16 @@
         }
         this.visitorList.list = this.checkArr
         orderSave(this.visitorList).then(function (res) {
-          if(!res.data.res){
-            alert('提交成功');
+          if(!res.data.error){
+            _this.$message({
+              message: '提交成功',
+              type: 'success'
+            });
           }else {
-            alert('提交失败')
+            _this.$message({
+              message: res.data.message,
+              type: 'error'
+            });
           }
         })
       },
@@ -443,7 +453,7 @@
       // 获取详情
       getlineinfo(){
         let para = {
-          token:'',
+          token:token,
           id:this.categoryId
         }
         orderdet(para).then((res) => {
@@ -465,8 +475,8 @@
         }
         let _this = this;
         if(this.visitorList.custtype == 2 && this.visitorList.comname.toString().length>4){
-          console.log(1111, {token: '0828',mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''});
-          reserveNum(JSON.stringify({token: '0828',mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''})).then(function (res) {
+          console.log(1111, {token: token,mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''});
+          reserveNum(JSON.stringify({token: token,mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''})).then(function (res) {
             _this.companyArr = res.data.obj
             _this.jidiaoArr = _this.companyArr
           })
@@ -479,7 +489,7 @@
         }
         let _this = this;
         if(this.visitorList.custtype == 2 && this.visitorList.mobile.toString().length>6){
-          reserveNum({token: '0828',mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''}).then(function (res) {
+          reserveNum({token: token,mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''}).then(function (res) {
             _this.phoneArr = res.data.obj
             _this.jidiaoArr = _this.phoneArr
           })
@@ -491,7 +501,7 @@
         this.getJidiaoo();
         this.isShowc = false;
         let _this = this;
-        reserveNum(JSON.stringify({token: '0828',mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''})).then(function (res) {
+        reserveNum(JSON.stringify({token: token,mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''})).then(function (res) {
           _this.companyArr = res.data.obj
           _this.jidiaoArr = _this.companyArr
         })
@@ -511,7 +521,7 @@
       getdetail() {
         let para = {
           id: this.listid,
-          token: ''
+          token: token
         }
       },
 

@@ -336,7 +336,7 @@
         notice: '',
         lineItemId: '',
         search: {
-          token:'',
+          token:token,
           pageindex:0,
           pagesize: 9999,
           categoryid:'', //分类id
@@ -344,7 +344,7 @@
         },
         destinations: [],
         groupList: {
-          token: '',
+          token: token,
           lineid: '',
           sexid:'1',
           mobile:'',
@@ -493,12 +493,14 @@
             _this.surpluss = item.surplus;
             _this.dayss = item.deadline;
             _this.getTimeArr.push(item.endtime);
+            _this.checkArr[idx].checked = false;
           })
         })
+        console.log(888888, _this.checkArr);
       },
       getPingtai () {
         let _this = this;
-        openlist({token: ''}).then(function (res) {
+        openlist({token: token}).then(function (res) {
           // 平台列表
           _this.pingtai = res.data.obj
         })
@@ -567,6 +569,7 @@
         isAll == true ? this.allChecked = true : this.allChecked = false
       },
       allCheck (event) {
+        console.log(666666, event);
         if(event.target.checked){
           this.checkArr.forEach(function (item, index) {
             item.checked = true
@@ -576,6 +579,7 @@
             item.checked = false
           })
         }
+        console.log(7777, this.checkArr);
       },
       // 选择日期添加一行
       addTr () {
@@ -633,13 +637,28 @@
       },
       getcategoryall(){
         this.lineFlag = true;
-        let para= {token:''}
+        let para= {token:token}
         categoryall(para).then(res =>{
           this.linesorts = res.data.obj
         })
       },
       // 点击保存 取消
       save () {
+        // 列表数据
+        if(!this.lineid) {
+          this.$message({
+            message: '请选择线路',
+            type: 'warning'
+          });
+          return;
+        }
+        if (this.checkArr.length == 0) {
+          this.$message({
+            message: '请添加发团信息',
+            type: 'warning'
+          });
+          return;
+        }
         // 合作平台
         let platforms = [];
         var checkListNew = []
@@ -667,27 +686,11 @@
           })
           TemStArr = this.getTimeArr.concat(TemStArr)
         }
-        // 列表数据
-        if(!this.lineid) {
-          this.$message({
-            message: '请选择线路',
-            type: 'warning'
-          });
-          return;
-        }
-        if (this.checkArr.length == 0) {
-          this.$message({
-            message: '请添加发团信息',
-            type: 'warning'
-          });
-          return;
-        }
 
         try {
           this.checkArr.forEach(function (item,idx) {
             item.confirm = parseFloat(item.confirm);
             item.surplus = _this.surpluss;
-            delete item.checked
             item.endtime = TemStArr[idx] || ''
             if(!item.plan || !item.deadline || !item.mktbaby || !item.mktchild || !item.mktaduilt || !item.mktroom
               || !item.sltbaby || !item.sltchild || !item.sltaduilt || !item.sltroom) {
@@ -697,22 +700,16 @@
               });
               throw false
             }
+            delete item.checked
           })
         }catch (e){
           throw e
         }
 
-        if(platforms.length == 0) {
-          this.$message({
-            message: '请选择合作平台',
-            type: 'warning'
-          });
-          return;
-        }
         // 1 创建
         if(_this.operationType.type == 'add'){
           groupsave({
-            token: '',
+            token: token,
             lineid: _this.lineid,
             notify: _this.notify || '',
             platforms: platforms,
@@ -737,7 +734,7 @@
         // 2 编辑
         if(_this.operationType.type == 'edit'){
           groupupdate({
-            token: '',
+            token: token,
             lineid: _this.lineid,
             notify: _this.notify || '',
             platforms: platforms,
@@ -827,7 +824,7 @@
         let count = "fb0828b148bc48afbab8ef03c55d153b"
         let para = {
           id: count,
-          token: ''
+          token: token
         }
         province(para).then((res) => {
           this.province = res.data.obj

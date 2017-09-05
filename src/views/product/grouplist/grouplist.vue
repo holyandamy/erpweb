@@ -10,7 +10,7 @@
             </el-breadcrumb>
           </el-col>
           <el-col :span="12">
-            <el-button class="defaultbutton" @click="setMode('newGroup','add')" >新增发团计划</el-button>
+            <el-button id="5c18b1d0734611e788410242ac120009" class="defaultbutton hasid" @click="setMode('newGroup','add')" >新增发团计划</el-button>
           </el-col>
         </el-row>
       </header>
@@ -19,14 +19,14 @@
           <el-form-item label="出发时间"   style="margin-left: 10px">
             <div class="block">
               <el-date-picker
-                v-model="searchList.date"
+                v-model="date"
                 type="daterange"
                 placeholder="选择日期范围">
               </el-date-picker>
             </div>
           </el-form-item>
-          <el-form-item label="线路类型" prop="type"  style="width: 190px" >
-            <el-select v-model="searchList.type"  >
+          <el-form-item label="线路类型" prop="categoryType"  style="width: 190px" >
+            <el-select v-model="searchList.categoryType"  >
               <el-option  v-for="item in type"
                           :key="item.value"
                           :label="item.label"
@@ -34,62 +34,61 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="状态" prop="type"  style="width: 190px" >
-            <el-select v-model="searchList.stateType"  >
-              <el-option value="0">全部</el-option>
-              <el-option value="1">正常</el-option>
-              <el-option value="2">停止</el-option>
-              <el-option value="3">待发团</el-option>
-              <el-option value="4">已发团</el-option>
-              <el-option value="5">已结团</el-option>
+          <el-form-item label="状态" prop="status"  style="width: 190px" >
+            <el-select v-model="searchList.status"  >
+              <el-option  v-for="item in type1"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="线路名称"  >
             <el-col :span="4"   >
-              <el-input v-model="searchList.name"></el-input>
+              <el-input v-model="searchList.linename"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="团号"  style="margin-left: 10px">
             <el-col :span="4" style="width: 150px">
-              <el-input v-model="searchList.groupNumber"></el-input>
+              <el-input v-model="searchList.teamname"></el-input>
             </el-col>
           </el-form-item>
 
           <el-form-item   style="margin-left: -70px">
-            <el-button type="primary" @click="searchGetList">查询</el-button>
+            <el-button class="hasid" id="49641a18734611e788410242ac120009" type="primary" @click="searchGetList">查询</el-button>
           </el-form-item>
           <el-form-item   style="margin-left: -70px">
-            <el-button type="primary" @click="searchGetList">清空查询</el-button>
+            <el-button  type="primary" @click="clearGetList">清空查询</el-button>
           </el-form-item>
         </el-form>
 
         <el-table :data="lineList" border style="text-align: left; font-size: 12px;">
-          <el-table-column prop="teamno" label=" 团号">
+          <el-table-column prop="teamno" label=" 团号" width="130">
           </el-table-column>
-          <el-table-column prop="linename" label="线路名称">
+          <el-table-column prop="linename" label="线路名称" >
           </el-table-column>
-          <el-table-column prop="starttime" label="出发日期">
+          <el-table-column prop="starttime" label="出发日期" width="130">
           </el-table-column>
-          <el-table-column prop="endtime" label="回团日期">
+          <el-table-column prop="endtime" label="回团日期" width="130">
           </el-table-column>
-          <el-table-column prop="plan" label="计划人数">
+          <el-table-column prop="plan" label="计划人数" width="80">
           </el-table-column>
-          <el-table-column prop="surplus" label="余位">
+          <el-table-column prop="surplus" label="余位" width="80">
           </el-table-column>
-          <el-table-column prop="days" label="天数">
+          <el-table-column prop="days" label="天数" width="80">
           </el-table-column>
-          <el-table-column prop="book" label="已售">
+          <el-table-column prop="book" label="已售" width="80">
           </el-table-column>
-          <el-table-column prop="status" label="状态">
+          <el-table-column prop="status" label="状态" width="80">
           </el-table-column>
-          <el-table-column prop="creater" label="发布人">
+          <el-table-column prop="creater" label="发布人" width="130">
           </el-table-column>
-          <el-table-column  label="操作">
+          <el-table-column  label="操作" width="200">
             <template scope="scope">
-              <el-button @click="setMode('groupinfo'),editorFn(scope.row,'groupinfo')" type="text" size="small">下单</el-button>
-              <el-button @click="setMode('newGroup','edit'),editorFn(scope.row,'newGroup')" type="text" size="small">编辑</el-button>  <!-- editorFn(scope.row)  -->
+              <el-button class="hasid" id="521410f9734611e788410242ac120009" @click="setMode('groupinfo'),editorFn(scope.row,'groupinfo')" type="text" size="small" >下单</el-button>
+              <el-button class="hasid" id="6f6276e6734611e788410242ac120009" @click="setMode('newGroup','edit'),editorFn(scope.row,'newGroup')" type="text" size="small">编辑</el-button>  <!-- editorFn(scope.row)  -->
               <el-button @click="setMode('newGroup','detail'),editorFn(scope.row,'newGroup')" type="text" size="small">详情</el-button>
-              <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row)">停止</el-button>
+              <el-button class="hasid" id="8929e4a7734611e788410242ac120009" type="text" size="small" @click="deleteRow(scope.$index, scope.row)">停止</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -118,8 +117,10 @@
   import GroupInfo from './groupinfo'
   import GroupReserve from './groupreserve'
   import Reserve from './reserve'
+  import util from '../../../common/js/util'
   import axios from 'axios'
-  import {token,grouplist,linecategoryadd,linecategoryupdate,linecategorydelete} from '../../../common/js/config'
+  import {token,grouplist,linecategorydelete} from '../../../common/js/config'
+  import { showorhide } from '../../../common/js/showorhid'
   export default {
     components:{
       Grouporder,
@@ -130,27 +131,38 @@
     },
     data() {
       return {
-        searchList:{},
+        date: '',
+        searchList:{
+          categoryType: '',
+          linename: '',
+          teamname: '',
+          status: '',
+          token: token,
+          pageindex:0,
+          pagesize: 10
+        },
         modeType:'list', /*reserve*/
         showAdd:false,
         showEdit:false,
         type:[{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
+        type1:[{value:'1',label:'正常'},{value:'2',label:'禁用'},{value:'3',label:'待发团'},{value:'4',label:'已发团'},{value:'5',label:'已结团'}],
         total:0,
         currentPage:1,
         pagesize:10,
         operationType:{type:'add',id:''},
-        pageset:{
-          token,
-          pageindex:0,
-          pagesize:''
-        },
         lineList:[],
         editcategory:{},
         optionName: '新增发团计划'
       }
     },
-    created(){
-      this.getList()
+    // 进入获取列表
+//    created(){
+//      this.getList()
+//    },
+    updated: function() {
+      this.$nextTick(function() {
+        showorhide()
+      })
     },
     methods:{
       setMode(type,option,sonData){
@@ -170,7 +182,7 @@
       },
       deleteRow(index, rows){
         this.lineList.splice(index, 1);
-        linecategorydelete({token,id:rows.id}).then((res) => {
+        linecategorydelete({token:token,id:rows.id}).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);
           }
@@ -187,52 +199,33 @@
         this.editcategory.name=rows.name;
         this.modeType = typee;
       },
-      saveEdit(){
-        this.$refs['editcategory'].validate((valid) => {
-          if (valid) {
-            this.showEdit=false;
-            linecategoryupdate(this.editcategory).then((res) => {
-              if(res.data.error){
-                this.$message.error(res.data.massage);
-              }
-              else {
-                this.getList()
-              }
-            })
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      saveAdd(){
-        this.$refs['addcategory'].validate((valid) => {
-          if (valid) {
-            let addPost=Object.assign({},this.addcategory);
-            addPost.type=parseInt(addPost.type);
-            linecategoryadd(addPost).then((res) => {
-              if(res.data.error){
-                this.$message.error(res.data.massage);
-              }
-              else {
-                this.getList()
-                this.addcategory.name='';
-                this.showAdd=false;
-              }
-            })
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
       getList(){
-        this.pageset.pageindex = this.currentPage-1
-        this.pageset.pagesize = this.pagesize
-        let page = this.pageset
-        grouplist(page).then((res) => {
-          this.lineList = res.data.obj.datas
-          this.total = Number(res.data.obj.total)
+        let _this = this;
+        this.searchList.pageindex = this.currentPage-1
+        this.searchList.pagesize = this.pagesize
+        let dates = ''
+        let startday = this.date[0]
+        let endday = this.date[1]
+        startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
+        endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
+        if(startday == '' && endday == '') {
+          dates = ''
+        } else {
+          dates = startday + '|' + endday
+        }
+        let searchParam = this.searchList
+        searchParam.date = dates || ''
+        grouplist(searchParam).then((res) => {
+          if(res.data.error || res.data.err) {
+            this.$message({
+              message: '查询失败',
+              type: 'warning'
+            });
+            return
+          }else {
+            _this.lineList = res.data.obj.datas
+            _this.total = Number(res.data.obj.total)
+          }
         })
       },
 
@@ -241,11 +234,24 @@
       },
       //分页
       handleCurrentChange(val) {
-        this.getList()
+        this.getList();
       },
-      //查询
+      //点击查询
       searchGetList(){
-
+        this.getList();
+      },
+      // 清空查询
+      clearGetList () {
+       this.searchList = {
+            categoryType: '',
+            linename: '',
+            teamname: '',
+            status: '',
+            token: token,
+            pageindex:0,
+            pagesize: 10
+        };
+        this.date = ''
       }
 
     }
@@ -316,4 +322,7 @@
 
   }
   .el-breadcrumb{font-size:18px ; margin-bottom: 20px;}
+  .hasid {
+    display: none;
+  }
 </style>

@@ -69,9 +69,9 @@
               </el-table-column>
               <el-table-column label="操作">
                 <template scope="scope">
-                  <el-button @click="setModee(2)" type="text" size="small">预定</el-button>
-                  <el-button @click="setModee(1)" type="text" size="small">占位</el-button>
-                  <el-button @click="setModEdit(detailOut.teamid)" type="text" size="small">编辑</el-button>
+                  <el-button class="hasid" id="b6152355735911e788410242ac120009" @click="setModee(2)" type="text" size="small">预定</el-button>
+                  <el-button class="hasid" id="b175d38b735911e788410242ac120009" @click="setModee(1)" type="text" size="small">占位</el-button>
+                  <el-button class="hasid" id="6f6276e6734611e788410242ac120009" @click="setModEdit(detailOut.teamid)" type="text" size="small">编辑</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -235,8 +235,8 @@
 </template>
 
 <script>
-  import {orderdet,openlist} from '../../../common/js/config';
-
+  import {token,orderdet,openlist} from '../../../common/js/config';
+  import { showorhide } from '../../../common/js/showorhid'
   export default {
     props: ['categoryId'],
     data() {
@@ -264,11 +264,16 @@
     created(){
       this.getPingtai();
     },
+    updated: function() {
+      this.$nextTick(function() {
+        showorhide()
+      })
+    },
     methods: {
       // 平台列表
       getPingtai () {
         let _this = this;
-        openlist({token: ''}).then(function (res) {
+        openlist({token: token}).then(function (res) {
           _this.pingtai = res.data.obj
         })
       },
@@ -277,7 +282,7 @@
       },
       getlineinfo() {
         let para = {
-          token: '',
+          token: token,
           id: this.categoryId
         }
         let _this = this;
@@ -619,5 +624,8 @@
   }
   .pingtai{
     padding: 0 0 30px 40px;
+  }
+  .hasid {
+    display: none;
   }
 </style>
