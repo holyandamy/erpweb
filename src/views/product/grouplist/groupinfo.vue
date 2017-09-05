@@ -2,12 +2,22 @@
   <div>
     <div v-if="modeType= 'groupinfo'">
       <header>
+        <el-row>
+          <el-col :span="12">
+            <el-breadcrumb separator="/">
+              <el-breadcrumb-item>产品管理</el-breadcrumb-item>
+              <el-breadcrumb-item><span @click="handleHide()">发团列表</span></el-breadcrumb-item>
+              <el-breadcrumb-item>{{optionName}}</el-breadcrumb-item>
+            </el-breadcrumb>
+          </el-col>
+
+        </el-row>
         <ul>
           <li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
         </ul>
       </header>
       <section>
-        <h2 class="d_jump" @click="handleHide()">下单</h2>
+        <h2 class="d_jump" >下单</h2>
         <div class="bgfff">
           <!--<h3>{{detail.name}}</h3>-->
           <div class="linecenter">
@@ -61,6 +71,7 @@
                 <template scope="scope">
                   <el-button @click="setModee(2)" type="text" size="small">预定</el-button>
                   <el-button @click="setModee(1)" type="text" size="small">占位</el-button>
+                  <el-button @click="setModEdit(detailOut.teamid)" type="text" size="small">编辑</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -230,6 +241,7 @@
     props: ['categoryId'],
     data() {
       return {
+        optionName:'下单',
         modeType: 'groupinfo',
         menus: ['下单', '基本信息', '行程', '预定须知', '发布平台'],
         active: 0,
@@ -402,10 +414,13 @@
       },
       //返回线路列表
       handleHide: function () {
-        this.$emit('setMode', 'groupreserve');
+        this.$emit('setMode', 'list');
       },
       setModee: function (typ) {
         this.$emit('setMode', 'reserve',typ);
+      },
+      setModEdit: function (sonData) {
+        this.$emit('setMode', 'newgroup','edit',sonData);
       }
 //			onScroll() {
 //				let scrolled = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop　　　 // 586、1063分别为第二个和第三个锚点对应的距离
@@ -429,13 +444,16 @@
 
 <style scoped lang="scss">
   header {
-    height: 40px;
-    padding: 20px 30px 0 30px;
+    height: 66px;
+    padding: 25px 30px 0 30px;
     background: #fff;
     position: fixed;
     width: 100%;
     z-index: 15;
     top: 0;
+    .el-row{
+      height: 30px;
+    }
     li {
       float: left;
       height: 37px;
@@ -460,7 +478,7 @@
     h2 {
       color: #2cb1b6;
       font-size: 24px;
-      padding-top: 20px;
+      padding-top: 34px;
       line-height: 60px;
       span {
         color: #666;

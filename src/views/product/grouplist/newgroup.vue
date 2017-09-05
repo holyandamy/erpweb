@@ -6,7 +6,7 @@
           <el-breadcrumb separator="/">
             <el-breadcrumb-item>产品管理</el-breadcrumb-item>
             <el-breadcrumb-item><span @click="handleHide()">发团列表</span></el-breadcrumb-item>
-            <el-breadcrumb-item>{{optionName}}</el-breadcrumb-item>
+            <el-breadcrumb-item>{{{'add':'新增发团计划','edit':'编辑','detail':'详情'}[operationType.type]}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
 
@@ -21,34 +21,7 @@
                 <el-button @click="getcategoryall()">选择</el-button>
                 <span class='routeName' style='padding-left: 10px;' v-text='routeName'>222</span>
               </el-form-item>
-              <!--<el-form-item label="线路分类" prop="name">-->
-              <!--<el-col :span="4" style="width: 100%;margin-right: 10px">-->
-              <!--<ul>-->
-              <!--<li @click="changecondition('-1')" :class="{checked:ischecked == -1}">全部</li>-->
-              <!--<li v-for="(linesort,index) in linesorts" :class="{checked:ischecked == index}" @click="changecondition(index,linesort)">{{linesort.name}}</li>-->
-              <!--</ul>-->
-              <!--</el-col>-->
-              <!--</el-form-item>-->
-              <!--<el-form-item label="线路类型" prop="name">-->
-              <!--<el-select v-model="search.type" placeholder="线路类型">-->
-              <!--<el-option label="国内" value="1"></el-option>-->
-              <!--<el-option label="出境" value="2"></el-option>-->
-              <!--<el-option label="周边" value="3"></el-option>-->
-              <!--</el-select>-->
-              <!--</el-form-item>-->
-              <!--<el-form-item label="线路名称" prop="name">-->
-              <!--<el-select-->
-              <!--v-model="groupList.lineid"-->
-              <!--filterable-->
-              <!--allow-create>-->
-              <!--<el-option-->
-              <!--v-for="item in linelist"-->
-              <!--:key="item.lineid"-->
-              <!--:label="item.linename"-->
-              <!--:value="item.lineid">-->
-              <!--</el-option>-->
-              <!--</el-select>-->
-              <!--</el-form-item>-->
+
               <el-form-item label="集合通知：" prop="notify">
                 <el-col :span="4" style="width: 100%;margin-right: 10px">
                   <el-input
@@ -293,8 +266,8 @@
               </div>
               <el-form-item label-width="200px" style="margin-top: 50px">
                 <!--<el-button type="primary" @click="submitForm('visitorList')" style="width: 120px">保存</el-button>-->
-                <el-button type="primary" @click="save" style="width: 120px">保存</el-button>
-                <el-button @click="handleHide()" style="width: 120px">取消</el-button>
+                <el-button type="primary" @click="save" style="width: 120px" v-if="operationType.type !='detail' ">保存</el-button>
+                <el-button @click="handleHide()" style="width: 120px">{{operationType.type == 'detail'? '返回': '取消'}}</el-button>
               </el-form-item>
             </div>
           </el-form>
@@ -302,6 +275,7 @@
       </el-row>
     </section>
 
+    <!--弹出框-->
     <el-dialog title="提示" :visible.sync="lineFlag" size="small">
       <el-form :inline="true" :model="search" class="demo-form-inline" ref="search">
         <el-form-item label="线路分类">
@@ -332,9 +306,10 @@
 <script>
   import {address} from '../../../common/js/address'
   import axios from 'axios';
-  import {token,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist} from '../../../common/js/config';
+  import {token,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist,groupupdate,groupdetail} from '../../../common/js/config';
   import ElDialog from "../../../../node_modules/element-ui/packages/dialog/src/component";
   export default {
+    props: ['operationType','categoryId'],
     components: {ElDialog},
     data() {
       //验证手机号码
@@ -392,7 +367,6 @@
         linesorts: [],
         linelist: [], //线路列表
         lineList: [], //线路列表
-        optionName:'新增团计划',
         rules: {
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' },
@@ -458,34 +432,14 @@
         temTime: '',
         startTimeArr: [],
         idx: '',
-        pingtai: []
+        pingtai: [],
+        idd: '',
+        getTimeArr: [],
+        dayss: '',
+        surpluss: ''
       }
     },
-//    created(){
-////      this.getlinelist()
-////      this.getprovince()
-//      if( this.$parent.operationType.type=='edit') {
-//        this.optionName = "编辑游客";
-//        this.birthdayFlag=false;
-//        let data = {
-//          token,
-//          id: this.$parent.operationType.id,
-//        }
-//        custdetail(data).then((res) => {
-//          if (res.data.error) {
-//            this.$message.error(res.data.massage);
-//          }
-//          else {
-//            let tempEditList = {};
-//            tempEditList = res.data.obj;
-//            tempEditList.sexid=String(tempEditList.sexid);
-//            tempEditList.mobile=parseInt(tempEditList.mobile);
-//            this.visitorList=Object.assign({},tempEditList)
-//
-//          }
-//        })
-//      }
-//    },
+
     watch : {
       // 自动 手动
       allconfirm (newValue, oldValue) {
@@ -503,8 +457,45 @@
     },
     created(){
       this.getPingtai();
+      if(this.operationType.type == 'edit' || this.operationType.type == 'detail') this.getdetail();
     },
     methods: {
+      // 编辑  详情时获取信息
+      getdetail () {
+        let _this = this;
+        groupdetail({token: token,id: this.categoryId}).then(function (res) {
+          _this.routeName = res.data.obj.linename
+          _this.idd = res.data.obj.id
+          _this.lineid = res.data.obj.lineid
+          _this.notify = res.data.obj.notify
+          let _thiss = _this
+          res.data.obj.platforms.forEach(function (item) {
+            if(item.isenable)  _thiss.checkList.push(item.platform - 1)
+          })
+          res.data.obj.details.forEach(function (item,idx) {
+            _this.checkArr.push({})
+            _this.checkArr[idx].confirm = item.confirm.toString();
+            _this.checkArr[idx].deadline = item.deadline;
+            _this.checkArr[idx].isenable = item.isenable;
+            _this.checkArr[idx].isorder = item.isorder;
+            _this.checkArr[idx].book = item.book;
+            _this.checkArr[idx].mktaduilt = item.mktaduilt;
+            _this.checkArr[idx].mktbaby = item.mktbaby;
+            _this.checkArr[idx].mktchild = item.mktchild;
+            _this.checkArr[idx].mktroom = item.mktroom;
+            _this.checkArr[idx].plan = item.plan;
+            _this.checkArr[idx].sit = item.sit;
+            _this.checkArr[idx].sltaduilt = item.sltaduilt;
+            _this.checkArr[idx].sltbaby = item.sltbaby;
+            _this.checkArr[idx].sltchild = item.sltchild;
+            _this.checkArr[idx].sltroom = item.sltroom;
+            _this.checkArr[idx].starttime = item.starttime;
+            _this.surpluss = item.surplus;
+            _this.dayss = item.deadline;
+            _this.getTimeArr.push(item.endtime);
+          })
+        })
+      },
       getPingtai () {
         let _this = this;
         openlist({token: ''}).then(function (res) {
@@ -558,12 +549,6 @@
       allPlan () {
         this.changeParam('plan', 'allplan')
       },
-//      allPlan () {
-//        let _this = this;
-//        this.checkArr.forEach(function (item) {
-//          if(item.checked) item.plan = _this.allplan
-//        })
-//      },
       // 封装输入框全写
       changeParam (param, allParam) {
         let _this = this;
@@ -596,7 +581,6 @@
       addTr () {
         // 开始时间
         this.startTimeArr.push(this.value1);
-        console.log(33, this.value1);
         var M = (this.value1.getMonth()+1).toString().length==1 ? '0'+ (this.value1.getMonth()+1).toString() : (this.value1.getMonth()+1).toString();
         var D = this.value1.getDate().toString().length==1 ? '0'+ this.value1.getDate().toString() : this.value1.getDate().toString();
         var selectTime = this.value1.getFullYear().toString() +"-" + M+ "-" + D;
@@ -634,7 +618,7 @@
       getDate (vall, dayy) {
 //        var now=new Date();
 //        var time=now.getTime();
-        var time = vall.getTime()
+        var time = vall.getTime();
         time+=1000*60*60*24*dayy;//加上3天
         vall.setTime(time);
         var M = (vall.getMonth()+1).toString().length == 1 ? '0' + (vall.getMonth()+1).toString(): (vall.getMonth()+1).toString()
@@ -670,31 +654,63 @@
           }
         })
         // 结束时间
-        let TemStArr = [];
         let _this = this;
-        this.startTimeArr.forEach(function (item) {
-          TemStArr.push(_this.getDate(item, _this.checkItem.days))
-        })
+        let TemStArr = [];
+        if(_this.operationType.type == 'add'){
+          _this.startTimeArr.forEach(function (item) {
+            TemStArr.push(_this.getDate(item, _this.checkItem.days))
+          })
+        }
+        if(_this.operationType.type == 'edit'){
+          this.startTimeArr.forEach(function (item) {
+            TemStArr.push(_this.getDate(item, _this.dayss))
+          })
+          TemStArr = this.getTimeArr.concat(TemStArr)
+        }
         // 列表数据
         if(!this.lineid) {
-          alert('请选择线路');
+          this.$message({
+            message: '请选择线路',
+            type: 'warning'
+          });
           return;
         }
         if (this.checkArr.length == 0) {
-          alert('请添加发团信息');
+          this.$message({
+            message: '请添加发团信息',
+            type: 'warning'
+          });
           return;
         }
-        this.checkArr.forEach(function (item,idx) {
-          delete item.checked
-          item.endtime = TemStArr[idx]
-          if(!item.plan || !item.deadline || !item.mktbaby || !item.mktchild || !item.mktaduilt || !item.mktroom
-            || !item.sltbaby || !item.sltchild || !item.sltaduilt || !item.sltroom) {alert(item.starttime + '日信息填写有误')
-            return
-          }
-          if(platforms.length == 0) {
-            alert('请选择合作平台');
-            return;
-          }
+
+        try {
+          this.checkArr.forEach(function (item,idx) {
+            item.confirm = parseFloat(item.confirm);
+            item.surplus = _this.surpluss;
+            delete item.checked
+            item.endtime = TemStArr[idx] || ''
+            if(!item.plan || !item.deadline || !item.mktbaby || !item.mktchild || !item.mktaduilt || !item.mktroom
+              || !item.sltbaby || !item.sltchild || !item.sltaduilt || !item.sltroom) {
+              _this.$message({
+                message: item.starttime + '日信息填写有误',
+                type: 'warning'
+              });
+              throw false
+            }
+          })
+        }catch (e){
+          throw e
+        }
+
+        if(platforms.length == 0) {
+          this.$message({
+            message: '请选择合作平台',
+            type: 'warning'
+          });
+          return;
+        }
+        // 1 创建
+        if(_this.operationType.type == 'add'){
           groupsave({
             token: '',
             lineid: _this.lineid,
@@ -703,28 +719,53 @@
             details: _this.checkArr
           }).then(res =>{
             if(res.data.error) {
-              alert(res.data.message);
+              this.$message({
+                message: res.data.message,
+                type: 'error'
+              });
               return
             }
             if(!res.data.error) {
-              console.log('创建成功');
+              this.$message({
+                message: '创建成功',
+                type: 'success'
+              });
               _this.$emit('setMode', 'list');
             }
           })
-        })
+        }
+        // 2 编辑
+        if(_this.operationType.type == 'edit'){
+          groupupdate({
+            token: '',
+            lineid: _this.lineid,
+            notify: _this.notify || '',
+            platforms: platforms,
+            details: _this.checkArr,
+            id: _this.idd
+          }).then(res =>{
+            if(res.data.error) {
+              this.$message({
+                message: res.data.message,
+                type: 'error'
+              });
+              return
+            }
+            if(!res.data.error) {
+              this.$message({
+                message: '编辑成功',
+                type: 'success'
+              });
+              _this.$emit('setMode', 'list');
+            }
+          })
+        }
+
       },
       handleHide: function (option) {
         this.$emit('setMode', 'list', option);
       },
-      //获取线路列表
-//      getlinelist(){
-//          console.log(this.search);
-//          /*
-//        let para = this.search
-//        linelist(para).then((res) => {
-//          console.log(para,res,"线路列表")
-//        })*/
-//      },
+
       submitForm() {
         let newDate = '';
         if (this.visitorList.birthday != '') {

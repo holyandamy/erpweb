@@ -10,7 +10,7 @@
             </el-breadcrumb>
           </el-col>
           <el-col :span="12">
-            <el-button class="defaultbutton" @click="setMode('newGroup','add')">新增发团计划</el-button>
+            <el-button class="defaultbutton" @click="setMode('newGroup','add')" >新增发团计划</el-button>
           </el-col>
         </el-row>
       </header>
@@ -86,9 +86,9 @@
           </el-table-column>
           <el-table-column  label="操作">
             <template scope="scope">
-              <el-button @click="setMode('groupinfo'),editorFn(scope.row)" type="text" size="small">下单</el-button>
-              <el-button @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
-              <el-button @click="editorFn(scope.row)" type="text" size="small">详情</el-button>
+              <el-button @click="setMode('groupinfo'),editorFn(scope.row,'groupinfo')" type="text" size="small">下单</el-button>
+              <el-button @click="setMode('newGroup','edit'),editorFn(scope.row,'newGroup')" type="text" size="small">编辑</el-button>  <!-- editorFn(scope.row)  -->
+              <el-button @click="setMode('newGroup','detail'),editorFn(scope.row,'newGroup')" type="text" size="small">详情</el-button>
               <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row)">停止</el-button>
             </template>
           </el-table-column>
@@ -105,11 +105,11 @@
         </div>
       </section>
     </div>
-    <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="setMode" :categoryId="editcategory.id"></GroupInfo>
+    <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="setMode" @editorFn='editorFn'  :categoryId="editcategory.id"></GroupInfo>
     <GroupReserve v-else-if="modeType == 'groupreserve'" @setMode="setMode" :categoryId="editcategory.id"></GroupReserve>
     <Grouporder v-else-if="modeType == 'order'"  @setMode="setMode" :operationType="operationType" ></Grouporder>
     <Reserve v-else-if="modeType == 'reserve'" @setMode="setMode" :categoryId="editcategory.id" :operationType="operationType"></Reserve>  <!-- @setMode="setMode"   :categoryId="editcategory.id"-->
-    <NewGroup v-else  @setMode="setMode" :operationType="operationType" ></NewGroup>
+    <NewGroup v-else  @setMode="setMode" :operationType="operationType" :categoryId="editcategory.id"></NewGroup>
   </div>
 </template>
 <script>
@@ -118,8 +118,8 @@
   import GroupInfo from './groupinfo'
   import GroupReserve from './groupreserve'
   import Reserve from './reserve'
-  import axios from 'axios';
-  import {token,grouplist,linecategoryadd,linecategoryupdate,linecategorydelete} from '../../../common/js/config';
+  import axios from 'axios'
+  import {token,grouplist,linecategoryadd,linecategoryupdate,linecategorydelete} from '../../../common/js/config'
   export default {
     components:{
       Grouporder,
@@ -137,7 +137,7 @@
         type:[{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
         total:0,
         currentPage:1,
-        pagesize:15,
+        pagesize:10,
         operationType:{type:'add',id:''},
         pageset:{
           token,
@@ -145,14 +145,16 @@
           pagesize:''
         },
         lineList:[],
-        editcategory:{}
+        editcategory:{},
+        optionName: '新增发团计划'
       }
     },
     created(){
       this.getList()
     },
     methods:{
-      setMode(type,option){
+      setMode(type,option,sonData){
+        if(sonData) this.editcategory.id = sonData
         this.operationType.type=option;
         this.modeType=type;
         if(type=='list') {
@@ -177,10 +179,13 @@
           }
         })
       },
-      editorFn(rows){
+      editorFn(rows,typee){
         this.editcategory.id=rows.id;
+        if(typee == 'newGroup') {
+          this.editcategory.id=rows.teamid;
+        }
         this.editcategory.name=rows.name;
-        this.modeType = 'groupinfo';
+        this.modeType = typee;
       },
       saveEdit(){
         this.$refs['editcategory'].validate((valid) => {
@@ -225,7 +230,7 @@
         this.pageset.pageindex = this.currentPage-1
         this.pageset.pagesize = this.pagesize
         let page = this.pageset
-        grouplist(JSON.stringify(page)).then((res) => {
+        grouplist(page).then((res) => {
           this.lineList = res.data.obj.datas
           this.total = Number(res.data.obj.total)
         })
