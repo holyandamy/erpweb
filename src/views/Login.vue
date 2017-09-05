@@ -13,7 +13,7 @@
 				</el-form-item>
 				<el-form-item style="margin-top: 50px; height: 30px; margin-bottom: 15px; ">
 					<el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
-					<a href="#" class="forget">忘记密码?</a>
+					<!--<a href="#" class="forget">忘记密码?</a>-->
 				</el-form-item>
 
 				<el-form-item style="width:100%;">
@@ -67,7 +67,6 @@ import Cookies from 'js-cookie';
                   	if(res.data.error == 0){
                   		let info = res.data.obj
                   		let data = JSON.stringify(info)
-	                  	localStorage.setItem('info',data)
 	                  	if(this.checked == true){
 	                  		Cookies.set('token', res.data.obj.token,{ expires: 1/3});
 	                  	}else{

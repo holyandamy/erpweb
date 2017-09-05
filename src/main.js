@@ -25,7 +25,6 @@ const whiteList = ['/login'];
 router.beforeEach((to, from, next) => {
 	let type = Cookies.get('token')
 	let typetoken = sessionStorage.getItem('token')
-	console.log(typetoken)
 	if(type) {
 		next()
 	} else if(typetoken) {

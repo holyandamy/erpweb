@@ -13,7 +13,7 @@
 					<a class="headerimg" > <router-link to="/main"><img src="../assets/images/header.png"/></router-link></a>
 					<div class="clearfix"></div>
 					<el-dropdown trigger="hover">
-					<p class="el-dropdown-link userinfo-inner">{{userinfos.username}}<!--<i class="el-icon-arrow-down"></i>--></p>
+					<p class="el-dropdown-link userinfo-inner">{{userinfo}}<!--<i class="el-icon-arrow-down"></i>--></p>
 					<!--<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>我的审批</el-dropdown-item>
 						<el-dropdown-item>审批列表</el-dropdown-item>
@@ -36,7 +36,7 @@
 				</el-menu>
 				<!--导航菜单-折叠后-->
 				<ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">
-					2222
+					
 					<li v-for="(item,index) in menu" v-if="!item.hidden" class="el-submenu item">
 						<template v-if="!item.leaf">
 							<div class="el-submenu__title" style="padding-left: 20px; " @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
@@ -64,6 +64,7 @@
 
 <script> 
 import Cookies from 'js-cookie';
+import {tokenlogin} from '../common/js/config'
 export default {
     data() {
       return {
@@ -82,10 +83,21 @@ export default {
 },
     methods: {
     	getuserinfo(){
-			let name = localStorage.getItem('info')
-			this.userinfos = JSON.parse(name)
-			this.menu = this.userinfos.menu
-			console.log(this.userinfos)
+//			let name = localStorage.getItem('info')
+			let token = Cookies.get('token')
+			let tokensession = sessionStorage.getItem('token')
+			let para={}
+			if(tokensession){
+				 para = {token:tokensession}
+			}else{
+				 para = {token:token}
+			}
+			
+			tokenlogin(para).then((res) =>{
+				this.userinfo =res.data.obj.username
+				this.menu = res.data.obj.menu
+			})
+		
 			
 		},
       handleSelect(key, keyPath) {
@@ -100,8 +112,9 @@ export default {
 				this.$confirm('确认退出吗?', '提示', {
 					//type: 'warning'
 				}).then(() => {
-					localStorage.removeItem('info');
+					sessionStorage.removeItem('token')
 					Cookies.remove('token');
+					
 					_this.$router.push('/login');
 				}).catch(() => {
 
@@ -132,7 +145,7 @@ float: left;
 			position: fixed;
 			width: 180px;
 			.logo{
-			padding: 15px 0 15px 0;
+			padding: 15px 0px 15px 0px;
 			}
 			.userinfo{
 				height: 150px;
@@ -160,7 +173,7 @@ float: left;
 					margin-top: 10px;
 					a{color: #b8c0cc;
 					font-size: 12px;
-					margin: 0 5px;
+					margin: 0px 5px;
 					cursor: pointer;
 					}
 				}
@@ -177,11 +190,11 @@ float: left;
 	.el-dropdown-menu{
 		font-size: 12px;
 		background: #4b5565;
-		border: 0;
+		border: 0px;
 		
 		li{
 			line-height: 30px;
-			margin-top: 0!important;
+			margin-top: 0px!important;
 			color: #fff;
 			text-align: center
 			:hover{
