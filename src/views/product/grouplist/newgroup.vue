@@ -205,7 +205,7 @@
                         <div class="cell" style='cursor: pointer;' @click='sigDel(idx)'>删除</div>
                       </td>
                       <td >
-                        {{item.starttime || '---'}}
+                        {{item.starttime || '---'}} {{item.checked ,item.isorder}}
                       </td>
                       <td>
                         <div class="cell el-tooltip" ><el-input v-model="item.plan"></el-input></div>
@@ -436,8 +436,9 @@
         idd: '',
         getTimeArr: [],
         dayss: '',
-        surpluss: ''
-      }
+        surpluss: '',
+        TemStArr: []
+    }
     },
 
     watch : {
@@ -561,6 +562,8 @@
       // 全选单选删除
       sigDel (idx) {
         this.checkArr.splice(idx, 1)
+        this.startTimeArr.splice(idx, 1)
+        this.TemStArr = []
       },
       sigCheck () {
         let isAll = this.checkArr.every(function (item) {
@@ -569,25 +572,34 @@
         isAll == true ? this.allChecked = true : this.allChecked = false
       },
       allCheck (event) {
-        console.log(666666, event);
+        console.log(event);  // todo
         if(event.target.checked){
+          console.log(111);  // todo
           this.checkArr.forEach(function (item, index) {
             item.checked = true
           })
+          console.log('this.checkArr', this.checkArr);  // todo
+
         }else {
+          console.log(2222); // todo
+
           this.checkArr.forEach(function (item, index) {
             item.checked = false
           })
+          console.log('this.checkArr', this.checkArr);  // todo
+
         }
-        console.log(7777, this.checkArr);
       },
       // 选择日期添加一行
       addTr () {
+        console.log(8888, this.value1);  // todo 3
         // 开始时间
         this.startTimeArr.push(this.value1);
         var M = (this.value1.getMonth()+1).toString().length==1 ? '0'+ (this.value1.getMonth()+1).toString() : (this.value1.getMonth()+1).toString();
         var D = this.value1.getDate().toString().length==1 ? '0'+ this.value1.getDate().toString() : this.value1.getDate().toString();
         var selectTime = this.value1.getFullYear().toString() +"-" + M+ "-" + D;
+        console.log(8888, selectTime);  // todo 3
+
         this.checkArr.push(
           {checked: '',
             starttime: selectTime,
@@ -619,11 +631,15 @@
         })
       },
       //求截止日期
-      getDate (vall, dayy) {
+      getDateEnd (vall, dayy,isPlus) {
 //        var now=new Date();
 //        var time=now.getTime();
         var time = vall.getTime();
-        time+=1000*60*60*24*dayy;//加上3天
+         if (isPlus) {
+           time+=1000*60*60*24*dayy;//加上3天
+         }else {
+           time-=1000*60*60*24*dayy;//减上3天
+         }
         vall.setTime(time);
         var M = (vall.getMonth()+1).toString().length == 1 ? '0' + (vall.getMonth()+1).toString(): (vall.getMonth()+1).toString()
         var D = vall.getDate().toString().length == 1 ? '0' + vall.getDate().toString(): vall.getDate().toString()
@@ -644,6 +660,7 @@
       },
       // 点击保存 取消
       save () {
+        let _this = this;
         // 列表数据
         if(!this.lineid) {
           this.$message({
@@ -672,26 +689,12 @@
             platforms.push({platform: item.platform, isenable: false});
           }
         })
-        // 结束时间
-        let _this = this;
-        let TemStArr = [];
-        if(_this.operationType.type == 'add'){
-          _this.startTimeArr.forEach(function (item) {
-            TemStArr.push(_this.getDate(item, _this.checkItem.days))
-          })
-        }
-        if(_this.operationType.type == 'edit'){
-          this.startTimeArr.forEach(function (item) {
-            TemStArr.push(_this.getDate(item, _this.dayss))
-          })
-          TemStArr = this.getTimeArr.concat(TemStArr)
-        }
 
         try {
           this.checkArr.forEach(function (item,idx) {
             item.confirm = parseFloat(item.confirm);
             item.surplus = _this.surpluss;
-            item.endtime = TemStArr[idx] || ''
+//            item.endtime = _this.TemStArr[idx] || ''
             if(!item.plan || !item.deadline || !item.mktbaby || !item.mktchild || !item.mktaduilt || !item.mktroom
               || !item.sltbaby || !item.sltchild || !item.sltaduilt || !item.sltroom) {
               _this.$message({
@@ -700,12 +703,28 @@
               });
               throw false
             }
+            _this. allChecked = false
             delete item.checked
           })
         }catch (e){
           throw e
         }
 
+        // 结束时间
+        if(_this.operationType.type == 'add'){
+          _this.startTimeArr.forEach(function (item) {
+            _this.TemStArr.push(_this.getDateEnd(item, _this.checkItem.days,true))
+          })
+        }
+        if(_this.operationType.type == 'edit'){
+          _this.startTimeArr.forEach(function (item) {
+            _this.TemStArr.push(_this.getDateEnd(item, _this.dayss,true))
+          })
+          _this.TemStArr = this.getTimeArr.concat(_this.TemStArr)
+        }
+        this.checkArr.forEach(function (item,idx) {
+          item.endtime = _this.TemStArr[idx] || ''
+        })
         // 1 创建
         if(_this.operationType.type == 'add'){
           groupsave({
@@ -715,11 +734,16 @@
             platforms: platforms,
             details: _this.checkArr
           }).then(res =>{
-            if(res.data.error) {
+            if(res.data.error || res.data.err) {
               this.$message({
-                message: res.data.message,
+                message: res.data.message || '失败',
                 type: 'error'
               });
+              //减去之前加上的时间
+              _this.startTimeArr.forEach(function (item) {
+                _this.TemStArr.push(_this.getDateEnd(item, _this.checkItem.days,false))
+              })
+              _this.TemStArr = []
               return
             }
             if(!res.data.error) {
@@ -746,6 +770,12 @@
                 message: res.data.message,
                 type: 'error'
               });
+              //减去之前加上的时间
+              _this.startTimeArr.forEach(function (item) {
+                _this.TemStArr.push(_this.getDateEnd(item, _this.dayss,false))
+              })
+              _this.TemStArr = _this.getTimeArr.concat(_this.TemStArr)
+              _this.TemStArr = []
               return
             }
             if(!res.data.error) {

@@ -348,6 +348,7 @@
           throw e
         }
         this.visitorList.list = this.checkArr
+        this.visitorList.mobile = this.visitorList.mobile.toString()
         orderSave(this.visitorList).then(function (res) {
           if(!res.data.error){
             _this.$message({
