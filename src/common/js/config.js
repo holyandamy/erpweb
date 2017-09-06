@@ -11,15 +11,12 @@ if(Cookies.get('token')){
 }
 
 
-export let bases = "http://172.17.9.13:3001/"
-export const setToken=value=>{ token= value };
 
-//////////0
 /* 首页 */
 export const dashboard = params => { return axios.post(`${base}/sys/dashboard/info`, params).then(res => res); };//首页信息
 export const tokenlogin = params => { return axios.post(`${base}/sys/user/token/login`, params).then(res => res); };
 //登陆接口
-export const login = params => { return axios.post(`${base}/sys/user/login`, params).then(res => res); };
+export const userlogin = params => { return axios.post(`${base}/sys/user/login`, params).then(res => res); };
 /* 收款 */
 export const getcollectlist = params => { return axios.post(`${base}/finance/collect`, params).then(res => res); };//获取收款列表
 export const collectsave = params => { return axios.post(`${base}/finance/collect/save`, params).then(res => res); };//收款登记
@@ -55,6 +52,7 @@ export const ordercancel = params => { return axios.post(`${base}/order/cancel`,
 export const ordernamelistconfirm = params => { return axios.post(`${base}/order/namelist/confirm`, params); };//确认游客名单接口
 export const ordernamelistexport = params => { return axios.post(`${base}/order/namelist/export`, params); };//导出游客名单
 export const orderexportdetail = params => { return axios.post(`${base}/order/export/detail`, params); };//获取确认单详情
+export const orderpay = params => { return axios.post(`${base}/order/pay`, params); };//调整价格
 
 
 

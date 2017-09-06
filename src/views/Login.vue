@@ -28,7 +28,7 @@
 	//import { requestLogin } from '../api/api';
 	//import NProgress from 'nprogress'
 import Cookies from 'js-cookie';
-	import { login } from '../common/js/config';
+	import { userlogin } from '../common/js/config';
 	import md5 from 'js-md5';
 	export default {
 		data() {
@@ -63,7 +63,7 @@ import Cookies from 'js-cookie';
 							username: this.loginForm.username,
 							password: md5(this.loginForm.password)
 						}
-                  login(para).then((res) =>{
+                  userlogin(para).then((res) =>{
                   	if(res.data.error == 0){
                   		let info = res.data.obj
                   		let data = JSON.stringify(info)

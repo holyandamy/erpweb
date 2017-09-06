@@ -96,7 +96,7 @@ export default {
 			tokenlogin(para).then((res) =>{
 				this.userinfo =res.data.obj.username
 				this.menu = res.data.obj.menu
-				console.log(res.data.obj)
+				Cookies.set('info',res.data.obj.auths)
 			})
 		
 			
@@ -115,7 +115,7 @@ export default {
 				}).then(() => {
 					sessionStorage.removeItem('token')
 					Cookies.remove('token');
-					
+					Cookies.remove('info')
 					_this.$router.push('/login');
 				}).catch(() => {
 

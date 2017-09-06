@@ -36,16 +36,5 @@ export async function imgupload(files) {
 	const res= await client.formPutFile('/{year}/{mon}/{day}/{random32}{.suffix}', files.file)
 	files.file['url'] = 'http://xtimg.b0.upaiyun.com' + res.url
 	return files
-//	.then(function(res) {
-//		 files.file['url'] = 'http://xtimg.b0.upaiyun.com' + res.url
-//		 return files
-////		uploadafter(res,files)
-//	}).catch(function(err) {})
-
 }
-//export function uploadafter(res,files){
-//	filelist.push(files.file['url'])
-//	console.log(filelist)
-//
-//}
-//export let filelists = []
+

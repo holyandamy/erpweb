@@ -51,7 +51,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							结算价格：   {{detail.sltprice}}   <!--  成人{{detail.sltaduilt}} 儿童{{detail.sltchild}} 婴儿{{detail.sltbaby}} 单房差{{detail.endtime}}-->
+							结算价格：   {{detail.sltprice}}    
 						</el-col>
 						<el-col :span="12" class="pl-20">
 							负责人：{{detail.creater}}
@@ -95,12 +95,12 @@
 						<el-col :span="12"><el-button @click="addcollpay('collect')" class="hasid" id="869cc288735d11e788410242ac120009">新增收款</el-button></el-col>
 					</el-row>
 				</h2>
-			<el-table :data="detail.collections" border style="width: 100%">
+			<el-table :data="detail.collections" show-summary border style="width: 100%">
 				<el-table-column prop="createtime" label="创建日期">
 				</el-table-column>
 				<el-table-column prop="code" label="收款单号">
 				</el-table-column>
-				<el-table-column prop="totalfee" label="金额">
+				<el-table-column prop="totalfee"  label="金额">
 				</el-table-column>
 				<el-table-column prop="confirm" label="确认状态">
 				</el-table-column>
@@ -115,7 +115,7 @@
 						<el-col :span="12"><el-button @click="addcollpay('pay')"  class="hasid" id="89cec1b8735d11e788410242ac120009">新增付款</el-button></el-col>
 					</el-row>
 				</h2>
-			<el-table :data="detail.pays" border style="width: 100%">
+			<el-table :data="detail.pays" show-summary border style="width: 100%">
 				<el-table-column prop="createtime" label="创建日期">
 				</el-table-column>
 				<el-table-column prop="code" label="收款单号">
@@ -126,7 +126,7 @@
 				</el-table-column>
 				<el-table-column prop="verification" label="核销状态">
 				</el-table-column>
-				<el-table-column prop="fee" label="备注">
+				<el-table-column prop="remark" label="备注">
 				</el-table-column>
 			</el-table>
 			<h2>
@@ -221,7 +221,7 @@
 								<el-input v-model="namelist.mobile" placeholder="手机号"></el-input>
 							</td>
 							<td>
-								<el-checkbox v-model="namelist.room">单房差</el-checkbox>
+								<el-checkbox v-model="namelist.room" @change="addroom">单房差</el-checkbox>
 							</td>
 							<td>
 								<el-input v-model="namelist.remark" placeholder="备注"></el-input>
@@ -232,8 +232,8 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="5">成人：￥82910 儿童：￥1839 婴儿：￥124</td>
-							<td colspan="4" style="text-align: right; padding-right: 20px;">退款合计：￥83028.00</td>
+							<td colspan="5"> 成人{{detail.sltaduilt*detail.totaladult}} 儿童{{detail.sltchild*detail.totalchild}} 婴儿{{detail.sltbaby*detail.totalbaby}} 单房差{{roomprice}}</td>
+							<td colspan="4" style="text-align: right; padding-right: 20px;">合计：{{detail.sltaduilt*detail.totaladult+detail.sltchild*detail.totalchild+detail.sltbaby*detail.totalbaby+roomprice}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -442,6 +442,8 @@
 				type: '',
 				alllogs: [],
 				oldtotal:0,
+				roomlength:'',
+				roomprice:0
 			}
 		},
 		created() {
@@ -481,18 +483,22 @@
 			//天数减少
 			minuday(type) {
 				let index = this.detail.namelist
-				
+				let adult = []
+				let child =[]
+				let baby = []
 				if(type == "adult") {
 					if(this.detail.totaladult <= 1) {
 						this.detail.totaladult == 1
 						index = 1
 					} else {
 						this.detail.totaladult -= 1
+						let t 
 						for(let i = 0; i < index.length; i++) {
 							if(index[i].type == "成人") {
-								index.splice(i + this.detail.totaladult, 1)
+								t = i
 							}
 						}
+						index.splice(t,1)
 					}
 				} else if(type == "child") {
 					if(this.detail.totalchild <= 1) {
@@ -500,11 +506,14 @@
 						index = 1
 					} else {
 						this.detail.totalchild -= 1
+						let t 
 						for(let i = 0; i < index.length; i++) {
 							if(index[i].type == "儿童") {
-								index.splice(i + this.detail.totalchild, 1)
+							
+								t = i
 							}
 						}
+						index.splice(t,1)
 					}
 				} else if(type == "baby") {
 					if(this.detail.totalbaby <= 1) {
@@ -512,13 +521,17 @@
 						index = 1
 					} else {
 						this.detail.totalbaby -= 1
+						let t 
 						for(let i = 0; i < index.length; i++) {
 							if(index[i].type == "婴儿") {
-								index.splice(i + this.detail.totalbaby, 1)
+							
+								t = i
 							}
 						}
+						index.splice(t,1)
 					}
 				}
+				
 
 			},
 			//天数增加
@@ -569,6 +582,28 @@
 				}
 
 			},
+			//单房差价格
+			addroom(){
+				let type = this.detail.namelist
+				let trueroom = []
+				let falseroom = []
+				for(let i =0;i<type.length;i++){
+					if(type[i].room){
+						trueroom.push(type[i].room)
+						this.roomprice = this.detail.sltroom*trueroom.length
+						
+					}
+					if(type[i].room == false){
+						
+						falseroom.push(type[i].room)
+
+						this.roomprice = this.detail.sltroom*trueroom.length
+					
+					}
+				}
+				
+				
+			},
 			//删除游客
 			deletepeople(index) {
 				this.detail.namelist.splice(index, 1)
@@ -580,21 +615,72 @@
 					token: token
 				}
 				orderdetail(para).then((res) => {
-					console.log(res)
 					this.detail = res.data.obj
 					let type = res.data.obj.namelist
 					this.alllogs = res.data.obj.logs
 					this.detail.logs = res.data.obj.logs.slice(0, 3)
 					this.oldtotal = res.data.obj.totaladult + res.data.obj.totalchild + res.data.obj.totalbaby
+					let roomtrue = []
+					let adultAll = []
+					let childAll = []
+					let babyAll = []
 					for(let i = 0; i < type.length; i++) {
 						if(type[i].type == 1) {
 							type[i].type = "成人"
+							adultAll.push(type[i])
 						} else if(type[i].type == 2) {
 							type[i].type = "儿童"
+							childAll.push(type[i])
 						} else if(type[i].type == 3) {
 							type[i].type = "婴儿"
+							babyAll.push(type[i])
+						
 						}
+						if(type[i].room == true){
+							roomtrue.push(type[i].room)
+							this.roomprice = res.data.obj.sltroom * roomtrue.length
+						}
+						
 					}
+					let otheradult = this.detail.totaladult - adultAll.length
+					let otherchild = this.detail.totalchild - childAll.length
+					let otherbaby = this.detail.totalbaby - babyAll.length
+					for(let j = 0 ; j <otheradult;j++){
+						this.detail.namelist.push({
+							name: '',
+							mobile: '',
+							certtype: '',
+							cert: '',
+							room: false,
+							remark: '',
+							type: '成人'
+							
+						})
+					}
+					for(let j = 0 ;j<otherchild;j++){
+						this.detail.namelist.push({
+							name: '',
+							mobile: '',
+							certtype: '',
+							cert: '',
+							room: false,
+							remark: '',
+							type: '儿童'
+							
+						})
+					}
+					for(let j = 0 ;j<otherbaby;j++){
+						this.detail.namelist.push({
+							name: '',
+							mobile: '',
+							certtype: '',
+							cert: '',
+							room: false,
+							remark: '',
+							type: '婴儿'
+						})
+					}
+					
 					//this.detail = res
 				})
 			},
@@ -696,20 +782,37 @@
 				}
 				for(let i = 0; i < this.detail.namelist.length; i++){
 					if(this.detail.namelist[i].type == "成人") {
-						para.list[i].type = 1
-						console.log()
+						para.list[i].type = '1'
 					} else if(this.detail.namelist[i].type == "儿童") {
-						para.list[i].type = 2
+						para.list[i].type = '2'
 					} else if((this.detail.namelist[i].type == "婴儿")) {
-						para.list[i].type = 3
+						para.list[i].type = '3'
 					}
 				}
+				
 				orderupdate(para).then((res) => {
+				for(let i = 0; i < this.detail.namelist.length; i++){
+					if(this.detail.namelist[i].type == "1") {
+						this.detail.namelist[i].type = '成人'
+					} else if(this.detail.namelist[i].type == "2") {
+						this.detail.namelist[i].type = '儿童'
+					} else if((this.detail.namelist[i].type == "3")) {
+						this.detail.namelist[i].type = '婴儿'
+					}
+				}
 					if(res.data.error == 1) {
+					
 						this.$message({
 							message: res.data.message,
 							type: 'warning'
 						});
+					
+						
+						
+						
+						
+						
+						
 					} else {
 						this.handleHide()
 						this.$message({
@@ -718,26 +821,50 @@
 						});
 
 					}
-					console.log(para, res, '提交表单')
+					
 				})
 			},
 			//取消订单
 			cancelorder() {
-				ordercancel(this.baseform).then((res) => {
-					console.log(this.baseform, res, '取消订单')
+				let para = {
+					token:token,
+					id:this.detail.id
+				}
+				ordercancel({para}).then((res) => {
+					console.log(para, res, '取消订单')
 				})
 			},
 			//确认游客名单
 			confirmvisitor() {
-				this.confirmnamelist = false
-				ordernamelistconfirm(this.baseform).then((res) => {
-					console.log(res, "确认游客名单")
+				let para = {
+					token:token,
+					id:this.detail.id
+				}
+				
+				ordernamelistconfirm(para).then((res) => {
+					console.log(para,res, "确认游客名单")
+					if(res.data.error == 1){
+						this.$message({
+							message: res.data.message,
+							type: 'error'
+						});
+					}else{
+						this.$message({
+							message: '保存成功',
+							type: 'success'
+						});
+						this.confirmnamelist = false
+					}
 				})
 			},
 			//导出游客名单
 			exportnamelist() {
-				ordernamelistexport(this.baseform).then((res) => {
-					console.log(this.baseform, res, "导出游客名单")
+				let para = {
+					token:token,
+					id:this.detail.id
+				}
+				ordernamelistexport(para).then((res) => {
+					console.log(para, res, "导出游客名单")
 				})
 			},
 			addcollpay(type) {

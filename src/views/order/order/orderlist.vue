@@ -15,7 +15,7 @@
 				</el-row>
 			</header>
 
-			<el-form :inline="true" :model="orderinfo" class="demo-form-inline hasid" style="text-align: left; padding-left: 30px;" id="bc6051cd735911e788410242ac120009">
+			<el-form :inline="true" :model="orderinfo" class="demo-form-inline hasid  ssss" style="text-align: left; padding-left: 30px;" id="bc6051cd735911e788410242ac120009">
 				<el-row>
 					<el-col :span="18">
 
@@ -99,7 +99,15 @@
 
 
 			</section>
-
+ <div class="page">
+          <el-pagination
+           @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-size="pagesize"
+            layout="total, prev, pager, next"
+            :total="total">
+          </el-pagination>
+        </div>
 		</div>
 		<OrderInfo v-else @setMode="setMode" :listid="listid"></OrderInfo>
 	</div>
@@ -116,6 +124,9 @@
 		},
 		data() {
 			return {
+				total: 0,
+				currentPage: 1,
+				pagesize:10,
 				orderinfo: {
 					orderno: '',
 					linename: '',
@@ -124,13 +135,12 @@
 					status: '',
 					source: '',
 					hide: false,
-					token: token
+					token: token,
+					pageindex:0,
+					pagesize:10
 
 				},
 				orderLists: [],
-				total: 0,
-				currentPage: 1,
-				pagesize: 10,
 				options: [{
 					value: '1',
 					label: '新增'
@@ -146,14 +156,9 @@
 
 			}
 		},
-		created(){
+		
+		mounted(){
 			showorhide()
-		},
-		updated: function() {
-			
-			this.$nextTick(function() {
-				showorhide()
-			})
 		},
 		methods: {
 			setMode(type){
@@ -172,6 +177,7 @@
 				}
 
 				let page = this.orderinfo
+				page.pageindex = this.currentPage-1
 				page.date = dates
 				orderlist(page).then((res) => {
 					console.log(page,res)
@@ -329,4 +335,8 @@
 		}
 	}
 	.demo-form-inline{float: left; text-align: left; padding-left: 30px;}
+	.page{
+		margin: 0 30px;
+		margin-top: 20px;
+	}
 </style>
