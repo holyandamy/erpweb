@@ -16,43 +16,48 @@
       </header>
       <section class="padding30">
         <el-form    ref="searchList" label-width="100px" class="demo-ruleForm" style="text-align: left;">
-          <el-form-item label="出发时间"   style="margin-left: 10px">
-            <div class="block">
-              <el-date-picker
-                v-model="date"
-                type="daterange"
-                placeholder="选择日期范围">
-              </el-date-picker>
-            </div>
-          </el-form-item>
-          <el-form-item label="线路类型" prop="categoryType"  style="width: 190px" >
-            <el-select v-model="searchList.categoryType"  >
-              <el-option  v-for="item in type"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="状态" prop="status"  style="width: 190px" >
-            <el-select v-model="searchList.status"  >
-              <el-option  v-for="item in type1"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="线路名称"  >
-            <el-col :span="4"   >
-              <el-input v-model="searchList.linename"></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="团号"  style="margin-left: 10px">
-            <el-col :span="4" style="width: 150px">
-              <el-input v-model="searchList.teamname"></el-input>
-            </el-col>
-          </el-form-item>
+          <el-row>
+           <el-form-item label="出发时间"   style="margin-left: 10px">
+             <div class="block">
+               <el-date-picker
+                 v-model="date"
+                 type="daterange"
+                 placeholder="选择日期范围">
+               </el-date-picker>
+             </div>
+           </el-form-item>
+           <el-form-item label="线路类型" prop="categoryType"  style="width: 390px" >
+             <el-select v-model="searchList.categoryType"  >
+               <el-option  v-for="item in type"
+                           :key="item.value"
+                           :label="item.label"
+                           :value="item.value"
+               ></el-option>
+             </el-select>
+           </el-form-item>
+           <el-form-item label="状态" prop="status"  style="width: 390px" >
+             <el-select v-model="searchList.status"  >
+               <el-option  v-for="item in type1"
+                           :key="item.value"
+                           :label="item.label"
+                           :value="item.value"
+               ></el-option>
+             </el-select>
+           </el-form-item>
+          </el-row>
+
+          <el-row>
+           <el-form-item label="线路名称"  >
+             <el-col :span="4"   >
+               <el-input v-model="searchList.linename"></el-input>
+             </el-col>
+           </el-form-item>
+           <el-form-item label="团号"  style="margin-left: 10px">
+             <el-col :span="4" style="width: 150px">
+               <el-input v-model="searchList.teamname"></el-input>
+             </el-col>
+           </el-form-item>
+          </el-row>
 
           <el-form-item   style="margin-left: -70px">
             <el-button class="hasid" id="49641a18734611e788410242ac120009" type="primary" @click="searchGetList">查询</el-button>

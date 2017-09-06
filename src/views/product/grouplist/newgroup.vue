@@ -441,7 +441,8 @@
         getTimeArr: [],
         dayss: '',
         surpluss: '',
-        TemStArr: []
+        TemStArr: [],
+        platformId: []
     }
     },
 
@@ -473,6 +474,7 @@
           let _thiss = _this
           res.data.obj.platforms.forEach(function (item) {
             if(item.isenable)  _thiss.checkList.push(item.platform - 1)
+            _this.platformId.push(item.id)
           })
           _this.checkArr = res.data.obj.details.slice(0)
           _this.checkArr.forEach(function (item,idx) {
@@ -661,9 +663,9 @@
         })
         this.pingtai.forEach(function (item,idx) {
           if (checkListNew.indexOf(item.platform) != -1) {
-            platforms.push({platform: item.platform, isenable: true});
+            platforms.push({platform: item.platform, isenable: true,id: _this.platformId[idx]});
           }else {
-            platforms.push({platform: item.platform, isenable: false});
+            platforms.push({platform: item.platform, isenable: false,id: _this.platformId[idx]});
           }
         })
 
