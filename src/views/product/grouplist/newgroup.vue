@@ -147,9 +147,10 @@
 
                     <tr class="el-table__row">
                       <td class="el-table_1_column_123 el-table-column--selection">
-                        <el-checkbox v-model="allChecked" @change='allCheck'>全选</el-checkbox>
+                        <el-checkbox v-model="allChecked" @change='allCheck' v-if="operationType.type == 'add'">全选</el-checkbox>
+                        <div class="cell el-tooltip" v-if="operationType.type == 'edit'">---</div>
                       </td>
-                      <td  >
+                      <td >
                         <!--<div class="cell">删除</div>-->
                         <div class="cell el-tooltip" >---</div>
                       </td>
@@ -199,21 +200,24 @@
                     </tr>
                     <tr class="el-table__row" v-for='(item,idx) in checkArr' v-if='checkArr.length>0'>
                       <td class="el-table_1_column_123 el-table-column--selection">
+                        <!--{{item.checked}}-->
                         <el-checkbox v-model="item.checked" @change='sigCheck'></el-checkbox>
                       </td>
                       <td  >
                         <div class="cell" style='cursor: pointer;' @click='sigDel(idx)'>删除</div>
                       </td>
-                      <td >
-                        {{item.starttime || '---'}} {{item.checked ,item.isorder}}
+                      <td width='800'>
+                        {{item.starttime || '---'}}
                       </td>
                       <td>
                         <div class="cell el-tooltip" ><el-input v-model="item.plan"></el-input></div>
                       </td>
                       <td >
+                        <!--{{item.isorder}}-->
                         <div class="cell el-tooltip" ><el-checkbox v-model="item.isorder"></el-checkbox></div>
                       </td>
                       <td >
+                        <!--{{item.confirm}}-->
                         <div class="cell el-tooltip" ><el-radio class="radio" v-model="item.confirm" label='0'>自动</el-radio></div>
                       </td>
                       <td  >
@@ -456,10 +460,7 @@
         }
       }
     },
-    created(){
-      this.getPingtai();
-      if(this.operationType.type == 'edit' || this.operationType.type == 'detail') this.getdetail();
-    },
+
     methods: {
       // 编辑  详情时获取信息
       getdetail () {
@@ -473,31 +474,17 @@
           res.data.obj.platforms.forEach(function (item) {
             if(item.isenable)  _thiss.checkList.push(item.platform - 1)
           })
+          _this.checkArr = res.data.obj.details.slice(0)
+          _this.checkArr.forEach(function (item,idx) {
+            item.confirm = item.confirm.toString();
+//            item.checked = item.isenable;
+          })
           res.data.obj.details.forEach(function (item,idx) {
-            _this.checkArr.push({})
-            _this.checkArr[idx].confirm = item.confirm.toString();
-            _this.checkArr[idx].deadline = item.deadline;
-            _this.checkArr[idx].isenable = item.isenable;
-            _this.checkArr[idx].isorder = item.isorder;
-            _this.checkArr[idx].book = item.book;
-            _this.checkArr[idx].mktaduilt = item.mktaduilt;
-            _this.checkArr[idx].mktbaby = item.mktbaby;
-            _this.checkArr[idx].mktchild = item.mktchild;
-            _this.checkArr[idx].mktroom = item.mktroom;
-            _this.checkArr[idx].plan = item.plan;
-            _this.checkArr[idx].sit = item.sit;
-            _this.checkArr[idx].sltaduilt = item.sltaduilt;
-            _this.checkArr[idx].sltbaby = item.sltbaby;
-            _this.checkArr[idx].sltchild = item.sltchild;
-            _this.checkArr[idx].sltroom = item.sltroom;
-            _this.checkArr[idx].starttime = item.starttime;
             _this.surpluss = item.surplus;
             _this.dayss = item.deadline;
             _this.getTimeArr.push(item.endtime);
-            _this.checkArr[idx].checked = false;
           })
         })
-        console.log(888888, _this.checkArr);
       },
       getPingtai () {
         let _this = this;
@@ -572,34 +559,24 @@
         isAll == true ? this.allChecked = true : this.allChecked = false
       },
       allCheck (event) {
-        console.log(event);  // todo
-        if(event.target.checked){
-          console.log(111);  // todo
+        if(this.allChecked){
           this.checkArr.forEach(function (item, index) {
             item.checked = true
           })
-          console.log('this.checkArr', this.checkArr);  // todo
 
         }else {
-          console.log(2222); // todo
-
           this.checkArr.forEach(function (item, index) {
             item.checked = false
           })
-          console.log('this.checkArr', this.checkArr);  // todo
-
         }
       },
       // 选择日期添加一行
       addTr () {
-        console.log(8888, this.value1);  // todo 3
         // 开始时间
         this.startTimeArr.push(this.value1);
         var M = (this.value1.getMonth()+1).toString().length==1 ? '0'+ (this.value1.getMonth()+1).toString() : (this.value1.getMonth()+1).toString();
         var D = this.value1.getDate().toString().length==1 ? '0'+ this.value1.getDate().toString() : this.value1.getDate().toString();
         var selectTime = this.value1.getFullYear().toString() +"-" + M+ "-" + D;
-        console.log(8888, selectTime);  // todo 3
-
         this.checkArr.push(
           {checked: '',
             starttime: selectTime,
@@ -756,7 +733,17 @@
           })
         }
         // 2 编辑
+
+
         if(_this.operationType.type == 'edit'){
+          _this.checkArr.forEach(function (item) {
+            delete item.linename;
+            delete item.creater;
+            delete item.id;
+            delete item.status;
+            delete item.teamid;
+            delete item.teamno;
+          })
           groupupdate({
             token: token,
             lineid: _this.lineid,
@@ -765,9 +752,9 @@
             details: _this.checkArr,
             id: _this.idd
           }).then(res =>{
-            if(res.data.error) {
+            if(res.data.error || res.data.err) {
               this.$message({
-                message: res.data.message,
+                message: res.data.message || '失败',
                 type: 'error'
               });
               //减去之前加上的时间
@@ -892,6 +879,10 @@
         }
         this.getdistrict(city)
       }
+    },
+    beforeMount () {
+      this.getPingtai();
+      if(this.operationType.type == 'edit' || this.operationType.type == 'detail') this.getdetail();
     }
 
   }
