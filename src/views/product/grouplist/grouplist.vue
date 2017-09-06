@@ -59,10 +59,10 @@
            </el-form-item>
           </el-row>
 
-          <el-form-item   style="margin-left: -70px">
+          <el-form-item   style="margin-left: 0px">
             <el-button class="hasid" id="49641a18734611e788410242ac120009" type="primary" @click="searchGetList">查询</el-button>
           </el-form-item>
-          <el-form-item   style="margin-left: -70px">
+          <el-form-item   style="margin-left: 0px">
             <el-button  type="primary" @click="clearGetList">清空查询</el-button>
           </el-form-item>
         </el-form>
