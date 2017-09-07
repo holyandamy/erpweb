@@ -69,6 +69,7 @@
 
 </template>
 <script>
+  import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
 	import { companyupdate, province, city, district,companydetail,token } from '../../../common/js/config';
 	import ImgLoad from './upload'
@@ -79,28 +80,28 @@
 		},
 		data() {
 			//验证手机号码
-//			var checkmobile = (rule, value, callback) => {
-//				if(!value) {
-//					return callback(new Error('手机号码不能为空'));
-//				}
-//				setTimeout(() => {
-//					if(!Number.isInteger(value)) {
-//						callback(new Error('请输入数字值'));
-//					} else {
-//						let mobilereg = /^[0-9]{11}$/;
-//						if(mobilereg.test(value)) {
-//							callback();
-//						} else {
-//							callback(new Error('请输入正确的手机号码'));
-//						}
-//					}
-//				}, 1000);
-//			};
+			var checkmobile = (rule, value, callback) => {
+				if(!value) {
+					return callback(new Error('手机号码不能为空'));
+				}
+				setTimeout(() => {
+					if(!Number.isInteger(value)) {
+						callback(new Error('请输入数字值'));
+					} else {
+						let mobilereg = /^[0-9]{11}$/;
+						if(mobilereg.test(value)) {
+							callback();
+						} else {
+							callback(new Error('请输入正确的手机号码'));
+						}
+					}
+				}, 1000);
+			};
 			return {
 				activeIndex: '3',
 				//提交数据
 				companyForm: {
-					token: token,
+					token: paramm.getToken(),
 					companyName: '',
 					countryId: 'fb0828b148bc48afbab8ef03c55d153b',
 					provinceId: '',
@@ -158,7 +159,7 @@
 						}
 					],
 					mobile: [{
-//						validator: checkmobile,
+					validator: checkmobile,
 						trigger: 'blur',
 						required: true,
 					}],
@@ -185,7 +186,7 @@
 		created() {
 			this.getinfo()
 			this.getprovince()
-			
+
 		},
 		updated: function() {
 			this.$nextTick(function() {
@@ -195,9 +196,10 @@
 		methods: {
 			//获取公司信息
 			getinfo(){
-				let para={token:token}
+				let para={token:paramm.getToken()}
 				companydetail(para).then((res) =>{
 					this.companyForm = res.data.obj
+          console.log(this.companyForm)
 					this.logo = res.data.obj.logo
 					console.log(res.data.obj)
 					this.$refs.logos.loading(this.logo)
@@ -227,6 +229,9 @@
 			//重置表单
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
+        this.companyForm.provinceId = ''
+        this.companyForm.cityId = ''
+        this.companyForm.districtId = ''
 			},
 			//
 			//获取省级列表
@@ -234,7 +239,7 @@
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
 					id: count,
-					token: token
+					token: paramm.getToken()
 				}
 				province(para).then((res) => {
 					this.province = res.data.obj
@@ -265,19 +270,21 @@
 			changecity(val) {
 				if(val =="pro"){
 					let pro = {
-					id: this.companyForm.provinceId
+					id: this.companyForm.provinceId,
+          token:paramm.getToken()
 					}
 					this.getcity(pro)
 					this.companyForm.cityId = ""
 				}else{
 					let city = {
-					id: this.companyForm.cityId
+					id: this.companyForm.cityId,
+          token:paramm.getToken()
 					}
 					this.getdistrict(city)
 					this.companyForm.districtId=""
 				}
-				
-				
+
+
 
 			},
 			imagelistchange(val){
@@ -291,19 +298,19 @@
 	.clearfix {
 		clear: both;
 	}
-	
+
 	.bg-white {
 		background: white;
 	}
-	
+
 	.padding30 {
 		padding: 20px;
 	}
-	
+
 	.margin30 {
 		margin: 30px;
 	}
-	
+
 	header {
 		padding: 0 40px;
 		background: white;
@@ -334,7 +341,7 @@
 			color: #333;
 		}
 	}
-	
+
 	.el-select {
 		margin-right: 15px;
 	}

@@ -125,7 +125,7 @@
 		</section>
 		<!--角色选择-->
 		<el-dialog title="选择角色" :visible.sync="finddepartment" size="tiny">
-			
+
 			  <div style="margin: 15px 0;"></div>
 			  <el-checkbox-group v-model="checkdepartment" @change="handleCheckedCitiesChange">
 			    <el-checkbox v-for="role in rolelist" :label="role.id" :key="role.id">{{role.rolename}}</el-checkbox>
@@ -136,7 +136,7 @@
 			  </span>
 		</el-dialog>
 		<!--部门选择-->
-		<el-dialog title="选择角色" :visible.sync="finddep" size="tiny">
+		<el-dialog title="选择部门" :visible.sync="finddep" size="tiny">
 			<ul class="dapul">
 				<li v-for="department in departments">
 					<el-radio class="radio" v-model="addstaff.deptid" :label="department.id">{{department.name}}</el-radio>
@@ -219,7 +219,7 @@
 					status: '1'
 				},
 				pickerOptions0: {},
-			
+
 				finddep: false,
 				rules: {
 					username: [{
@@ -359,18 +359,18 @@
 			//选择角色
 			comfirmrole() {
 				this.finddepartment = false
-				
+
 				this.addstaff.roleid = this.checkdepartment
 				let roleidlist= []
 				for(let i = 0; i < this.rolelist.length; i++) {
-					
+
 					for(let j = 0 ; j <this.checkdepartment.length;j++){
 					if(this.checkdepartment[j] == this.rolelist[i].id){
 					roleidlist.push(this.rolelist[i].rolename)
 					this.roleids = roleidlist.join(',')
 					}
 }
-						//this.roleids = 
+						//this.roleids =
 				}
 			},
 			//获取角色
@@ -415,7 +415,7 @@
 		      let checkedCount = value.length;
 		      this.isIndeterminate = checkedCount > 0 && checkedCount < this.rolelist.length;
 		      }
-		      
+
 		}
 	}
 </script>
@@ -457,21 +457,21 @@
 			color: #333;
 		}
 	}
-	
+
 	.el-breadcrumb {
 		font-size: 18px;
 		margin-bottom: 20px;
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 	}
-	
+
 	.bg_white {
 		background: #fff;
 		padding: 20px 35px;
 	}
-	
+
 	.dapul {
 		li {
 			width: 100%;

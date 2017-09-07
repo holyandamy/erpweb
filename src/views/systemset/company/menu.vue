@@ -5,7 +5,7 @@
 				<el-col :span="12">
 					<el-menu class="el-menu-demo" :default-active="activeIndex" mode="horizontal" style="background: #fff;">
 						<el-menu-item index="1"  class="hasid"  id="d018149d72ba11e7aad70242ac120006">
-							<a @click="setmode('depart')" >部门管理</a>
+							<a @click="setmode('depart')" >组织架构管理</a>
 						</el-menu-item>
 						<el-menu-item index="2" class="hasid"  id="a6c286e072ba11e7aad70242ac120006">
 							<a @click="setmode('bank')" >银行账号设置</a>
@@ -21,7 +21,7 @@
 				</el-col>
 			</el-row>
 		</header>
-		
+
 		<!--公司信息设置-->
 		<CompanySet v-if="modeType == 'company'"></CompanySet>
 		<!--部门管理-->
@@ -56,7 +56,7 @@
 		methods: {
 			setmode(type) {
 				this.modeType = type
-				
+
 			},
 			//新增银行账户
 			addbank() {

@@ -5,7 +5,7 @@
 		</header>
 		<div class="main">
 			<h2>
-				代办事项
+				待办事项
 			</h2>
 			<div class="list">
 				<ul>

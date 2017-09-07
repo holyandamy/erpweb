@@ -8,7 +8,7 @@
 					<i class="account"></i>
 				</el-form-item>
 				<el-form-item prop="password">
-					<input class="login_input " type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码" />
+					<input class="login_input " type="password" @keyup.enter="handleLogin" v-model="loginForm.password" auto-complete="off" placeholder="密码" />
 					<i class="checkPass"></i>
 				</el-form-item>
 				<el-form-item style="margin-top: 50px; height: 30px; margin-bottom: 15px; ">
@@ -72,14 +72,14 @@ import Cookies from 'js-cookie';
 	                  	}else{
 	                  		sessionStorage.setItem('token',res.data.obj.token)
 	                  	}
-	            		
+
             		this.$router.push({ path: '/main'});
  //                 	 this.$router.push({ path: '/'});
                   	}else{
                   		this.$message.error(res.data.message);
                   		this.loading = false;
                   	}
-                  	
+
                   })
 
                 } else {
@@ -145,7 +145,7 @@ import Cookies from 'js-cookie';
 			}
 		}
 	}
-	
+
 	.login_input {
 		height: 60px;
 		width: 230px;
@@ -154,12 +154,12 @@ import Cookies from 'js-cookie';
 		font-size: 18px;
 		color: #666666;
 	}
-	
+
 	:focus {
 		border: 0;
 		outline: 0;
 	}
-	
+
 	.account {
 		width: 30px;
 		height: 60px;
@@ -170,11 +170,11 @@ import Cookies from 'js-cookie';
 		display: block;
 		z-index: 4;
 	}
-	
+
 	.el-form-item {
 		margin-bottom: 0;
 	}
-	
+
 	.checkPass {
 		width: 30px;
 		height: 60px;
