@@ -125,6 +125,7 @@
   import {address} from '../../../common/js/address'
   import axios from 'axios';
   import {token,custsave,custupdate,custdetail, province, city, district } from '../../../common/js/config';
+  import paramm from '../../../common/js/getParam'
   export default {
     data() {
       //验证手机号码
@@ -147,7 +148,7 @@
       };
       return {
         visitorList: {
-          token:token,
+          token:paramm.getToken(),
           name: '',
           sexid:'1',
           mobile:'',
@@ -173,7 +174,7 @@
         rules: {
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' },
-            { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+            { min: 2, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
           ],
           sexid: [
             { required: true, message: '请选择活动资源', trigger: 'change' }
@@ -199,7 +200,7 @@
         this.optionName = "编辑游客";
         this.birthdayFlag=false;
         let data = {
-          token:token,
+          token:paramm.getToken(),
           id: this.$parent.operationType.id,
         }
         custdetail(data).then((res) => {
@@ -222,6 +223,7 @@
         this.$emit('setMode', 'list', option);
       },
       submitForm() {
+        let _this = this
           let newDate = '';
           if (this.visitorList.birthday != '') {
             const mouth = {
@@ -251,10 +253,11 @@
                 newPostDate.id=this.$parent.operationType.id;
                 delete  newPostDate.birthday;
                 custupdate(newPostDate).then((backData) => {
-                  if (backData.error) {
-                    this.$message.error(backData.massage);
+                  if (backData.data.error!=0 || backData.data.err) {
+                    paramm.getCode(backData.data,_this)
                   }
                   else {
+                    paramm.getCode(backData.data,_this)
                     this.handleHide('list');
                   }
                 })
@@ -262,10 +265,11 @@
               }
               else{
                 custsave(newPostDate).then((backData) => {
-                  if (backData.error) {
-                    this.$message.error(backData.massage);
+                  if (backData.data.error!=0 || backData.data.err) {
+                    paramm.getCode(backData.data,_this)
                   }
                   else {
+                    paramm.getCode(backData.data,_this)
                     this.handleHide('list');
                   }
                 })
@@ -282,7 +286,7 @@
         let count = "fb0828b148bc48afbab8ef03c55d153b"
         let para = {
           id: count,
-          token: token
+          token: paramm.getToken()
         }
         province(para).then((res) => {
           this.province = res.data.obj
@@ -311,12 +315,15 @@
       },
       //选择城市
       changecity() {
+        let _this = this;
         let pro = {
-          id: this.visitorList.provinceid
+          id: _this.visitorList.provinceid,
+          token: paramm.getToken()
         }
         this.getcity(pro)
         let city = {
-          id: this.visitorList.cityid
+          id: _this.visitorList.cityid,
+          token: paramm.getToken()
         }
         this.getdistrict(city)
       }

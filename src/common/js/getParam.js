@@ -17,19 +17,19 @@ paramm.getToken = () =>{
 paramm.getCode = (data,thiss) => {
   console.log(666, this);
   if(data.error == 0) {
-      this.$message({
+     thiss.$message({
         message: data.message || '成功',
         type: 'success'
       });
     }
     if(data.error == 1) {
-      this.$message({
+      thiss.$message({
         message: data.message || '失败',
         type: 'error'
       });
     }
     if(data.err == 401) {
-      this.$message({
+      thiss.$message({
         message: '请登录',
         type: 'warning'
       });

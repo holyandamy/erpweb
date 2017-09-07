@@ -118,7 +118,7 @@
 	import AddIine from './addline'
 	import EditInfo from './editline'
 	import { showorhide } from '../../../common/js/showorhid'
-  import peramm from '../../../common/js/getParam'
+  import paramm from '../../../common/js/getParam'
 	export default {
 		components: {
 			LineInfo,

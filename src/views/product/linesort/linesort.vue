@@ -10,23 +10,28 @@
             </el-breadcrumb>
           </el-col>
           <el-col :span="12">
-            <el-button class="defaultbutton hasid" @click="showAdd=true" id="a997d5fd735811e788410242ac120009">新增线路</el-button>
+            <el-button class="defaultbutton hasid" @click="showAdd=true" id="a997d5fd735811e788410242ac120009">添加分类</el-button>
           </el-col>
         </el-row>
       </header>
       <section class="padding30">
-        <el-table :data="lineList" style="text-align: left; font-size: 12px;">
+        <el-table :data="lineList" style="text-align: left; font-size: 12px;" >
           <el-table-column prop="typeName" label="系统分类">
           </el-table-column>
           <el-table-column prop="name" label="分类名称">
           </el-table-column>
-          <el-table-column prop="total" label="线路数量">
+          <el-table-column  label="线路数量"> <!--  prop="total"   -->
+            <template scope="scope">
+             <span @click='jump(scope.row.id)' class='jump'>
+                {{scope.row.total}}
+             </span>
+              <!--<router-link to="/news/001">新闻001</router-link>-->
+            </template>
           </el-table-column>
-
           <el-table-column  label="操作">
             <template scope="scope">
               <el-button class="hasid" id="ad7954ba735811e788410242ac120009" @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
-              <el-button type="text" size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
+              <el-button v-if='scope.row.total ==0 && lineList.length > 1'  type="text" size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -85,17 +90,18 @@
   import util from '../../../common/js/util'
   import {token,linecategorylist,linecategoryadd,linecategoryupdate,linecategorydelete} from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
+  import paramm from '../../../common/js/getParam'
   export default {
     data() {
       return {
         lineList:[],
         addcategory:{
-          token:token,
+          token:paramm.getToken(),
           type:'1',
           name:''
         },
         editcategory:{
-            token:token,
+            token:paramm.getToken(),
             id:'',
           name:''
         },
@@ -116,7 +122,7 @@
         pagesize:15,
         operationType:{type:'add',id:''},
         pageset:{
-          token:token,
+          token:paramm.getToken(),
           pageIndex:0,
           pageSize:''
         },
@@ -131,13 +137,18 @@
 			})
 		},
     methods:{
+      jump () {
+        this.$router.push({path: '/linelist',idd: '111'})
+      },
       deleteRow(index, rows){
+        let _this = this;
         this.lineList.splice(index, 1);
-        linecategorydelete({token:token,id:rows.id}).then((res) => {
-          if(res.data.error){
-            this.$message.error(res.data.massage);
+        linecategorydelete({token:paramm.getToken(),id:rows.id}).then((res) => {
+          if(res.data.error != 0 || res.data.err){
+            paramm.getCode(res.data,_this)
           }
           else {
+            paramm.getCode(res.data,_this)
             this.getList()
           }
         })
@@ -148,15 +159,16 @@
         this.showEdit=true;
       },
       saveEdit(){
-
+        let _this = this;
         this.$refs['editcategory'].validate((valid) => {
           if (valid) {
             this.showEdit=false;
             linecategoryupdate(this.editcategory).then((res) => {
-              if(res.data.error){
-                this.$message.error(res.data.massage);
+              if(res.data.error != 0 || res.data.err){
+                paramm.getCode(res.data,_this)
               }
               else {
+                paramm.getCode(res.data,_this)
                 this.getList()
               }
             })
@@ -167,15 +179,17 @@
         });
       },
       saveAdd(){
+        let _this = this;
         this.$refs['addcategory'].validate((valid) => {
           if (valid) {
             let addPost=Object.assign({},this.addcategory);
             addPost.type=parseInt(addPost.type);
             linecategoryadd(addPost).then((res) => {
-              if(res.data.error){
-                this.$message.error(res.data.massage);
+              if(res.data.error != 0 || res.data.err){
+                paramm.getCode(res.data,_this)
               }
               else {
+                paramm.getCode(res.data,_this)
                 this.getList()
                 this.addcategory.name='';
                 this.showAdd=false;
@@ -273,4 +287,10 @@
 
   }
   .el-breadcrumb{font-size:18px ; margin-bottom: 20px;}
+  .jump{
+    cursor: pointer;
+  }
+  .jump:hover{
+    color: blue;
+  }
 </style>
