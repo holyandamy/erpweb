@@ -45,7 +45,7 @@
 						<el-form :inline="true" :model="search" class="demo-form-inline">
 							<el-form-item label="状态">
 								<el-select v-model="search.status" placeholder="状态">
-								
+
 									<el-option
         v-for="item in statuses"
         :key="item.value"
@@ -62,7 +62,7 @@
 									<el-option label="国内" value="1"></el-option>
 									<el-option label="出境" value="2"></el-option>
 									<el-option label="周边" value="3"></el-option>
-									
+
 								</el-select>
 							</el-form-item>
 							<el-form-item>
@@ -72,7 +72,7 @@
 					</el-row>
 				</div>
 				<el-table :data="linelist" border style="width: 100%">
-					
+
 					<el-table-column prop="name" label="模板名称">
 					</el-table-column>
 					<el-table-column prop="categoryName" label="线路分类"  width="200">
@@ -85,12 +85,12 @@
 					</el-table-column>
 					<el-table-column prop="creater" label="创建人" width="100">
 					</el-table-column>
-					
+
 					<el-table-column fixed="right" label="操作" width="110">
 						<template scope="scope">
 							<el-button class="hasid" id="d245d97b734711e788410242ac120009" @click="setMode('lineinfo'),lineinfo(scope)" type="text" size="small">查看</el-button>
 							<el-button class="hasid" id="ce9c845e734711e788410242ac120009" @click="setMode('editline'),lineinfo(scope)" type="text" size="small">编辑</el-button>
-							
+
 						</template>
 					</el-table-column>
 				</el-table>
@@ -102,12 +102,12 @@
 				</div>
 			</section>
 		</div>
-		
+
 		<LineInfo v-else-if="modeType == 'lineinfo'"  :lineid = 'lineid' @setMode="setMode"></LineInfo>
 		<EditInfo v-else-if="modeType == 'editline'" @getlinelist="getlinelist" :lineid = 'lineid'  :scope = "scope"  @setMode="setMode"></EditInfo>
 		<AddIine v-else="modeType == 'addline'" @getlinelist="getlinelist"  @setMode="setMode"></AddIine>
-		
-		
+
+
 	</div>
 
 </template>
@@ -118,11 +118,12 @@
 	import AddIine from './addline'
 	import EditInfo from './editline'
 	import { showorhide } from '../../../common/js/showorhid'
+  import peramm from '../../../common/js/getParam'
 	export default {
 		components: {
 			LineInfo,
 			AddIine,
-			EditInfo 
+			EditInfo
 		},
 		data() {
 			return {
@@ -144,14 +145,14 @@
 				lineid:'',
 				scope:{},
 				examineform: {
-					token:token,
+					token:paramm.getToken(),
 					id:'',
 					approve: '',
 					remark:''
 				}, //审核表单
 				modeType: 'linelist',
 				search: {
-					token:token,
+					token:paramm.getToken(),
 					pageindex:0,
 					pagesize:15,
 					categoryid:'', //分类id
@@ -183,23 +184,23 @@
 			//筛选线路分类
 			changecondition(index,list) {
 				this.ischecked = index
-				
+
 				let listid = '0'
 				if(index == '-1'){
-					
+
 					listid = '0'
 					this.ischecked = -1
 					this.search.categoryid = ''
-					
+
 				}else{
 					listid = list.id
 					this.search.categoryid = list.id
 				}
-			let para = {token:token,categoryid:listid}
+			let para = {token:paramm.getToken(),categoryid:listid}
 			destlist(para).then((res) => {
 					this.destinations = res.data.obj
-				
-					
+
+
 				})
 			},
 			//获取线路列表
@@ -214,7 +215,7 @@
 			},
 			//获取分类列表
 			getcategoryall(){
-				let para= {token:token}
+				let para= {token:paramm.getToken()}
 				categoryall(para).then(res =>{
 					this.linesorts = res.data.obj
 				})
@@ -228,9 +229,9 @@
 					this.search.toid = destination.id
 					console.log(destination.id)
 				}
-				
+
 			},
-			
+
 			//查看线路
 			setMode(type) {
 				this.modeType = type
@@ -239,9 +240,9 @@
 				this.lineid = scope.row.id
 				this.scope = scope.row
 			},
-			
+
 			handleCurrentChange(){
-				
+
 			}
 
 		}
@@ -252,7 +253,7 @@
 	.not:hover {
 		color: red;
 	}
-	
+
 	header {
 		padding: 0 40px;
 		background: white;
@@ -289,26 +290,26 @@
 			color: #333;
 		}
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 	}
-	
+
 	.page {
 		padding: 15px 30px;
 		background: white;
 		text-align: right;
 	}
-	
+
 	.el-table .cell {
 		text-align: left;
 	}
-	
+
 	.el-breadcrumb {
 		font-size: 18px;
 		margin-bottom: 20px;
 	}
-	
+
 	.search {
 		font-size: 14px;
 		color: #333;
@@ -332,14 +333,14 @@
 			}
 		}
 	}
-	
+
 	.el-col li:hover,
 	.checked {
 		border: 1px solid #3ec3c8!important;
 		color: #3ec3c8;
 	}
-	
-	
+
+
 	.el-dropdown-menu {
 		font-size: 12px;
 		span {

@@ -148,9 +148,9 @@
 							<el-form-item label="集合地点" prop="station">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-							
+
 							<ImgLoad @geturl = "geturl" :checktop="checktop" ></ImgLoad>
-							
+
 
 						</el-col>
 					</el-row>
@@ -247,7 +247,7 @@
 
 						</li>
 					</ul>
-				
+
 				</div>
 				<h2 class="d_jump">备注说明</h2>
 				<div class="baseinfo">
@@ -339,6 +339,7 @@
 	import UE from '../../common/ue.vue';
 	import { linesave, province, city, district, categoryall, linecategorytype, templatelist, templatdetail,token} from '../../../common/js/config';
 	import { imgupload } from '../../../common/js/upload'
+  import paramm from '../../../common/js/getParam'
 	import ImgLoad from './upload'
 	export default {
 		components: {
@@ -354,7 +355,7 @@
 				templatelists: [],
 				//模板列表请求参数
 				addtemplateform: {
-					token: token,
+					token: paramm.getToken(),
 					pageindex: 0,
 					pagesize: 889888,
 					categoryid: '',
@@ -415,7 +416,7 @@
 				fileList: [],
 				customtext: '', //自定义文本内容
 				baseForm: {
-					token: token,
+					token: paramm.getToken(),
 					categoryid: '',
 					categorytype: '',
 					name: '',
@@ -514,8 +515,8 @@
 				uploadform: {},
 				authorization: '',
 				checktop:true
-				
-				
+
+
 			}
 		},
 		mounted: function() {
@@ -574,7 +575,7 @@
 			//选择分类
 			checkline() {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					type: this.baseForm.categorytype
 				}
 				linecategorytype(para).then((res) => {
@@ -583,7 +584,7 @@
 			},
 			checklinetem() {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					type: this.categorytypetem
 				}
 				linecategorytype(para).then((res) => {
@@ -602,12 +603,12 @@
 			},
 			//保存表单
 			submitForm(formName) {
-				
+
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.baseForm
 						let html = this.$refs.ue.getUEContent()
-						
+
 						let categorytype = para.categorytype
 						switch(categorytype) {
 							case "全部":
@@ -676,7 +677,7 @@
 						}
 						console.log(para)
 						linesave(para).then((res) => {
-						
+
 							if(res.data.error == 1) {
 
 								this.$message({
@@ -705,7 +706,7 @@
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
 			},
-			
+
 			//天数减少
 			minuday() {
 				let index = this.baseForm.length
@@ -741,7 +742,7 @@
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
 					id: count,
-					token: token
+					token: paramm.getToken()
 				}
 				province(para).then((res) => {
 					this.province = res.data.obj
@@ -771,24 +772,28 @@
 			//选择去程城市
 			changecityfrom() {
 				let pro = {
-					id: this.baseForm.fromprovinceid
+					id: this.baseForm.fromprovinceid,
+          token: paramm.getToken()
 				}
-				this.getcity(pro)
+        this.getcity(pro)
 				let city = {
-					id: this.baseForm.fromcityid
-				}
+					id: this.baseForm.fromcityid,
+          token: paramm.getToken()
+        }
 				this.getdistrict(city)
 
 			},
 			//选择返程城市
 			changecityback() {
 				let pro = {
-					id: this.baseForm.toprovinceid
-				}
+					id: this.baseForm.toprovinceid,
+          token: paramm.getToken()
+        }
 				this.getcity(pro)
 				let city = {
-					id: this.baseForm.tocityid
-				}
+					id: this.baseForm.tocityid,
+          token: paramm.getToken()
+        }
 				this.getdistrict(city)
 			},
 			//插入交通工具
@@ -816,7 +821,7 @@
 			confirmtemplate() {
 				this.templatevisiable = false
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					id: this.templateselectid
 				}
 				templatdetail(para).then((res) => {
@@ -914,7 +919,7 @@
 			}
 		}
 	}
-	
+
 	section {
 		margin-top: 60px;
 		padding: 0 30px;
@@ -990,11 +995,11 @@
 			}
 		}
 	}
-	
+
 	.linetype li:last-child {
 		border-right: 0!important;
 	}
-	
+
 	.file {
 		position: relative;
 		display: inline-block;
@@ -1012,8 +1017,8 @@
 		float: left;
 		margin-top: 5px;
 	}
-	
-	
+
+
 	.el-upload-list__item-actions{
 		display: none;
 	}

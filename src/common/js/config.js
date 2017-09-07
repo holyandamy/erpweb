@@ -5,9 +5,11 @@ let base = 'http://api.erp.we2tu.com/api';
 export let token = ""
 if(sessionStorage.getItem('token')){
 	token = sessionStorage.getItem('token')
+  console.log(11, token);
 }
 if(Cookies.get('token')){
 	token = Cookies.get('token')
+  console.log(222, token);
 }
 
 

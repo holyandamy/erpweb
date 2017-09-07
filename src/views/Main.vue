@@ -65,6 +65,7 @@
 <script>
 	import Cookies from 'js-cookie';
 	import { dashboard, loglist, token, tokenlogin } from '../common/js/config';
+	import paramm from '../common/js/getParam.js'
 	export default {
 		data() {
 			return {
@@ -72,51 +73,42 @@
 				loglist: [],
 				pagesize: 10,
 				total: 0,
-				currentPage: 0,
+				currentPage: 1,
 				userinfo: '',
-				userinfos: {}
+				userinfos: {},
+        tokenn: ''
 			}
 		},
-		created() {
+    beforeMount() {
+//			this.getToken()
 			this.getinfo()
 			this.getloglist()
 			this.getuserinfo()
 		},
 		methods: {
+//      getToken() {
+//        console.log(233, paramm.getToken());
+//        this.tokenn = Cookies.get('token') || sessionStorage.getItem('token')
+//      },
 			getinfo() {
-				let para = {
-					token: token
-				}
-				dashboard(para).then((res) => {
+        dashboard({token: paramm.getToken()}).then((res) => {
 					this.lists = res.data.obj
 				})
 			},
 			getuserinfo() {
-				let token = Cookies.get('token')
-				let tokensession = sessionStorage.getItem('token')
-				let para ={}
-				if(tokensession) {
-					 para = {
-						token: tokensession
-					}
-				} else {
-					 para = {
-						token: token
-					}
-				}
-				tokenlogin(para).then((res) => {
+				tokenlogin({token: paramm.getToken()}).then((res) => {
 					this.userinfo = res.data.obj.username
 					this.menu = res.data.obj.menu
 				})
 			},
 			getloglist() {
 				let page = {
-					token: token,
+					token: paramm.getToken(),
 					moudle: '',
 					date: '',
 					type: '',
 					operator: '',
-					pageindex: this.currentPage,
+					pageindex: this.currentPage-1,
 					pagesize: 10
 				}
 				loglist(page).then((res) => {
@@ -137,7 +129,7 @@
 		font-size: 16px;
 		text-align: left;
 	}
-	
+
 	.main {
 		padding: 0 40px;
 		h2 {
@@ -168,15 +160,15 @@
 			}
 		}
 	}
-	
+
 	.clearfix {
 		clear: both;
 	}
-	
+
 	.list li:hover {
 		border: 1px solid #2cb1b6;
 	}
-	
+
 	.padding30 {
 		padding: 0 30px
 	}

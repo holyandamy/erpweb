@@ -160,7 +160,7 @@
 				<div class="tablemenu">
 					<el-button style="float: left;" @click="editor = false; menucheck1=true; menucheck2=false; basetype()">普通方式录入<i :class="[{'el-icon-check': menucheck1},'el-icon--right']"></i></el-button>
 					<el-button style="float: left;" @click="editor = true; menucheck1=false; menucheck2=true; selftype()">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
-					
+
 					<!--<el-input-number v-model="baseForm.days" @change="changeday" :min="1" :max="10"></el-input-number>-->
 					<el-form-item label="行程天数" style="float: left; margin-bottom: 0;">
 								<el-input v-model="baseForm.days" v-if="editor"></el-input>
@@ -169,7 +169,7 @@
 								<span class="el-input-number__decrease" @click="minuday"><i class="el-icon-minus"></i></span>
 								<span class="el-input-number__increase" @click="addday"><i class="el-icon-plus"></i></span>
 								<div class="el-input"><input v-model="baseForm.days" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
-		
+
 								</div>
 							</div>
 							</el-form-item>
@@ -250,7 +250,7 @@
 						</li>
 					</ul>
 					<!--<div class="daylist" v-for="route in baseForm.routes" >
-						
+
 					</div>-->
 				</div>
 				<h2 class="d_jump">备注说明</h2>
@@ -311,6 +311,7 @@
 	import UE from '../../common/ue.vue';
 	import { linesave, province, city, district, categoryall, linecategorytype, lineupdate, linedetail,token } from '../../../common/js/config';
 	import ImgLoad from './upload'
+  import paramm from '../../../common/js/getParam'
 	export default {
 		components: {
 			UE,
@@ -369,7 +370,7 @@
 				fileList: [],
 				customtext: '', //自定义文本内容
 				baseForm: {
-					token:token,
+					token:paramm.getToken(),
 					id: this.lineid,
 					categoryid: '',
 					categorytype: '',
@@ -473,7 +474,7 @@
 			}
 		},
 		created(){
-			
+
 			this.getlineinfo()
 			this.getprovince()
 		},
@@ -483,7 +484,7 @@
 			},
 			getlineinfo() {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					id: this.lineid
 				}
 				linedetail(para).then((res) => {
@@ -494,11 +495,11 @@
 					this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0){
 						this.editor = false
-						
+
 					}else{
 						this.editor = true
 						this.editorhtml = res.data.obj.routes[0].content
-						
+
 					}
 					let categorytype = res.data.obj.categorytype
 					switch(categorytype) {
@@ -609,7 +610,7 @@
 			//选择分类
 			checkline() {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					type: this.baseForm.categorytype
 				}
 				linecategorytype(para).then((res) => {
@@ -626,7 +627,7 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.baseForm
-						
+
 						let categorytype = para.categorytype
 					switch(categorytype) {
 						case "全部":
@@ -684,7 +685,7 @@
 							this.baseForm.trafficreturn = 6;
 							break;
 					}
-					
+
 						if(this.editor == false) {
 							//基本录入
 							para.routes = this.baseForm.routes
@@ -773,7 +774,7 @@
 				for(let i = 0 ; i <this.baseForm.routes.length;i++){
 					this.baseForm.days = i+1
 				}
-					
+
 			},
 			//自定义录入
 			selftype(){
@@ -784,7 +785,7 @@
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
 					id: count,
-					token: token
+					token: paramm.getToken()
 				}
 				province(para).then((res) => {
 					this.province = res.data.obj
@@ -879,7 +880,7 @@
 			}
 		}
 	}
-	
+
 	section {
 		margin-top: 60px;
 		padding: 0 30px;
@@ -955,7 +956,7 @@
 			}
 		}
 	}
-	
+
 	.linetype li:last-child {
 		border-right: 0!important;
 	}

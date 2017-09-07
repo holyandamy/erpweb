@@ -167,8 +167,8 @@
             <li>
               <span>图片</span>
               <div class="xc">
-                <div > <!--v-for="img in route.titleimages"-->
-                  <img :src="route.titleimages"/>
+                <div v-for="img in route.titleimages.split(',')">
+                  <img :src="img"/>
                 </div>
               </div>
 
@@ -299,9 +299,7 @@
           for (let i = 0; i < this.detail.routes.length; i++) {
             let arr = []
             arr = res.data.obj.routes[i].titleimages.split(',')
-            console.log(arr)
             this.detail.routes[i].titleimages = arr
-            console.log(this.detail.routes[i].titleimages)
           }
 
           if (this.detail.edittype == 0) {

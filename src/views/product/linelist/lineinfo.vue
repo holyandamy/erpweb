@@ -22,7 +22,7 @@
 								<el-checkbox label="儿童" prop="ischild" disabled v-model="detail.ischild"></el-checkbox>
 								<el-checkbox label="老人" prop="isbaby" disabled v-model="detail.isbaby"></el-checkbox>
 							</li>
-								
+
 							</ul>
 						</el-col>
 						<el-col :span="12">
@@ -30,7 +30,7 @@
 								<li><span>出港地</span>{{detail.depart}}</li>
 								<li><span>目的地</span>{{detail.dest}}</li>
 								<li><span>交通工具</span>去：{{detail.trafficgo}} | 返：{{detail.trafficreturn}}</li>
-								
+
 								<!--去程交通：1飞机，2动车，3火车，4高铁，5大巴，6轮船-->
 							</ul>
 						</el-col>
@@ -66,7 +66,7 @@
 					<li>
 						<span>三餐</span>
 						<div class="xc">
-							
+
 							<el-checkbox label="早"  disabled v-model="route.isbreakfast"></el-checkbox>
 								<el-checkbox label="中"  disabled v-model="route.islunch"></el-checkbox>
 								<el-checkbox label="晚"  disabled v-model="route.isdinner"></el-checkbox>
@@ -102,7 +102,7 @@
 				</ul>
 			</div>
 			<div class="content" v-else>
-				
+
 				<span v-html="detail.routes[0].content">
 				  {{detail.routes[0].content}}
 				</span>
@@ -125,7 +125,7 @@
 				</ul>
 			</div>
 			<h2 class="d_jump">操作日志 </h2>
-			
+
 				<el-table
     :data="loglist"
     border
@@ -147,14 +147,15 @@
       label="操作内容">
     </el-table-column>
   </el-table>
-			
+
 		</section>
 	</div>
 </template>
 
 <script>
 	import {linedetail,token} from '../../../common/js/config';
-	export default {
+  import paramm from '../../../common/js/getParam'
+  export default {
 		props:['lineid'],
 		data() {
 			return {
@@ -165,7 +166,7 @@
 				edittype:true,
 				imglist:[],
 				toplist:[]
-				
+
 			}
 		},
 		mounted: function() {
@@ -175,28 +176,28 @@
 		methods: {
 			getlineinfo(){
 				let para = {
-					token:token,
+					token:paramm.getToken(),
 					id:this.lineid
 				}
 				linedetail(para).then((res) => {
 					this.detail = res.data.obj
 					console.log(para,res.data.obj,'111')
 					this.toplist = this.detail.images.split(',')
-					
+
 					for(let i = 0 ; i <this.detail.routes.length;i++){
 						let arr = []
 						arr = res.data.obj.routes[i].titleimages.split(',')
 						this.detail.routes[i].titleimages = arr
-						
+
 					}
-					
+
 					if(this.detail.edittype == 0 ){
 						this.edittype = true
 					}else{
 						this.edittype = false
 					let str = this.detail.routes[0].content
 					this.detail.routes[0].content = str
-                    
+
 					}
 					this.loglist = res.data.obj.logs
 					let categorytype =  res.data.obj.categorytype
@@ -258,13 +259,13 @@
 						  this.detail.detail = "轮船";
 						  break;
 						}
-							
+
 				})
-				
+
 			},
 			jump(index) {
 				this.active=index
-				
+
 				// 用 class="d_jump" 添加锚点
 				let jump = document.querySelectorAll('.d_jump')
 				let total = jump[index].offsetTop
@@ -281,29 +282,29 @@
 
 				function smoothDown() {
 					if(distance < total) {
-						distance += step　　　　　　　 
-						document.body.scrollTop = distance 
-						document.documentElement.scrollTop = distance 
-						window.pageYOffset = distance 
+						distance += step　　　　　　　
+						document.body.scrollTop = distance
+						document.documentElement.scrollTop = distance
+						window.pageYOffset = distance
 						setTimeout(smoothDown, 10)
 					} else {
-						document.body.scrollTop = total 
-						document.documentElement.scrollTop = total 
-						window.pageYOffset = total 
+						document.body.scrollTop = total
+						document.documentElement.scrollTop = total
+						window.pageYOffset = total
 					}
 				}
 
 				function smoothUp() {
 					if(distance > total) {
 						distance -= step　　　　　　　
-						document.body.scrollTop = distance 
-						document.documentElement.scrollTop = distance 
-						window.pageYOffset = distance 
+						document.body.scrollTop = distance
+						document.documentElement.scrollTop = distance
+						window.pageYOffset = distance
 						setTimeout(smoothUp, 10)
 					} else {
-						document.body.scrollTop = total 
-						document.documentElement.scrollTop = total 
-						window.pageYOffset = total 
+						document.body.scrollTop = total
+						document.documentElement.scrollTop = total
+						window.pageYOffset = total
 					}
 				}
 			},
@@ -356,7 +357,7 @@
 			border-top-right-radius: 5px;
 		}
 	}
-	
+
 	section {
 		margin-top: 60px;
 		padding: 0 30px;
@@ -374,7 +375,7 @@
 		.bgfff {
 			background: #fff;
 			padding: 0 40px 20px 40px;
-			
+
 			h3 {
 				font-size: 18px;
 				line-height: 28px;
@@ -407,7 +408,7 @@
 			}
 			.notes {
 				font-size: 14px;
-				
+
 				li {
 					padding: 20px 0;
 					span {
@@ -471,7 +472,7 @@
 			}
 		}
 	}
-	
+
 	.linecenter:after {
 		content: '';
 		position: absolute;

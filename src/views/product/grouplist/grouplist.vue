@@ -126,6 +126,7 @@
   import axios from 'axios'
   import {token,grouplist,linecategorydelete} from '../../../common/js/config'
   import { showorhide } from '../../../common/js/showorhid'
+  import paramm from '../../../common/js/getParam'
   export default {
     components:{
       Grouporder,
@@ -142,7 +143,7 @@
           linename: '',
           teamname: '',
           status: '',
-          token: token,
+          token: paramm.getToken(),
           pageindex:0,
           pagesize: 10
         },
@@ -187,7 +188,7 @@
       },
       deleteRow(index, rows){
         this.lineList.splice(index, 1);
-        linecategorydelete({token:token,id:rows.id}).then((res) => {
+        linecategorydelete({token:paramm.getToken(),id:rows.id}).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);
           }
@@ -252,7 +253,7 @@
             linename: '',
             teamname: '',
             status: '',
-            token: token,
+            token: paramm.getToken(),
             pageindex:0,
             pagesize: 10
         };

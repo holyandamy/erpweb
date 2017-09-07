@@ -11,7 +11,7 @@
 						</el-breadcrumb>
 					</el-col>
 					<el-col :span="12">
-						
+
 						<el-button class="defaultbutton hasid" id="42a741aa734711e788410242ac120009" @click="setMode('addline')" size="large" type="primary" style="color: #fff;">发布线路</el-button>
 					</el-col>
 				</el-row>
@@ -60,7 +60,7 @@
 									<el-option label="国内" value="1"></el-option>
 									<el-option label="出境" value="2"></el-option>
 									<el-option label="周边" value="3"></el-option>
-									
+
 								</el-select>
 							</el-form-item>
 							<el-form-item>
@@ -103,13 +103,13 @@
 										<el-dropdown-item><span @click="updatastatus(scope,4)">操作日志</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
-								
-								
-								
+
+
+
 							</a>
-							
+
 						</template>
-					
+
 					</el-table-column>
 				</el-table>
 
@@ -120,11 +120,11 @@
 				</div>
 			</section>
 		</div>
-		
+
 		<LineInfo v-else-if="modeType == 'lineinfo'"  :lineid = 'lineid' @setMode="setMode"></LineInfo>
 		<EditInfo v-else-if="modeType == 'editline'" @getlinelist="getlinelist" :lineid = 'lineid'  :scope = "scope"  @setMode="setMode"></EditInfo>
 		<AddIine v-else="modeType == 'addline'" @getlinelist="getlinelist"  @setMode="setMode"></AddIine>
-		
+
 		<el-dialog title="线路审核" size="tiny" :visible.sync="examinevisiable">
 			<el-form label-width="80px" :model="examineform" style="text-align: left;">
 				<el-form-item label="状态" prop="approve">
@@ -140,7 +140,7 @@
 							 </el-col>
 					</el-row>
 				</el-form-item>
-				
+
 			</el-form>
 
 			<span slot="footer" class="dialog-footer">
@@ -148,10 +148,10 @@
     <el-button type="primary" @click="examineinfo">确 定</el-button>
   </span>
 		</el-dialog>
-		
-		
+
+
 		<el-dialog title="线路置顶" size="lastiny" :visible.sync="topvisiable">
-		
+
 			<span>您确定要置顶该线路吗？</span>
 			<span slot="footer" class="dialog-footer">
     <el-button @click="topvisiable = false">取 消</el-button>
@@ -164,6 +164,7 @@
 
 <script>
 	import {linelist,destlist,categoryall,lineapprove,linetop,token} from '../../../common/js/config';
+	import paramm from '../../../common/js/getParam'
 	import LineInfo from './lineinfo'
 	import AddIine from './addline'
 	import EditInfo from './editline'
@@ -172,7 +173,7 @@
 		components: {
 			LineInfo,
 			AddIine,
-			EditInfo 
+			EditInfo
 		},
 		data() {
 			return {
@@ -181,7 +182,7 @@
 				scope:{},
 				examinevisiable: false, //线路审核
 				examineform: {
-					token:token,
+					token:paramm.getToken(),
 					id:'',
 					approve: '',
 					remark:''
@@ -189,7 +190,7 @@
 				topvisiable:false,//线路置顶
 				modeType: 'linelist',
 				search: {
-					token:token,
+					token:paramm.getToken(),
 					pageindex:0,
 					pagesize:15,
 					categoryid:'', //分类id
@@ -206,14 +207,14 @@
 				linelist: [], //线路列表
 				selectid:'',
 				examineid:'',
-			
+
 			}
 		},
 		created(){
-			this.getlinelist()
+//			this.getlinelist()
 			this.getcategoryall()
 		},
-		
+
 		updated: function () {
 		  this.$nextTick(function () {
 		    showorhide()
@@ -223,19 +224,19 @@
 			//筛选线路分类
 			changecondition(index,list) {
 				this.ischecked = index
-				
+
 				let listid = '0'
 				if(index == '-1'){
-					
+
 					listid = '0'
 					this.ischecked = -1
 					this.search.categoryid = ''
-					
+
 				}else{
 					listid = list.id
 					this.search.categoryid = list.id
 				}
-			let para = {token:token,categoryid:listid}
+			let para = {token:paramm.getToken(),categoryid:listid}
 			destlist(para).then((res) => {
 					this.destinations = res.data.obj
 				})
@@ -243,7 +244,7 @@
 			//获取线路列表
 			getlinelist(){
 				let para = this.search
-				
+
 				linelist(para).then((res) => {
 					this.linelist = res.data.obj.datas
 					for(let i = 0 ; i <res.data.obj.datas.length;i++){
@@ -259,13 +260,13 @@
 						}
 					}
 					this.total = Number(res.data.obj.total)
-					
+
 //					console.log(para)
 				})
 			},
 			//获取分类列表
 			getcategoryall(){
-				let para= {token:token}
+				let para= {token:paramm.getToken()}
 				categoryall(para).then(res =>{
 					this.linesorts = res.data.obj
 				})
@@ -278,7 +279,7 @@
 					this.checkeddest = index
 					this.search.toid = destination.id
 				}
-				
+
 			},
 			//查看线路
 			setMode(type) {
@@ -319,7 +320,7 @@
 			comfirmtop(){
 				this.topvisiable = false
 				let para = {
-					token:token,
+					token:paramm.getToken(),
 					id:this.selectid,
 					isTop:true
 				}
@@ -336,7 +337,7 @@
 				})
 			},
 			handleCurrentChange(){
-				
+
 			}
 
 		}
@@ -347,7 +348,7 @@
 	.not:hover {
 		color: red;
 	}
-	
+
 	header {
 		padding: 0 40px;
 		background: white;
@@ -384,26 +385,26 @@
 			color: #333;
 		}
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 	}
-	
+
 	.page {
 		padding: 15px 30px;
 		background: white;
 		text-align: right;
 	}
-	
+
 	.el-table .cell {
 		text-align: left;
 	}
-	
+
 	.el-breadcrumb {
 		font-size: 18px;
 		margin-bottom: 20px;
 	}
-	
+
 	.search {
 		font-size: 14px;
 		color: #333;
@@ -427,20 +428,20 @@
 			}
 		}
 	}
-	
+
 	.el-col li:hover,
 	.checked {
 		border: 1px solid #3ec3c8!important;
 		color: #3ec3c8;
 	}
-	
+
 	.operation {
 		span {
 			font-size: 12px;
 			color: #2cb1b6;
 		}
 	}
-	
+
 	.el-dropdown-menu {
 		font-size: 12px;
 		span {
