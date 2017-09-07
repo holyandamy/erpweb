@@ -312,6 +312,7 @@
   import axios from 'axios';
   import {token,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist,groupupdate,groupdetail} from '../../../common/js/config';
   import ElDialog from "../../../../node_modules/element-ui/packages/dialog/src/component";
+  import paramm from '../../../common/js/getParam'
   export default {
     props: ['operationType','categoryId'],
     components: {ElDialog},
@@ -340,7 +341,7 @@
         notice: '',
         lineItemId: '',
         search: {
-          token:token,
+          token:paramm.getToken(),
           pageindex:0,
           pagesize: 9999,
           categoryid:'', //分类id
@@ -348,7 +349,7 @@
         },
         destinations: [],
         groupList: {
-          token: token,
+          token: paramm.getToken(),
           lineid: '',
           sexid:'1',
           mobile:'',
@@ -466,7 +467,7 @@
       // 编辑  详情时获取信息
       getdetail () {
         let _this = this;
-        groupdetail({token: token,id: this.categoryId}).then(function (res) {
+        groupdetail({token: paramm.getToken(),id: this.categoryId}).then(function (res) {
           _this.routeName = res.data.obj.linename
           _this.idd = res.data.obj.id
           _this.lineid = res.data.obj.lineid
@@ -490,7 +491,7 @@
       },
       getPingtai () {
         let _this = this;
-        openlist({token: token}).then(function (res) {
+        openlist({token: paramm.getToken()}).then(function (res) {
           // 平台列表
           _this.pingtai = res.data.obj
         })
@@ -632,7 +633,7 @@
       },
       getcategoryall(){
         this.lineFlag = true;
-        let para= {token:token}
+        let para= {token:paramm.getToken()}
         categoryall(para).then(res =>{
           this.linesorts = res.data.obj
         })
@@ -707,7 +708,7 @@
         // 1 创建
         if(_this.operationType.type == 'add'){
           groupsave({
-            token: token,
+            token: paramm.getToken(),
             lineid: _this.lineid,
             notify: _this.notify || '',
             platforms: platforms,
@@ -747,7 +748,7 @@
             delete item.teamno;
           })
           groupupdate({
-            token: token,
+            token: paramm.getToken(),
             lineid: _this.lineid,
             notify: _this.notify || '',
             platforms: platforms,
@@ -843,7 +844,7 @@
         let count = "fb0828b148bc48afbab8ef03c55d153b"
         let para = {
           id: count,
-          token: token
+          token: paramm.getToken()
         }
         province(para).then((res) => {
           this.province = res.data.obj

@@ -85,6 +85,7 @@
   import axios from 'axios';
   import {token,custlist,custdel} from '../../../common/js/config';
  import {showorhide} from '../../../common/js/showorhid'
+  import paramm from '../../../common/js/getParam'
   export default {
     components:{
       AddVisitor
@@ -99,12 +100,12 @@
         pagesize:15,
         operationType:{type:'add',id:''},
         pageset:{
-          token:token,
+          token:paramm.getToken(),
           pageIndex:0,
           pageSize:''
         },
         searchList:{
-            token:token,
+            token:paramm.getToken(),
             name:'',
             mobile:'',
             date:''
@@ -112,7 +113,7 @@
       }
     },
     created(){
-      this.getList()
+//      this.getList()
     },
     mounted(){
 			showorhide()
@@ -134,7 +135,7 @@
       },
       deleteRow(index, rows){
         this.visitorList.splice(index, 1);
-        let para={token:token,id:rows.id}
+        let para={token:paramm.getToken(),id:rows.id}
         custdel(para).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);
@@ -177,7 +178,7 @@
         let templateSeacrchList={
             pageIndex:this.currentPage-1,
             pageSize:this.pagesize,
-            token:token,
+            token:paramm.getToken(),
             name:this.searchList.name,
             date:newDate,
             mobile:this.searchList.mobile,

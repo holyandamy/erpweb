@@ -66,6 +66,9 @@
 							<el-form-item>
 								<el-button type="primary" class="hasid" id="398e1080734711e788410242ac120009"  @click="getlinelist">搜索</el-button>
 							</el-form-item>
+              <el-form-item   style="margin-left: 0px">
+                <el-button  type="primary" @click="clearGetList">清空查询</el-button>
+              </el-form-item>
 						</el-form>
 					</el-row>
 				</div>
@@ -338,7 +341,20 @@
 			},
 			handleCurrentChange(){
 
-			}
+			},
+      // 清空查询
+      clearGetList () {
+        this.search= {
+          token:paramm.getToken(),
+            pageindex:0,
+            pagesize:15,
+            categoryid:'', //分类id
+            toid:'',//目的地id
+            status:'',//状态 1正常，0停止，-1全部，
+            linename:'',//线路名称
+            type:'',//1.国内，2出境，3周边
+        }
+      }
 
 		}
 	}
