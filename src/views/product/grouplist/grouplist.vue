@@ -17,7 +17,7 @@
       <section class="padding30">
         <el-form    ref="searchList" label-width="100px" class="demo-ruleForm" style="text-align: left;">
           <el-row>
-           <el-form-item label="出发时间"   style="margin-left: 10px">
+           <el-form-item label="出发时间" label-width="90px"  style="margin-left: 10px">
              <div class="block">
                <el-date-picker
                  v-model="date"
@@ -26,7 +26,7 @@
                </el-date-picker>
              </div>
            </el-form-item>
-           <el-form-item label="线路类型" prop="categoryType"  style="width: 390px" >
+           <el-form-item label="线路类型" prop="categoryType"  style="width: 326px" >
              <el-select v-model="searchList.categoryType"  >
                <el-option  v-for="item in type"
                            :key="item.value"
@@ -52,14 +52,14 @@
                <el-input v-model="searchList.linename"></el-input>
              </el-col>
            </el-form-item>
-           <el-form-item label="团号"  style="margin-left: 10px">
+           <el-form-item label="团号">
              <el-col :span="4" style="width: 150px">
                <el-input v-model="searchList.teamname"></el-input>
              </el-col>
            </el-form-item>
           </el-row>
 
-          <el-form-item   style="margin-left: 0px">
+          <el-form-item   style="margin-right: 50px;">
             <el-button class="hasid" id="49641a18734611e788410242ac120009" type="primary" @click="searchGetList">查询</el-button>
           </el-form-item>
           <el-form-item   style="margin-left: 0px">
@@ -68,7 +68,7 @@
         </el-form>
 
         <el-table :data="lineList" border style="text-align: left; font-size: 12px;">
-          <el-table-column prop="teamno" label=" 团号" width="130">
+          <el-table-column prop="teamno" label=" 团号" width="150">
           </el-table-column>
           <el-table-column prop="linename" label="线路名称" >
           </el-table-column>
@@ -309,7 +309,7 @@
       .el-form-item{
         float: left;
         .el-col-4{
-          width: 200px;
+          width: 220px;
         }
       }
 

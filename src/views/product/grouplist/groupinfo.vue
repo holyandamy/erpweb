@@ -160,15 +160,15 @@
             <li>
               <span>备注</span>
               <div class="xc">
-                {{route.remark}}
+                {{route.remark || '无'}}
               </div>
 
             </li>
             <li>
               <span>图片</span>
               <div class="xc">
-                <div v-for="img in route.titleimages">
-                  <img :src="img"/>
+                <div > <!--v-for="img in route.titleimages"-->
+                  <img :src="route.titleimages"/>
                 </div>
               </div>
 
