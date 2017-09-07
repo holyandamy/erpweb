@@ -41,7 +41,7 @@
 						<el-button type="primary" @click="onSubmit" class="hasid" id="e1adf55a72b911e7aad70242ac120006">查询</el-button>
 					</el-form-item>
 				</el-form>
-
+        <!--v-loading="listLoading"-->
 				<el-table :data="tableData" v-loading="listLoading" border style="width: 100%; font-size:12px ;">
 					<el-table-column fixed prop="createtime" label="日期" width="100">
 					</el-table-column>
@@ -137,6 +137,7 @@
 </template>
 
 <script>
+  import paramm from '../../common/js/getParam'
 	import axios from 'axios';
 	import util from '../../common/js/util'
 	import PayEdit from './payedit'
@@ -240,7 +241,7 @@
 			setMode(type) {
 				this.showedit = type
 			},
-			
+
 			//		状态编辑
 			updatastatus(scope, i) {
 				let para = {
@@ -265,12 +266,15 @@
 			},
 			//获取用户列表
 			getUsers() {
-				this.pageset.pageindex = this.currentPage - 1
-				this.pageset.pagesize = this.pagesize
-				let page = this.pageset
-				
+        let page = {}
+        page.pageindex = this.currentPage - 1
+        page.pagesize = this.pagesize
+        page.token =  paramm.getToken()
+        let para = Object.assign(page,this.search)
 				this.listLoading = true;
-				getpaylist(page).then((data) => {
+				getpaylist(para).then((data) => {
+          console.log(123)
+          console.log(data)
 					this.total = Number(data.data.obj.total);
 					this.tableData = data.data.obj.datas
 					this.listLoading = false
@@ -310,37 +314,37 @@
 		text-align: left;
 		margin-bottom: 20px;
 	}
-	
+
 	.container {
 		padding: 0 40px;
 	}
-	
+
 	.el-form {
 		text-align: left;
 	}
-	
+
 	.el-table td .cell {
 		font-size: 12px;
 	}
-	
+
 	.el-dropdown-menu li {
 		font-size: 12px;
 		a {
 			display: block;
 		}
 	}
-	
+
 	.pages {
 		padding: 10px 40px;
 		background: #fff;
 		text-align: right;
 	}
-	
+
 	.el-dropdown-link {
 		font-size: 12px;
 		color: #3ec3c8;
 	}
-	
+
 	a {
 		color: #fff;
 	}

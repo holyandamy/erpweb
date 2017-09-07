@@ -80,6 +80,7 @@
 </template>
 
 <script>
+  import paramm from '../../../common/js/getParam'
 	import { getbanklist, addbank, updatebank, updatestatus, token } from '../../../common/js/config';
 	import { showorhide } from '../../../common/js/showorhid'
 	export default {
@@ -174,7 +175,7 @@
 				this.pageset.pageIndex = this.currentPage - 1
 				this.pageset.pageSize = this.pagesize
 				let page = this.pageset
-
+        page.token = paramm.getToken()
 				getbanklist(page).then((res) => {
 					this.banklist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
@@ -213,6 +214,7 @@
 						}
 
 						let para = this.addBank
+            para.token = paramm.getToken()
 						addbank(para).then((res) => {
 							this.addbankuser = false
 							this.$message('保存成功！');
@@ -229,6 +231,7 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.editbank
+            para.token = paramm.getToken()
 						updatebank(para).then((res) => {
 							//console.log(para)
 							this.showFormVisible = false
@@ -264,7 +267,7 @@
 	.not:hover {
 		color: red;
 	}
-	
+
 	header {
 		padding: 0 40px;
 		background: white;
@@ -295,17 +298,17 @@
 			color: #333;
 		}
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 	}
-	
+
 	.page {
 		padding: 15px 30px;
 		background: white;
 		text-align: right;
 	}
-	
+
 	.el-table .cell {
 		text-align: left;
 	}

@@ -24,14 +24,14 @@
 						<el-input placeholder="HP23083098409283098028450" @blur="typethis" v-model="collectForm.orderno"></el-input>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="团号" prop="teamno" v-show="isshow">
+				<el-form-item label="团号" prop="teamno" v-show="isshowall">
 					<el-col :span="10" v-model="collectForm.teamno">
-						HP23083098409283098028450
+            <el-input v-model="collectForm.teamno"></el-input>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="线路名称" prop="linename" v-show="isshow">
-					<el-col :span="24">
-						{{collectForm.linename}}
+				<el-form-item label="线路名称" prop="linename" v-show="isshowall">
+					<el-col :span="10">
+            <el-input v-model="collectForm.linename"></el-input>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="付款单位" prop="companyname">
@@ -57,7 +57,7 @@
 							<tr v-for="(domain,index) in collectForm.detail">
 								<td>
 									<el-col :span="20">
-										<el-select placeholder="收款账号" v-model="domain.type">
+										<el-select placeholder="收款方式" v-model="domain.type">
 											<el-option  v-for="bus in types" :key="bus.id" :label="bus.label" :value="bus.value">
 											</el-option>
 										</el-select>
@@ -108,6 +108,7 @@
 	</el-row>
 </template>
 <script>
+  import paramm from '../../common/js/getParam'
 	import axios from 'axios';
 	import util from '../../common/js/util'
 	import { collectsave, banlist,token } from '../../common/js/config';
@@ -141,7 +142,7 @@
 					}
 				},
 				collectForm: {
-					token:token,
+					token:paramm.getToken(),
 					businesstype: '',
 					orderno: '',
 					teamno: '',
@@ -207,7 +208,7 @@
 			let today = mydate.getFullYear() + "-" + (mydate.getMonth() + 1) + "-" + mydate.getDate()
 			this.createtime = today
 			this.checkbanklist()
-			
+
 
 		},
 		mounted(){
@@ -276,7 +277,7 @@
 			},
 			imagelistchange (val) {
                 this.collectForm.attach = val;
-                
+
                 console.log(this.collectForm.attach)
            },
 			changemenu() {
@@ -293,9 +294,10 @@
 			},
 			checkbanklist() {
 				let para = {
-					token:token
+					token:paramm.getToken()
 				}
 				banlist(para).then((res) => {
+          console.log(res.data)
 					this.banklist = res.data.obj
 				})
 			}
@@ -306,24 +308,24 @@
 	.bg-white {
 		background: white;
 	}
-	
+
 	.padding30 {
 		padding: 20px;
 	}
-	
+
 	.margin30 {
 		margin: 30px;
 	}
-	
+
 	.el-form-item {
 		text-align: left;
 	}
-	
+
 	.el-breadcrumb {
 		padding: 20px 40px;
 		background: white;
 	}
-	
+
 	.collecttable {
 		border: 1px solid #dee5ec;
 		border-radius: 5px;
