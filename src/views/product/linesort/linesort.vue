@@ -53,7 +53,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="活动名称" prop="name">
+            <el-form-item label="线类名称" prop="name">
               <el-input v-model="addcategory.name"></el-input>
             </el-form-item>
 

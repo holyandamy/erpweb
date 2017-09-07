@@ -48,7 +48,7 @@
 							<el-form-item label="收客类型">
 								<el-checkbox label="成人" prop="isadult" v-model="baseForm.isadult"></el-checkbox>
 								<el-checkbox label="儿童" prop="ischild" v-model="baseForm.ischild"></el-checkbox>
-								<el-checkbox label="老人" prop="isbaby" v-model="baseForm.isbaby"></el-checkbox>
+								<el-checkbox label="婴儿" prop="isbaby" v-model="baseForm.isbaby"></el-checkbox>
 							</el-form-item>
 							<el-form-item label="出港地">
 								<el-col :span="5">
@@ -167,7 +167,7 @@
 							<!--is-disabled-->
 							<span class="el-input-number__decrease" @click="minuday"><i class="el-icon-minus"></i></span>
 							<span class="el-input-number__increase" @click="addday"><i class="el-icon-plus"></i></span>
-							<div class="el-input"><input v-model="baseForm.days" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
+							<div class="el-input"><input v-model="baseForm.days" readonly="readonly" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
 
 							</div>
 						</div>
