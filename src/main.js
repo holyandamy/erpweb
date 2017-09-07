@@ -27,16 +27,12 @@ router.beforeEach((to, from, next) => {
 	let typetoken = sessionStorage.getItem('token')
 	if(type) {
 		next()
-		router.push({path: '/main'});
 	} else if(typetoken) {
 		next()
-		router.push({path: '/main'});
 	} else {
 		if(whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
 			next()
-			router.push({path: '/main'});
 		} else {
-			
 			next('/login'); // 否则全部重定向到登录页
 
 		}

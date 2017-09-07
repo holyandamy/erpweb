@@ -73,8 +73,9 @@ import Cookies from 'js-cookie';
 	                  		sessionStorage.setItem('token',res.data.obj.token)
 	                  	}
 	            		
-            		this.$router.push({path: '/main'});
-						}else{
+            		this.$router.push({ path: '/main'});
+ //                 	 this.$router.push({ path: '/'});
+                  	}else{
                   		this.$message.error(res.data.message);
                   		this.loading = false;
                   	}
