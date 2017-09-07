@@ -4,7 +4,7 @@ import axios from 'axios';
 let bucket = new upyun.Bucket('xtimg')
 
 export function getHeaderSign(bucket, method, path) {
-	axios.post('http://172.17.9.13:3001/file/upyun/getSign', {
+	axios.post('http://api.erp.we2tu.com/file/upyun/getSign', {
 			bucket,
 			method,
 			path
@@ -18,7 +18,7 @@ export function getHeaderSign(bucket, method, path) {
 		})
 }
 export function bodySignCallback(bucket, params) {
-	return axios.post('http://172.17.9.13:3001/file/upyun/bodySign', {
+	return axios.post('http://api.erp.we2tu.com/file/upyun/bodySign', {
 			bucket,
 			params
 		})

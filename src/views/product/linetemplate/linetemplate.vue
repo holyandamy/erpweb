@@ -11,7 +11,7 @@
 						</el-breadcrumb>
 					</el-col>
 					<el-col :span="12">
-						<el-button class="defaultbutton hasid" id="c9494719734711e788410242ac120009" @click="setMode('addline')" size="large" type="primary" style="color: #fff;">发布模板</el-button>
+						<el-button class="defaultbutton hasid"  id="c9494719734711e788410242ac120009" @click="setMode('addline')" size="large" type="primary" >发布模板</el-button>
 					</el-col>
 				</el-row>
 			</header>
@@ -118,7 +118,7 @@
 	import AddIine from './addline'
 	import EditInfo from './editline'
 	import { showorhide } from '../../../common/js/showorhid'
-  import peramm from '../../../common/js/getParam'
+  import paramm from '../../../common/js/getParam'
 	export default {
 		components: {
 			LineInfo,
@@ -145,14 +145,14 @@
 				lineid:'',
 				scope:{},
 				examineform: {
-					token:paramm.getToken(),
+					token:'',
 					id:'',
 					approve: '',
 					remark:''
 				}, //审核表单
 				modeType: 'linelist',
 				search: {
-					token:paramm.getToken(),
+					token:'',
 					pageindex:0,
 					pagesize:15,
 					categoryid:'', //分类id
@@ -206,6 +206,7 @@
 			//获取线路列表
 			getlinelist(){
 				let para = this.search
+				para.token = paramm.getToken()
 				templatelist(para).then((res) => {
 					console.log(res)
 					this.linelist = res.data.obj.datas
@@ -261,7 +262,7 @@
 		padding-top: 20px;
 		.defaultbutton {
 			border-color: #9ad4d6;
-			color: #2cb1b6;
+			color: #fff;
 			float: right;
 			margin-top: -10px;
 		}

@@ -10,6 +10,7 @@
  **************************提示********************************/
 //import {bases} from '../../common/js/config.js'
 import {bases} from '../../src/common/js/config.js'
+
 (function () {
 
     /**
@@ -32,7 +33,7 @@ import {bases} from '../../src/common/js/config.js'
         UEDITOR_HOME_URL: URL
 
         // 服务器统一请求接口路径
-        , serverUrl:  "http://172.17.9.13:3001/ueditor"
+        , serverUrl:  bases+"ueditor"
         
       
 

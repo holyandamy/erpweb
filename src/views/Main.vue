@@ -86,11 +86,8 @@
 			this.getuserinfo()
 		},
 		methods: {
-//      getToken() {
-//        console.log(233, paramm.getToken());
-//        this.tokenn = Cookies.get('token') || sessionStorage.getItem('token')
-//      },
-			getinfo() {
+		getinfo() {
+				
         dashboard({token: paramm.getToken()}).then((res) => {
 					this.lists = res.data.obj
 				})
