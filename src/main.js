@@ -25,15 +25,20 @@ const whiteList = ['/login'];
 router.beforeEach((to, from, next) => {
 	let type = Cookies.get('token')
 	let typetoken = sessionStorage.getItem('token')
-	if(type) {
-		next()
-	} else if(typetoken) {
-		next()
+	if(type || typetoken){
+		console.log(to.path)
+		if(to.path === '/login'){
+			next('/main')
+		}else{
+			next()
+		}
 	} else {
 		if(whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
 			next()
+			console.log(2)
 		} else {
 			next('/login'); // 否则全部重定向到登录页
+			console.log(3)
 
 		}
 
