@@ -339,7 +339,7 @@
 //            console.log(1111, _this.visitorList);
             }else {
               _this.$message({
-                message: '信息填写有误',
+                message: '信息未填写完整',
                 type: 'warning'
               });
               throw false

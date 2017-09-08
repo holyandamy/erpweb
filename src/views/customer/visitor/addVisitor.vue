@@ -109,7 +109,7 @@
                   <el-input v-model="visitorList.interest"></el-input>
                 </el-col>
               </el-form-item>
-              <el-form-item label="游客方式" prop="tourtype" style="width: 150px">
+              <el-form-item label="出游方式" prop="tourtype" style="width: 150px">
                 <el-col :span="4">
                   <el-input v-model="visitorList.tourtype"></el-input>
                 </el-col>
@@ -255,7 +255,7 @@
       this.getprovince()
       if( this.$parent.operationType.type=='edit') {
         this.optionName = "编辑游客";
-        this.birthdayFlag=false;
+//        this.birthdayFlag=false;
         let data = {
           token:paramm.getToken(),
           id: this.$parent.operationType.id,
@@ -280,26 +280,15 @@
         this.$emit('setMode', 'list', option);
       },
       submitForm() {
-        let _this = this
-          let newDate = '';
-          if (this.visitorList.birthday != '') {
-            const mouth = {
-              Jan: '01',
-              Feb: '02',
-              Mar: '03',
-              Apr: '04',
-              May: '05',
-              Jun: '06',
-              Jul: '07',
-              Aug: '08',
-              Sept: '09',
-              Oct: '10',
-              Nov: '11',
-              Dec: '12'
-            }
-            let start = String(this.visitorList.birthday).split(' ');
-            newDate = start[3] + '-' + mouth[start[1]] + '-' + start[2]
-          }
+//        console.log(6666, this.visitorList.birthday);
+
+        let _this = this;
+        var newDate = '';
+        if(this.visitorList.birthday){
+          let M = (this.visitorList.birthday.getMonth()+1).toString().length==1 ? '0'+ (this.visitorList.birthday.getMonth()+1).toString() : (this.visitorList.birthday.getMonth()+1).toString();
+          let D = this.visitorList.birthday.getDate().toString().length==1 ? '0'+ this.visitorList.birthday.getDate().toString() : this.visitorList.birthday.getDate().toString();
+          newDate = this.visitorList.birthday.getFullYear().toString() +"-" + M+ "-" + D;
+        }
           let newPostDate = Object.assign({}, this.visitorList)
           newPostDate.birthday = newDate;
           newPostDate.sexid = parseInt(newPostDate.sexid);
@@ -309,7 +298,7 @@
             if (valid) {
               if( this.$parent.operationType.type=='edit') {
                 newPostDate.id=this.$parent.operationType.id;
-                delete  newPostDate.birthday;
+//                delete  newPostDate.birthday;
                 custupdate(newPostDate).then((backData) => {
                   if (backData.data.error!=0 || backData.data.err) {
                     paramm.getCode(backData.data,_this)

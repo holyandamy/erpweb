@@ -97,12 +97,12 @@
         total:0,
         token:paramm.getToken(),
         currentPage:1,
-        pagesize:15,
+        pagesize:10,
         operationType:{type:'add',id:''},
         pageset:{
           token:paramm.getToken(),
-          pageIndex:0,
-          pageSize:''
+          pageindex:0,
+          pagesize:10
         },
         searchList:{
             token:paramm.getToken(),
@@ -151,8 +151,8 @@
         this.modeType='add';
       },
       getList(){
-        this.pageset.pageIndex = this.currentPage-1
-        this.pageset.pageSize = this.pagesize
+        this.pageset.pageindex = this.currentPage-1
+        this.pageset.pagesize = this.pagesize
         let page = this.pageset
         custlist(page).then((res) => {
           this.visitorList = res.data.obj.datas
@@ -176,8 +176,8 @@
         }
 
         let templateSeacrchList={
-            pageIndex:this.currentPage-1,
-            pageSize:this.pagesize,
+            pageindex:this.currentPage-1,
+            pagesize:this.pagesize,
             token:paramm.getToken(),
             name:this.searchList.name,
             date:newDate,
@@ -194,7 +194,7 @@
       },
       //分页
       handleCurrentChange(val) {
-        this.getlist()
+        this.getList()
       }
 
     }

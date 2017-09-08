@@ -23,11 +23,11 @@
 					<p class="out"><a  @click="logout">退出</a><!-- | <a href="#">消息</a>--></p>
 				</el-row>
 				<!--导航菜单-->
-				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" 
+				<el-menu :default-active="$route.path" class="el-menu-vertical-demo"
 					 unique-opened  v-show="!collapsed"  theme="dark">
 					<template v-for="(item,index) in menu" v-if="!item.hidden">
 						<el-submenu :index="index+''" v-if="!item.leaf">
-							
+
 							<template slot="title"></i>{{item.authname}}</template>
 							<el-menu-item v-for="child in item.childs" :index="child.path" @click="showhome=false,$router.push(child.path)" :key="child.path" v-if="!child.hidden">{{child.authname}}</el-menu-item>
 						</el-submenu>
@@ -36,12 +36,12 @@
 				</el-menu>
 				<!--导航菜单-折叠后-->
 				<ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">
-					
+
 					<li v-for="(item,index) in menu" v-if="!item.hidden" class="el-submenu item">
 						<template v-if="!item.leaf">
 							<div class="el-submenu__title" style="padding-left: 20px; " @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
-							<ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"> 
-								<li v-for="childnode in item.childs" v-if="!childnode.hidden" :key="childnode.path" class="el-menu-item" style="padding-left: 40px;" :class="$route.path==childnode.path?'is-active':''" @click="$router.push(childnode.path)">{{childnode.authname}}</li>
+							<ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
+								<li v-for="childnode in item.childs" v-if="!childnode.hidden" :key="childnode.path" class="el-menu-item" style="padding-left: 40px;min-width: 0;" :class="$route.path==childnode.path?'is-active':''" @click="$router.push(childnode.path)">{{childnode.authname}}</li>
 							</ul>
 						</template>
 						<template v-else>
@@ -56,13 +56,13 @@
 		<div class="containtermain">
 			<router-view></router-view>
 		</div>
-		
+
 		</el-col>
-		
+
 	</el-row>
 </template>
 
-<script> 
+<script>
 import Cookies from 'js-cookie';
 import {tokenlogin} from '../common/js/config'
 export default {
@@ -92,14 +92,14 @@ export default {
 			}else{
 				 para = {token:token}
 			}
-			
+
 			tokenlogin(para).then((res) =>{
 				this.userinfo =res.data.obj.username
 				this.menu = res.data.obj.menu
 				Cookies.set('info',res.data.obj.auths)
 			})
-		
-			
+
+
 		},
       handleSelect(key, keyPath) {
         if(key == 1){
@@ -119,7 +119,7 @@ export default {
 					_this.$router.push('/login');
 				}).catch(() => {
 
-				});	
+				});
 
 
 			}
@@ -129,7 +129,7 @@ export default {
 
 <style scoped lang="scss">
 .clearfix{clear: both;}
-.nav{height: 100%; 
+.nav{height: 100%;
 width: 180px;
 float: left;
 }
@@ -184,17 +184,17 @@ float: left;
 			.el-submenu{
 			border-bottom: 1px solid #4b5565;
 			}
-			
+
 		}
-		
-		
-		
+
+
+
 	}
 	.el-dropdown-menu{
 		font-size: 12px;
 		background: #4b5565;
 		border: 0px;
-		
+
 		li{
 			line-height: 30px;
 			margin-top: 0px!important;
@@ -203,9 +203,9 @@ float: left;
 			:hover{
 				background: #232c39;
 			}
-			
+
 		}
-		
+
 	}
 	.el-submenu{position: relative;}
 	.el-submenu:after{
