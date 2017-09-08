@@ -103,7 +103,6 @@
 										<el-dropdown-item class="hasid"  id="4dcba294734711e788410242ac120009"><span @click="setMode('editline'),lineinfo(scope)">编辑线路</span></el-dropdown-item>
 										<el-dropdown-item class="hasid"  id="9079b8af734711e788410242ac120009"><span @click="settop(scope)">线路置顶</span></el-dropdown-item>
 										<el-dropdown-item class="hasid"  id="6e3c1a72734711e788410242ac120009"><span @click="updatastatus(scope,4)">查看团期</span></el-dropdown-item>
-										<el-dropdown-item><span @click="updatastatus(scope,4)">操作日志</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 
@@ -202,7 +201,7 @@
 					linename:'',//线路名称
 					type:'',//1.国内，2出境，3周边
 				},
-				currentPage:0,
+				currentPage:1,
 				linesorts: [], //线路分类
 				destinations: [], //目的地
 				ischecked: -2,
@@ -247,7 +246,7 @@
 			//获取线路列表
 			getlinelist(){
 				let para = this.search
-
+				para.pageindex = this.currentPage-1
 				linelist(para).then((res) => {
 					this.linelist = res.data.obj.datas
 					for(let i = 0 ; i <res.data.obj.datas.length;i++){
@@ -291,7 +290,7 @@
 			lineinfo(scope){
 				this.lineid = scope.row.id
 				this.scope = scope.row
-				console.log(scope,111)
+			
 			},
 			//线路审核
 			examine(scope) {
@@ -340,7 +339,7 @@
 				})
 			},
 			handleCurrentChange(){
-
+				this.getlinelist()
 			},
       // 清空查询
       clearGetList () {
@@ -460,8 +459,12 @@
 
 	.el-dropdown-menu {
 		font-size: 12px;
-		span {
-			display: block;
+		width: 150px;
+		li {
+			display: inline-block;
+			width: 130px;
+			float: left;
+			text-align: center;
 		}
 	}
 </style>

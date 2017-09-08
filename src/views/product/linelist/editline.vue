@@ -21,18 +21,16 @@
 						<el-col :span="20">
 
 							<el-form-item label="选择线路分类">
-								<el-select v-model="baseForm.categorytype" placeholder="请选择" @change="checkline">
+								<el-select filterable v-model="baseForm.categorytype" placeholder="请选择" @change="checkline">
 									<el-option v-for="item in categoryids" :key="item.value" :label="item.label" :value="item.value">
 									</el-option>
 								</el-select>
-								<el-select v-model="baseForm.categoryid" placeholder="请选择">
+								<el-select filterable v-model="baseForm.categoryid" placeholder="请选择">
 									<el-option v-for="item in categorytypes" :key="item.id" :label="item.name" :value="item.id">
 									</el-option>
 								</el-select>
 							</el-form-item>
-							<el-form-item label="模板导入">
-								<el-button>添加模板</el-button>
-							</el-form-item>
+						
 							<el-form-item label="线路名称" prop="name">
 								<el-input v-model="baseForm.name"></el-input>
 							</el-form-item>
@@ -53,7 +51,7 @@
 							<el-form-item label="出港地">
 								<el-col :span="5">
 									<el-form-item prop="fromprovinceid">
-										<el-select v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom">
+										<el-select filterable v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom">
 											<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -65,7 +63,7 @@
 								</el-col>
 								<el-col :span="5">
 									<el-form-item prop="fromcityid">
-										<el-select v-model="baseForm.fromcityid" placeholder="请选择" @change="changecityfrom">
+										<el-select filterable v-model="baseForm.fromcityid" placeholder="请选择" @change="changecityfrom">
 											<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -76,7 +74,7 @@
 								</el-col>
 								<el-col :span="5">
 									<el-form-item prop="fromdistrictid">
-										<el-select v-model="baseForm.fromdistrictid" placeholder="请选择">
+										<el-select filterable v-model="baseForm.fromdistrictid" placeholder="请选择">
 											<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -86,7 +84,7 @@
 							<el-form-item label="目的地">
 								<el-col :span="5">
 									<el-form-item prop="toprovinceid">
-										<el-select v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
+										<el-select filterable v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
 											<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -97,7 +95,7 @@
 								</el-col>
 								<el-col :span="5">
 									<el-form-item prop="tocityid">
-										<el-select v-model="baseForm.tocityid" placeholder="请选择" @change="changecityback">
+										<el-select filterable v-model="baseForm.tocityid" placeholder="请选择" @change="changecityback">
 											<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -108,7 +106,7 @@
 								</el-col>
 								<el-col :span="5">
 									<el-form-item prop="todistrictid">
-										<el-select v-model="baseForm.todistrictid" placeholder="请选择">
+										<el-select filterable v-model="baseForm.todistrictid" placeholder="请选择">
 											<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -121,7 +119,7 @@
 								</el-col>
 								<el-col :span="4">
 									<el-form-item prop="trafficgo">
-										<el-select v-model="baseForm.trafficgo" placeholder="请选择">
+										<el-select  v-model="baseForm.trafficgo" placeholder="请选择">
 											<el-option v-for="item in traffics" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -135,7 +133,7 @@
 								</el-col>
 								<el-col :span="4">
 									<el-form-item prop="trafficreturn">
-										<el-select v-model="baseForm.trafficreturn" placeholder="请选择">
+										<el-select  v-model="baseForm.trafficreturn" placeholder="请选择">
 											<el-option v-for="item in traffics" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -159,7 +157,7 @@
 
 				<div class="tablemenu">
 					<el-button style="float: left;" @click="editor = false; menucheck1=true; menucheck2=false; basetype()">普通方式录入<i :class="[{'el-icon-check': menucheck1},'el-icon--right']"></i></el-button>
-					<el-button style="float: left;" @click="editor = true; menucheck1=false; menucheck2=true; selftype()">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
+					<el-button style="float: left;" @click="editor = true; menucheck1=false; menucheck2=true; selftype(),selfedit=true">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
 
 					<!--<el-input-number v-model="baseForm.days" @change="changeday" :min="1" :max="10"></el-input-number>-->
 					<el-form-item label="行程天数" style="float: left; margin-bottom: 0;">
@@ -257,6 +255,9 @@
 				<div class="baseinfo">
 					<el-row>
 						<el-col :span="20">
+							<el-form-item label="产品亮点" prop="feature">
+								<el-input type="textarea" v-model="baseForm.feature"></el-input>
+							</el-form-item>
 							<el-form-item label="购物安排" prop="shopping">
 								<el-input type="textarea" v-model="baseForm.shopping"></el-input>
 							</el-form-item>
@@ -293,7 +294,16 @@
 						</el-col>
 					</el-row>
 				</div>
-
+<el-dialog
+  title="自定义输入"
+  :visible.sync="selfedit"
+  size="tiny"
+>
+  <span>自定义输入不支持同步到OTA平台</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="selfedit = false">我知道了</el-button>
+  </span>
+</el-dialog>
 				<div class="button">
 					<el-form-item>
 						<el-button size="large" type="primary" @click="submitForm('baseForm')">保存</el-button>
@@ -696,8 +706,11 @@
 							para.routes[0].content = html
 							para.edittype = 1
 						}
+						
+						para.token = paramm.getToken()
+						console.log(para)
 						lineupdate(para).then((res) => {
-							console.log(para)
+							
 							if(res.data.error == 1) {
 								this.$message({
 									showClose: true,

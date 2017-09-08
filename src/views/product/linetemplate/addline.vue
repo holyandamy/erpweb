@@ -21,11 +21,11 @@
 						<el-col :span="20">
 
 							<el-form-item label="选择线路分类">
-								<el-select v-model="baseForm.categorytype" placeholder="请选择" @change="checkline">
+								<el-select filterable  v-model="baseForm.categorytype" placeholder="请选择" @change="checkline">
 									<el-option v-for="item in categoryids" :key="item.value" :label="item.label" :value="item.value">
 									</el-option>
 								</el-select>
-								<el-select v-model="baseForm.categoryid" placeholder="请选择">
+								<el-select filterable  v-model="baseForm.categoryid" placeholder="请选择">
 									<el-option v-for="item in categorytypes" :key="item.id" :label="item.name" :value="item.id">
 									</el-option>
 								</el-select>
@@ -50,7 +50,7 @@
 							<el-form-item label="出港地">
 								<el-col :span="5">
 									<el-form-item prop="fromprovinceid">
-										<el-select v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom">
+										<el-select filterable  v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom">
 											<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -62,7 +62,7 @@
 								</el-col>
 								<el-col :span="5">
 									<el-form-item prop="fromcityid">
-										<el-select v-model="baseForm.fromcityid" placeholder="请选择" @change="changecityfrom">
+										<el-select filterable  v-model="baseForm.fromcityid" placeholder="请选择" @change="changecityfrom">
 											<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -73,7 +73,7 @@
 								</el-col>
 								<el-col :span="5">
 									<el-form-item prop="fromdistrictid">
-										<el-select v-model="baseForm.fromdistrictid" placeholder="请选择">
+										<el-select filterable  v-model="baseForm.fromdistrictid" placeholder="请选择">
 											<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -83,7 +83,7 @@
 							<el-form-item label="目的地">
 								<el-col :span="5">
 									<el-form-item prop="toprovinceid">
-										<el-select v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
+										<el-select filterable  v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
 											<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -94,7 +94,7 @@
 								</el-col>
 								<el-col :span="5">
 									<el-form-item prop="tocityid">
-										<el-select v-model="baseForm.tocityid" placeholder="请选择" @change="changecityback">
+										<el-select filterable  v-model="baseForm.tocityid" placeholder="请选择" @change="changecityback">
 											<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -105,7 +105,7 @@
 								</el-col>
 								<el-col :span="5">
 									<el-form-item prop="todistrictid">
-										<el-select v-model="baseForm.todistrictid" placeholder="请选择">
+										<el-select filterable  v-model="baseForm.todistrictid" placeholder="请选择">
 											<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>

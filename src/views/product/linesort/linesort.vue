@@ -37,7 +37,6 @@
         </el-table>
         <div class="page">
           <el-pagination
-            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage"
             :page-size="pagesize"
@@ -123,8 +122,8 @@
         operationType:{type:'add',id:''},
         pageset:{
           token:paramm.getToken(),
-          pageIndex:0,
-          pageSize:''
+          pageindex:0,
+          pageindex:15
         },
       }
     },
@@ -202,19 +201,17 @@
         });
       },
       getList(){
-        this.pageset.pageIndex = this.currentPage-1
-        this.pageset.pageSize = this.pagesize
-        let page = this.pageset
+      	let page = this.pageset
+    	  page.pageindex = this.currentPage-1
+        page.pagesize = this.pagesize
+        
         linecategorylist(page).then((res) => {
+        	 console.log(page,res)
           this.lineList = res.data.obj.datas
           this.total = Number(res.data.obj.total)
         })
       },
-
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      //分页
+		//分页
       handleCurrentChange(val) {
         this.getList()
       }
