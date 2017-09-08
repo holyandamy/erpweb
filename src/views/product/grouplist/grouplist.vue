@@ -57,14 +57,14 @@
                <el-input v-model="searchList.teamname"></el-input>
              </el-col>
            </el-form-item>
+            <el-form-item   style="margin-right: 30px;">
+              <el-button class="hasid" id="49641a18734611e788410242ac120009" type="primary" @click="searchGetList">查询</el-button>
+            </el-form-item>
+            <el-form-item   style="margin-left: 0px">
+              <el-button  type="primary" @click="clearGetList">清空查询</el-button>
+            </el-form-item>
           </el-row>
 
-          <el-form-item   style="margin-right: 50px;">
-            <el-button class="hasid" id="49641a18734611e788410242ac120009" type="primary" @click="searchGetList">查询</el-button>
-          </el-form-item>
-          <el-form-item   style="margin-left: 0px">
-            <el-button  type="primary" @click="clearGetList">清空查询</el-button>
-          </el-form-item>
         </el-form>
 
         <el-table :data="lineList" border style="text-align: left; font-size: 12px;">
@@ -92,8 +92,8 @@
             <template scope="scope">
               <el-button class="hasid" id="521410f9734611e788410242ac120009" @click="setMode('groupinfo'),editorFn(scope.row,'groupinfo')" type="text" size="small" >下单</el-button>
               <el-button class="hasid" id="6f6276e6734611e788410242ac120009" @click="setMode('newGroup','edit'),editorFn(scope.row,'newGroup')" type="text" size="small">编辑</el-button>  <!-- editorFn(scope.row)  -->
-              <el-button @click="setMode('newGroup','detail'),editorFn(scope.row,'newGroup')" type="text" size="small">详情</el-button>
-              <el-button class="hasid" id="8929e4a7734611e788410242ac120009" type="text" size="small" @click="deleteRow(scope.$index, scope.row)">停止</el-button>
+              <!--<el-button @click="setMode('newGroup','detail'),editorFn(scope.row,'newGroup')" type="text" size="small">详情</el-button>-->
+              <el-button class="hasid" id="8929e4a7734611e788410242ac120009" type="text" size="small" @click="deleteRow(scope.$index, scope.row)">{{{false:'启用',true:'停止'}[scope.row.isenable]}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -124,7 +124,7 @@
   import Reserve from './reserve'
   import util from '../../../common/js/util'
   import axios from 'axios'
-  import {token,grouplist,linecategorydelete} from '../../../common/js/config'
+  import {token,grouplist,linecategorydelete,groupStop} from '../../../common/js/config'
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   export default {
@@ -187,12 +187,14 @@
 
       },
       deleteRow(index, rows){
+        let _this = this;
         this.lineList.splice(index, 1);
-        linecategorydelete({token:paramm.getToken(),id:rows.id}).then((res) => {
-          if(res.data.error){
-            this.$message.error(res.data.massage);
+        groupStop({token:paramm.getToken(),id:rows.id,status:!rows.isenable}).then((res) => {
+          if(res.data.error == 1 || res.data.err){
+            paramm.getCode(res.data, _this)
           }
           else {
+            paramm.getCode(res.data, _this)
             this.getList()
           }
         })
