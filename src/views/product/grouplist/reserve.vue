@@ -45,7 +45,7 @@
           <section class="padding30">
             <el-row class="bg_white">
               <el-col :span="25">
-                <el-form   ref="visitorList" v-model="visitorList"  :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;">  <!--   -->
+                <el-form   ref="visitorList" :model="visitorList"  :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;">  <!--   -->
                   <div style="width:50%;float: left;overflow:hidden">
                     <el-form-item label="客户类型：" prop="custtype" >
                       <el-col :span="4">
@@ -282,7 +282,7 @@
             validator: checkmobile,
             trigger: 'blur',
             required: true,
-          }]
+          }],
         },
         options: [{
           value: '1',

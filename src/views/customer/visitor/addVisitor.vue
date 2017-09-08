@@ -38,6 +38,8 @@
                 <el-select v-model="visitorList.certtype" >
                   <el-option label="身份证" :value=1 ></el-option>
                   <el-option label="护照" :value=2></el-option>
+                  <el-option label="军官证" :value=3></el-option>
+                  <el-option label="港澳通行证" :value=4></el-option>
                 </el-select>
               </el-col>
               <el-col :span="11">
@@ -146,13 +148,67 @@
           }
         }, 1000);
       };
+      var validatePass = (rule, value, callback) => {
+        // 身份证
+        if(this.visitorList.certtype == 1){
+          if(!value) {
+            return callback(new Error('身份证号码不能为空'));
+          }
+          let cardOne1 = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/;
+          let cardOne2 = /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+          if (cardOne1.test(value) || cardOne2.test(value)) {
+            callback()
+          }else {
+            callback(new Error('请输入正确的身份证号码'));
+          }
+        }
+        // 护照
+        if(this.visitorList.certtype == 2){
+          if(!value) {
+            return callback(new Error('护照号码不能为空'));
+          }
+          let cardTwo1 = /^[a-zA-Z]{5,17}$/;
+          let cardTwo2 = /^[a-zA-Z0-9]{5,17}$/;
+          if (cardTwo1.test(value) || cardTwo2.test(value)) {
+            callback()
+          }else {
+            callback(new Error('请输入正确的护照号码'));
+          }
+        }
+        // 军官证
+        if(this.visitorList.certtype == 3){
+          if(!value) {
+            return callback(new Error('军官证号码不能为空'));
+          }
+          let cardThree1 = /南字第(\d{8})号|北字第(\d{8})号|沈字第(\d{8})号|兰字第(\d{8})号|成字第(\d{8})号|济字第(\d{8})号|广字第(\d{8})号|海字第(\d{8})号|空字第(\d{8})号|参字第(\d{8})号|政字第(\d{8})号|后字第(\d{8})号|装字第(\d{8})号/;
+          if (cardThree1.test(value)) {
+            callback()
+          }else {
+            callback(new Error('请输入正确的军官证号码'));
+          }
+        }
+        // 港澳通行证
+        if(this.visitorList.certtype == 4){
+          if(!value) {
+            return callback(new Error('港澳通行证号码不能为空'));
+          }
+          let cardFour1 = /^[HMhm]{1}([0-9]{10}|[0-9]{8})$/;
+          if (cardFour1.test(value)) {
+            callback()
+          }else {
+            callback(new Error('请输入正确的港澳通行证号码'));
+          }
+        }
+
+      };
+
       return {
         visitorList: {
           token:paramm.getToken(),
           name: '',
           sexid:'1',
           mobile:'',
-          certtype:2,
+          certtype:1,
           certno: '',
           qq: '',
           weixin: '',
@@ -185,7 +241,8 @@
             required: true,
           }],
           certno:[
-            { required: false,  min: 7, max: 18, message: '请输入正确的格式', trigger: 'blur' }
+//            { required: true,  min: 7, max: 18, message: '请输入正确的格式', trigger: 'blur' }
+            { validator: validatePass,  trigger: 'blur', required: true }
           ],
 
         },
@@ -247,6 +304,7 @@
           newPostDate.birthday = newDate;
           newPostDate.sexid = parseInt(newPostDate.sexid);
           newPostDate.mobile = String(newPostDate.mobile);
+          newPostDate.token = paramm.getToken();
           this.$refs['visitorList'].validate((valid) => {
             if (valid) {
               if( this.$parent.operationType.type=='edit') {
