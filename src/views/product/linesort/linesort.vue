@@ -22,7 +22,7 @@
           </el-table-column>
           <el-table-column  label="线路数量"> <!--  prop="total"   -->
             <template scope="scope">
-             <span @click='jump(scope.row.id)' class='jump'>
+             <span @click='jump(scope)' class='jump'>
                 {{scope.row.total}}
              </span>
               <!--<router-link to="/news/001">新闻001</router-link>-->
@@ -136,8 +136,9 @@
 			})
 		},
     methods:{
-      jump () {
-        this.$router.push({path: '/linelist',idd: '111'})
+      jump (scope) {
+      	console.log(scope.row.name)
+        this.$router.push({path: '/linelist',query: {name: scope.row.name}})
       },
       deleteRow(index, rows){
         let _this = this;
