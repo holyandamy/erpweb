@@ -47,7 +47,7 @@
 					</el-table-column>
 					<el-table-column prop="orderno" label="订单编号" width="120">
 					</el-table-column>
-					<el-table-column prop="code" label="收款单号" width="180">
+					<el-table-column prop="code" label="付款单号" width="180">
 					</el-table-column>
 					<el-table-column prop="teamno" label="团号" width="120">
 					</el-table-column>
@@ -75,10 +75,10 @@
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
 									<el-dropdown-menu slot="dropdown">
-										<el-dropdown-item class="hasid" id="1246dc8c72ba11e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
-										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
+										<el-dropdown-item class="hasid" id="1246dc8c72ba11e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">已确认</span></el-dropdown-item>
+										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">未确认</span></el-dropdown-item>
 										<el-dropdown-item class="hasid" id="31ce8b2b72ba11e7aad70242ac120006"  v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
-										<el-dropdown-item class="hasid" id="40da0a9772ba11e7aad70242ac120006"  v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">不核销</span></el-dropdown-item>
+										<el-dropdown-item class="hasid" id="40da0a9772ba11e7aad70242ac120006"  v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">未核销</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 							</a>
@@ -152,6 +152,7 @@
 				showedit: 'pay',
 				//搜索数据
 				search: {
+          token:paramm.getToken(),
 					createtime: '',
 					companyname: '',
 					teamno: '',

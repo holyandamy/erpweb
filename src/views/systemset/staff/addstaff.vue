@@ -98,7 +98,7 @@
 								</el-col>
 							</el-row>
 						</el-form-item>
-						<el-form-item label="选择角色">
+						<el-form-item label="选择角色" prop="roleid">
 							<el-row>
 								<el-col :span="4">
 									<el-input v-model="roleids"></el-input>
@@ -258,7 +258,7 @@
 					roleid: [{
 						required: true,
 						message: '请选择角色',
-						trigger: 'change'
+						trigger: 'blur'
 					}],
 					status: [{
 						required: true,

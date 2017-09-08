@@ -83,19 +83,15 @@
 			var checkmobile = (rule, value, callback) => {
 				if(!value) {
 					return callback(new Error('手机号码不能为空'));
-				}
-				setTimeout(() => {
-					if(!Number.isInteger(value)) {
-						callback(new Error('请输入数字值'));
-					} else {
+				}else {
 						let mobilereg = /^[0-9]{11}$/;
 						if(mobilereg.test(value)) {
 							callback();
 						} else {
 							callback(new Error('请输入正确的手机号码'));
 						}
-					}
-				}, 1000);
+				}
+
 			};
 			return {
 				activeIndex: '3',
@@ -113,8 +109,7 @@
 					tel: '',
 					fax: '',
 					companyId: '',
-					brand:'',
-					companyId:''
+					brand:''
 				},
 				//验证数据
 				rules: {
@@ -207,18 +202,19 @@
 			},
 			//保存数据
 			submitForm(formName) {
+        let _this =this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let parses = this.companyForm
 					parses.companyId = this.companyForm.id
+					parses.token = paramm.getToken()
+					parses.mobile = parses.mobile.toString()
 						companyupdate(parses).then((res) => {
-							if(res.data.error == 1){
-								console.log(parses, res)
-								 this.$message.error(res.data.message);
+							if(res.data.error == 1 || res.data.err){
+                  paramm.getCode(res.data,_this)
 							}else{
-								this.$message('提交成功！');
-								console.log(parses, res)
-							}
+                  paramm.getCode(res.data,_this)
+              }
 						})
 					} else {
 						this.$message.error('提交错误！');
@@ -274,14 +270,14 @@
           token:paramm.getToken()
 					}
 					this.getcity(pro)
-					this.companyForm.cityId = ""
+					//this.companyForm.cityId = ""
 				}else{
 					let city = {
 					id: this.companyForm.cityId,
           token:paramm.getToken()
 					}
 					this.getdistrict(city)
-					this.companyForm.districtId=""
+					//this.companyForm.districtId=""
 				}
 
 
