@@ -296,7 +296,7 @@
         </el-form-item>
         <el-form-item label="选择线路">
           <el-radio-group v-model="checkItem" style='text-align: left;'>
-            <el-radio :label="item" :key="item.name" v-for="item in lineList">{{item.name}}</el-radio>
+            <el-radio :label="item" :key="item.name" v-for="item in lineList">{{item.name.substring(0,20)}}</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
