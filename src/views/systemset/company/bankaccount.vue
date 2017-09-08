@@ -253,7 +253,8 @@
 					this.$notify({
 						title: '成功',
 						message: '状态改变成功',
-						type: 'success'
+						type: 'success',
+            duration:800
 					});
 					this.getlist()
 				})
