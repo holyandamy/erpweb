@@ -142,7 +142,7 @@
 						<el-button @click="resetPassword = false">取消</el-button>
 						</el-form-item>
 					</el-form>
-					
+
 				</el-col>
 			</el-row>
 		</el-dialog>
@@ -150,6 +150,7 @@
 </template>
 
 <script>
+  import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
 	import util from '../../../common/js/util'
 	import { editusersave, getdeplist, userdetail, rolelist,userpwd } from '../../../common/js/config';
@@ -277,7 +278,7 @@
 		created() {
 			this.getinfo()
 			this.getdepartment()
-			
+
 		},
 		methods: {
 			submitForm(formName) {
@@ -354,7 +355,7 @@
 					this.roleids = role.join(',')
 				}
 			},
-			
+
 			//传值
 			getinfo() {
 				let para = {
@@ -378,13 +379,13 @@
 								if(list[i] == this.rolelists[j].id){
 									this.roleids += this.rolelists[j].rolename+","
 									this.checkdepartment = this.roleids.split(',')
-									
+
 								}
 							}
 						}
 						})
 				})
-				
+
 			},
 			//修改密码
 			changepassword() {
@@ -466,16 +467,16 @@
 			color: #333;
 		}
 	}
-	
+
 	.el-breadcrumb {
 		font-size: 18px;
 		margin-bottom: 20px;
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 	}
-	
+
 	.bg_white {
 		background: #fff;
 		padding: 20px 35px;

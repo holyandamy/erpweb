@@ -16,7 +16,7 @@
 					<el-select v-model="collectForm.businesstype" placeholder="选择" @change="changemenu()">
 						<el-option label="预收款" value="1"></el-option>
 						<el-option label="订单预收款" value="2"></el-option>
-						<el-option label="预付款退款" value="3"></el-option>
+						<el-option label="预收款退款" value="3"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="订单编号" required prop="orderno" v-show="isshowall">
@@ -34,7 +34,7 @@
             <el-input v-model="collectForm.linename"></el-input>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="付款单位" prop="companyname">
+				<el-form-item label="收款单位" prop="companyname">
 					<el-col :span="10">
 						<el-input v-model="collectForm.companyname" placeholder="搜索选择收款单位"></el-input>
 					</el-col>

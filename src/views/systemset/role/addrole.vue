@@ -63,7 +63,7 @@
 
 <script>
 
-
+  import paramm from '../../../common/js/getParam'
   import axios from 'axios';
    import {token,roledetail,authlist,rolesave,roleupdate} from '../../../common/js/config';
   export default {
@@ -79,7 +79,7 @@
       }
     },
     created: function () {
-    	let para={token:token}
+    	let para={token:paramm.getToken()}
       authlist(para).then((res) => {
         if(res.data.error){
           this.$message.error(res.data.massage);
@@ -92,7 +92,7 @@
           if( this.$parent.operationType.type=='edit'){
             this.optionName="编辑角色"
             let data={
-                token:token,
+                token:paramm.getToken(),
                 id:this.$parent.operationType.id,
             }
            roledetail(data).then((res) => {
@@ -200,7 +200,7 @@
         newAuths.pop();
         if( this.$parent.operationType.type!='edit'){
             let addPostData = {
-              token,
+              token:paramm.getToken(),
               name: this.roleName,
               remark: this.remarkInfo,
               auths: newAuths
@@ -216,7 +216,7 @@
         }
         else {
           let editPostData = {
-            token,
+            token:paramm.getToken(),
             name: this.roleName,
             remark: this.remarkInfo,
             auths: newAuths,

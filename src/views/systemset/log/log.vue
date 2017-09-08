@@ -12,7 +12,7 @@
 
 				</el-row>
 			</header>
-			<el-form :inline="true" :model="formInline" class="demo-form-inline hasid" style="text-align: left!important; padding-left: 30px; float: left;" id="54bfe60304f84742bd37e2d93c3924da"> 
+			<el-form :inline="true" :model="formInline" class="demo-form-inline hasid" style="text-align: left!important; padding-left: 30px; float: left;" id="54bfe60304f84742bd37e2d93c3924da">
 				<el-form-item label="操作模块">
 					<el-input v-model="formInline.moudle" placeholder="操作模块"></el-input>
 				</el-form-item>
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+  import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
 	import util from '../../../common/js/util'
 	import { showorhide } from '../../../common/js/showorhid'
@@ -71,7 +72,7 @@
 					date: '',
 					type: '',
 					operator: '',
-					
+
 				},
 				roleLists: [],
 				total: 0,
@@ -111,7 +112,7 @@
 					dates = startday+'|'+endday
 				}
 				let page = {
-					token: token,
+					token: paramm.getToken(),
 					moudle: this.formInline.moudle,
 					date: dates,
 					type: this.formInline.type,
@@ -139,7 +140,7 @@
 	.not:hover {
 		color: red;
 	}
-	
+
 	header {
 		padding: 0 40px;
 		background: white;
@@ -176,23 +177,22 @@
 			color: #333;
 		}
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 	}
-	
+
 	.page {
 		padding: 15px 30px;
 		background: white;
 		text-align: right;
 	}
-	
+
 	.el-table .cell {
 		text-align: left;
 	}
-	
+
 	.el-breadcrumb {
 		margin-bottom: 20px;
 	}
-	.demo-form-inline{float: left; padding-left: 30px;}
 </style>

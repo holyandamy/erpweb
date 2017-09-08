@@ -24,7 +24,7 @@
 
 		<!--公司信息设置-->
 		<CompanySet v-if="modeType == 'company'"></CompanySet>
-		<!--部门管理-->
+		<!--组织架构管理-->
 		<DepartMent  v-else-if="modeType == 'depart'" ref="Addpartment"></DepartMent>
 		<!--银行账号设置-->
 		<BankAccount  v-else-if="modeType == 'bank'" ref="BankAccount"></BankAccount>

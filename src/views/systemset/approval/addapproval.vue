@@ -85,6 +85,7 @@
 </template>
 
 <script>
+  import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
 	import { addapprove, userenablelist,token } from '../../../common/js/config';
 	export default {
@@ -92,7 +93,7 @@
 		data() {
 			return {
 				appform: {
-					token: token,
+					token: paramm.getToken(),
 					executorid: '',
 					approverid: '',
 					isenable: '启用'
@@ -127,7 +128,7 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = {
-							token: token,
+							token: paramm.getToken(),
 							executorid: '',
 							approverid: '',
 							isenable: ''
@@ -202,7 +203,7 @@
 			//获取被审批人员
 			getuser() {
 				let para = {
-					token: token
+					token: paramm.getToken()
 				}
 				userenablelist(para).then((res) => {
 					console.log(res)
@@ -263,16 +264,16 @@
 			color: #333;
 		}
 	}
-	
+
 	.el-breadcrumb {
 		font-size: 18px;
 		margin-bottom: 20px;
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 	}
-	
+
 	.bg_white {
 		background: #fff;
 		padding: 20px 35px;

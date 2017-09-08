@@ -88,7 +88,7 @@
 						      </span>
 									<el-dropdown-menu slot="dropdown">
 										<el-dropdown-item class="hasid" id="9250c2ef72b911e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
-										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
+										<!--<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>-->
 										<el-dropdown-item class="hasid" id="a5ecf87872b911e7aad70242ac120006" v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
 										<el-dropdown-item class="hasid" id="b16981ef72b911e7aad70242ac120006" v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">不核销</span></el-dropdown-item>
 									</el-dropdown-menu>
@@ -149,6 +149,7 @@
 </template>
 
 <script>
+  import paramm from '../../common/js/getParam'
 	import util from '../../common/js/util'
 	import CollectEdit from './collectedit'
 	import { getcollectlist, collectstatus, token } from '../../common/js/config';
@@ -162,7 +163,7 @@
 				showedit: 'collectlist',
 				//搜索数据
 				search: {
-					token: token,
+					token: paramm.getToken(),
 					date: '',
 					companyname: '',
 					teamno: '',
@@ -253,7 +254,7 @@
 			}
 
 		},
-		
+
 		updated: function() {
 			this.$nextTick(function() {
 				showorhide()
@@ -273,9 +274,6 @@
 			handleSizeChange(val) {
 
 			},
-			handleCurrentChange(val) {
-				this.getUsers();
-			},
 
 			onSubmit() {
 
@@ -293,7 +291,7 @@
 					dates = startday + '|' + endday
 				}
 				let parses = {
-					token: token,
+					token: paramm.getToken(),
 					date: dates,
 					companyname: this.search.companyname,
 					teamno: this.search.teamno,
@@ -311,6 +309,9 @@
 					this.listLoading = false
 				})
 			},
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
 			//显示查看界面
 			handleShow: function(index, row) {
 				this.showFormVisible = true;
@@ -319,7 +320,7 @@
 			//		状态编辑
 			updatastatus(scope, i) {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					id: scope.row.id,
 					status: i
 				}
@@ -362,49 +363,49 @@
 		text-align: left;
 		margin-bottom: 20px;
 	}
-	
+
 	.container {
 		padding: 0 40px;
 	}
-	
+
 	.el-form {
 		text-align: left;
 	}
-	
+
 	.el-table td .cell {
 		font-size: 12px;
 	}
-	
+
 	.el-dropdown-menu li {
 		font-size: 12px;
 		a {
 			display: block;
 		}
 	}
-	
+
 	.pages {
 		padding: 10px 40px;
 		background: #fff;
 		text-align: right;
 	}
-	
+
 	.el-dropdown-link {
 		font-size: 12px;
 		color: #3ec3c8;
 	}
-	
+
 	a {
 		color: #fff;
 	}
-	
+
 	.el-dropdown-menu__item span {
 		display: block;
 	}
-	
+
 	.abc {
 		color: red;
 	}
-	
+
 	.hasid {
 		display: none;
 	}

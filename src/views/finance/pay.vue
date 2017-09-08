@@ -76,9 +76,9 @@
 						      </span>
 									<el-dropdown-menu slot="dropdown">
 										<el-dropdown-item class="hasid" id="1246dc8c72ba11e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">已确认</span></el-dropdown-item>
-										<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">未确认</span></el-dropdown-item>
+										<!--<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">未确认</span></el-dropdown-item>-->
 										<el-dropdown-item class="hasid" id="31ce8b2b72ba11e7aad70242ac120006"  v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
-										<el-dropdown-item class="hasid" id="40da0a9772ba11e7aad70242ac120006"  v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">未核销</span></el-dropdown-item>
+										<el-dropdown-item class="hasid" id="40da0a9772ba11e7aad70242ac120006"  v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">反核销</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 							</a>
@@ -96,34 +96,49 @@
 				<!--查看界面-->
 				<el-dialog title="查看" v-model="showFormVisible" :close-on-click-modal="false">
 					<el-form :model="showForm" label-width="80px" ref="showForm">
-						<el-form-item label="产品名称" prop="linename">
-							{{showForm.linename}}
-						</el-form-item>
-						<el-form-item label="单位名称" prop="companyname">
-							{{showForm.companyname}}
-						</el-form-item>
-						<el-form-item label="订单编号" prop="orderno">
-							{{showForm.orderno}}
-						</el-form-item>
-						<el-form-item label="收款单号" prop="code">
-							{{showForm.code}}
-						</el-form-item>
-						<el-form-item label="团号" prop="teamno">
-							{{showForm.teamno}}
-						</el-form-item>
-						<el-form-item label="金额" prop="totalfee">
-							{{showForm.totalfee}}
-						</el-form-item>
-						<el-form-item label="经办人" prop="operator">
-							{{showForm.operator}}
+						<el-form-item label="创建日期" prop="createtime">
+							{{showForm.createtime}}
 						</el-form-item>
 						<el-form-item label="业务类型" prop="busstypename">
 							{{showForm.busstypename}}
 						</el-form-item>
+						<el-form-item label="订单编号" prop="orderno">
+							{{showForm.orderno}}
+						</el-form-item>
+						<!--<el-form-item label="收款单号" prop="code">
+							{{showForm.code}}
+						</el-form-item>-->
+						<el-form-item label="团号" prop="teamno">
+							{{showForm.teamno}}
+						</el-form-item>
+            <el-form-item label="线路名称" prop="linename">
+              {{showForm.linename}}
+            </el-form-item>
+            <el-form-item label="付款单位" prop="companyname">
+              {{showForm.companyname}}
+            </el-form-item>
+						<!--<el-form-item label="金额" prop="totalfee">
+							{{showForm.totalfee}}
+						</el-form-item>
+						<el-form-item label="经办人" prop="operator">
+							{{showForm.operator}}
+						</el-form-item>-->
 						<el-form-item label="备注" prop="remark">
 							{{showForm.remark}}
 						</el-form-item>
 					</el-form>
+          <el-table :data="showForm"  border style="width: 100%; font-size:12px;">
+            <el-table-column prop="teamno" label="团号" width="120">
+            </el-table-column>
+            <el-table-column prop="teamno" label="团号" width="120">
+            </el-table-column>
+            <el-table-column prop="teamno" label="团号" width="120">
+            </el-table-column>
+            <el-table-column prop="teamno" label="团号" width="120">
+            </el-table-column>
+            <el-table-column prop="teamno" label="团号" width="120">
+            </el-table-column>
+          </el-table>
 					<div slot="footer" class="dialog-footer">
 						<el-button @click.native="showFormVisible = false">确认</el-button>
 
@@ -246,7 +261,7 @@
 			//		状态编辑
 			updatastatus(scope, i) {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					id: scope.row.id,
 					status: i
 				}
