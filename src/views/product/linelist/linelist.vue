@@ -24,7 +24,7 @@
 						线路分类：
 					</span>
 						<el-col :span="20">
-							<ul>
+							<ul class="kindid">
 								<li @click="changecondition('-1')" :class="{checked:ischecked == -1}">全部</li>
 								<li v-for="(linesort,index) in linesorts" :class="{checked:ischecked == index}" @click="changecondition(index,linesort)">{{linesort.name}}</li>
 							</ul>
@@ -209,20 +209,63 @@
 				linelist: [], //线路列表
 				selectid:'',
 				examineid:'',
+				kindid:''
 
 			}
 		},
 		created(){
-//			this.getlinelist()
 			this.getcategoryall()
+			
 		},
-
 		updated: function () {
 		  this.$nextTick(function () {
 		    showorhide()
+		   
+		    
 		  })
+		 
+		},
+		mounted(){
+			this.getcategoryall() 
 		},
 		methods: {
+			//线路分类筛选
+			checkkind(){
+//				this.$route.query.name
+				if(this.$route.query.name){
+					console.log(this.linesorts)
+					for(let i = 0 ; i <this.linesorts.length;i++){
+						if(this.$route.query.name == this.linesorts[i].name){
+							this.kindid =this.linesorts[i].id
+							
+//							document.getElementsByClassName('kindid').childNodes('li')[i].setAttribute('class','checked')
+document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class','checked')
+							let para = this.search
+							para.categoryid = this.linesorts[i].id, 
+							para.pageindex = this.currentPage-1
+							linelist(para).then((res) => {
+								this.linelist = res.data.obj.datas
+								for(let i = 0 ; i <res.data.obj.datas.length;i++){
+									let list = res.data.obj.datas
+									if(list[i].approve == 0){
+										this.linelist[i].approve = "无须审批"
+									}else if(list[i].approve == 1){
+										this.linelist[i].approve = "待审批"
+									}else if(list[i].approve == 2){
+										this.linelist[i].approve = "通过"
+									}else{
+										this.linelist[i].approve = "拒绝"
+									}
+								}
+								this.total = Number(res.data.obj.total)
+			
+			//					console.log(para)
+							})
+						}
+					}
+					//线路分类过来
+				}
+			},
 			//筛选线路分类
 			changecondition(index,list) {
 				this.ischecked = index
@@ -271,7 +314,9 @@
 				let para= {token:paramm.getToken()}
 				categoryall(para).then(res =>{
 					this.linesorts = res.data.obj
+					this.checkkind()
 				})
+				
 			},
 			changedest(index,destination) {
 				if(index == -1){
