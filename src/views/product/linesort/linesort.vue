@@ -57,7 +57,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="线类名称" prop="name">
+            <el-form-item label="分类名称" prop="name">
               <el-input v-model="addcategory.name"></el-input>
             </el-form-item>
 
@@ -106,7 +106,7 @@
         },
         showAdd:false,
         showEdit:false,
-        type:[{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
+        type:[{value:'1',label:'国内游'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
         rules: {
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' },

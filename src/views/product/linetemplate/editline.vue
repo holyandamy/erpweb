@@ -321,6 +321,7 @@
 <script>
 	import UE from '../../common/ue.vue';
 	import { province, city, district, categoryall, linecategorytype, templatupdate, templatdetail,token } from '../../../common/js/config';
+	import paramm from '../../../common/js/getParam'
 	export default {
 		components: {
 			UE
@@ -379,7 +380,7 @@
 				customtext: '', //自定义文本内容
 
 				baseForm: {
-					token: token,
+					token: paramm.getToken(),
 					id: this.lineid,
 					categoryid: '',
 					categorytype: '',
@@ -488,7 +489,7 @@
 		
 			getlineinfo() {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					id: this.lineid
 				}
 				templatdetail(para).then((res) => {
@@ -613,7 +614,7 @@
 			//选择分类
 			checkline() {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					type: this.baseForm.categorytype
 				}
 				linecategorytype(para).then((res) => {
@@ -790,7 +791,7 @@
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
 					id: count,
-					token:token
+					token:paramm.getToken()
 				}
 				province(para).then((res) => {
 					this.province = res.data.obj

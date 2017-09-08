@@ -114,6 +114,7 @@
 
 <script>
 	import {templatdetail,token} from '../../../common/js/config';
+	import paramm from '../../../common/js/getParam'
 	export default {
 		props:['lineid'],
 		data() {
@@ -130,7 +131,7 @@
 		methods: {
 			getlineinfo(){
 				let para = {
-					token:token,
+					token:paramm.getToken(),
 					id:this.lineid
 				}
 				templatdetail(para).then((res) => {

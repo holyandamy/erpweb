@@ -14,7 +14,7 @@
 		</header>
 		<section>
 
-			<el-form :model="baseForm" ref="baseForm" label-width="100px" class="demo-baseForm">
+			<el-form :model="baseForm" :rules="baseFormrules" ref="baseForm"  label-width="100px" class="demo-baseForm">
 				<h2 class="d_jump">基本信息</h2>
 				<div class="baseinfo">
 					<el-row>
@@ -42,12 +42,12 @@
 									<el-radio label="1">跟团游</el-radio>
 								</el-radio-group>
 							</el-form-item>
-							<el-form-item label="收客类型">
+							<el-form-item label="收客类型"  prop="typepeo">
 								<el-checkbox label="成人" prop="isadult" v-model="baseForm.isadult"></el-checkbox>
 								<el-checkbox label="儿童" prop="ischild" v-model="baseForm.ischild"></el-checkbox>
 								<el-checkbox label="老人" prop="isbaby" v-model="baseForm.isbaby"></el-checkbox>
 							</el-form-item>
-							<el-form-item label="出港地">
+							<el-form-item label="出港地" prop="fromprovinceid">
 								<el-col :span="5">
 									<el-form-item prop="fromprovinceid">
 										<el-select filterable  v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom">
@@ -80,7 +80,7 @@
 									</el-form-item>
 								</el-col>
 							</el-form-item>
-							<el-form-item label="目的地">
+							<el-form-item label="目的地" prop ="backaddress">
 								<el-col :span="5">
 									<el-form-item prop="toprovinceid">
 										<el-select filterable  v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
@@ -316,12 +316,46 @@
 <script>
 	import UE from '../../common/ue.vue';
 	import { province, city, district, categoryall, linecategorytype,templatsave,token } from '../../../common/js/config';
+	import paramm from '../../../common/js/getParam'
+	import check from '../../../common/js/check'
 	export default {
 		components: {
 			UE
 		},
 		props: ['scope'],
 		data() {
+			//收客类型
+			var typepeo =(rule,value,callback) =>{
+						if(this.baseForm.isadult == false && this.baseForm.isbaby == false && this.baseForm.ischild == false){
+									callback(new Error('请选择收客类型！'));
+								}else{
+									callback()
+								}
+			}
+			//出港地
+			var startaddresscheck = (rule, value, callback) =>{
+				if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' ||this.baseForm.fromdistrictid == ''){
+					callback(new Error('请选择出港地！'));
+				}else{
+					callback()
+				}
+			}
+			//回港地
+			var endcheck = (rule, value, callback) =>{
+				if(this.baseForm.toprovinceid == '' || this.baseForm.tocityid == ''){
+					callback(new Error('请选择目的地！'));
+				}else{
+					callback()
+				}
+			}
+			//
+			var category  = (rule, value, callback) =>{
+				if(this.baseForm.categorytype == '' || this.baseForm.categoryid == ''){
+					callback(new Error('线路分类不能为空！'));
+				}else{
+					callback()
+				}
+			}
 			return {
 				headerqq:{},
 				traffics: [{
@@ -374,7 +408,7 @@
 				fileList: [],
 				customtext: '', //自定义文本内容
 				baseForm: {
-					token: token,
+					token: paramm.getToken(),
 					categoryid: '',
 					categorytype: '',
 					name: '',
@@ -417,52 +451,27 @@
 
 					}]
 				},
-				rules: {
+				baseFormrules: {
+					categorytype: [{
+						required: true,
+						trigger: 'change',
+						validator:category
+					}],
 					name: [{
-							required: true,
-							message: '请输入活动名称',
-							trigger: 'blur'
-						},
-						{
-							min: 3,
-							max: 5,
-							message: '长度在 3 到 5 个字符',
-							trigger: 'blur'
-						}
-					],
-					region: [{
 						required: true,
-						message: '请选择活动区域',
-						trigger: 'change'
-					}],
-					date1: [{
-						type: 'date',
-						required: true,
-						message: '请选择日期',
-						trigger: 'change'
-					}],
-					date2: [{
-						type: 'date',
-						required: true,
-						message: '请选择时间',
-						trigger: 'change'
-					}],
-					type: [{
-						type: 'array',
-						required: true,
-						message: '请至少选择一个活动性质',
-						trigger: 'change'
-					}],
-					resource: [{
-						required: true,
-						message: '请选择活动资源',
-						trigger: 'change'
-					}],
-					desc: [{
-						required: true,
-						message: '请填写活动形式',
+						message: '请填写线路名称',
 						trigger: 'blur'
-					}]
+					}],
+					teamno: [{ validator:check.teanno, trigger: 'blur', required: true}
+					],
+					type: [{
+						required: true,
+						message: '请选择出行方式',
+						trigger: 'change'
+					}],
+				typepeo: [{required: true,trigger: 'change', validator:typepeo}],
+				fromprovinceid: [{required: true, trigger: 'change',validator:startaddresscheck}],
+				backaddress: [{ required: true,trigger: 'change',  validator:endcheck}]
 				},
 				province: [],
 				city: [],
@@ -527,7 +536,7 @@
 			//选择分类
 			checkline() {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					type: this.baseForm.categorytype
 				}
 				linecategorytype(para).then((res) => {
@@ -655,7 +664,7 @@
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
 					id: count,
-					token: token
+					token: paramm.getToken()
 				}
 				province(para).then((res) => {
 					this.province = res.data.obj
@@ -685,11 +694,13 @@
 			//选择去程城市
 			changecityfrom() {
 				let pro = {
-					id: this.baseForm.fromprovinceid
+					id: this.baseForm.fromprovinceid,
+					token: paramm.getToken()
 				}
 				this.getcity(pro)
 				let city = {
-					id: this.baseForm.fromcityid
+					id: this.baseForm.fromcityid,
+					token: paramm.getToken()
 				}
 				this.getdistrict(city)
 
@@ -697,11 +708,13 @@
 			//选择返程城市
 			changecityback() {
 				let pro = {
-					id: this.baseForm.toprovinceid
+					id: this.baseForm.toprovinceid,
+					token: paramm.getToken()
 				}
 				this.getcity(pro)
 				let city = {
-					id: this.baseForm.tocityid
+					id: this.baseForm.tocityid,
+					token: paramm.getToken()
 				}
 				this.getdistrict(city)
 			},
