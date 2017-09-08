@@ -296,7 +296,7 @@
         </el-form-item>
         <el-form-item label="选择线路">
           <el-radio-group v-model="checkItem" style='text-align: left;'>
-            <el-radio :label="item" :key="item.name" v-for="item in lineList">{{item.name}}</el-radio>
+            <el-radio :label="item" :key="item.name" v-for="item in lineList">{{item.name.substring(0,20)}}</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -575,11 +575,29 @@
       },
       // 选择日期添加一行
       addTr () {
+        let _this = this;
         // 开始时间
         this.startTimeArr.push(this.value1);
         var M = (this.value1.getMonth()+1).toString().length==1 ? '0'+ (this.value1.getMonth()+1).toString() : (this.value1.getMonth()+1).toString();
         var D = this.value1.getDate().toString().length==1 ? '0'+ this.value1.getDate().toString() : this.value1.getDate().toString();
         var selectTime = this.value1.getFullYear().toString() +"-" + M+ "-" + D;
+        // 添加一行之前做校验 不能添加相同团期的
+        try{
+          if(this.checkArr.length){
+            this.checkArr.forEach(function (item) {
+              if(item.starttime == selectTime) {
+                _this.$message({
+                  message: '该团期已添加,请添加其他团期',
+                  type: 'warning'
+                })
+                throw false
+              }
+            })
+          }
+        }catch (e){
+          throw e
+        }
+
         this.checkArr.push(
           {checked: '',
             starttime: selectTime,

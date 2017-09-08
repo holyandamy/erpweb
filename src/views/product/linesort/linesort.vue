@@ -37,7 +37,6 @@
         </el-table>
         <div class="page">
           <el-pagination
-            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage"
             :page-size="pagesize"
@@ -58,7 +57,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="线类名称" prop="name">
+            <el-form-item label="分类名称" prop="name">
               <el-input v-model="addcategory.name"></el-input>
             </el-form-item>
 
@@ -107,7 +106,7 @@
         },
         showAdd:false,
         showEdit:false,
-        type:[{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
+        type:[{value:'1',label:'国内游'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
         rules: {
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' },
@@ -123,8 +122,8 @@
         operationType:{type:'add',id:''},
         pageset:{
           token:paramm.getToken(),
-          pageIndex:0,
-          pageSize:''
+          pageindex:0,
+          pageindex:15
         },
       }
     },
@@ -202,19 +201,17 @@
         });
       },
       getList(){
-        this.pageset.pageIndex = this.currentPage-1
-        this.pageset.pageSize = this.pagesize
-        let page = this.pageset
+      	let page = this.pageset
+    	  page.pageindex = this.currentPage-1
+        page.pagesize = this.pagesize
+        
         linecategorylist(page).then((res) => {
+        	 console.log(page,res)
           this.lineList = res.data.obj.datas
           this.total = Number(res.data.obj.total)
         })
       },
-
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      //分页
+		//分页
       handleCurrentChange(val) {
         this.getList()
       }

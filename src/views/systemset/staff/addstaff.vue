@@ -169,6 +169,24 @@
 	import { usersave, getdeplist, rolelist,token} from '../../../common/js/config';
 	export default {
 		data() {
+      //验证员工编号
+      var checkcode = (rule,value,callback) => {
+         let codereg = /^[0-9]{1,20}$/;
+         if(codereg.test(value)){
+           callback()
+         }else{
+           callback(new Error('编号为1-20位数字'))
+         }
+      };
+      //验证用户名
+      var checkusername = (rule,value,callback) => {
+         let usernamereg = /^[a-z0-9A-Z]{6,16}$/;
+         if(usernamereg.test(value)){
+           callback()
+         }else{
+           callback(new Error('用户名由6~20位的字母或数字组成'))
+         }
+      };
 			//验证手机号码
 			var checkmobile = (rule, value, callback) => {
 				if(!value) {
@@ -185,6 +203,12 @@
 				}, 1000);
 			};
 			var validatePass = (rule, value, callback) => {
+        let passwordreg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+        if(passwordreg.test(value)){
+          callback()
+        }else{
+          callback(new Error('密码由8~20位字符组成，必须包含英文字母和数字'))
+        }
 				if(value === '') {
 					callback(new Error('请输入密码'));
 				} else {
@@ -216,14 +240,21 @@
 					sex: '',
 					birthday: '',
 					deptid: '',
-					roleid: [],
+					roleid: '',
 					status: '1'
 				},
 				pickerOptions0: {},
 
 				finddep: false,
 				rules: {
+          code:[{
+            validator:checkcode,
+            trigger:'blur',
+            required:true,
+            type:'number'
+          }],
 					username: [{
+              validator:checkusername,
 							required: true,
 							message: '请输入用户名',
 							trigger: 'blur'
@@ -266,7 +297,7 @@
 						message: '请选择状态',
 						trigger: 'change'
 					}],
-					pass: [{
+					password: [{
 						required: true,
 						validator: validatePass,
 						trigger: 'blur'

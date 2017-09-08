@@ -116,6 +116,7 @@
 							{{detail.excludePkg}}
 						</div>
 					</li>
+					<li><span>产品亮点</span><div class="xc"><pre>{{detail.feature}}</pre></div></li>
 					<li><span>包含项目</span><div class="xc"><pre>{{detail.includePkg}}</pre></div></li>
 					<li><span>购物安排</span><div class="xc"><pre>{{detail.shopping}}</pre></div></li>
 					<li><span>温馨提示</span><div class="xc"><pre>{{detail.reminder}}</pre></div></li>
@@ -124,6 +125,7 @@
 					<li><span>内部备注</span><div class="xc"><pre>{{detail.innerremark}}</pre></div></li>
 				</ul>
 			</div>
+			
 			<h2 class="d_jump">操作日志 </h2>
 
 				<el-table

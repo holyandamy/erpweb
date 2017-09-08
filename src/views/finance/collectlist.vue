@@ -274,9 +274,6 @@
 			handleSizeChange(val) {
 
 			},
-			handleCurrentChange(val) {
-				this.getUsers();
-			},
 
 			onSubmit() {
 
@@ -312,6 +309,9 @@
 					this.listLoading = false
 				})
 			},
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
 			//显示查看界面
 			handleShow: function(index, row) {
 				this.showFormVisible = true;

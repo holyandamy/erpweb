@@ -56,8 +56,8 @@
 							<div class="fourlist" v-for="(four,index) in three.childs">
 								<ul>
 									<li>
-										<div class="name">{{four.total}}</div>
-										<div class="presonnum">&nbsp;</div>
+										<div class="name">{{four.name}}</div>
+										<div class="presonnum">{{four.total}}</div>
 										<div class="add">&nbsp;</div>
 										<div>
 											<el-col :span="5">
