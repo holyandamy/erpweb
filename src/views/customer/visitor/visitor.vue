@@ -35,9 +35,9 @@
               </el-date-picker>
             </div>
           </el-form-item>
-          <el-form-item   style="margin-left: -70px">
-              <el-button type="primary" class="hasid" id="23a15b23734511e788410242ac120009" @click="searchGetList">搜索</el-button>
-          </el-form-item>
+          <el-form-item   style="margin-left: -20px">
+              <el-button  type="primary" class="hasid" id="23a15b23734511e788410242ac120009" @click="searchGetList">搜索</el-button>
+          </el-form-item>  <!-- style='margin: 0 40px 0 70px;'  -->
         </el-form>
         <el-table :data="visitorList" style="text-align: left; font-size: 12px;">
           <el-table-column prop="code" label="游客IDs">
@@ -95,14 +95,14 @@
         visitorList:[],
         modeType:'list',
         total:0,
-        token:123,
+        token:paramm.getToken(),
         currentPage:1,
-        pagesize:15,
+        pagesize:10,
         operationType:{type:'add',id:''},
         pageset:{
           token:paramm.getToken(),
-          pageIndex:0,
-          pageSize:''
+          pageindex:0,
+          pagesize:10
         },
         searchList:{
             token:paramm.getToken(),
@@ -151,8 +151,8 @@
         this.modeType='add';
       },
       getList(){
-        this.pageset.pageIndex = this.currentPage-1
-        this.pageset.pageSize = this.pagesize
+        this.pageset.pageindex = this.currentPage-1
+        this.pageset.pagesize = this.pagesize
         let page = this.pageset
         custlist(page).then((res) => {
           this.visitorList = res.data.obj.datas
@@ -176,8 +176,8 @@
         }
 
         let templateSeacrchList={
-            pageIndex:this.currentPage-1,
-            pageSize:this.pagesize,
+            pageindex:this.currentPage-1,
+            pagesize:this.pagesize,
             token:paramm.getToken(),
             name:this.searchList.name,
             date:newDate,
@@ -194,7 +194,7 @@
       },
       //分页
       handleCurrentChange(val) {
-        this.getlist()
+        this.getList()
       }
 
     }

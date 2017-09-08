@@ -294,9 +294,9 @@
         <el-form-item>
           <el-button type="primary" @click="queryLine()">查询</el-button>
         </el-form-item>
-        <el-form-item label="选择线路">
-          <el-radio-group v-model="checkItem" style='text-align: left;'>
-            <el-radio :label="item" :key="item.name" v-for="item in lineList">{{item.name.substring(0,20)}}</el-radio>
+        <el-form-item label="">
+          <el-radio-group v-model="checkItem" style='text-align: left;padding: 0 50px;'>
+            <el-radio style='width: 50%;margin: 0;' :label="item" :key="item.name" v-for="item in lineList">{{item.name.length>20?item.name.substring(0,20)+'...':item.name}}</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -696,7 +696,7 @@
             if(!item.plan || !item.deadline || !item.mktbaby || !item.mktchild || !item.mktaduilt || !item.mktroom
               || !item.sltbaby || !item.sltchild || !item.sltaduilt || !item.sltroom) {
               _this.$message({
-                message: item.starttime + '日信息填写有误',
+                message: item.starttime + '日信息未填写完整',
                 type: 'warning'
               });
               throw false

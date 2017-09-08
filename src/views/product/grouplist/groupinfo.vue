@@ -237,6 +237,7 @@
 <script>
   import {token,orderdet,openlist} from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
+  import paramm from '../../../common/js/getParam'
   export default {
     props: ['categoryId'],
     data() {
@@ -273,7 +274,7 @@
       // 平台列表
       getPingtai () {
         let _this = this;
-        openlist({token: token}).then(function (res) {
+        openlist({token: paramm.getToken()}).then(function (res) {
           _this.pingtai = res.data.obj
         })
       },
@@ -282,7 +283,7 @@
       },
       getlineinfo() {
         let para = {
-          token: token,
+          token: paramm.getToken(),
           id: this.categoryId
         }
         let _this = this;
