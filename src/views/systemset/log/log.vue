@@ -194,4 +194,5 @@
 	.el-breadcrumb {
 		margin-bottom: 20px;
 	}
+	.demo-form-inline{float: left; padding-left: 30px;}
 </style>

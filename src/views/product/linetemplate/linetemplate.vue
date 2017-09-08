@@ -118,7 +118,7 @@
 	import AddIine from './addline'
 	import EditInfo from './editline'
 	import { showorhide } from '../../../common/js/showorhid'
-  import paramm from '../../../common/js/getParam'
+ 	 import paramm from '../../../common/js/getParam'
 	export default {
 		components: {
 			LineInfo,
@@ -145,14 +145,14 @@
 				lineid:'',
 				scope:{},
 				examineform: {
-					token:'',
+					token:paramm.getToken(),
 					id:'',
 					approve: '',
 					remark:''
 				}, //审核表单
 				modeType: 'linelist',
 				search: {
-					token:'',
+					token:paramm.getToken(),
 					pageindex:0,
 					pagesize:15,
 					categoryid:'', //分类id
