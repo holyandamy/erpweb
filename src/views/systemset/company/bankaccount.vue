@@ -112,7 +112,7 @@
 				},
 				updatestatus: {
 					isEnable: '',
-					token: token,
+					token: paramm.getToken(),
 					id: ''
 				},
 				bankrules: {

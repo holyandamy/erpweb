@@ -56,6 +56,7 @@
 </template>
 
 <script>
+  import paramm from '../../../common/js/getParam'
 	import AddStaff from './addstaff'
 	import EditStaff from './editstaff'
 	import axios from 'axios';
@@ -83,7 +84,7 @@
 				showFormVisible: false,
 				isenable: false,
 				pageset: {
-					token: token,
+					token: paramm.getToken(),
 					pageIndex: '',
 					pageSize: ''
 				},
@@ -101,7 +102,7 @@
 				},
 				updatestatus: {
 					status: false,
-					token: token,
+					token: paramm.getToken(),
 					id: ''
 				}
 			}
@@ -156,7 +157,7 @@
 			//删除
 			deleteRow(index, rows) {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					id: rows[index].id
 				}
 				userdel(para).then((res) => {
@@ -185,7 +186,7 @@
 	.not:hover {
 		color: red;
 	}
-	
+
 	header {
 		padding: 0 40px;
 		background: white;
@@ -222,21 +223,21 @@
 			color: #333;
 		}
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 	}
-	
+
 	.page {
 		padding: 15px 30px;
 		background: white;
 		text-align: right;
 	}
-	
+
 	.el-table .cell {
 		text-align: left;
 	}
-	
+
 	.el-breadcrumb {
 		font-size: 18px;
 		margin-bottom: 20px;

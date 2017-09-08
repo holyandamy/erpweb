@@ -86,7 +86,7 @@
 			<span slot="footer" class="dialog-footer">
   	<el-button type="primary" @click="add">确 定</el-button>
     <el-button @click="adddepartment = false">取 消</el-button>
-    
+
   </span>
 		</el-dialog>
 		<!--新增下级-->
@@ -106,7 +106,7 @@
 			<span slot="footer" class="dialog-footer">
   	<el-button type="primary" @click="addsubordinate">确 定</el-button>
     <el-button @click="subordinate = false">取 消</el-button>
-    
+
   </span>
 		</el-dialog>
 
@@ -122,13 +122,14 @@
 			<span slot="footer" class="dialog-footer">
   	<el-button type="primary" @click="editpartmentconfirm">确 定</el-button>
     <el-button @click="editpartment = false">取 消</el-button>
-    
+
   </span>
 		</el-dialog>
 	</div>
 </template>
 
 <script>
+  import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
 	import { getdeplist,adddep,deldep,editdep,token } from '../../../common/js/config';
 	import { showorhide } from '../../../common/js/showorhid'
@@ -147,19 +148,19 @@
 				editpartment: false, //编辑
 				listLoading: false,
 				adddatas: {
-					token: token,
+					token: paramm.getToken(),
 					name: '',
 					path: '',
 					parentid: ''
 				},
 				subordinates: {
-					token:token,
+					token:paramm.getToken(),
 					name: '',
 					path: '',
 					parentid: ''
 				},
 				editpartmentmodel: {
-					token: token,
+					token: paramm.getToken(),
 					name: '',
 					id: ''
 				}
@@ -176,7 +177,7 @@
 		methods: {
 			getuser() {
 				let para = {
-					token: token
+					token: paramm.getToken()
 				}
 				getdeplist(para).then((res) => {
 					console.log(res)
@@ -230,7 +231,7 @@
 			//删除部门
 			deletechild(index, data) {
 				let para = {
-					token:token,
+					token:paramm.getToken(),
 					id: data.id
 				}
 				deldep(para).then((res) => {
@@ -274,20 +275,20 @@
 	.clearfix {
 		clear: both;
 	}
-	
+
 	.bg-white {
 		background: white;
 		text-align: left;
 	}
-	
+
 	.padding30 {
 		padding: 20px;
 	}
-	
+
 	.margin30 {
 		margin: 30px;
 	}
-	
+
 	header {
 		padding: 0 40px;
 		background: white;
@@ -324,7 +325,7 @@
 			color: #333;
 		}
 	}
-	
+
 	.title {
 		padding: 0 20px;
 		height: 40px;
@@ -354,7 +355,7 @@
 			}
 		}
 	}
-	
+
 	.list {
 		background: #fff;
 		height: 40px;
@@ -425,7 +426,7 @@
 			}
 		}
 	}
-	
+
 	div.presonnum:before,
 	div.presonnum:after,
 	div.add:after {
@@ -438,15 +439,15 @@
 		content: '';
 		top: 10px;
 	}
-	
+
 	div.presonnum:after {
 		left: 0;
 	}
-	
+
 	div.add:after {
 		right: 0;
 	}
-	
+
 	div.add i {
 		color: #3ec3c8;
 	}

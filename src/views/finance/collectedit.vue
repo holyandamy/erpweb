@@ -34,7 +34,7 @@
             <el-input v-model="collectForm.linename"></el-input>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="付款单位" prop="companyname">
+				<el-form-item label="收款单位" prop="companyname">
 					<el-col :span="10">
 						<el-input v-model="collectForm.companyname" placeholder="搜索选择收款单位"></el-input>
 					</el-col>

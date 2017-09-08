@@ -162,6 +162,7 @@
 </template>
 
 <script>
+  import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
 	import md5 from 'js-md5';
 	import util from '../../../common/js/util'
@@ -204,7 +205,7 @@
 			};
 			return {
 				addstaff: {
-					token: token,
+					token: paramm.getToken(),
 					username: '',
 					code: '',
 					password: '',
@@ -296,7 +297,7 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = {
-							token: token,
+							token: paramm.getToken(),
 							username: this.addstaff.username,
 							code: this.addstaff.code,
 							password: '',
@@ -350,7 +351,7 @@
 			//获取部门
 			getdepartment() {
 				let para = {
-					token: token
+					token: paramm.getToken()
 				}
 				getdeplist(para).then((data) => {
 					this.departments = data.data.obj
@@ -376,7 +377,7 @@
 			//获取角色
 			getrole() {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					pageIndex: 0,
 					pageSize: '30'
 				}
