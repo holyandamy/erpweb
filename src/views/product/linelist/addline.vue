@@ -293,7 +293,7 @@
 				<div class="button">
 					<el-form-item>
 						<el-button size="large" type="primary" @click="submitForm('baseForm')">立即创建</el-button>
-						<el-button size="large" @click="resetForm('baseForm')">重置</el-button>
+						<el-button size="large" @click="handleHide">取消</el-button>
 					</el-form-item>
 				</div>
 

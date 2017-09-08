@@ -34,13 +34,13 @@
 						</el-form-item>
 						<el-form-item label="订单状态">
 							<el-select v-model="orderinfo.status" clearable placeholder="订单状态">
-								<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+								<el-option v-for="item in optionsstate" :key="item.value" :label="item.label" :value="item.value">
 								</el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="订单来源">
 							<el-select v-model="orderinfo.source" clearable placeholder="订单来源">
-								<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+								<el-option v-for="item in optionsfrom" :key="item.value" :label="item.label" :value="item.value">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -141,15 +141,31 @@
 
 				},
 				orderLists: [],
-				options: [{
+				optionsstate: [{
+					value: '0',
+					label: '全部'
+				}, {
 					value: '1',
-					label: '新增'
+					label: '名单不全'
 				}, {
 					value: '2',
-					label: '编辑'
+					label: '未确认'
 				}, {
 					value: '3',
-					label: '删除'
+					label: '已确认'
+				}, {
+					value: '4',
+					label: '已支付'
+				}],
+				optionsfrom:[{
+					value: '0',
+					label: '全部'
+				}, {
+					value: '1',
+					label: '馨·欢途'
+				}, {
+					value: '2',
+					label: '馨·驰誉'
 				}],
 				setmode:'orderlistmodel',
 				listid:''
