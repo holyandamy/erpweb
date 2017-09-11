@@ -280,7 +280,7 @@
     </section>
 
     <!--弹出框-->
-    <el-dialog title="提示" :visible.sync="lineFlag" size="small">
+    <el-dialog title="选择线路" :visible.sync="lineFlag" size="small">
       <el-form :inline="true" :model="search" class="demo-form-inline" ref="search">
         <el-form-item label="线路分类">
           <el-select v-model="search.categoryid" placeholder="请选择">
@@ -344,6 +344,7 @@
         notice: '',
         lineItemId: '',
         search: {
+          status: 1,
           token:paramm.getToken(),
           pageindex:0,
           pagesize: 9999,
