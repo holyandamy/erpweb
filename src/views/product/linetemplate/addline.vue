@@ -236,7 +236,7 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-									<<ImgLoad :route="route"></ImgLoad>
+									<ImgLoad :route="route"></ImgLoad>
 								</el-col>
 
 							</el-row>
@@ -251,6 +251,9 @@
 				<div class="baseinfo">
 					<el-row>
 						<el-col :span="20">
+							<el-form-item label="产品亮点" prop="featrue">
+								<el-input type="textarea" v-model="baseForm.featrue"></el-input>
+							</el-form-item>
 							<el-form-item label="购物安排" prop="shopping">
 								<el-input type="textarea" v-model="baseForm.shopping"></el-input>
 							</el-form-item>
@@ -410,6 +413,7 @@
 					fromprovinceid: '',
 					fromcityid: '',
 					fromdistrictid: '',
+					featrue:'',
 					toprovinceid: '',
 					tocityid: '',
 					todistrictid: '',

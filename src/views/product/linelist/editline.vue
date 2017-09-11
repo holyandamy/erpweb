@@ -519,7 +519,6 @@
 				linedetail(para).then((res) => {
 					this.baseForm = res.data.obj
 					this.paras = this.baseForm.images
-					//console.log(this.paras,2222)
 					this.topimglist = res.data.obj.images
 					res.data.obj.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
 					this.oldday = res.data.obj.days

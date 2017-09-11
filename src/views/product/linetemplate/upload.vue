@@ -1,6 +1,6 @@
 <template>
 	<el-form-item label="上传图片" label-width="120px">
-		<el-upload action="http://v0.api.upyun.com/xtimg"  list-type="picture-card" :on-preview="handlePictureCardPreview" :file-list="imglist" :http-request="upload" :on-success="uploadsuccess" :on-remove="handleRemove" multiple>
+		<el-upload action="http://v0.api.upyun.com/xtimg" accept="image/jpeg,image/gif,image/png" list-type="picture-card" :on-preview="handlePictureCardPreview" :file-list="imglist" :http-request="upload" :on-success="uploadsuccess" :on-remove="handleRemove" multiple>
 			<i class="el-icon-plus"></i>
 		</el-upload>
 		<el-dialog v-model="dialogVisible" size="tiny">
@@ -55,6 +55,7 @@
 				let titlename = []
 				for(let i = 0; i < this.imglist.length; i++) {
 					titlename.push(this.imglist[i].raw.url)
+					
 				}
 				
 				if(this.checktop){

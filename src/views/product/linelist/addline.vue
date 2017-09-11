@@ -535,7 +535,7 @@
 				typepeo: [{required: true,trigger: 'change', validator:typepeo}],
 				fromprovinceid: [{required: true, trigger: 'change',validator:startaddresscheck}],
 				backaddress: [{ required: true,trigger: 'change',  validator:endcheck}],
-				title:[{ required: true,trigger: 'blur', validator:checktitle}]
+//				title:[{ required: true,trigger: 'blur', validator:checktitle}]
 				},
 				province: [],
 				city: [],
@@ -858,8 +858,9 @@
 					id: this.templateselectid
 				}
 				templatdetail(para).then((res) => {
-					console.log(res.data.obj)
 					this.baseForm = res.data.obj
+					
+					this.baseForm.type == 1 ?this.baseForm.type="1":this.baseForm.type="2"
 					let categorytype = res.data.obj.categorytype
 					switch(categorytype) {
 						case 0:
@@ -917,6 +918,21 @@
 							this.baseForm.detail = "轮船";
 							break;
 					}
+					
+					if(res.data.obj.edittype == 0 ){
+						//普通输入
+						console.log(1)
+					}else{
+						//自定义输入
+						console.log(2)
+						this.edittype = false
+						let str = this.detail.routes[0].content
+						this.detail.routes[0].content = str
+					}
+					
+					
+					
+					
 				})
 
 			}

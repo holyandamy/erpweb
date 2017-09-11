@@ -255,6 +255,9 @@
 				<div class="baseinfo">
 					<el-row>
 						<el-col :span="20">
+							<el-form-item label="产品亮点" prop="featrue">
+								<el-input type="textarea" v-model="baseForm.featrue"></el-input>
+							</el-form-item>
 							<el-form-item label="购物安排" prop="shopping">
 								<el-input type="textarea" v-model="baseForm.shopping"></el-input>
 							</el-form-item>
@@ -383,6 +386,7 @@
 					fromcityid: '',
 					fromdistrictid: '',
 					toprovinceid: '',
+					featrue:'',
 					tocityid: '',
 					todistrictid: '',
 					trafficgo: '',
@@ -491,7 +495,6 @@
 					this.baseForm = res.data.obj
 					res.data.obj.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
 					this.topimglist = res.data.obj.images
-				
 					this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0){
 						this.editor = false
