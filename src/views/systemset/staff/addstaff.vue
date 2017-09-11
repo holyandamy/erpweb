@@ -117,7 +117,7 @@
 						</el-form-item>
 						<el-form-item label-width="100px">
 							<el-button type="primary" @click="submitForm('addstaff')">保存</el-button>
-							<el-button @click="resetForm('addstaff')">重置</el-button>
+							<el-button @click="handleHide()">取消</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -287,11 +287,11 @@
 						message: '请选择部门',
 						trigger: 'blur'
 					}],
-					roleid: [{
+					/*roleid: [{
 						required: true,
 						message: '请选择角色',
 						trigger: 'blur'
-					}],
+					}],*/
 					status: [{
 						required: true,
 						message: '请选择状态',
@@ -325,6 +325,7 @@
 		},
 		methods: {
 			submitForm(formName) {
+			  let _this = this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = {
@@ -347,6 +348,12 @@
 						para.mobile = String(this.addstaff.mobile)
 						para.password = md5(this.addstaff.password)
 						usersave(para).then((res) => {
+              if(res.data.error!=0 || res.data.err){
+                paramm.getCode(res.data, _this)
+              }
+              else {
+                paramm.getCode(res.data, _this)
+              }
 							console.log(para)
 							if(res.data.error == 0) {
 								this.$message({

@@ -228,12 +228,18 @@
 			},
 			//编辑保存
 			saveedit(formName) {
+			  let _this = this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.editbank
             para.token = paramm.getToken()
 						updatebank(para).then((res) => {
 							//console.log(para)
+              if(res.data.error != 0 || res.data.err){
+                paramm.getCode(res.data,_this)
+              }else{
+                paramm.getCode(res.data,_this)
+              }
 							this.showFormVisible = false
 							this.$message('保存成功！');
 							this.getlist()

@@ -36,7 +36,7 @@
 				</el-form-item>
 				<el-form-item label="收款单位" prop="companyname">
 					<el-col :span="10">
-						<el-input v-model="collectForm.companyname" placeholder="搜索选择收款单位"></el-input>
+						<el-input v-model="collectForm.companyname" placeholder="请选择收款单位"></el-input>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="备注" prop="remark">
@@ -86,12 +86,13 @@
 								<td>
 									<el-col :span="20">
 										<el-button type="text" @click="addDomain">新增</el-button>
-										<el-button type="text" @click.prevent="removeDomain(domain)">删除</el-button>
+										<el-button type="text" class="delete" @click.prevent="removeDomain(domain)">删除</el-button>
 
 									</el-col>
 
 								</td>
 							</tr>
+
 						</table>
 
 					</el-col>
@@ -219,6 +220,7 @@
 				this.$emit('setMode', 'collectlist');
 			},
 			submitForm(formName) {
+			  let _this = this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.collectForm
@@ -227,6 +229,12 @@
 							para.detail[i].linetime = (!para.detail[i].linetime || para.detail[i].linetime == '') ? '' : util.formatDate.format(new Date(para.detail[i].linetime), 'yyyy-MM-dd');
 						}
 						collectsave(para).then((res) => {
+              if(res.data.error!=0 || res.data.err){
+                paramm.getCode(res.data, _this)
+              }
+              else {
+                paramm.getCode(res.data, _this)
+              }
 							this.$message({
 								message: '提交成功',
 								type: 'success'
@@ -340,5 +348,8 @@
 			border-bottom: 1px solid #dee5ec;
 		}
 	}
+  .delete {
+    margin-left:0
+  }
 	.hasid{display: none;}
 </style>

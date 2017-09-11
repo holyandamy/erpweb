@@ -18,7 +18,7 @@
 				dialogVisible: false,
 				imglist: [],
 				imagelist:''
-				
+
 			}
 		},
 		methods: {
@@ -31,11 +31,15 @@
 				this.imglist = fileList
 				let list = []
 				for(let i = 0 ; i <this.imglist.length;i++){
+				  //限制图片的数量
+          /*if(this.imglist.length > 10){
+            return false;
+          }*/
 					list.push(this.imglist[i].raw.url)
 					this.imagelist = list.join(',')
 					this.$emit("imagelistchange",this.imagelist)
 				}
-				
+
 			},
 			handleRemove(file, fileList) {
 				let index
@@ -47,13 +51,21 @@
 				for(let i = 0 ; i <this.imglist.length;i++){
 					list.push(this.imglist[i].raw.url)
 					this.imagelist = list.join(',')
-					this.$emit("imagelistchange",this.imagelist) 
+					this.$emit("imagelistchange",this.imagelist)
 				}
 			},
 			handlePictureCardPreview(file) {
 				this.dialogImageUrl = file.url;
 				this.dialogVisible = true;
-			}
+			},
+			//限制图片的大小和数量
+      beforeAvatarUpload(file) {
+        const isLt1M = file.size / 1024 / 1024 < 1;
+        if (!isLt1M) {
+          this.$message.error('上传头像图片大小不能超过 1MB!');
+        }
+        return isLt1M;
+      }
 		}
 	}
 </script>

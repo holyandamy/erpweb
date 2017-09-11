@@ -188,6 +188,10 @@
 				showorhide()
 			})
 		},
+    //观察省的变化
+    watch:{
+
+    },
 		methods: {
 			//获取公司信息
 			getinfo(){
@@ -279,8 +283,6 @@
 					this.getdistrict(city)
 					//this.companyForm.districtId=""
 				}
-
-
 
 			},
 			imagelistchange(val){

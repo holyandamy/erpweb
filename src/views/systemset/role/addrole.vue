@@ -192,6 +192,7 @@
         },
         //post date
       submitFn:function () {
+        let _this = this;
         if (this.roleName.length == 0) {
           this.$message.error('请输入角色名！');
           return
@@ -206,11 +207,12 @@
               auths: newAuths
             };
             rolesave(addPostData).then((backData) => {
-                if(backData.error){
-                  this.$message.error(backData.massage);
+                if(backData.data.error!=0 || backData.data.err){
+                  paramm.getCode(backData.data, _this)
                 }
                 else {
-                    this.handleHide('add');
+                  paramm.getCode(backData.data, _this)
+                  this.handleHide('add');
                 }
             })
         }

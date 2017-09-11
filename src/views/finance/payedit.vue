@@ -37,12 +37,12 @@
 				</el-form-item>
 				<el-form-item label="付款单位" prop="companyname">
 					<el-col :span="10">
-						<el-input v-model="collectForm.companyname" placeholder="搜索选择收款单位"></el-input>
+						<el-input v-model="collectForm.companyname" maxlength=50 placeholder="搜索选择收款单位"></el-input>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="备注" prop="remark">
 					<el-col :span="10">
-						<el-input type="textarea" v-model="collectForm.remark"></el-input>
+						<el-input type="textarea" maxlength=120 v-model="collectForm.remark"></el-input>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="收款明细" prop="detail">
@@ -81,7 +81,7 @@
 								</td>
 								<td>
 									<el-col :span="20">
-										<el-input v-model="domain.fee" placeholder="金额"></el-input>
+										<el-input v-model="domain.fee" @blur="moneyLimit" placeholder="金额"></el-input>
 									</el-col>
 								</td>
 								<td>
@@ -130,6 +130,18 @@
 					callback();
 				}
 			};
+			//付款单位的限制
+      var checkCompanyname = (rule,value,callback) => {
+         if(value.length > 50){
+           callback(new Error('请输入50字以内的字符'))
+         }
+      };
+      //对备注的限制
+      var checkRemark = (rule,value,callback) => {
+        if(value.length > 120){
+          callback(new Error('请输入120字以内的字符'))
+        }
+      }
 			return {
 				createtime:'',
 				item: [],
@@ -168,10 +180,17 @@
 					}],
 
 					companyname: [{
+					  validator:checkCompanyname,
 						required: true,
 						message: '请选择付款单位',
 						trigger: 'blur'
-					}]
+					}],
+
+          remark:[{
+					  validator:checkRemark,
+            required:true,
+            trigger:'blur'
+          }]
 				},
 
 				accounts:[],
@@ -219,6 +238,7 @@
 		        this.$emit('setMode', 'pay');
 		    },
 			submitForm(formName) {
+			  let _this = this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.collectForm
@@ -227,6 +247,12 @@
 							para.detail[i].linetime = (!para.detail[i].linetime || para.detail[i].linetime == '') ? '' : util.formatDate.format(new Date(para.detail[i].linetime), 'yyyy-MM-dd');
 						}
 						paysave(para).then((res) => {
+              if(res.data.error!=0 || res.data.err){
+                paramm.getCode(res.data, _this)
+              }
+              else {
+                paramm.getCode(res.data, _this)
+              }
 							this.$message({
 								message: '提交成功',
 								type: 'success'
@@ -298,7 +324,14 @@
 					this.banklist = res.data.obj
 
 				})
-			}
+			},
+
+			//对金额做限制
+      moneyLimit() {
+        if(!/^\d{0,10}$/.test(this.value)){
+          alert('金额只能输入数字,且小于10位')
+        }
+      }
 		}
 	}
 

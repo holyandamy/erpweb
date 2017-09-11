@@ -220,7 +220,7 @@
 					},
 					{
 						value: '4',
-						label: '预收款退款'
+						label: '预付款退款'
 					}
 				],
 				tableData: [],

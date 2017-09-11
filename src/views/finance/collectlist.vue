@@ -108,8 +108,11 @@
 				<!--查看界面-->
 				<el-dialog title="查看" v-model="showFormVisible" :close-on-click-modal="false">
 					<el-form :model="showForm" label-width="80px" ref="showForm">
-						<el-form-item label="产品名称" prop="linename">
-							{{showForm.linename}}
+            <el-form-item label="创建日期" prop="createtime">
+              {{showForm.createtime}}
+            </el-form-item>
+						<el-form-item label="业务类型" prop="busstypename">
+							{{showForm.busstypename}}
 						</el-form-item>
 						<el-form-item label="单位名称" prop="companyname">
 							{{showForm.companyname}}
@@ -171,7 +174,7 @@
 					confirmstatus: '',
 					busstypename: '',
 					pageindex: '1',
-					pagesize: '10'
+					pagesize: 10
 				},
 				pageset: {
 					pageindex: '',
@@ -226,7 +229,7 @@
 					},
 					{
 						value: '3',
-						label: '预付款退款'
+						label: '预收款退款'
 					}
 				],
 				tableData: [],
@@ -298,8 +301,8 @@
 					orderno: this.search.orderno,
 					confirmstatus: this.search.confirmstatus,
 					busstypename: this.search.busstypename,
-					pageindex: '0',
-					pagesize: '10'
+					pageindex: this.currentPage - 1,
+					pagesize: this.pagesize
 				}
 
 				getcollectlist(parses).then((data) => {
@@ -311,6 +314,8 @@
 			},
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+        //获取列表
+        this.onSubmit();
       },
 			//显示查看界面
 			handleShow: function(index, row) {
