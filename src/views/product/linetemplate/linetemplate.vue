@@ -83,7 +83,7 @@
 					</el-table-column>
 					<el-table-column prop="days" label="天数" width="90">
 					</el-table-column>
-					<el-table-column prop="creater" label="创建人" width="100">
+					<el-table-column prop="creater" label="创建人" width="130">
 					</el-table-column>
 
 					<el-table-column fixed="right" label="操作" width="110">

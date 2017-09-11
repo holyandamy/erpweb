@@ -92,17 +92,20 @@
 					<el-table-column fixed="right" label="操作" width="110">
 						<template scope="scope">
 							<el-button @click="setMode('lineinfo'),lineinfo(scope)"  type="text" size="small">查看</el-button>
+							
 							<a href="javascript:;" class="operation">
 								<el-dropdown>
 									<span class="el-dropdown-link">
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
 									<el-dropdown-menu slot="dropdown">
+									
 										<!--<el-dropdown-item > <a href="javascript:;" @click="handleEdit(scope.$index, scope.row)">编辑</a></el-dropdown-item>-->
-										<el-dropdown-item v-if="scope.row.isApprove=true"><span @click="examine(scope)">线路审核</span></el-dropdown-item>
+										<el-dropdown-item v-if="scope.row.isApprove == true"><span @click="examine(scope)">线路审核</span></el-dropdown-item>
 										<el-dropdown-item class="hasid"  id="4dcba294734711e788410242ac120009"><span @click="setMode('editline'),lineinfo(scope)">编辑线路</span></el-dropdown-item>
 										<el-dropdown-item class="hasid"  id="9079b8af734711e788410242ac120009"><span @click="settop(scope)">线路置顶</span></el-dropdown-item>
 										<el-dropdown-item class="hasid"  id="6e3c1a72734711e788410242ac120009"><span @click="updatastatus(scope,4)">查看团期</span></el-dropdown-item>
+										<el-dropdown-item><span @click="stop(scope)">停止</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 
@@ -131,8 +134,8 @@
 			<el-form label-width="80px" :model="examineform" style="text-align: left;">
 				<el-form-item label="状态" prop="approve">
 					<el-radio-group v-model="examineform.approve">
-						<el-radio label="审核通过"></el-radio>
-						<el-radio label="拒绝"></el-radio>
+						<el-radio label="true">审核通过</el-radio>
+						<el-radio label="false">拒绝</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="备注" prop="resource">
@@ -165,7 +168,7 @@
 </template>
 
 <script>
-	import {linelist,destlist,categoryall,lineapprove,linetop,token} from '../../../common/js/config';
+	import {linelist,destlist,categoryall,lineapprove,linetop,token,linestatus} from '../../../common/js/config';
 	import paramm from '../../../common/js/getParam'
 	import LineInfo from './lineinfo'
 	import AddIine from './addline'
@@ -186,7 +189,7 @@
 				examineform: {
 					token:paramm.getToken(),
 					id:'',
-					approve: '',
+					approve: 'true',
 					remark:''
 				}, //审核表单
 				topvisiable:false,//线路置顶
@@ -197,7 +200,7 @@
 					pagesize:15,
 					categoryid:'', //分类id
 					toid:'',//目的地id
-					status:'',//状态 1正常，0停止，-1全部，
+					status:'-1',//状态 1正常，0停止，-1全部，
 					linename:'',//线路名称
 					type:'',//1.国内，2出境，3周边
 				},
@@ -245,6 +248,7 @@ document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class
 							para.pageindex = this.currentPage-1
 							linelist(para).then((res) => {
 								this.linelist = res.data.obj.datas
+								
 								for(let i = 0 ; i <res.data.obj.datas.length;i++){
 									let list = res.data.obj.datas
 									if(list[i].approve == 0){
@@ -291,6 +295,7 @@ document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class
 				let para = this.search
 				para.pageindex = this.currentPage-1
 				linelist(para).then((res) => {
+				console.log(res)
 					this.linelist = res.data.obj.datas
 					for(let i = 0 ; i <res.data.obj.datas.length;i++){
 						let list = res.data.obj.datas
@@ -347,12 +352,13 @@ document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class
 				this.examinevisiable = false
 				let para = this.examineform
 				para.id = this.examineid
+				para.approve == 'true' ? para.approve = true:para.approve = false
 				lineapprove(para).then((res) => {
 					if(res.data.error == 1){
 						 this.$message.error(res.data.message);
 					}else{
 						this.$message({
-				          message: '审核状态改变成功',
+				          message: '审核状态改变成功!',
 				          type: 'success'
 				        });
 				        this.getlinelist()
@@ -385,6 +391,24 @@ document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class
 			},
 			handleCurrentChange(){
 				this.getlinelist()
+			},
+			stop(scope){
+				let _this = this;
+				let para={
+					token:paramm.getToken(),
+					id:scope.row.id,
+					status:false
+				}
+				linestatus(para).then((res) =>{
+				
+					if(res.data.error == 1 || res.data.err){
+			            paramm.getCode(res.data, _this)
+			          }
+			          else {
+			            paramm.getCode(res.data, _this)
+			           	
+			          }
+				})
 			},
       // 清空查询
       clearGetList () {

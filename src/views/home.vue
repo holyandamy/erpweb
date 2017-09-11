@@ -145,6 +145,7 @@ float: left;
 			height: 100%;
 			position: fixed;
 			width: 180px;
+			min-width: 180px;
 			.logo{
 			padding: 15px 0px 15px 0px;
 			}
