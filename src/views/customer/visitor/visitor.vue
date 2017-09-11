@@ -35,7 +35,7 @@
               </el-date-picker>
             </div>
           </el-form-item>
-          <el-form-item   style="margin-left: -70px">
+          <el-form-item>
               <el-button type="primary" class="hasid" id="23a15b23734511e788410242ac120009" @click="searchGetList">搜索</el-button>
           </el-form-item>
         </el-form>

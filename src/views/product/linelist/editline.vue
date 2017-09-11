@@ -330,6 +330,7 @@
 		props: ['lineid', 'scope'],
 		data() {
 			return {
+				selfedit:false,
 				traffics: [{
 					value: '1',
 					label: '飞机'
@@ -511,6 +512,7 @@
 						this.editorhtml = res.data.obj.routes[0].content
 
 					}
+					console.log(res.data.obj)
 					let categorytype = res.data.obj.categorytype
 					switch(categorytype) {
 						case 0:
@@ -811,7 +813,6 @@
 			getcity(pro) {
 				city(pro).then((res) => {
 					this.city = res.data.obj
-
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
@@ -820,7 +821,6 @@
 			getdistrict(city) {
 				district(city).then((res) => {
 					this.district = res.data.obj
-
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
@@ -828,11 +828,13 @@
 			//选择去程城市
 			changecityfrom() {
 				let pro = {
-					id: this.baseForm.fromprovinceid
+					id: this.baseForm.fromprovinceid,
+					token: paramm.getToken()
 				}
 				this.getcity(pro)
 				let city = {
-					id: this.baseForm.fromcityid
+					id: this.baseForm.fromcityid,
+					token: paramm.getToken()
 				}
 				this.getdistrict(city)
 
@@ -840,11 +842,13 @@
 			//选择返程城市
 			changecityback() {
 				let pro = {
-					id: this.baseForm.toprovinceid
+					id: this.baseForm.toprovinceid,
+					token: paramm.getToken()
 				}
 				this.getcity(pro)
 				let city = {
-					id: this.baseForm.tocityid
+					id: this.baseForm.tocityid,
+					token: paramm.getToken()
 				}
 				this.getdistrict(city)
 			},

@@ -791,7 +791,7 @@
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
 					id: count,
-					token:paramm.getToken()
+					token: paramm.getToken()
 				}
 				province(para).then((res) => {
 					this.province = res.data.obj
@@ -804,7 +804,6 @@
 			getcity(pro) {
 				city(pro).then((res) => {
 					this.city = res.data.obj
-
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
@@ -813,7 +812,6 @@
 			getdistrict(city) {
 				district(city).then((res) => {
 					this.district = res.data.obj
-
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
@@ -821,11 +819,13 @@
 			//选择去程城市
 			changecityfrom() {
 				let pro = {
-					id: this.baseForm.fromprovinceid
+					id: this.baseForm.fromprovinceid,
+					token: paramm.getToken()
 				}
 				this.getcity(pro)
 				let city = {
-					id: this.baseForm.fromcityid
+					id: this.baseForm.fromcityid,
+					token: paramm.getToken()
 				}
 				this.getdistrict(city)
 
@@ -833,11 +833,13 @@
 			//选择返程城市
 			changecityback() {
 				let pro = {
-					id: this.baseForm.toprovinceid
+					id: this.baseForm.toprovinceid,
+					token: paramm.getToken()
 				}
 				this.getcity(pro)
 				let city = {
-					id: this.baseForm.tocityid
+					id: this.baseForm.tocityid,
+					token: paramm.getToken()
 				}
 				this.getdistrict(city)
 			},

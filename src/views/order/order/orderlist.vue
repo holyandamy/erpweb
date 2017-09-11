@@ -235,6 +235,7 @@
 				this.setmode = type
 			},
 			getList() {
+				
 				let dates = ''
 				let startday = this.orderinfo.date[0]
 				let endday = this.orderinfo.date[1]
@@ -250,8 +251,16 @@
 				page.pageindex = this.currentPage - 1
 				page.date = dates
 				orderlist(page).then((res) => {
-					this.orderLists = res.data.obj.datas
-					this.total = Number(res.data.obj.total)
+					if(res.data.error == 1){
+						this.$message({
+							message: res.data.message,
+							type: 'error'
+						});
+					}else{
+						this.orderLists = res.data.obj.datas
+						this.total = Number(res.data.obj.total)
+					}
+					
 				})
 			},
 			handleCurrentChange(val) {

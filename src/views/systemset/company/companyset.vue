@@ -159,7 +159,7 @@
 						}
 					],
 					mobile: [{
-					validator: checkmobile,
+					
 						trigger: 'blur',
 						required: true,
 					}],
@@ -199,10 +199,9 @@
 				let para={token:paramm.getToken()}
 				companydetail(para).then((res) =>{
 					this.companyForm = res.data.obj
-          console.log(this.companyForm)
-					this.logo = res.data.obj.logo
-					console.log(res.data.obj)
-					this.$refs.logos.loading(this.logo)
+       				this.logo = res.data.obj.logo
+       				console.log(this.companyForm)
+				this.$refs.logos.loading(this.logo)
 				})
 			},
 			//保存数据
@@ -212,11 +211,14 @@
 						let parses = this.companyForm
 					parses.companyId = this.companyForm.id
 						companyupdate(parses).then((res) => {
-							if(res.data.error == 1){
-								console.log(parses, res)
+							if(res.data.error == 1 || res.data.err == 401){
+								
 								 this.$message.error(res.data.message);
 							}else{
-								this.$message('提交成功！');
+								this.$message({
+							          message: '更新成功!',
+							          type: 'success'
+							        });
 								console.log(parses, res)
 							}
 						})
@@ -271,14 +273,14 @@
 				if(val =="pro"){
 					let pro = {
 					id: this.companyForm.provinceId,
-          token:paramm.getToken()
+         			 token:paramm.getToken()
 					}
 					this.getcity(pro)
 					this.companyForm.cityId = ""
 				}else{
 					let city = {
 					id: this.companyForm.cityId,
-          token:paramm.getToken()
+          			token:paramm.getToken()
 					}
 					this.getdistrict(city)
 					this.companyForm.districtId=""

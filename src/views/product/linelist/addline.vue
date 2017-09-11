@@ -186,7 +186,7 @@
 							</div>
 							<el-row>
 								<el-col :span="7">
-									<el-form-item label="标题">
+									<el-form-item label="标题" prop="title">
 										<el-input v-model="route.title" class="insertinput"></el-input>
 									</el-form-item>
 								</el-col>
@@ -391,6 +391,16 @@
 					callback()
 				}
 			}
+			//验证标题
+			var checktitle =  (rule, value, callback) =>{
+				for(let i = 0;i<this.baseForm.routes.length;i++){
+					if(this.baseForm.routes[i].title == ""){
+						callback(new Error('请输入标题！'));
+					}else{
+						callback()
+					}
+				}
+			}
 			return {
 				selfedit: false,
 				templateselectid: '',
@@ -524,7 +534,8 @@
 					}],
 				typepeo: [{required: true,trigger: 'change', validator:typepeo}],
 				fromprovinceid: [{required: true, trigger: 'change',validator:startaddresscheck}],
-				backaddress: [{ required: true,trigger: 'change',  validator:endcheck}]
+				backaddress: [{ required: true,trigger: 'change',  validator:endcheck}],
+				title:[{ required: true,trigger: 'blur', validator:checktitle}]
 				},
 				province: [],
 				city: [],
@@ -740,6 +751,7 @@
 			},
 			//天数增加
 			addday() {
+				this.baseFormrules
 				this.baseForm.days += 1
 				this.baseForm.routes.push({
 					'number': this.deafultnumber++,
@@ -765,6 +777,7 @@
 				}
 				province(para).then((res) => {
 					this.province = res.data.obj
+					console.log(this.province)
 
 				}).catch(function(err) {
 					console.log("连接错误")
@@ -774,6 +787,7 @@
 			getcity(pro) {
 				city(pro).then((res) => {
 					this.city = res.data.obj
+					
 
 				}).catch(function(err) {
 					console.log("连接错误")
