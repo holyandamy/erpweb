@@ -9,7 +9,7 @@ if(sessionStorage.getItem('token')){
 }
 if(Cookies.get('token')){
 	token = Cookies.get('token')
- 
+
 }
 
 
@@ -39,6 +39,7 @@ export const orderSave = params => { return axios.post(`${base}/order/save`, par
 export const orderdet = params => { return axios.post(`${base}/line/team/order/detail`, params).then(res => res); }//发团 下单详情  TODO
 export const groupdetail = params => { return axios.post(`${base}/line/team/detail`, params).then(res => res); };//发团列表 详情
 export const groupupdate = params => { return axios.post(`${base}/line/team/update`, params).then(res => res); };//发团列表 编辑
+export const groupStop = params => { return axios.post(`${base}/line/team/status`, params).then(res => res); };//发团列表 停止
 
 /*产品分类*/
 export const linecategorylist = params => { return axios.post(`${base}/line/category/list`, params); };//获取线路管理

@@ -45,7 +45,7 @@
           <section class="padding30">
             <el-row class="bg_white">
               <el-col :span="25">
-                <el-form   ref="visitorList" v-model="visitorList"  :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;">  <!--   -->
+                <el-form   ref="visitorList" :model="visitorList"  :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;">  <!--   -->
                   <div style="width:50%;float: left;overflow:hidden">
                     <el-form-item label="客户类型：" prop="custtype" >
                       <el-col :span="4">
@@ -233,6 +233,7 @@
 
 <script>
   import {token,orderdet, reserveNum,orderSave} from '../../../common/js/config';
+  import paramm from '../../../common/js/getParam'
   export default {
     props:['categoryId','operationType'],
     data() {
@@ -274,7 +275,7 @@
           adultNum: '',
           childNum: '',
           babyNum: '',
-          token: token
+          token: paramm.getToken()
         },
         adjuster: '',
         rules: {
@@ -282,7 +283,7 @@
             validator: checkmobile,
             trigger: 'blur',
             required: true,
-          }]
+          }],
         },
         options: [{
           value: '1',
@@ -338,7 +339,7 @@
 //            console.log(1111, _this.visitorList);
             }else {
               _this.$message({
-                message: '信息填写有误',
+                message: '信息未填写完整',
                 type: 'warning'
               });
               throw false
@@ -454,7 +455,7 @@
       // 获取详情
       getlineinfo(){
         let para = {
-          token:token,
+          token:paramm.getToken(),
           id:this.categoryId
         }
         orderdet(para).then((res) => {
@@ -476,8 +477,8 @@
         }
         let _this = this;
         if(this.visitorList.custtype == 2 && this.visitorList.comname.toString().length>4){
-          console.log(1111, {token: token,mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''});
-          reserveNum(JSON.stringify({token: token,mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''})).then(function (res) {
+          console.log(1111, {token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''});
+          reserveNum(JSON.stringify({token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''})).then(function (res) {
             _this.companyArr = res.data.obj
             _this.jidiaoArr = _this.companyArr
           })
@@ -490,7 +491,7 @@
         }
         let _this = this;
         if(this.visitorList.custtype == 2 && this.visitorList.mobile.toString().length>6){
-          reserveNum({token: token,mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''}).then(function (res) {
+          reserveNum({token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''}).then(function (res) {
             _this.phoneArr = res.data.obj
             _this.jidiaoArr = _this.phoneArr
           })
@@ -502,7 +503,7 @@
         this.getJidiaoo();
         this.isShowc = false;
         let _this = this;
-        reserveNum(JSON.stringify({token: token,mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''})).then(function (res) {
+        reserveNum(JSON.stringify({token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''})).then(function (res) {
           _this.companyArr = res.data.obj
           _this.jidiaoArr = _this.companyArr
         })
@@ -522,7 +523,7 @@
       getdetail() {
         let para = {
           id: this.listid,
-          token: token
+          token: paramm.getToken()
         }
       },
 

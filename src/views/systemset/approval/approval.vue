@@ -55,6 +55,7 @@
 </template>
 
 <script>
+  import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
 	import AppRoval from './addapproval.vue'
 	import EditRoval from './editapproval.vue'
@@ -78,14 +79,14 @@
 				pagesize: 15,
 				isenable: false,
 				pageset: {
-					token: token,
+					token: paramm.getToken(),
 					executor: '',
 					pageIndex: '',
 					pageSize: ''
 				},
 				updatestatus: {
 					isEnable: '',
-					token: token,
+					token: paramm.getToken(),
 					id: ''
 				},
 				edit: {}
@@ -135,7 +136,7 @@
 	.not:hover {
 		color: red;
 	}
-	
+
 	header {
 		padding: 0 40px;
 		background: white;
@@ -172,21 +173,21 @@
 			color: #333;
 		}
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 	}
-	
+
 	.page {
 		padding: 15px 30px;
 		background: white;
 		text-align: right;
 	}
-	
+
 	.el-table .cell {
 		text-align: left;
 	}
-	
+
 	.el-breadcrumb {
 		font-size: 18px;
 		margin-bottom: 20px;

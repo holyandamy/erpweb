@@ -122,7 +122,7 @@
 
 		<!--角色选择-->
 		<el-dialog title="选择角色" :visible.sync="finddepartment" size="tiny">
-			
+
 			  <div style="margin: 15px 0;"></div>
 			  <el-checkbox-group v-model="checkdepartment" @change="handleCheckedCitiesChange">
 			    <el-checkbox v-for="role in rolelists" :label="role.id" :key="role.id">{{role.rolename}}</el-checkbox>
@@ -160,18 +160,18 @@
 				<el-col :span='20'>
 
 					<el-form :model="resetpassword" :rules="rules2" ref="changepass" label-width="100px" class="demo-ruleForm">
-						<el-form-item label="密码" prop="pass">
+						<el-form-item label="请输入旧密码" prop="pass">
 							<el-input type="password" v-model="resetpassword.pass" auto-complete="off"></el-input>
 						</el-form-item>
-						<el-form-item label="确认密码" prop="checkPass">
+						<el-form-item label="请输入新密码" prop="checkPass">
 							<el-input type="password" v-model="resetpassword.checkPass" auto-complete="off"></el-input>
 						</el-form-item>
 
-						<el-button type="primary" @click="savepass('changepass')">提交</el-button>
+						<el-button type="primary" @click="savepass('changepass')">确定</el-button>
 						<el-button @click="resetPassword = false">取消</el-button>
 						</el-form-item>
 					</el-form>
-					
+
 				</el-col>
 			</el-row>
 		</el-dialog>
@@ -179,10 +179,11 @@
 </template>
 
 <script>
+  import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
 	import util from '../../../common/js/util'
 	import { editusersave, getdeplist, rolelist,userdetail,userpwd,token } from '../../../common/js/config'
-	
+
 	import md5 from 'js-md5';
 	export default {
 		props: ['edituser'],
@@ -201,6 +202,11 @@
 					}
 				}, 1000);
 			};
+      var checkcode = (rule,value,callback) => {
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+          }
+      };
 			var validatePass = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('请输入密码'));
@@ -233,7 +239,7 @@
 					deptid: '',
 					roleid: [],
 					status: '',
-					deptname: ''
+					deptname: '',
 				},
 				resetpassword: {
 					pass: '',
@@ -251,6 +257,12 @@
 				},
 				pickerOptions0: {},
 				rules: {
+          code:[{
+            validator:checkcode,
+            required:true,
+            message:'长度小于20位',
+            trigger:'blur'
+          }],
 					username: [{
 							required: true,
 							message: '请输入用户名',
@@ -316,7 +328,7 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = {
-							token: token,
+							token: paramm.getToken(),
 							username: this.addstaff.username,
 							code: this.addstaff.code,
 							realname: this.addstaff.realname,
@@ -370,7 +382,7 @@
 			//获取部门
 			getdepartment() {
 				let para = {
-					token: token
+					token: paramm.getToken()
 				}
 				getdeplist(para).then((data) => {
 					this.departments = data.data.obj
@@ -395,18 +407,18 @@
 			findrole(){
 				this.finddepartment = true
 					let para = {
-						token: token,
+						token: paramm.getToken(),
 						pageIndex: 0,
 						pageSize: 10
 					}
 					rolelist(para).then((res) => {
 						this.rolelists = res.data.obj.datas
 					})
-					
+
 					},//传值
 			getinfo() {
 				let para = {
-					token: token,
+					token: paramm.getToken(),
 					id: this.edituser.row.id
 				}
 				userdetail(para).then((res) => {
@@ -416,11 +428,11 @@
 					this.checkeddepar = res.data.obj.deptname
 					this.roleid = res.data.obj.roleid
 					console.log(res.data.obj)
-					
+
 
 				}).then(()=>{
 					let para = {
-						token:token,
+						token:paramm.getToken(),
 						pageIndex: 0,
 						pageSize: 10
 					}
@@ -438,8 +450,8 @@
 						}
 					})
 				})
-				
-				
+
+
 			},
 			//修改密码
 			changepassword() {
@@ -451,7 +463,7 @@
 					if(valid) {
 						let para ={
 							pwd:this.resetpassword.pass,
-							token:token,
+							token:paramm.getToken(),
 							id:this.addstaff.id
 						}
 						para.pwd = md5(this.resetpassword.pass)
@@ -552,16 +564,16 @@
 			color: #333;
 		}
 	}
-	
+
 	.el-breadcrumb {
 		font-size: 18px;
 		margin-bottom: 20px;
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 	}
-	
+
 	.bg_white {
 		background: #fff;
 		padding: 20px 35px;

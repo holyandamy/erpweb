@@ -83,19 +83,15 @@
 			var checkmobile = (rule, value, callback) => {
 				if(!value) {
 					return callback(new Error('手机号码不能为空'));
-				}
-				setTimeout(() => {
-					if(!Number.isInteger(value)) {
-						callback(new Error('请输入数字值'));
-					} else {
+				}else {
 						let mobilereg = /^[0-9]{11}$/;
 						if(mobilereg.test(value)) {
 							callback();
 						} else {
 							callback(new Error('请输入正确的手机号码'));
 						}
-					}
-				}, 1000);
+				}
+
 			};
 			return {
 				activeIndex: '3',
@@ -113,8 +109,7 @@
 					tel: '',
 					fax: '',
 					companyId: '',
-					brand:'',
-					companyId:''
+					brand:''
 				},
 				//验证数据
 				rules: {
@@ -159,7 +154,7 @@
 						}
 					],
 					mobile: [{
-					
+					validator: checkmobile,
 						trigger: 'blur',
 						required: true,
 					}],
@@ -199,28 +194,27 @@
 				let para={token:paramm.getToken()}
 				companydetail(para).then((res) =>{
 					this.companyForm = res.data.obj
-       				this.logo = res.data.obj.logo
-       				console.log(this.companyForm)
-				this.$refs.logos.loading(this.logo)
+          console.log(this.companyForm)
+					this.logo = res.data.obj.logo
+					console.log(res.data.obj)
+					this.$refs.logos.loading(this.logo)
 				})
 			},
 			//保存数据
 			submitForm(formName) {
+        let _this =this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let parses = this.companyForm
 					parses.companyId = this.companyForm.id
+					parses.token = paramm.getToken()
+					parses.mobile = parses.mobile.toString()
 						companyupdate(parses).then((res) => {
-							if(res.data.error == 1 || res.data.err == 401){
-								
-								 this.$message.error(res.data.message);
+							if(res.data.error == 1 || res.data.err){
+                  paramm.getCode(res.data,_this)
 							}else{
-								this.$message({
-							          message: '更新成功!',
-							          type: 'success'
-							        });
-								console.log(parses, res)
-							}
+                  paramm.getCode(res.data,_this)
+              }
 						})
 					} else {
 						this.$message.error('提交错误！');
@@ -273,17 +267,17 @@
 				if(val =="pro"){
 					let pro = {
 					id: this.companyForm.provinceId,
-         			 token:paramm.getToken()
+          token:paramm.getToken()
 					}
 					this.getcity(pro)
-					this.companyForm.cityId = ""
+					//this.companyForm.cityId = ""
 				}else{
 					let city = {
 					id: this.companyForm.cityId,
-          			token:paramm.getToken()
+          token:paramm.getToken()
 					}
 					this.getdistrict(city)
-					this.companyForm.districtId=""
+					//this.companyForm.districtId=""
 				}
 
 

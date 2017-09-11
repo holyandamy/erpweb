@@ -48,6 +48,7 @@
 </template>
 
 <script>
+  import paramm from '../../../common/js/getParam'
 	import { showorhide } from '../../../common/js/showorhid'
   import axios from 'axios';
   import AddRole from './addrole';
@@ -61,12 +62,12 @@
         roleList: [],
         modeType:'role',
         total:0,
-        token:token,
+        token:paramm.getToken(),
         currentPage:1,
         pagesize:15,
         operationType:{type:'add',id:''},
         pageset:{
-          token:token,
+          token:paramm.getToken(),
           pageIndex:0,
           pageSize:''
         },
@@ -102,7 +103,7 @@
       },
       deleteRow(index, rows){
         this.roleList.splice(index, 1);
-        let para ={token:token,id:rows.id}
+        let para ={token:paramm.getToken(),id:rows.id}
         roledel(para).then((res) => {
           if(res.data.error){
             this.$message.error(res.data.massage);

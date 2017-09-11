@@ -14,7 +14,7 @@
 					<template scope="scope">
 						<el-button @click="handleShow(scope.$index, scope.row)" class="hasid" id="626f8c1472bb11e7aad70242ac120006" type="text" size="small">编辑</el-button>
 						<span class="hasid" id="8bcbe83a72bb11e7aad70242ac120006">
-							<el-button type="text" size="small" v-show="scope.row.status=='禁用'" style="margin-left:10px ;" @click="changestatus(1,scope.row.id)">启用</el-button>
+							<el-button type="text" size="small"  v-show="scope.row.status=='禁用'" style="margin-left:10px ;" @click="changestatus(1,scope.row.id)">启用</el-button>
 							<el-button type="text" size="small" v-show="scope.row.status=='启用'" class="not" @click="changestatus(0,scope.row.id)">禁用</el-button>
 						</span>
 					</template>
@@ -112,7 +112,7 @@
 				},
 				updatestatus: {
 					isEnable: '',
-					token: token,
+					token: paramm.getToken(),
 					id: ''
 				},
 				bankrules: {
@@ -253,7 +253,8 @@
 					this.$notify({
 						title: '成功',
 						message: '状态改变成功',
-						type: 'success'
+						type: 'success',
+            duration:800
 					});
 					this.getlist()
 				})

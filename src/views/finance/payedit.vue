@@ -14,9 +14,10 @@
 				</el-form-item>
 				<el-form-item label="业务类型" prop="businesstype">
 					<el-select v-model="collectForm.businesstype" placeholder="选择" @change="changemenu()">
-						<el-option label="预收款" value="1"></el-option>
+						<el-option label="预付款" value="1"></el-option>
 						<el-option label="订单预收款" value="2"></el-option>
 						<el-option label="预付款退款" value="3"></el-option>
+						<el-option label="成本单付款" value="4"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="订单编号" required prop="orderno" v-show="isshowall">
@@ -24,14 +25,14 @@
 						<el-input placeholder="HP23083098409283098028450" @blur="typethis" v-model="collectForm.orderno"></el-input>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="团号" prop="teamno" v-show="isshow">
+				<el-form-item label="团号" prop="teamno" v-show="isshowall">
 					<el-col :span="10" v-model="collectForm.teamno">
-						HP23083098409283098028450
+            <el-input v-model="collectForm.teamno"></el-input>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="线路名称" prop="linename" v-show="isshow">
+				<el-form-item label="线路名称" prop="linename" v-show="isshowall">
 					<el-col :span="24">
-						{{collectForm.linename}}
+            <el-input v-model="collectForm.linename"></el-input>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="付款单位" prop="companyname">
@@ -108,6 +109,7 @@
 	</el-row>
 </template>
 <script>
+  import paramm from '../../common/js/getParam'
 	import axios from 'axios';
 	import util from '../../common/js/util'
 	import {paysave,banlist,token} from '../../common/js/config';
@@ -134,7 +136,7 @@
 				banklist: [],
 				item:[],
 				banklist:[],
-		        isshow: false,
+		    isshow: false,
 				isshowall:false,
 				pickerOptions0: {
 					disabledDate(time) {
@@ -142,7 +144,7 @@
 					}
 				},
 				collectForm: {
-					token:token,
+					token:paramm.getToken(),
 					businesstype: '',
 					orderno: '',
 					teamno: '',
@@ -171,7 +173,7 @@
 						trigger: 'blur'
 					}]
 				},
-				
+
 				accounts:[],
 				types: [{ //1现金，2对公汇款，3刷卡，4支付宝，5微信，6网银，7其他
 						value: '1',
@@ -202,7 +204,7 @@
 						label: '其他'
 					}
 				],
-				
+
 			}
 		},
 		created() {
@@ -240,7 +242,7 @@
 			typethis() {
 				if(this.collectForm.orderno == "") {
 					//this.rules.push("orderno: [{required: false,validator: validatePass,trigger: 'blur'}]")
-					
+
 				}else{
 					this.isshow = true
 				}
@@ -275,26 +277,26 @@
 			},
 			imagelistchange (val) {
                 this.collectForm.attach = val;
-                
+
                 console.log(this.collectForm.attach)
            },
 			changemenu() {
-				let changetype = this.collectForm.businesstypename
-				if(changetype==0 || changetype ==2){
+				let changetype = this.collectForm.businesstype
+				if(changetype==1 || changetype ==3 || changetype == 4){
 					//预收款、预付款退款
 					this.isshowall = true
 					this.typethis()
 				}
-				if(changetype==1){
+				if(changetype==2){
 					//订单收款
 					this.isshowall = false
 				}
 			},
 			checkbanklist(){
-				let para = {token:token}
+				let para = {token:paramm.getToken()}
 				banlist(para).then((res) => {
 					this.banklist = res.data.obj
-				
+
 				})
 			}
 		}
@@ -305,24 +307,24 @@
 	.bg-white {
 		background: white;
 	}
-	
+
 	.padding30 {
 		padding: 20px;
 	}
-	
+
 	.margin30 {
 		margin: 30px;
 	}
-	
+
 	.el-form-item {
 		text-align: left;
 	}
-	
+
 	.el-breadcrumb {
 		padding: 20px 40px;
 		background: white;
 	}
-	
+
 	.collecttable {
 		border: 1px solid #dee5ec;
 		border-radius: 5px;
