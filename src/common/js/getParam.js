@@ -34,5 +34,11 @@ paramm.getCode = (data,thiss) => {
         type: 'warning'
       });
     }
+   if(data.err == 502) {
+     thiss.$message({
+       message: '网络异常',
+       type: 'warning'
+     });
+   }
 }
 export default paramm;
