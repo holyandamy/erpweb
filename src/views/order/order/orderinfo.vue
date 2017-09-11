@@ -111,8 +111,8 @@
 			</el-table>
 			<h2>
 					<el-row>
-						<el-col :span="12">付款详情</el-col>
-						<el-col :span="12"><el-button @click="addcollpay('pay')"  class="hasid" id="89cec1b8735d11e788410242ac120009">新增付款</el-button></el-col>
+						<el-col :span="12">退款详情</el-col>
+						<el-col :span="12"><el-button @click="addcollpay('pay')"  class="hasid" id="89cec1b8735d11e788410242ac120009">新增退款</el-button></el-col>
 					</el-row>
 				</h2>
 			<el-table :data="detail.pays" show-summary border style="width: 100%">
@@ -350,6 +350,7 @@
 <script>
 	import util from '../../../common/js/util'
 	import { showorhide } from '../../../common/js/showorhid'
+	import paramm from '../../../common/js/getParam'
 	import { orderdetail, banlist, collectsave, orderupdate,orderpay, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave,token} from '../../../common/js/config';
 	export default {
 		props: ['listid'],
@@ -363,7 +364,7 @@
 					id:'',
 					money:'',
 					remark:'',
-					token:token
+					token:paramm.getToken()
 				},
 				detail: {
 					namelist: []
@@ -421,7 +422,7 @@
 				],
 				banklist: [], //银行列表
 				collectionsForm: {
-					token: token,
+					token: paramm.getToken(),
 					businesstype: '2',
 					orderno: '',
 					lineid: '',
@@ -437,7 +438,7 @@
 				},
 				baseform: {
 					id: '',
-					token: token
+					token: paramm.getToken()
 				},
 				type: '',
 				alllogs: [],
@@ -612,7 +613,7 @@
 			getdetail() {
 				let para = {
 					id: this.listid,
-					token: token
+					token: paramm.getToken()
 				}
 				orderdetail(para).then((res) => {
 					this.detail = res.data.obj
@@ -687,7 +688,7 @@
 			//获取账号列表
 			checkbanklist() {
 				let para = {
-					token: token
+					token: paramm.getToken()
 				}
 				banlist(para).then((res) => {
 					this.banklist = res.data.obj
@@ -778,7 +779,7 @@
 					childNum: this.detail.totalchild,
 					babyNum: this.detail.totalbaby,
 					list: this.detail.namelist,
-					token: token
+					token: paramm.getToken()
 				}
 				for(let i = 0; i < this.detail.namelist.length; i++){
 					if(this.detail.namelist[i].type == "成人") {
@@ -827,17 +828,17 @@
 			//取消订单
 			cancelorder() {
 				let para = {
-					token:token,
+					token:paramm.getToken(),
 					id:this.detail.id
 				}
 				ordercancel({para}).then((res) => {
-					console.log(para, res, '取消订单')
+					
 				})
 			},
 			//确认游客名单
 			confirmvisitor() {
 				let para = {
-					token:token,
+					token:paramm.getToken(),
 					id:this.detail.id
 				}
 				
@@ -860,7 +861,7 @@
 			//导出游客名单
 			exportnamelist() {
 				let para = {
-					token:token,
+					token:paramm.getToken(),
 					id:this.detail.id
 				}
 				ordernamelistexport(para).then((res) => {

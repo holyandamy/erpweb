@@ -4,7 +4,7 @@
 			<ul>
 				<li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
 			</ul>
-			<el-button @click="handleHide()" style="float: left; margin-top: -10px;">返回线路列表</el-button>
+			<el-button @click="handleHide()" style="float: left; margin-top: -10px;">返回线路模板</el-button>
 		</header>
 		<section>
 			<h2 class="d_jump">基本信息</h2>
@@ -116,7 +116,7 @@
 							{{detail.excludePkg}}
 						</div>
 					</li>
-					<li><span>产品亮点</span><div class="xc"><pre>{{detail.featrue}}</pre></div></li>
+					<li><span>产品亮点</span><div class="xc"><pre>{{detail.feature}}</pre></div></li>
 					<li><span>包含项目</span><div class="xc"><pre>{{detail.includePkg}}</pre></div></li>
 					<li><span>购物安排</span><div class="xc"><pre>{{detail.shopping}}</pre></div></li>
 					<li><span>温馨提示</span><div class="xc"><pre>{{detail.reminder}}</pre></div></li>

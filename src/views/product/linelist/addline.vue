@@ -45,73 +45,72 @@
 									<el-radio label="1">跟团游</el-radio>
 								</el-radio-group>
 							</el-form-item>
-							<el-form-item label="收客类型" prop="typepeo" label-width="120px">
-								<el-checkbox label="成人" prop="isadult" v-model="baseForm.isadult"></el-checkbox>
-								<el-checkbox label="儿童" prop="ischild" v-model="baseForm.ischild"></el-checkbox>
-								<el-checkbox label="婴儿" prop="isbaby" v-model="baseForm.isbaby"></el-checkbox>
+							<el-form-item label="收客类型" prop="checkpeople" label-width="120px">
+								<el-checkbox label="成人"  v-model="baseForm.isadult"></el-checkbox>
+								<el-checkbox label="儿童"  v-model="baseForm.ischild"></el-checkbox>
+								<el-checkbox label="婴儿"  v-model="baseForm.isbaby"></el-checkbox>
 							</el-form-item>
 							<el-form-item label="出港地" prop="fromprovinceid" label-width="120px">
 								<el-col :span="5">
-									<el-form-item >
-										<el-select filterable v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom">
+									<el-select filterable v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom">
 											<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+									
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
 								</el-col>
 								<el-col :span="5">
-									<el-form-item prop="fromcityid">
+								
 										<el-select filterable v-model="baseForm.fromcityid" placeholder="请选择" @change="changecityfrom">
 											<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+									
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
 								</el-col>
 								<el-col :span="5">
-									<el-form-item prop="fromdistrictid">
+									
 										<el-select filterable v-model="baseForm.fromdistrictid" placeholder="请选择">
 											<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+									
 								</el-col>
 							</el-form-item>
 							<el-form-item label="目的地" prop ="backaddress" label-width="120px">
 								<el-col :span="5">
-									<el-form-item prop="toprovinceid">
+									
 										<el-select filterable v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
 											<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+									
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
 								</el-col>
 								<el-col :span="5">
-									<el-form-item prop="tocityid">
+								
 										<el-select filterable v-model="baseForm.tocityid" placeholder="请选择" @change="changecityback">
 											<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+									
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
 								</el-col>
 								<el-col :span="5">
-									<el-form-item prop="todistrictid">
+									
 										<el-select filterable v-model="baseForm.todistrictid" placeholder="请选择">
 											<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+									
 								</el-col>
 							</el-form-item>
 							<el-form-item label="交通工具" label-width="120px">
@@ -360,24 +359,26 @@
 		props: ['scope'],
 		data() {
 			//收客类型
-			var typepeo =(rule,value,callback) =>{
-						if(this.baseForm.isadult == false && this.baseForm.isbaby == false && this.baseForm.ischild == false){
-									callback(new Error('请选择收客类型！'));
-								}else{
-									callback()
-								}
+			var isadult =(rule,value,callback) =>{
+				if(this.baseForm.isadult == false && this.baseForm.isbaby == false && this.baseForm.ischild == false){
+						callback(new Error('请选择收客类型！'));
+					}else{
+						callback()
+				}
 			}
 			//出港地
 			var startaddresscheck = (rule, value, callback) =>{
 				if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' ||this.baseForm.fromdistrictid == ''){
+					console.log(1)
 					callback(new Error('请选择出港地！'));
 				}else{
+					console.log(2)
 					callback()
 				}
 			}
 			//回港地
 			var endcheck = (rule, value, callback) =>{
-				if(this.baseForm.toprovinceid == '' || this.baseForm.tocityid == ''){
+				if(this.baseForm.toprovinceid == '' || this.baseForm.tocityid == '' || this.baseForm.todistrictid == ''){
 					callback(new Error('请选择目的地！'));
 				}else{
 					callback()
@@ -532,8 +533,8 @@
 						message: '请选择出行方式',
 						trigger: 'change'
 					}],
-				typepeo: [{required: true,trigger: 'change', validator:typepeo}],
-				fromprovinceid: [{required: true, trigger: 'change',validator:startaddresscheck}],
+				checkpeople: [{required: true,trigger: 'change', validator:isadult}],
+				fromprovinceid: [{required: true,validator:startaddresscheck}],
 				backaddress: [{ required: true,trigger: 'change',  validator:endcheck}],
 //				title:[{ required: true,trigger: 'blur', validator:checktitle}]
 				},
@@ -727,7 +728,11 @@
 
 						})
 					} else {
-						console.log('error submit!!');
+						this.$message({
+									showClose: true,
+									message: '有必填项没有填写！',
+									type: 'error'
+								});
 						return false;
 					}
 				});
