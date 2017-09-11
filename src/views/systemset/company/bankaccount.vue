@@ -164,21 +164,21 @@
     created() {
       this.getlist();
 
-    },
-    updated: function() {
-      this.$nextTick(function() {
-        showorhide()
-      })
-    },
-    methods: {
-      getlist() {
-        this.pageset.pageIndex = this.currentPage - 1
-        this.pageset.pageSize = this.pagesize
-        let page = this.pageset
-        page.token = paramm.getToken()
-        getbanklist(page).then((res) => {
-          this.banklist = res.data.obj.datas
-          this.total = Number(res.data.obj.total)
+		},
+		updated: function() {
+			this.$nextTick(function() {
+				showorhide()
+			})
+		},
+		methods: {
+			getlist() {
+				this.pageset.pageIndex = this.currentPage - 1
+				this.pageset.pageSize = this.pagesize
+				let page = this.pageset
+     			page.token = paramm.getToken()
+				getbanklist(page).then((res) => {
+					this.banklist = res.data.obj.datas
+					this.total = Number(res.data.obj.total)
 
         }).catch(function(err) {
           console.log("连接错误")
@@ -207,31 +207,31 @@
         this.$refs[formName].validate((valid) => {
           if(valid) {
 
-            if(this.addBank.isEnable == "禁用") {
-              this.addBank.isEnable = '0'
-            } else {
-              this.addBank.isEnable = '1'
-            }
-
-            let para = this.addBank
-            para.token = paramm.getToken()
-            addbank(para).then((res) => {
-              this.addbankuser = false
-              this.$message('保存成功！');
-              this.getlist()
-            })
-          } else {
-            this.$message.error('提交错误！');
-            return false;
-          }
-        });
-      },
-      //编辑保存
-      saveedit(formName) {
-        let _this = this;
-        this.$refs[formName].validate((valid) => {
-          if(valid) {
-            let para = this.editbank
+						if(this.addBank.isEnable == "禁用") {
+							this.addBank.isEnable = '0'
+						} else {
+							this.addBank.isEnable = '1'
+						}
+						
+						let para = this.addBank
+          				  para.token = paramm.getToken()
+          				  console.log(para)
+						addbank(para).then((res) => {
+							this.addbankuser = false
+							this.$message('保存成功！');
+							this.getlist()
+						})
+					} else {
+						this.$message.error('提交错误！');
+						return false;
+					}
+				});
+			},
+			//编辑保存
+			saveedit(formName) {
+				this.$refs[formName].validate((valid) => {
+					if(valid) {
+						let para = this.editbank
             para.token = paramm.getToken()
             updatebank(para).then((res) => {
               //console.log(para)
