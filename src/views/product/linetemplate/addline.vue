@@ -146,12 +146,7 @@
 							<el-form-item label="集合地点" prop="station">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-							<el-form-item label="上传图片" prop="images">
-								<el-upload class="upload-demo" action="http://172.17.9.13:3001/api/images" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList">
-									<el-button size="small" type="primary">点击上传</el-button>
-									<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-								</el-upload>
-							</el-form-item>
+							<ImgLoad @geturl="geturl" :checktop="checktop"></ImgLoad>
 
 						</el-col>
 					</el-row>
@@ -241,14 +236,7 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-									<el-form-item label="图片" prop="titleimages">
-										<el-upload action="http://v0.api.upyun.com/" :data="uploadform" list-type="picture-card" :before-upload="imgupload" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
-											<i class="el-icon-plus"></i>
-										</el-upload>
-										<el-dialog v-model="dialogVisible" size="tiny">
-											<img width="100%" :src="dialogImageUrl" alt="">
-										</el-dialog>
-									</el-form-item>
+									<<ImgLoad :route="route"></ImgLoad>
 								</el-col>
 
 							</el-row>
@@ -318,9 +306,11 @@
 	import { province, city, district, categoryall, linecategorytype,templatsave,token } from '../../../common/js/config';
 	import paramm from '../../../common/js/getParam'
 	import check from '../../../common/js/check'
+	import ImgLoad from './upload'
 	export default {
 		components: {
-			UE
+			UE,
+			ImgLoad
 		},
 		props: ['scope'],
 		data() {
@@ -479,6 +469,7 @@
 				deafultnumber: 2,
 				actionurl:'',
 				uploadform:{},
+				checktop: true
 				
 			}
 		},
@@ -488,6 +479,9 @@
 			
 		},
 		methods: {
+			geturl(url) {
+				this.baseForm.images = url
+			},
 			jump(index) {
 				this.active = index
 
@@ -566,7 +560,7 @@
 						}
 						
 						templatsave(para).then((res) => {
-							console.log(JSON.stringify(para))
+							console.log(para)
 							if(res.data.error == 1) {
 								this.$message({
 									showClose: true,

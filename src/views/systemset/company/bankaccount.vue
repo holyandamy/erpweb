@@ -175,7 +175,7 @@
 				this.pageset.pageIndex = this.currentPage - 1
 				this.pageset.pageSize = this.pagesize
 				let page = this.pageset
-        page.token = paramm.getToken()
+     			page.token = paramm.getToken()
 				getbanklist(page).then((res) => {
 					this.banklist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
@@ -212,9 +212,10 @@
 						} else {
 							this.addBank.isEnable = '1'
 						}
-
+						
 						let para = this.addBank
-            para.token = paramm.getToken()
+          				  para.token = paramm.getToken()
+          				  console.log(para)
 						addbank(para).then((res) => {
 							this.addbankuser = false
 							this.$message('保存成功！');

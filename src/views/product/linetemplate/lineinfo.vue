@@ -41,6 +41,15 @@
 						<p>
 							<span>集合地点</span>{{detail.station}}
 						</p>
+							<div class="topimglist">
+							<span style="float: left;">图片</span><div class="xc" style="float: left; line-height: 26px;">
+								<ul>
+									<li v-for="img in toplist">
+										<img :src="img"/>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</el-row>
 				</div>
 
@@ -78,6 +87,15 @@
 						<span>备注</span>
 						<div class="xc">
 							{{route.remark}}
+						</div>
+
+					</li>
+					<li>
+						<span>图片</span>
+						<div class="xc">
+							<div v-for="img in route.titleimages">
+							<img :src="img"/>
+							</div>
 						</div>
 
 					</li>
@@ -119,10 +137,11 @@
 		props:['lineid'],
 		data() {
 			return {
-				menus: ['基本信息', '行程', '预定须知', '发布平台'],
+				menus: ['基本信息', '行程', '预定须知'],
 				active:0,
 				detail:{},
-				edittype:true
+				edittype:true,
+				toplist:[]
 			}
 		},
 		mounted: function() {
@@ -136,6 +155,14 @@
 				}
 				templatdetail(para).then((res) => {
 					this.detail = res.data.obj
+					this.toplist = this.detail.images.split(',')
+					console.log(this.detail)
+					for(let i = 0 ; i <this.detail.routes.length;i++){
+						let arr = []
+						arr = res.data.obj.routes[i].titleimages.split(',')
+						this.detail.routes[i].titleimages = arr
+
+					}
 					if(this.detail.edittype == 0 ){
 						this.edittype = true
 					}else{
@@ -256,22 +283,7 @@
 			handleHide: function() {
 				this.$emit('setMode', 'linelist');
 			},
-//			onScroll() {
-//				let scrolled = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop　　　 // 586、1063分别为第二个和第三个锚点对应的距离
-//				let jump = document.querySelectorAll('.d_jump')
-//				let two = jump[1].offsetTop
-//				let three = jump[2].offsetTop
-//				let four = jump[3].offsetTop
-//				if(scrolled >= four) {
-//					this.active = 3
-//				}else if(scrolled < four && scrolled >= three){
-//					this.active = 2
-//				} else if(scrolled < three && scrolled >= two) {
-//					this.active = 1
-//				} else {
-//					this.active = 0
-//				}
-//			}
+
 		}
 	}
 </script>
@@ -433,4 +445,12 @@
 				color: #333;
 			}
 	.content{padding: 20px 30px; background: #fff;}
+	.topimglist{
+		span{
+			font-size: 14px;
+			color: #666;
+			width: 90px;
+			display: inline-block;
+		}
+	}
 </style>

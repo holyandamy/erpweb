@@ -19,10 +19,10 @@
 				<div class="baseinfo">
 					<el-row>
 						<el-col :span="21">
-							<el-form-item label="模板导入">
+							<el-form-item label="模板导入" label-width="120px">
 								<el-button @click="addtemplate">添加模板</el-button>
 							</el-form-item>
-							<el-form-item label="选择线路分类" prop="categorytype">
+							<el-form-item label="选择线路分类" prop="categorytype" label-width="120px">
 								<el-select filterable v-model="baseForm.categorytype" placeholder="请选择" @change="checkline">
 									<el-option v-for="item in categoryids" :key="item.value" :label="item.label" :value="item.value">
 									</el-option>
@@ -33,24 +33,24 @@
 								</el-select>
 							</el-form-item>
 
-							<el-form-item label="线路名称" prop="name">
+							<el-form-item label="线路名称" prop="name" label-width="120px">
 								<el-input v-model="baseForm.name"></el-input>
 							</el-form-item>
-							<el-form-item label="团号代码" prop="teamno">
+							<el-form-item label="团号代码" prop="teamno" label-width="120px">
 								<el-input v-model="baseForm.teamno"></el-input>
 							</el-form-item>
-							<el-form-item label="出行方式" prop="type">
+							<el-form-item label="出行方式" prop="type" label-width="120px">
 								<el-radio-group v-model="baseForm.type">
 									<el-radio label="2">自由行</el-radio>
 									<el-radio label="1">跟团游</el-radio>
 								</el-radio-group>
 							</el-form-item>
-							<el-form-item label="收客类型" prop="typepeo">
+							<el-form-item label="收客类型" prop="typepeo" label-width="120px">
 								<el-checkbox label="成人" prop="isadult" v-model="baseForm.isadult"></el-checkbox>
 								<el-checkbox label="儿童" prop="ischild" v-model="baseForm.ischild"></el-checkbox>
 								<el-checkbox label="婴儿" prop="isbaby" v-model="baseForm.isbaby"></el-checkbox>
 							</el-form-item>
-							<el-form-item label="出港地" prop="fromprovinceid">
+							<el-form-item label="出港地" prop="fromprovinceid" label-width="120px">
 								<el-col :span="5">
 									<el-form-item >
 										<el-select filterable v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom">
@@ -82,7 +82,7 @@
 									</el-form-item>
 								</el-col>
 							</el-form-item>
-							<el-form-item label="目的地" prop ="backaddress">
+							<el-form-item label="目的地" prop ="backaddress" label-width="120px">
 								<el-col :span="5">
 									<el-form-item prop="toprovinceid">
 										<el-select filterable v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
@@ -114,7 +114,7 @@
 									</el-form-item>
 								</el-col>
 							</el-form-item>
-							<el-form-item label="交通工具">
+							<el-form-item label="交通工具" label-width="120px">
 								<el-col :span="2">
 									去程
 								</el-col>
@@ -142,10 +142,10 @@
 								</el-col>
 
 							</el-form-item>
-							<el-form-item label="线路说明" prop="remark">
+							<el-form-item label="线路说明" prop="remark" label-width="120px">
 								<el-input type="textarea" v-model="baseForm.remark"></el-input>
 							</el-form-item>
-							<el-form-item label="集合地点" prop="station">
+							<el-form-item label="集合地点" prop="station" label-width="120px">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
 
@@ -193,13 +193,13 @@
 								<el-col :span="7">
 									<div class="linetype">
 										<ul>
-											<li @click="inserttype('飞机')"></li>
-											<li @click="inserttype('火车')"></li>
-											<li @click="inserttype('汽车')"></li>
-											<li @click="inserttype('轮船')"></li>
-											<li @click="inserttype('动车')"></li>
-											<li @click="inserttype('高铁')"></li>
-											<li @click="inserttype('待定')"></li>
+											<li @click="inserttype('[飞机]')"></li>
+											<li @click="inserttype('[火车]')"></li>
+											<li @click="inserttype('[汽车]')"></li>
+											<li @click="inserttype('[轮船]')"></li>
+											<li @click="inserttype('[动车]')"></li>
+											<li @click="inserttype('[高铁]')"></li>
+											<li @click="inserttype('[待定]')"></li>
 
 										</ul>
 									</div>

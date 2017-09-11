@@ -214,9 +214,8 @@
 					token: paramm.getToken(),
 					id: this.nameid
 				}
-
-				ordernamelistconfirm(para).then((res) => {
-
+				
+			ordernamelistconfirm(para).then((res) => {
 					if(res.data.error == 1) {
 						this.$message({
 							message: res.data.message,
@@ -227,6 +226,7 @@
 							message: '保存成功',
 							type: 'success'
 						});
+						this.getList()
 						this.confirmnamelist = false
 					}
 				})
@@ -251,6 +251,7 @@
 				page.pageindex = this.currentPage - 1
 				page.date = dates
 				orderlist(page).then((res) => {
+					console.log(res.data.obj)
 					if(res.data.error == 1){
 						this.$message({
 							message: res.data.message,
