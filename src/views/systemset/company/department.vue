@@ -191,8 +191,15 @@
 			},
 			//新增部门
 			add() {
+			  let _this = this;
 				let para = this.adddatas
 				adddep(para).then((res) => {
+          if(res.data.error!=0 || res.data.err){
+            paramm.getCode(res.data, _this)
+          }
+          else {
+            paramm.getCode(res.data, _this)
+          }
 					if(res.data.error == 1) {
 						this.$message({
 							message: res.data.message,
@@ -220,8 +227,15 @@
 			},
 			//新增下级
 			addsubordinate() {
+			  let _this = this;
 				let para = this.subordinates
 				adddep(para).then((res) => {
+          if(res.data.error!=0 || res.data.err){
+            paramm.getCode(res.data, _this)
+          }
+          else {
+            paramm.getCode(res.data, _this)
+          }
 					this.subordinate = false
 					this.getuser()
 				}).catch((res) => {
@@ -258,8 +272,14 @@
 				this.editpartmentmodel.name = data.name
 			},
 			editpartmentconfirm() {
+			  let _this = this;
 				let para = this.editpartmentmodel
 				editdep(para).then((res) => {
+          if(res.data.error == 1 || res.data.err){
+            paramm.getCode(res.data,_this)
+          }else{
+            paramm.getCode(res.data,_this)
+          }
 					this.editpartment = false
 					this.getuser()
 				}).catch((res) => {

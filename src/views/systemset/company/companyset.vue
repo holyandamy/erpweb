@@ -59,7 +59,7 @@
           <ImgLoad @imagelistchange="imagelistchange" :logo="logo" ref='logos'></ImgLoad>
           <el-form-item label-width="100px" style="text-align: left;">
             <el-button type="primary" class="hasid" id="e10adc3949ba59abbe56e057f20f883e" @click="submitForm('companyForm')">保存</el-button>
-            <el-button @click="resetForm('companyForm')">重置</el-button>
+            <!--<el-button @click="resetForm('companyForm')">取消</el-button>-->
           </el-form-item>
         </el-form>
       </el-col>
@@ -274,14 +274,14 @@
             token:paramm.getToken()
           }
           this.getcity(pro)
-          //this.companyForm.cityId = ""
+          this.companyForm.cityId = ""
         }else{
           let city = {
             id: this.companyForm.cityId,
             token:paramm.getToken()
           }
           this.getdistrict(city)
-          //this.companyForm.districtId=""
+          this.companyForm.districtId=""
         }
 
       },

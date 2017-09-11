@@ -202,11 +202,32 @@
 					}
 				}, 1000);
 			};
+			//验证员工编号
       var checkcode = (rule,value,callback) => {
-          if (!Number.isInteger(value)) {
-            callback(new Error('请输入数字值'));
-          }
+        let codereg = /^[0-9]{1,20}$/;
+        if(codereg.test(value)){
+          callback()
+        }else{
+          callback(new Error('编号为1-20位数字'))
+        }
       };
+      //验证用户名
+      var checkusername = (rule,value,callback) => {
+        let usernamereg = /^[a-z0-9A-Z]{6,16}$/;
+        if(usernamereg.test(value)){
+          callback()
+        }else{
+          callback(new Error('用户名由6~20位的字母或数字组成'))
+        }
+      };
+      //验证真实姓名
+      var checkrealname =  (rule,value,callback) => {
+        if(value.length >0 && value.length <= 15){
+          callback()
+        }else{
+          callback(new Error('姓名不能超过15位'))
+        }
+      }
 			var validatePass = (rule, value, callback) => {
 				if(value === '') {
 					callback(new Error('请输入密码'));
@@ -260,10 +281,11 @@
           code:[{
             validator:checkcode,
             required:true,
-            message:'长度小于20位',
+            //message:'长度小于20位',
             trigger:'blur'
           }],
 					username: [{
+              validator:checkusername,
 							required: true,
 							message: '请输入用户名',
 							trigger: 'blur'
@@ -282,8 +304,9 @@
 						type: 'number'
 					}],
 					realname: [{
+            validator:checkrealname,
 						required: true,
-						message: '请填写真实姓名',
+						//message: '请填写真实姓名',
 						trigger: 'blur'
 					}],
 					sex: [{
