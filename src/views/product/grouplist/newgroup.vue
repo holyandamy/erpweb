@@ -295,9 +295,12 @@
           <el-button type="primary" @click="queryLine()">查询</el-button>
         </el-form-item>
         <el-form-item label="">
-          <el-radio-group v-model="checkItem" style='text-align: left;padding: 0 50px;'>
+          <el-radio-group v-model="checkItem" style='text-align: left;padding: 0 50px;' >  <!--  v-if='lineList.length>0'  -->
             <el-radio style='width: 50%;margin: 0;' :label="item" :key="item.name" v-for="item in lineList">{{item.name.length>20?item.name.substring(0,20)+'...':item.name}}</el-radio>
           </el-radio-group>
+          <!--<div v-if='lineList.length == 0'>-->
+            <!--该分类下没有线路,请前往线路列表中添加!-->
+          <!--</div>-->
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

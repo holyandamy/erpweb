@@ -280,17 +280,21 @@
         this.$emit('setMode', 'list', option);
       },
       submitForm() {
-//        console.log(6666, this.visitorList.birthday);
+        console.log(6666, this.visitorList.birthday);
 
         let _this = this;
         var newDate = '';
-        if(this.visitorList.birthday){
+        if(this.visitorList.birthday && this.visitorList.birthday.getMonth()){
           let M = (this.visitorList.birthday.getMonth()+1).toString().length==1 ? '0'+ (this.visitorList.birthday.getMonth()+1).toString() : (this.visitorList.birthday.getMonth()+1).toString();
           let D = this.visitorList.birthday.getDate().toString().length==1 ? '0'+ this.visitorList.birthday.getDate().toString() : this.visitorList.birthday.getDate().toString();
           newDate = this.visitorList.birthday.getFullYear().toString() +"-" + M+ "-" + D;
         }
           let newPostDate = Object.assign({}, this.visitorList)
-          newPostDate.birthday = newDate;
+          if(this.visitorList.birthday.getMonth()) {
+            newPostDate.birthday = newDate;
+          }else {
+            newPostDate.birthday = this.visitorList.birthday;
+          }
           newPostDate.sexid = parseInt(newPostDate.sexid);
           newPostDate.mobile = String(newPostDate.mobile);
           newPostDate.token = paramm.getToken();

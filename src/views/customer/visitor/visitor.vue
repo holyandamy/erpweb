@@ -35,8 +35,9 @@
               </el-date-picker>
             </div>
           </el-form-item>
-          <el-form-item   style="margin-left: -20px">
+          <el-form-item   style="margin-left: 50px">
               <el-button  type="primary" class="hasid" id="23a15b23734511e788410242ac120009" @click="searchGetList">搜索</el-button>
+            <el-button  type="primary" @click="clearGetList">清空查询</el-button>
           </el-form-item>  <!-- style='margin: 0 40px 0 70px;'  -->
         </el-form>
         <el-table :data="visitorList" style="text-align: left; font-size: 12px;">
@@ -134,14 +135,16 @@
 
       },
       deleteRow(index, rows){
+        let _this = this
         this.visitorList.splice(index, 1);
         let para={token:paramm.getToken(),id:rows.id}
         custdel(para).then((res) => {
-          if(res.data.error){
-            this.$message.error(res.data.massage);
+          if(res.data.error!=0 || res.data.err){
+            paramm.getCode(res.data,_this)
           }
           else {
-            this.getList()
+            paramm.getCode(res.data,_this)
+            _this.getList()
           }
         })
       },
@@ -151,22 +154,30 @@
         this.modeType='add';
       },
       getList(){
-        this.pageset.pageindex = this.currentPage-1
-        this.pageset.pagesize = this.pagesize
-        let page = this.pageset
-        custlist(page).then((res) => {
-          this.visitorList = res.data.obj.datas
-          this.total = Number(res.data.obj.total)
+        let _this = this
+        console.log(8888,this.currentPage);
+        custlist({pageindex:this.currentPage-1,pagesize:this.pagesize,token:paramm.getToken() }).then((res) => {
+          _this.visitorList = res.data.obj.datas
+          _this.total = Number(res.data.obj.total)
         })
       },
       searchGetList(){
-        let newDate
-        if(this.searchList.date!=''){
-          const mouth={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sept:'09',Oct:'10',Nov:'11',Dec:'12' }
-          let start=String(this.searchList.date[0]).split(' ')
-          let end=String(this.searchList.date[1]).split(' ')
-          newDate=start[3]+'-'+mouth[start[1]]+'-'+start[2]+'|'+end[3]+'-'+mouth[end[1]]+'-'+end[2]
+        let newDate;
+        let temArr = [];
+        if(this.searchList.date[0]){
+          this.searchList.date.forEach(function (item,idx) {
+            let M = (item.getMonth()+1).toString().length==1 ? '0'+ (item.getMonth()+1).toString() : (item.getMonth()+1).toString();
+            let D = item.getDate().toString().length==1 ? '0'+ item.getDate().toString() : item.getDate().toString();
+            temArr.push(item.getFullYear().toString() +"-" + M+ "-" + D);
+            newDate = temArr.join('|')
+          })
         }
+//        if(this.searchList.date!=''){
+//          const mouth={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sept:'09',Oct:'10',Nov:'11',Dec:'12' }
+//          let start=String(this.searchList.date[0]).split(' ')
+//          let end=String(this.searchList.date[1]).split(' ')
+//          newDate=start[3]+'-'+mouth[start[1]]+'-'+start[2]+'|'+end[3]+'-'+mouth[end[1]]+'-'+end[2]
+//        }
         if(this.searchList.mobile){
           let mobileReg = /^[0-9]{11}$/;
           if(!mobileReg.test(this.searchList.mobile)) {
@@ -174,7 +185,6 @@
             return
           }
         }
-
         let templateSeacrchList={
             pageindex:this.currentPage-1,
             pagesize:this.pagesize,
@@ -194,7 +204,18 @@
       },
       //分页
       handleCurrentChange(val) {
-        this.getList()
+        this.searchGetList()
+      },
+      // 清空查询
+      clearGetList () {
+        this. searchList = {
+            pageindex:this.currentPage-1,
+            pagesize:this.pagesize,
+            token:paramm.getToken(),
+            name:'',
+            mobile:'',
+            date:''
+        }
       }
 
     }
