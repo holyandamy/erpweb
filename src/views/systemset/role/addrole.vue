@@ -20,9 +20,9 @@
         <div class="add-role-item " v-for="sValue in value.childs">
           <div class="left"><el-checkbox :disabled="!value.status"  v-model="sValue.status" @change="clickChangeChildState(sValue)">{{sValue.authname}}</el-checkbox></div>
           <div class="right" >
-              <div v-for="tValue in sValue.childs" style="float: left">
-                <el-checkbox  :disabled="!value.status || !sValue.status" v-model="tValue.status" >{{tValue.authname}}</el-checkbox>
-              </div>
+            <div v-for="tValue in sValue.childs" style="float: left">
+              <el-checkbox  :disabled="!value.status || !sValue.status" v-model="tValue.status" >{{tValue.authname}}</el-checkbox>
+            </div>
           </div>
         </div>
 
@@ -44,12 +44,12 @@
       <div class="remark">
         <label class=" remark-lable">备注  </label>
 
-          <el-input
-            type="textarea"
-            :rows="3"
-            placeholder="请输入内容"
-            v-model="remarkInfo">
-          </el-input>
+        <el-input
+          type="textarea"
+          :rows="3"
+          placeholder="请输入内容"
+          v-model="remarkInfo">
+        </el-input>
       </div>
       <div class="save">
         <el-button type="primary" @click="submitFn()">保存</el-button>
@@ -65,7 +65,7 @@
 
   import paramm from '../../../common/js/getParam'
   import axios from 'axios';
-   import {token,roledetail,authlist,rolesave,roleupdate} from '../../../common/js/config';
+  import {token,roledetail,authlist,rolesave,roleupdate} from '../../../common/js/config';
   export default {
 
     data() {
@@ -79,7 +79,7 @@
       }
     },
     created: function () {
-    	let para={token:paramm.getToken()}
+      let para={token:paramm.getToken()}
       authlist(para).then((res) => {
         if(res.data.error){
           this.$message.error(res.data.massage);
@@ -92,21 +92,21 @@
           if( this.$parent.operationType.type=='edit'){
             this.optionName="编辑角色"
             let data={
-                token:paramm.getToken(),
-                id:this.$parent.operationType.id,
+              token:paramm.getToken(),
+              id:this.$parent.operationType.id,
             }
-           roledetail(data).then((res) => {
+            roledetail(data).then((res) => {
               if(res.data.error){
                 this.$message.error(res.data.massage);
               }
               else {
-                  let tempEditList={};
-                  this.roleName=res.data.obj.rolename;
-                  this.remarkInfo=res.data.obj.remark;
-                  tempEditList.childs=res.data.obj.auths;
-                  this.changeStateOfChildNodes(this.roleMap,false);
-                  this.changeStateOfChildNodes(tempEditList,true);
-                  this.deepCopyStatus(this.roleMap,tempEditList);
+                let tempEditList={};
+                this.roleName=res.data.obj.rolename;
+                this.remarkInfo=res.data.obj.remark;
+                tempEditList.childs=res.data.obj.auths;
+                this.changeStateOfChildNodes(this.roleMap,false);
+                this.changeStateOfChildNodes(tempEditList,true);
+                this.deepCopyStatus(this.roleMap,tempEditList);
               }
             })
           }
@@ -119,47 +119,47 @@
       }
     },
     methods:{
-        deepCopyStatus:function (target,sources) {
-          var newData=this.getData(sources).split(',')
-          newData.pop();
-          newData.map((value)=>{
-            target.childs.forEach(singleChild=>{
+      deepCopyStatus:function (target,sources) {
+        var newData=this.getData(sources).split(',')
+        newData.pop();
+        newData.map((value)=>{
+          target.childs.forEach(singleChild=>{
               this.changeChildStateForDeepCopy(singleChild,value)
-              }
-            )
+            }
+          )
+        })
+      },
+      changeChildStateForDeepCopy:function (singleChild,key) {
+        if(singleChild.id == key){
+          singleChild.status=true;
+          return  true
+        }
+        if(singleChild.childs){
+          singleChild.childs.forEach(newChild=>{
+            this.changeChildStateForDeepCopy(newChild,key);
           })
-        },
-        changeChildStateForDeepCopy:function (singleChild,key) {
-          if(singleChild.id == key){
-            singleChild.status=true;
-            return  true
-          }
-          if(singleChild.childs){
-            singleChild.childs.forEach(newChild=>{
-              this.changeChildStateForDeepCopy(newChild,key);
-            })
-          }
-          return false
-        },
+        }
+        return false
+      },
 
       // This is an assign function that copies full descriptors
-       completeAssign:function(target, ...sources) {
-          sources.forEach(source => {
-            let descriptors = Object.keys(source).reduce((descriptors, key) => {
-              descriptors[key] = Object.getOwnPropertyDescriptor(source, key);
-              return descriptors;
-            }, {});
-            // by default, Object.assign copies enumerable Symbols too
-            Object.getOwnPropertySymbols(source).forEach(sym => {
-              let descriptor = Object.getOwnPropertyDescriptor(source, sym);
-              if (descriptor.enumerable) {
-                descriptors[sym] = descriptor;
-              }
-            });
-            Object.defineProperties(target, descriptors);
+      completeAssign:function(target, ...sources) {
+        sources.forEach(source => {
+          let descriptors = Object.keys(source).reduce((descriptors, key) => {
+            descriptors[key] = Object.getOwnPropertyDescriptor(source, key);
+            return descriptors;
+          }, {});
+          // by default, Object.assign copies enumerable Symbols too
+          Object.getOwnPropertySymbols(source).forEach(sym => {
+            let descriptor = Object.getOwnPropertyDescriptor(source, sym);
+            if (descriptor.enumerable) {
+              descriptors[sym] = descriptor;
+            }
           });
-          return target;
-        },
+          Object.defineProperties(target, descriptors);
+        });
+        return target;
+      },
       changeStateOfChildNodes:function (oldObject,type) {
         if(typeof oldObject== "object"){
           oldObject.id?oldObject.status=type:'';
@@ -179,19 +179,20 @@
         this.changeStateOfChildNodes(newObject,newObject.status)
       },
       getData(mapDate){
-          var postList=''
-          for(let i=0;i<mapDate.childs.length;i++){
-            if(mapDate.childs[i].status == true){
-              postList+= mapDate.childs[i].id+','
-            }
-            if(mapDate.childs[i].childs&&mapDate.childs[i].childs.length>0&&mapDate.childs[i].status==true){
-              postList+=this.getData(mapDate.childs[i])
-            }
+        var postList=''
+        for(let i=0;i<mapDate.childs.length;i++){
+          if(mapDate.childs[i].status == true){
+            postList+= mapDate.childs[i].id+','
           }
-          return postList
-        },
-        //post date
+          if(mapDate.childs[i].childs&&mapDate.childs[i].childs.length>0&&mapDate.childs[i].status==true){
+            postList+=this.getData(mapDate.childs[i])
+          }
+        }
+        return postList
+      },
+      //post date
       submitFn:function () {
+        let _this = this;
         if (this.roleName.length == 0) {
           this.$message.error('请输入角色名！');
           return
@@ -199,20 +200,21 @@
         let newAuths=this.getData(this.roleMap).split(',')
         newAuths.pop();
         if( this.$parent.operationType.type!='edit'){
-            let addPostData = {
-              token:paramm.getToken(),
-              name: this.roleName,
-              remark: this.remarkInfo,
-              auths: newAuths
-            };
-            rolesave(addPostData).then((backData) => {
-                if(backData.error){
-                  this.$message.error(backData.massage);
-                }
-                else {
-                    this.handleHide('add');
-                }
-            })
+          let addPostData = {
+            token:paramm.getToken(),
+            name: this.roleName,
+            remark: this.remarkInfo,
+            auths: newAuths
+          };
+          rolesave(addPostData).then((backData) => {
+            if(backData.data.error!=0 || backData.data.err){
+              paramm.getCode(backData.data, _this)
+            }
+            else {
+              paramm.getCode(backData.data, _this)
+              this.handleHide('add');
+            }
+          })
         }
         else {
           let editPostData = {
