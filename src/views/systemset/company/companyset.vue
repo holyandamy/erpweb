@@ -206,13 +206,18 @@
       },
       //保存数据
       submitForm(formName) {
-        let _this =this;
         this.$refs[formName].validate((valid) => {
           if(valid) {
+            let _this =this;
             let parses = this.companyForm
             parses.companyId = this.companyForm.id
             parses.token = paramm.getToken()
             parses.mobile = parses.mobile.toString()
+            //如果市或者县为空时，直接阻止发请求
+            if(parses.cityId === '' || parses.districtId === ''){
+               alert('所在城市不能为空');
+               return false;
+            }
             companyupdate(parses).then((res) => {
               if(res.data.error == 1 || res.data.err){
                 paramm.getCode(res.data,_this)

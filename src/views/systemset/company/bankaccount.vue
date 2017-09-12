@@ -14,8 +14,14 @@
 					<template scope="scope">
 						<el-button @click="handleShow(scope.$index, scope.row)" class="hasid" id="626f8c1472bb11e7aad70242ac120006" type="text" size="small">编辑</el-button>
 						<span class="hasid" id="8bcbe83a72bb11e7aad70242ac120006">
-							<el-button type="text" size="small"  v-show="scope.row.status=='禁用'" style="margin-left:10px ;" @click="changestatus(1,scope.row.id)">启用</el-button>
+							<el-button type="text" size="small"  v-show="scope.row.status=='停止'" style="margin-left:10px ;" @click="changestatus(1,scope.row.id)">启用</el-button>
 							<el-button type="text" size="small" v-show="scope.row.status=='启用'" class="not" @click="changestatus(0,scope.row.id)">禁用</el-button>
+              <!--
+                0表示禁用 1表示启用
+                问题是：点击禁用按钮后， scope.row.status 应从启用变为禁用  这样启用按钮才能显示
+
+                问题：sys/bank/list请求后，返回的数据中status字段  都是 ‘停止’ 和 ‘禁用’
+              -->
 						</span>
 					</template>
 
@@ -62,6 +68,7 @@
 
 					<el-form-item label="状态" prop="isEnable">
 						<el-radio-group v-model="addBank.isEnable">
+              <!--0代表禁用  1代表启用-->
 							<el-radio label="启用"></el-radio>
 							<el-radio label="禁用"></el-radio>
 						</el-radio-group>
@@ -185,11 +192,7 @@
 				this.pageset.pageIndex = this.currentPage - 1
 				this.pageset.pageSize = this.pagesize
 				let page = this.pageset
-<<<<<<< HEAD
         page.token = paramm.getToken()
-=======
-     			page.token = paramm.getToken()
->>>>>>> 407d44f99715a02cc7d99b4ea40cda3d998955a2
 				getbanklist(page).then((res) => {
 					this.banklist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
@@ -214,6 +217,7 @@
 			addbank() {
 				//this.$emit('addbank',this.addbankuser)
 				this.addbankuser = true
+        this.$refs.addBank.resetFields();
 
 			},
 			//保存银行账户
@@ -226,19 +230,16 @@
 						} else {
 							this.addBank.isEnable = '1'
 						}
-<<<<<<< HEAD
 
 						let para = this.addBank
-            para.token = paramm.getToken()
-=======
-						
-						let para = this.addBank
-          				  para.token = paramm.getToken()
-          				  console.log(para)
->>>>>>> 407d44f99715a02cc7d99b4ea40cda3d998955a2
+          	para.token = paramm.getToken()
+          	console.log(para)
 						addbank(para).then((res) => {
+						  //发完请求之后，应该把文本框里面的内容清空
+
 							this.addbankuser = false
 							this.$message('保存成功！');
+							//选择禁用后，列表中的数据应该显示为禁用，而不是启用
 							this.getlist()
 						})
 					} else {
@@ -249,10 +250,7 @@
 			},
 			//编辑保存
 			saveedit(formName) {
-<<<<<<< HEAD
 			  let _this = this;
-=======
->>>>>>> 407d44f99715a02cc7d99b4ea40cda3d998955a2
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.editbank
@@ -285,6 +283,7 @@
 						title: '成功',
 						message: '状态改变成功',
 						type: 'success',
+            //弹窗消失时间
             duration:800
 					});
 					this.getlist()
@@ -341,14 +340,7 @@
 		text-align: right;
 	}
 
-<<<<<<< HEAD
-	.el-table .cell {
-		text-align: left;
-	}
-</style>
-=======
   .el-table .cell {
     text-align: left;
   }
 </style>
->>>>>>> 407d44f99715a02cc7d99b4ea40cda3d998955a2

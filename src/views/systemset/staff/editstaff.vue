@@ -113,7 +113,7 @@
 
 						<el-form-item label-width="100px">
 							<el-button type="primary" @click="submitForm('addstaff')">保存</el-button>
-							<el-button @click="resetForm('addstaff')">重置</el-button>
+							<el-button @click="handleHide()">返回</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -213,11 +213,11 @@
       };
       //验证用户名
       var checkusername = (rule,value,callback) => {
-        let usernamereg = /^[a-z0-9A-Z]{6,16}$/;
+        let usernamereg = /^[a-z0-9A-Z]{1,16}$/;
         if(usernamereg.test(value)){
           callback()
         }else{
-          callback(new Error('用户名由6~20位的字母或数字组成'))
+          callback(new Error('用户名由1~20位的字母或数字组成'))
         }
       };
       //验证真实姓名
@@ -291,9 +291,9 @@
 							trigger: 'blur'
 						},
 						{
-							min: 6,
+							min: 1,
 							max: 20,
-							message: '长度在6 到 20 个字符',
+							//message: '长度在6 到 20 个字符',
 							trigger: 'blur'
 						}
 					],
