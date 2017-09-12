@@ -284,6 +284,8 @@
             trigger: 'blur',
             required: true,
           }],
+          remark: [
+            { min: 0, max: 120, message: '不能超过120字!', trigger: 'blur' }]
         },
         options: [{
           value: '1',
@@ -335,7 +337,7 @@
         this.visitorList.type = this.operationType.type;
         try {
           this.checkArr.forEach(function (item) {
-            if((item.name && item.certtype && item.cert && item.mobile && item.remark) || (!item.name && !item.certtype && !item.cert && !item.mobile && !item.remark)){
+            if((item.name && item.certtype && item.cert && item.mobile) || (!item.name && !item.certtype && !item.cert && !item.mobile)){
 //            console.log(1111, _this.visitorList);
             }else {
               _this.$message({
@@ -348,6 +350,9 @@
         }catch (e){
           throw e
         }
+        this.checkArr.forEach(function (item,idx) {
+          if(item.name == '') _this.checkArr.splice(idx,1)
+        })
         this.visitorList.list = this.checkArr
         this.visitorList.mobile = this.visitorList.mobile.toString()
         orderSave(this.visitorList).then(function (res) {
@@ -356,6 +361,7 @@
               message: '提交成功',
               type: 'success'
             });
+            _this.$emit('setMode', 'list');
           }else {
             _this.$message({
               message: res.data.message,
@@ -478,7 +484,7 @@
         let _this = this;
         if(this.visitorList.custtype == 2 && this.visitorList.comname.toString().length>4){
           console.log(1111, {token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''});
-          reserveNum(JSON.stringify({token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''})).then(function (res) {
+          reserveNum({token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''}).then(function (res) {
             _this.companyArr = res.data.obj
             _this.jidiaoArr = _this.companyArr
           })
@@ -503,7 +509,7 @@
         this.getJidiaoo();
         this.isShowc = false;
         let _this = this;
-        reserveNum(JSON.stringify({token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''})).then(function (res) {
+        reserveNum({token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''}).then(function (res) {
           _this.companyArr = res.data.obj
           _this.jidiaoArr = _this.companyArr
         })

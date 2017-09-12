@@ -39,14 +39,14 @@
 
 					<li v-for="(item,index) in menu" v-if="!item.hidden" class="el-submenu item">
 						<template v-if="!item.leaf">
-							<div class="el-submenu__title" style="padding-left: 20px; " @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
+							<div class="el-submenu__title" style="padding-left: 20px;height: 46px;line-height: 46px; " @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
 							<ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
 								<li v-for="childnode in item.childs" v-if="!childnode.hidden" :key="childnode.path" class="el-menu-item" style="padding-left: 40px;min-width: 0;" :class="$route.path==childnode.path?'is-active':''" @click="$router.push(childnode.path)">{{childnode.authname}}</li>
 							</ul>
 						</template>
 						<template v-else>
 							<li class="el-submenu">
-								<div class="el-submenu__title el-menu-item" style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.childnode[0].path?'is-active':''" @click="$router.push(item.childnode[0].path)"></div>
+								<div class="el-submenu__title el-menu-item" style="padding-left: 20px;height: 46px;line-height: 46px;padding: 0 20px;" :class="$route.path==item.childnode[0].path?'is-active':''" @click="$router.push(item.childnode[0].path)"></div>
 							</li>
 						</template>
 					</li>
@@ -145,12 +145,13 @@ float: left;
 			height: 100%;
 			position: fixed;
 			width: 180px;
+			min-width: 180px;
 			.logo{
 			padding: 15px 0px 15px 0px;
 			}
 			.userinfo{
 				height: 150px;
-				margin-top: 50px;
+				margin-top: 0px;
 				border-bottom: 1px solid #4b5565;
 				.headerimg{
 					width: 80px;

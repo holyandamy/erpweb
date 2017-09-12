@@ -8,7 +8,7 @@
 					</ul>
 				</el-col>
 				<el-col :span="12">
-					<el-button @click="handleHide()" style=" margin-top: -10px;">返回线路列表</el-button>
+					<el-button @click="handleHide()" style=" margin-top: -10px;">返回线路模板</el-button>
 				</el-col>
 			</el-row>
 		</header>
@@ -47,69 +47,69 @@
 								<el-checkbox label="儿童" prop="ischild" v-model="baseForm.ischild"></el-checkbox>
 								<el-checkbox label="老人" prop="isbaby" v-model="baseForm.isbaby"></el-checkbox>
 							</el-form-item>
-							<el-form-item label="出港地">
+							<el-form-item label="出港地" prop="fromprovinceid">
 								<el-col :span="5">
-									<el-form-item prop="fromprovinceid">
+								
 										<el-select filterable  v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom">
 											<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+									
 
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
 								</el-col>
 								<el-col :span="5">
-									<el-form-item prop="fromcityid">
+									
 										<el-select filterable  v-model="baseForm.fromcityid" placeholder="请选择" @change="changecityfrom">
 											<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+								
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
 								</el-col>
 								<el-col :span="5">
-									<el-form-item prop="fromdistrictid">
+									
 										<el-select filterable  v-model="baseForm.fromdistrictid" placeholder="请选择">
 											<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+									
 								</el-col>
 							</el-form-item>
-							<el-form-item label="目的地">
+							<el-form-item label="目的地" prop="toprovinceid">
 								<el-col :span="5">
-									<el-form-item prop="toprovinceid">
+								
 										<el-select filterable  v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
 											<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+									
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
 								</el-col>
 								<el-col :span="5">
-									<el-form-item prop="tocityid">
+								
 										<el-select filterable  v-model="baseForm.tocityid" placeholder="请选择" @change="changecityback">
 											<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+									
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
 								</el-col>
 								<el-col :span="5">
-									<el-form-item prop="todistrictid">
+									
 										<el-select filterable  v-model="baseForm.todistrictid" placeholder="请选择">
 											<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									</el-form-item>
+									
 								</el-col>
 							</el-form-item>
 							<el-form-item label="交通工具">
@@ -146,13 +146,7 @@
 							<el-form-item label="集合地点" prop="station">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-							<el-form-item label="上传图片" prop="images">
-								<el-upload class="upload-demo" action="http://172.17.9.13:3001/api/images" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList">
-									<el-button size="small" type="primary">点击上传</el-button>
-									<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-								</el-upload>
-							</el-form-item>
-
+								<ImgLoad @geturl="geturl" :checktop="checktop" :topimglist="topimglist"></ImgLoad>
 						</el-col>
 					</el-row>
 				</div>
@@ -200,13 +194,13 @@
 								<el-col :span="7">
 									<div class="linetype">
 										<ul>
-											<li @click="inserttype('飞机')"></li>
-											<li @click="inserttype('火车')"></li>
-											<li @click="inserttype('汽车')"></li>
-											<li @click="inserttype('轮船')"></li>
-											<li @click="inserttype('动车')"></li>
-											<li @click="inserttype('高铁')"></li>
-											<li @click="inserttype('待定')"></li>
+											<li @click="inserttype('[飞机]')"></li>
+											<li @click="inserttype('[火车]')"></li>
+											<li @click="inserttype('[汽车]')"></li>
+											<li @click="inserttype('[轮船]')"></li>
+											<li @click="inserttype('[动车]')"></li>
+											<li @click="inserttype('[高铁]')"></li>
+											<li @click="inserttype('[待定]')"></li>
 
 										</ul>
 									</div>
@@ -246,14 +240,7 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-									<el-form-item label="图片" prop="titleimages">
-										<el-upload action="http://172.17.9.13:3001/api/titleimages" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
-											<i class="el-icon-plus"></i>
-										</el-upload>
-										<el-dialog v-model="dialogVisible" size="tiny">
-											<img width="100%" :src="dialogImageUrl" alt="">
-										</el-dialog>
-									</el-form-item>
+									<ImgLoad :route="route" :editimg="editimg" :scope="scope"></ImgLoad>
 								</el-col>
 
 							</el-row>
@@ -268,6 +255,9 @@
 				<div class="baseinfo">
 					<el-row>
 						<el-col :span="20">
+							<el-form-item label="产品亮点" prop="feature">
+								<el-input type="textarea" v-model="baseForm.feature"></el-input>
+							</el-form-item>
 							<el-form-item label="购物安排" prop="shopping">
 								<el-input type="textarea" v-model="baseForm.shopping"></el-input>
 							</el-form-item>
@@ -322,11 +312,13 @@
 	import UE from '../../common/ue.vue';
 	import { province, city, district, categoryall, linecategorytype, templatupdate, templatdetail,token } from '../../../common/js/config';
 	import paramm from '../../../common/js/getParam'
+	import ImgLoad from './upload'
 	export default {
 		components: {
-			UE
+			UE,
+			ImgLoad
 		},
-		props: ['lineid', 'scope'],
+		props: ['lineid', 'scope','topimglist'],
 		data() {
 			return {
 				traffics: [{
@@ -394,6 +386,7 @@
 					fromcityid: '',
 					fromdistrictid: '',
 					toprovinceid: '',
+					feature:'',
 					tocityid: '',
 					todistrictid: '',
 					trafficgo: '',
@@ -476,7 +469,10 @@
 				district: [],
 				editor:'',
 				editorhtml:'',
-				oldday:''
+				oldday:'',
+				checktop:true,
+				editimg:true,
+				topimglist:''
 			
 			}
 		},
@@ -484,9 +480,12 @@
 			this.getlineinfo()
 			this.getprovince()
 		
+		
 		},
 		methods: {
-		
+		geturl(url) {
+				this.baseForm.images = url
+			},
 			getlineinfo() {
 				let para = {
 					token: paramm.getToken(),
@@ -495,16 +494,15 @@
 				templatdetail(para).then((res) => {
 					this.baseForm = res.data.obj
 					res.data.obj.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
+					this.topimglist = res.data.obj.images
 					this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0){
 						this.editor = false
-						
 					}else{
 						this.editor = true
 						this.editorhtml = res.data.obj.routes[0].content
-						console.log(this.editorhtml)
-						
 					}
+					console.log(res.data.obj)
 					let categorytype = res.data.obj.categorytype
 					switch(categorytype) {
 						case 0:
@@ -631,7 +629,7 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.baseForm
-						
+						para.token = paramm.getToken()
 						let categorytype = para.categorytype
 					switch(categorytype) {
 						case "全部":
@@ -703,7 +701,6 @@
 						templatupdate(para).then((res) => {
 							console.log(para)
 							if(res.data.error == 1) {
-								
 								this.$message({
 									showClose: true,
 									message: res.data.message,
@@ -791,7 +788,7 @@
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
 					id: count,
-					token:paramm.getToken()
+					token: paramm.getToken()
 				}
 				province(para).then((res) => {
 					this.province = res.data.obj
@@ -804,7 +801,6 @@
 			getcity(pro) {
 				city(pro).then((res) => {
 					this.city = res.data.obj
-
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
@@ -813,7 +809,6 @@
 			getdistrict(city) {
 				district(city).then((res) => {
 					this.district = res.data.obj
-
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
@@ -821,11 +816,13 @@
 			//选择去程城市
 			changecityfrom() {
 				let pro = {
-					id: this.baseForm.fromprovinceid
+					id: this.baseForm.fromprovinceid,
+					token: paramm.getToken()
 				}
 				this.getcity(pro)
 				let city = {
-					id: this.baseForm.fromcityid
+					id: this.baseForm.fromcityid,
+					token: paramm.getToken()
 				}
 				this.getdistrict(city)
 
@@ -833,11 +830,13 @@
 			//选择返程城市
 			changecityback() {
 				let pro = {
-					id: this.baseForm.toprovinceid
+					id: this.baseForm.toprovinceid,
+					token: paramm.getToken()
 				}
 				this.getcity(pro)
 				let city = {
-					id: this.baseForm.tocityid
+					id: this.baseForm.tocityid,
+					token: paramm.getToken()
 				}
 				this.getdistrict(city)
 			},

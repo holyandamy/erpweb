@@ -18,10 +18,10 @@
 								<li><span>出行方式</span>{{detail.type == 1?'跟团游':'自由行'}}</li>
 								<!--出行方式:1跟团游，2自由行-->
 								<li><span>收客类型</span>
-								<el-checkbox label="成人" prop="isadult" disabled v-model="detail.isadult"></el-checkbox>
-								<el-checkbox label="儿童" prop="ischild" disabled v-model="detail.ischild"></el-checkbox>
-								<el-checkbox label="老人" prop="isbaby" disabled v-model="detail.isbaby"></el-checkbox>
-							</li>
+									<el-checkbox label="成人" prop="isadult" disabled v-model="detail.isadult"></el-checkbox>
+									<el-checkbox label="儿童" prop="ischild" disabled v-model="detail.ischild"></el-checkbox>
+									<el-checkbox label="老人" prop="isbaby" disabled v-model="detail.isbaby"></el-checkbox>
+								</li>
 
 							</ul>
 						</el-col>
@@ -42,10 +42,11 @@
 							<span>集合地点</span>{{detail.station}}
 						</p>
 						<div class="topimglist">
-							<span style="float: left;">图片</span><div class="xc" style="float: left; line-height: 26px;">
+							<span style="float: left;">图片</span>
+							<div class="xc" style="float: left; line-height: 26px;">
 								<ul>
 									<li v-for="img in toplist">
-										<img :src="img"/>
+										<img :src="img" />
 									</li>
 								</ul>
 							</div>
@@ -67,10 +68,10 @@
 						<span>三餐</span>
 						<div class="xc">
 
-							<el-checkbox label="早"  disabled v-model="route.isbreakfast"></el-checkbox>
-								<el-checkbox label="中"  disabled v-model="route.islunch"></el-checkbox>
-								<el-checkbox label="晚"  disabled v-model="route.isdinner"></el-checkbox>
-							</div>
+							<el-checkbox label="早" disabled v-model="route.isbreakfast"></el-checkbox>
+							<el-checkbox label="中" disabled v-model="route.islunch"></el-checkbox>
+							<el-checkbox label="晚" disabled v-model="route.isdinner"></el-checkbox>
+						</div>
 					</li>
 					<li>
 						<span>住宿</span>
@@ -81,7 +82,7 @@
 					<li>
 						<span>行程</span>
 						<div class="xc">
-						<pre>{{route.content}}</pre></div>
+							<pre>{{route.content}}</pre></div>
 					</li>
 					<li>
 						<span>备注</span>
@@ -94,7 +95,7 @@
 						<span>图片</span>
 						<div class="xc">
 							<div v-for="img in route.titleimages">
-							<img :src="img"/>
+								<img :src="img" />
 							</div>
 						</div>
 
@@ -116,58 +117,59 @@
 							{{detail.excludePkg}}
 						</div>
 					</li>
-					<li><span>产品亮点</span><div class="xc"><pre>{{detail.feature}}</pre></div></li>
-					<li><span>包含项目</span><div class="xc"><pre>{{detail.includePkg}}</pre></div></li>
-					<li><span>购物安排</span><div class="xc"><pre>{{detail.shopping}}</pre></div></li>
-					<li><span>温馨提示</span><div class="xc"><pre>{{detail.reminder}}</pre></div></li>
-					<li><span>儿童/老人</span><div class="xc"><pre>{{detail.childolder}}</pre></div></li>
-					<li><span>对外备注</span><div class="xc"><pre>{{detail.outremark}}</pre></div></li>
-					<li><span>内部备注</span><div class="xc"><pre>{{detail.innerremark}}</pre></div></li>
+					<li><span>产品亮点</span>
+						<div class="xc"><pre>{{detail.feature}}</pre></div>
+					</li>
+					<li><span>包含项目</span>
+						<div class="xc"><pre>{{detail.includePkg}}</pre></div>
+					</li>
+					<li><span>购物安排</span>
+						<div class="xc"><pre>{{detail.shopping}}</pre></div>
+					</li>
+					<li><span>温馨提示</span>
+						<div class="xc"><pre>{{detail.reminder}}</pre></div>
+					</li>
+					<li><span>儿童/老人</span>
+						<div class="xc"><pre>{{detail.childolder}}</pre></div>
+					</li>
+					<li><span>对外备注</span>
+						<div class="xc"><pre>{{detail.outremark}}</pre></div>
+					</li>
+					<li><span>内部备注</span>
+						<div class="xc"><pre>{{detail.innerremark}}</pre></div>
+					</li>
 				</ul>
 			</div>
-			
+
 			<h2 class="d_jump">操作日志 </h2>
 
-				<el-table
-    :data="loglist"
-    border
-    style="width: 100%">
-    <el-table-column
-      prop="creater"
-      label="操作人"
-       width="180"
-     >
-    </el-table-column>
-    <el-table-column
-      prop="createtime"
-      label="操作时间"
-       width="180"
-     >
-    </el-table-column>
-    <el-table-column
-      prop="content"
-      label="操作内容">
-    </el-table-column>
-  </el-table>
+			<el-table :data="loglist" border style="width: 100%">
+				<el-table-column prop="creater" label="操作人" width="180">
+				</el-table-column>
+				<el-table-column prop="createtime" label="操作时间" width="180">
+				</el-table-column>
+				<el-table-column prop="content" label="操作内容">
+				</el-table-column>
+			</el-table>
 
 		</section>
 	</div>
 </template>
 
 <script>
-	import {linedetail,token} from '../../../common/js/config';
-  import paramm from '../../../common/js/getParam'
-  export default {
-		props:['lineid'],
+	import { linedetail, token } from '../../../common/js/config';
+	import paramm from '../../../common/js/getParam'
+	export default {
+		props: ['lineid'],
 		data() {
 			return {
-				menus: ['基本信息', '行程', '预定须知', '发布平台'],
-				active:0,
-				detail:{},
-				loglist:[],
-				edittype:true,
-				imglist:[],
-				toplist:[]
+				menus: ['基本信息', '行程', '预定须知'],
+				active: 0,
+				detail: {},
+				loglist: [],
+				edittype: true,
+				imglist: [],
+				toplist: []
 
 			}
 		},
@@ -176,97 +178,112 @@
 			console.log(this.lineid)
 		},
 		methods: {
-			getlineinfo(){
+			getlineinfo() {
 				let para = {
-					token:paramm.getToken(),
-					id:this.lineid
+					token: paramm.getToken(),
+					id: this.lineid
 				}
 				linedetail(para).then((res) => {
 					this.detail = res.data.obj
-					console.log(para,res.data.obj,'111')
-					this.toplist = this.detail.images.split(',')
-
-					for(let i = 0 ; i <this.detail.routes.length;i++){
-						let arr = []
-						arr = res.data.obj.routes[i].titleimages.split(',')
-						this.detail.routes[i].titleimages = arr
-
-					}
-
-					if(this.detail.edittype == 0 ){
-						this.edittype = true
-					}else{
-						this.edittype = false
-					let str = this.detail.routes[0].content
-					this.detail.routes[0].content = str
-
-					}
 					this.loglist = res.data.obj.logs
-					let categorytype =  res.data.obj.categorytype
-					switch (categorytype){
+					let categorytype = res.data.obj.categorytype
+					switch(categorytype) {
 						case 0:
-						this.detail.categorytype = "全部";
-						break;
+							this.detail.categorytype = "全部";
+							break;
 						case 1:
-						this.detail.categorytype = "国内游";
-						break;
+							this.detail.categorytype = "国内游";
+							break;
 						case 2:
-						this.detail.categorytype = "出境游";
-						break;
+							this.detail.categorytype = "出境游";
+							break;
 						case 3:
-						this.detail.categorytype = "周边游";
-						break;
+							this.detail.categorytype = "周边游";
+							break;
 					}
-				let day=res.data.obj.trafficgo
-						switch (day)
-						{
+					let day = res.data.obj.trafficgo
+					switch(day) {
 						case 1:
-						  this.detail.trafficgo = "飞机";
-						  break;
+							this.detail.trafficgo = "飞机";
+							break;
 						case 2:
-						 this.detail.trafficgo = "动车";
-						  break;
+							this.detail.trafficgo = "动车";
+							break;
 						case 3:
-						  this.detail.trafficgo = "火车";
-						  break;
+							this.detail.trafficgo = "火车";
+							break;
 						case 4:
-						  this.detail.trafficgo = "高铁";
-						  break;
+							this.detail.trafficgo = "高铁";
+							break;
 						case 5:
-						  this.detail.trafficgo = "大巴";
-						  break;
+							this.detail.trafficgo = "大巴";
+							break;
 						case 6:
-						  this.detail.trafficgo = "轮船";
-						  break;
-						}
-						let trafficback=res.data.obj.trafficreturn
-						switch (trafficback)
-						{
+							this.detail.trafficgo = "轮船";
+							break;
+					}
+					let trafficback = res.data.obj.trafficreturn
+					switch(trafficback) {
 						case 1:
-						  this.detail.trafficreturn = "飞机";
-						  break;
+							this.detail.trafficreturn = "飞机";
+							break;
 						case 2:
-						 this.detail.trafficreturn = "动车";
-						  break;
+							this.detail.trafficreturn = "动车";
+							break;
 						case 3:
-						  this.detail.trafficreturn = "火车";
-						  break;
+							this.detail.trafficreturn = "火车";
+							break;
 						case 4:
-						  this.detail.trafficreturn = "高铁";
-						  break;
+							this.detail.trafficreturn = "高铁";
+							break;
 						case 5:
-						  this.detail.trafficreturn = "大巴";
-						  break;
+							this.detail.trafficreturn = "大巴";
+							break;
 						case 6:
-						  this.detail.detail = "轮船";
-						  break;
+							this.detail.detail = "轮船";
+							break;
+					}
+
+					if(this.detail.edittype == 0) {
+						if(res.data.obj.images != '') {
+							if(res.data.obj.images.indexOf(',') >= 0) {
+								this.toplist = this.detail.images.split(',')
+							} else {
+								this.toplist.push(res.data.obj.images)
+							}
+						} else {
+							res.data.obj.images = ' '
 						}
+
+						for(let i = 0; i < res.data.obj.routes.length; i++) {
+
+							if(res.data.obj.routes[i].titleimages != "") {
+								if(res.data.obj.routes[i].titleimages.indexOf(',') == -1) {
+									let arr = []
+									arr.push(this.detail.routes[i].titleimages)
+									this.detail.routes[i].titleimages = arr
+								} else {
+									let arr = []
+									arr = res.data.obj.routes[i].titleimages.split(',')
+									this.detail.routes[i].titleimages = arr
+								}
+							} else {
+								res.data.obj.routes[i].titleimages = " "
+							}
+						}
+						this.edittype = true
+					} else {
+						this.edittype = false
+						let str = this.detail.routes[0].content
+						this.detail.routes[0].content = str
+
+					}
 
 				})
 
 			},
 			jump(index) {
-				this.active=index
+				this.active = index
 
 				// 用 class="d_jump" 添加锚点
 				let jump = document.querySelectorAll('.d_jump')
@@ -314,22 +331,22 @@
 			handleHide: function() {
 				this.$emit('setMode', 'linelist');
 			},
-//			onScroll() {
-//				let scrolled = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop　　　 // 586、1063分别为第二个和第三个锚点对应的距离
-//				let jump = document.querySelectorAll('.d_jump')
-//				let two = jump[1].offsetTop
-//				let three = jump[2].offsetTop
-//				let four = jump[3].offsetTop
-//				if(scrolled >= four) {
-//					this.active = 3
-//				}else if(scrolled < four && scrolled >= three){
-//					this.active = 2
-//				} else if(scrolled < three && scrolled >= two) {
-//					this.active = 1
-//				} else {
-//					this.active = 0
-//				}
-//			}
+			//			onScroll() {
+			//				let scrolled = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop　　　 // 586、1063分别为第二个和第三个锚点对应的距离
+			//				let jump = document.querySelectorAll('.d_jump')
+			//				let two = jump[1].offsetTop
+			//				let three = jump[2].offsetTop
+			//				let four = jump[3].offsetTop
+			//				if(scrolled >= four) {
+			//					this.active = 3
+			//				}else if(scrolled < four && scrolled >= three){
+			//					this.active = 2
+			//				} else if(scrolled < three && scrolled >= two) {
+			//					this.active = 1
+			//				} else {
+			//					this.active = 0
+			//				}
+			//			}
 		}
 	}
 </script>
@@ -352,14 +369,14 @@
 			font-size: 14px;
 			cursor: pointer;
 		}
-		.active{
+		.active {
 			background: #eef1f6;
 			border-top: 3px solid #3ec3c8;
 			border-top-left-radius: 5px;
 			border-top-right-radius: 5px;
 		}
 	}
-
+	
 	section {
 		margin-top: 60px;
 		padding: 0 30px;
@@ -377,7 +394,6 @@
 		.bgfff {
 			background: #fff;
 			padding: 0 40px 20px 40px;
-
 			h3 {
 				font-size: 18px;
 				line-height: 28px;
@@ -410,7 +426,6 @@
 			}
 			.notes {
 				font-size: 14px;
-
 				li {
 					padding: 20px 0;
 					span {
@@ -474,7 +489,7 @@
 			}
 		}
 	}
-
+	
 	.linecenter:after {
 		content: '';
 		position: absolute;
@@ -485,15 +500,21 @@
 		left: 50%;
 		top: 10px;
 	}
-	pre{
-				font-size: 14px;
-				font-family: 'Avenir', Helvetica, Arial, sans-serif;
-				color: #333;
-				white-space:pre-wrap;
-			}
-	.content{padding: 20px 30px; background: #fff;}
-	.topimglist{
-		span{
+	
+	pre {
+		font-size: 14px;
+		font-family: 'Avenir', Helvetica, Arial, sans-serif;
+		color: #333;
+		white-space: pre-wrap;
+	}
+	
+	.content {
+		padding: 20px 30px;
+		background: #fff;
+	}
+	
+	.topimglist {
+		span {
 			font-size: 14px;
 			color: #666;
 			width: 90px;

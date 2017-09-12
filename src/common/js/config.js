@@ -69,6 +69,7 @@ export const lineapprove = params => { return axios.post(`${base}/line/approve`,
 export const linetop = params => { return axios.post(`${base}/line/top`, params).then(res => res); };//线路置顶
 export const linesave = params => { return axios.post(`${base}/line/save`, params).then(res => res); };//保存线路
 export const lineupdate = params => { return axios.post(`${base}/line/update`, params).then(res => res); };//更新线路
+export const linestatus = params => { return axios.post(`${base}/line/status`, params).then(res => res); };//更新线路
 
 
 /*产品中心--模板*/
