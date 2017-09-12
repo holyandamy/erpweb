@@ -284,6 +284,8 @@
             trigger: 'blur',
             required: true,
           }],
+          remark: [
+            { min: 0, max: 120, message: '不能超过120字!', trigger: 'blur' }]
         },
         options: [{
           value: '1',

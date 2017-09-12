@@ -224,7 +224,7 @@
         searchParam.date = dates || ''
         grouplist(searchParam).then((res) => {
           if(res.data.error !=0 || res.data.err) {
-//            paramm.getCode(res.data, _this)
+            paramm.getCode(res.data, _this)
             return
           }else {
             _this.lineList = res.data.obj.datas
