@@ -90,7 +90,7 @@
                     <el-dropdown-item class="hasid" id="9250c2ef72b911e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
                     <!--<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>-->
                     <el-dropdown-item class="hasid" id="a5ecf87872b911e7aad70242ac120006" v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
-                    <el-dropdown-item class="hasid" id="b16981ef72b911e7aad70242ac120006" v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">不核销</span></el-dropdown-item>
+                    <el-dropdown-item class="hasid" id="b16981ef72b911e7aad70242ac120006" v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">反核销</span></el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </a>
@@ -400,17 +400,5 @@
 
   a {
     color: #fff;
-  }
-
-  .el-dropdown-menu__item span {
-    display: block;
-  }
-
-  .abc {
-    color: red;
-  }
-
-  .hasid {
-    display: none;
   }
 </style>

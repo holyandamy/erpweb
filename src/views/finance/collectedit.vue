@@ -25,7 +25,7 @@
           </el-col>
         </el-form-item>
         <el-form-item label="团号" prop="teamno" v-show="isshowall">
-          <el-col :span="10" v-model="collectForm.teamno">
+          <el-col :span="10">
             <el-input v-model="collectForm.teamno"></el-input>
           </el-col>
         </el-form-item>
@@ -100,7 +100,7 @@
         <ImgUpload @imagelistchange="imagelistchange"></ImgUpload>
         <el-form-item>
           <el-button class="hasid" id="869cc288735d11e788410242ac120009" type="primary" @click="submitForm('collectForm')">保 存</el-button>
-          <el-button @click="resetForm('collectForm')">重置</el-button>
+          <el-button @click="resetForm('collectForm')">取消</el-button>
         </el-form-item>
 
       </el-form>
@@ -248,10 +248,12 @@
         });
       },
       typethis() {
+        //输完订单编号，应该获取团号和线路名称  并且展示
         if(this.collectForm.orderno == "") {
           //this.rules.push("orderno: [{required: false,validator: validatePass,trigger: 'blur'}]")
 
         } else {
+          //输入了订单编号  要获取那一行的数据
           this.isshow = true
         }
         //				this.$refs.collectForm.validateField('orderno');
@@ -298,6 +300,7 @@
         if(changetype == 2) {
           //订单收款
           this.isshowall = true
+
         }
       },
       checkbanklist() {
