@@ -91,8 +91,9 @@
             callback(new Error('请输入正确的手机号码'));
           }
         }
-
       };
+
+
       return {
         activeIndex: '3',
         //提交数据
@@ -126,7 +127,7 @@
             }
           ],
           province: [{
-            required: false,
+            required: true,
             message: '请选择地址',
             trigger: 'change'
           }],

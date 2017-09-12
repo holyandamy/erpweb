@@ -160,10 +160,10 @@
 				<el-col :span='20'>
 
 					<el-form :model="resetpassword" :rules="rules2" ref="changepass" label-width="100px" class="demo-ruleForm">
-						<el-form-item label="请输入旧密码" prop="pass">
+						<el-form-item label="请输入新密码" prop="pass">
 							<el-input type="password" v-model="resetpassword.pass" auto-complete="off"></el-input>
 						</el-form-item>
-						<el-form-item label="请输入新密码" prop="checkPass">
+						<el-form-item label="请确认新密码" prop="checkPass">
 							<el-input type="password" v-model="resetpassword.checkPass" auto-complete="off"></el-input>
 						</el-form-item>
 
@@ -229,6 +229,13 @@
         }
       }
 			var validatePass = (rule, value, callback) => {
+        let passwordreg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+        if(passwordreg.test(value)){
+          callback()
+        }else{
+          callback(new Error('密码由8~20位字符组成，必须包含英文字母和数字'))
+        }
+
 				if(value === '') {
 					callback(new Error('请输入密码'));
 				} else {

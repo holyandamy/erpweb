@@ -124,7 +124,7 @@
 					bankName: '',
 					name: '',
 					account: '',
-					isEnable: '',
+					isEnable: '启用',
 				},
 				updatestatus: {
 					isEnable: '',
@@ -194,7 +194,10 @@
 				let page = this.pageset
         page.token = paramm.getToken()
 				getbanklist(page).then((res) => {
+				  //banklist.status 应为点击保存时携带的状态
+          //0为禁用  1为启用
 					this.banklist = res.data.obj.datas
+          console.log(banklist.status)
 					this.total = Number(res.data.obj.total)
 
 				}).catch(function(err) {
@@ -217,18 +220,24 @@
 			addbank() {
 				//this.$emit('addbank',this.addbankuser)
 				this.addbankuser = true
-        this.$refs.addBank.resetFields();
-
+//        this.$refs.addBank.resetFields();
+        this.addBank = {
+          bankName: '',
+            name: '',
+            account: '',
+            isEnable: '启用',
+        }
 			},
 			//保存银行账户
 			submitForm(formName) {
+			  let _this = this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
-
-						if(this.addBank.isEnable == "禁用") {
-							this.addBank.isEnable = '0'
+            //问题：选中禁用状态，点击保存，展示的却为启用状态
+						if(this.addBank.isEnable == '禁用') {
+							this.addBank.isEnable = 0
 						} else {
-							this.addBank.isEnable = '1'
+							this.addBank.isEnable = 1
 						}
 
 						let para = this.addBank
@@ -236,11 +245,14 @@
           	console.log(para)
 						addbank(para).then((res) => {
 						  //发完请求之后，应该把文本框里面的内容清空
-
-							this.addbankuser = false
-							this.$message('保存成功！');
+							if(res.data.error || res.data.err){
+							  paramm.getCode(res.data,_this)
+              }else {
+                paramm.getCode(res.data,_this)
+                this.addbankuser = false
+                this.getlist()
+              }
 							//选择禁用后，列表中的数据应该显示为禁用，而不是启用
-							this.getlist()
 						})
 					} else {
 						this.$message.error('提交错误！');
@@ -285,7 +297,7 @@
 						type: 'success',
             //弹窗消失时间
             duration:800
-					});
+					}).close();
 					this.getlist()
 				})
 			}
