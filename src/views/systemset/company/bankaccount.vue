@@ -185,7 +185,11 @@
 				this.pageset.pageIndex = this.currentPage - 1
 				this.pageset.pageSize = this.pagesize
 				let page = this.pageset
+<<<<<<< HEAD
         page.token = paramm.getToken()
+=======
+     			page.token = paramm.getToken()
+>>>>>>> 407d44f99715a02cc7d99b4ea40cda3d998955a2
 				getbanklist(page).then((res) => {
 					this.banklist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
@@ -222,9 +226,16 @@
 						} else {
 							this.addBank.isEnable = '1'
 						}
+<<<<<<< HEAD
 
 						let para = this.addBank
             para.token = paramm.getToken()
+=======
+						
+						let para = this.addBank
+          				  para.token = paramm.getToken()
+          				  console.log(para)
+>>>>>>> 407d44f99715a02cc7d99b4ea40cda3d998955a2
 						addbank(para).then((res) => {
 							this.addbankuser = false
 							this.$message('保存成功！');
@@ -238,7 +249,10 @@
 			},
 			//编辑保存
 			saveedit(formName) {
+<<<<<<< HEAD
 			  let _this = this;
+=======
+>>>>>>> 407d44f99715a02cc7d99b4ea40cda3d998955a2
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.editbank
@@ -327,7 +341,14 @@
 		text-align: right;
 	}
 
+<<<<<<< HEAD
 	.el-table .cell {
 		text-align: left;
 	}
 </style>
+=======
+  .el-table .cell {
+    text-align: left;
+  }
+</style>
+>>>>>>> 407d44f99715a02cc7d99b4ea40cda3d998955a2

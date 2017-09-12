@@ -188,7 +188,6 @@
       },
       deleteRow(index, rows){
         let _this = this;
-        this.lineList.splice(index, 1);
         groupStop({token:paramm.getToken(),id:rows.id,status:!rows.isenable}).then((res) => {
           if(res.data.error == 1 || res.data.err){
             paramm.getCode(res.data, _this)
@@ -224,11 +223,8 @@
         let searchParam = this.searchList
         searchParam.date = dates || ''
         grouplist(searchParam).then((res) => {
-          if(res.data.error || res.data.err) {
-            this.$message({
-              message: '查询失败',
-              type: 'warning'
-            });
+          if(res.data.error !=0 || res.data.err) {
+//            paramm.getCode(res.data, _this)
             return
           }else {
             _this.lineList = res.data.obj.datas

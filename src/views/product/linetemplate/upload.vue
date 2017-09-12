@@ -12,28 +12,25 @@
 <script>
 	import { imgupload } from '../../../common/js/upload'
 	export default {
-		props: ['route','editimg','checktop','paras'],
+		props: ['route','editimg','checktop','paras','topimglist'],
 		data() {
 			return {
 				dialogImageUrl: '',
 				dialogVisible: false,
 				imglist: [],
-				topimglist:[]
+				topimglists:[]
 			}
 		},
-		
 		mounted(){
 			this.loading()
-			console.log(3)
-			console.log(this.paras)
+			
+			
 		},
-		
 		methods: {
 			loading(){
-			
-				if(this.editimg){
-				let imgurl = this.route.titleimages.split(',')
-				//console.log(imgurl)
+			if(this.editimg){
+				let imgurl = this.scope.route.titleimages.split(',')
+				
 				let list=[]
 				for(let i = 0;i<imgurl.length;i++){
 					let oldimglist = {}
@@ -41,6 +38,7 @@
 					list.push(oldimglist)
 				}
 				this.imglist = list
+				
 				//let topimgurl = this.route.images.split(',')
 				
 				//this.topimglist = topimgurl

@@ -183,13 +183,29 @@
 				}
 				linedetail(para).then((res) => {
 					this.detail = res.data.obj
-					console.log(para,res.data.obj,'111')
-					this.toplist = this.detail.images.split(',')
-
+					if(res.data.obj.images.indexOf(',')>=0){
+						this.toplist = this.detail.images.split(',')
+					}else{
+						this.toplist.push(res.data.obj.images)
+					}
+					
+				console.log(res.data.obj.routes)
 					for(let i = 0 ; i <this.detail.routes.length;i++){
-						let arr = []
-						arr = res.data.obj.routes[i].titleimages.split(',')
-						this.detail.routes[i].titleimages = arr
+						if(i == 0){
+							this.detail.routes[i].titleimages = ''
+						}else{
+							let arr = []
+						if(res.data.obj.routes[i].titleimages.indexOf(',') == -1){
+							this.detail.routes[i].titleimages.push(this.detail.routes[i].titleimages)
+							console.log(2)
+						}else{
+								arr = res.data.obj.routes[i].titleimages.split(',')
+							this.detail.routes[i].titleimages = arr
+							console.log(1)
+						
+						 }
+						}
+						
 
 					}
 

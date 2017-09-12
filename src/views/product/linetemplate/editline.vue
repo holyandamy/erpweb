@@ -146,13 +146,7 @@
 							<el-form-item label="集合地点" prop="station">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-							<el-form-item label="上传图片" prop="images">
-								<el-upload class="upload-demo" action="http://172.17.9.13:3001/api/images" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList">
-									<el-button size="small" type="primary">点击上传</el-button>
-									<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-								</el-upload>
-							</el-form-item>
-
+								<ImgLoad @geturl="geturl" :checktop="checktop" :topimglist="topimglist"></ImgLoad>
 						</el-col>
 					</el-row>
 				</div>
@@ -246,14 +240,7 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-									<el-form-item label="图片" prop="titleimages">
-										<el-upload action="http://172.17.9.13:3001/api/titleimages" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
-											<i class="el-icon-plus"></i>
-										</el-upload>
-										<el-dialog v-model="dialogVisible" size="tiny">
-											<img width="100%" :src="dialogImageUrl" alt="">
-										</el-dialog>
-									</el-form-item>
+									<ImgLoad :route="route" :editimg="editimg" :scope="scope"></ImgLoad>
 								</el-col>
 
 							</el-row>
@@ -322,11 +309,13 @@
 	import UE from '../../common/ue.vue';
 	import { province, city, district, categoryall, linecategorytype, templatupdate, templatdetail,token } from '../../../common/js/config';
 	import paramm from '../../../common/js/getParam'
+	import ImgLoad from './upload'
 	export default {
 		components: {
-			UE
+			UE,
+			ImgLoad
 		},
-		props: ['lineid', 'scope'],
+		props: ['lineid', 'scope','topimglist'],
 		data() {
 			return {
 				traffics: [{
@@ -476,7 +465,10 @@
 				district: [],
 				editor:'',
 				editorhtml:'',
-				oldday:''
+				oldday:'',
+				checktop:true,
+				editimg:true,
+				topimglist:''
 			
 			}
 		},
@@ -484,9 +476,12 @@
 			this.getlineinfo()
 			this.getprovince()
 		
+		
 		},
 		methods: {
-		
+		geturl(url) {
+				this.baseForm.images = url
+			},
 			getlineinfo() {
 				let para = {
 					token: paramm.getToken(),
@@ -495,16 +490,16 @@
 				templatdetail(para).then((res) => {
 					this.baseForm = res.data.obj
 					res.data.obj.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
+					this.topimglist = res.data.obj.images
+				
 					this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0){
 						this.editor = false
-						
 					}else{
 						this.editor = true
 						this.editorhtml = res.data.obj.routes[0].content
-						console.log(this.editorhtml)
-						
 					}
+					console.log(res.data.obj)
 					let categorytype = res.data.obj.categorytype
 					switch(categorytype) {
 						case 0:
@@ -791,7 +786,7 @@
 				let count = "fb0828b148bc48afbab8ef03c55d153b"
 				let para = {
 					id: count,
-					token:paramm.getToken()
+					token: paramm.getToken()
 				}
 				province(para).then((res) => {
 					this.province = res.data.obj
@@ -804,7 +799,6 @@
 			getcity(pro) {
 				city(pro).then((res) => {
 					this.city = res.data.obj
-
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
@@ -813,7 +807,6 @@
 			getdistrict(city) {
 				district(city).then((res) => {
 					this.district = res.data.obj
-
 				}).catch(function(err) {
 					console.log("连接错误")
 				})
@@ -821,11 +814,13 @@
 			//选择去程城市
 			changecityfrom() {
 				let pro = {
-					id: this.baseForm.fromprovinceid
+					id: this.baseForm.fromprovinceid,
+					token: paramm.getToken()
 				}
 				this.getcity(pro)
 				let city = {
-					id: this.baseForm.fromcityid
+					id: this.baseForm.fromcityid,
+					token: paramm.getToken()
 				}
 				this.getdistrict(city)
 
@@ -833,11 +828,13 @@
 			//选择返程城市
 			changecityback() {
 				let pro = {
-					id: this.baseForm.toprovinceid
+					id: this.baseForm.toprovinceid,
+					token: paramm.getToken()
 				}
 				this.getcity(pro)
 				let city = {
-					id: this.baseForm.tocityid
+					id: this.baseForm.tocityid,
+					token: paramm.getToken()
 				}
 				this.getdistrict(city)
 			},

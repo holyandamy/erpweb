@@ -10,7 +10,7 @@
 						</el-breadcrumb>
 					</el-col>
 					<el-col :span="12">
-						<el-button class="defaultbutton" @click="setMode('addapproval')">新增审批</el-button>
+						<el-button style='border-color: #9ad4d6;  color: #2cb1b6;  float: right;  margin-top: -10px;' id="ba2ec1611d0b4c718fbb5377e379e15f" class="hasid" @click="setMode('addapproval')">新增审批</el-button>
 					</el-col>
 				</el-row>
 			</header>
@@ -22,7 +22,7 @@
 						<el-input v-model="formInline.search" placeholder="被审批人"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="onSubmit">查询</el-button>
+						<el-button type="primary" @click="onSubmit" class="hasid" id="9c468b98329d409fa32210d81d2c0ca6">查询</el-button>
 					</el-form-item>
 				</el-form>
 				<el-table :data="banklist" style="text-align: left; font-size: 12px;">
@@ -35,9 +35,9 @@
 
 					<el-table-column label="操作">
 						<template scope="scope">
-							<el-button @click="setMode('editroval',scope)" type="text" size="small">编辑</el-button>
-							<el-button type="text" size="small" v-show="scope.row.status=='禁用'" @click="changestatus('1',scope.row.id)">启用</el-button>
-							<el-button type="text" size="small" v-show="scope.row.status=='启用'" class="not" @click="changestatus('0',scope.row.id)">禁用</el-button>
+							<el-button class="hasid" id="e3d7e8a60c444348bbb17eba062dab6d" @click="setMode('editroval',scope)" type="text" size="small">编辑</el-button>
+							<el-button class="hasid" id="0a60087a2cda4136bd075600f770a0a6" type="text" size="small" @click="changestatus(scope.$index, scope.row)">{{{false:'启用',true:'停止'}[scope.row.isenable]}}</el-button>
+							<!--<el-button type="text" size="small" v-show="scope.row.status=='启用'" class="not" @click="changestatus('0',scope.row.id)">停止</el-button>-->
 						</template>
 					</el-table-column>
 				</el-table>
@@ -55,12 +55,13 @@
 </template>
 
 <script>
-  import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
 	import AppRoval from './addapproval.vue'
 	import EditRoval from './editapproval.vue'
 	import {getapprovelist, approvestatus,token} from '../../../common/js/config';
-	export default {
+  import { showorhide } from '../../../common/js/showorhid'
+  import paramm from '../../../common/js/getParam'
+  export default {
 		components: {
 			AppRoval, // add role
 			EditRoval //编辑
@@ -76,7 +77,7 @@
 				banklist: [],
 				total: 0,
 				currentPage: 1,
-				pagesize: 15,
+				pagesize: 10,
 				isenable: false,
 				pageset: {
 					token: paramm.getToken(),
@@ -92,6 +93,11 @@
 				edit: {}
 			}
 		},
+    updated: function() {
+      this.$nextTick(function() {
+        showorhide()
+      })
+    },
 		methods: {
 			setMode(type, scope) {
 				this.modeType = type
@@ -101,12 +107,17 @@
 				this.getlist()
 			},
 			getlist() {
-				this.pageset.pageIndex = this.currentPage - 1
+        let _this = this;
+        this.pageset.pageIndex = this.currentPage - 1
 				this.pageset.pageSize = this.pagesize
 				this.pageset.executor = this.formInline.search
 				let page = this.pageset
 				console.log(page)
 				getapprovelist(page).then((res) => {
+          if(res.data.error != 0 || res.data.err){
+            paramm.getCode(res.data, _this)
+            return
+          }
 					this.banklist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
 				})
@@ -118,14 +129,17 @@
 			handleCurrentChange(val) {
 				this.getlist()
 			},
-			changestatus(i, id) {
-				this.updatestatus.id = id
-				let para = this.updatestatus
-				i == "1" ? para.isenable = true : para.isenable = false
-				approvestatus(para).then((res) => {
-					this.$message.success("状态改变成功！")
-					this.getlist()
-				})
+			changestatus(index, rows) {
+        let _this = this;
+        approvestatus({token:paramm.getToken(),id:rows.id,isenable:!rows.isenable}).then((res) => {
+          if(res.data.error != 0 || res.data.err){
+            paramm.getCode(res.data, _this)
+          }
+          else {
+            paramm.getCode(res.data, _this)
+            _this.getlist()
+          }
+        })
 			}
 
 		}
@@ -142,12 +156,6 @@
 		background: white;
 		margin-bottom: 30px;
 		padding-top: 20px;
-		.defaultbutton {
-			border-color: #9ad4d6;
-			color: #2cb1b6;
-			float: right;
-			margin-top: -10px;
-		}
 		.el-menu-item {
 			height: 36px;
 			line-height: 36px;
@@ -192,4 +200,7 @@
 		font-size: 18px;
 		margin-bottom: 20px;
 	}
+  .hasid {
+    display: none;
+  }
 </style>
