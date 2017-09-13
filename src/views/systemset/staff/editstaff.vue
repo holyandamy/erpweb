@@ -113,7 +113,7 @@
 
 						<el-form-item label-width="100px">
 							<el-button type="primary" @click="submitForm('addstaff')">保存</el-button>
-							<el-button @click="resetForm('addstaff')">重置</el-button>
+							<el-button @click="handleHide()">返回</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -160,10 +160,10 @@
 				<el-col :span='20'>
 
 					<el-form :model="resetpassword" :rules="rules2" ref="changepass" label-width="100px" class="demo-ruleForm">
-						<el-form-item label="请输入旧密码" prop="pass">
+						<el-form-item label="请输入新密码" prop="pass">
 							<el-input type="password" v-model="resetpassword.pass" auto-complete="off"></el-input>
 						</el-form-item>
-						<el-form-item label="请输入新密码" prop="checkPass">
+						<el-form-item label="请确认新密码" prop="checkPass">
 							<el-input type="password" v-model="resetpassword.checkPass" auto-complete="off"></el-input>
 						</el-form-item>
 
@@ -213,11 +213,11 @@
       };
       //验证用户名
       var checkusername = (rule,value,callback) => {
-        let usernamereg = /^[a-z0-9A-Z]{6,16}$/;
+        let usernamereg = /^[a-z0-9A-Z]{1,16}$/;
         if(usernamereg.test(value)){
           callback()
         }else{
-          callback(new Error('用户名由6~20位的字母或数字组成'))
+          callback(new Error('用户名由1~20位的字母或数字组成'))
         }
       };
       //验证真实姓名
@@ -229,6 +229,13 @@
         }
       }
 			var validatePass = (rule, value, callback) => {
+        let passwordreg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+        if(passwordreg.test(value)){
+          callback()
+        }else{
+          callback(new Error('密码由8~20位字符组成，必须包含英文字母和数字'))
+        }
+
 				if(value === '') {
 					callback(new Error('请输入密码'));
 				} else {
@@ -291,9 +298,9 @@
 							trigger: 'blur'
 						},
 						{
-							min: 6,
+							min: 1,
 							max: 20,
-							message: '长度在6 到 20 个字符',
+							//message: '长度在6 到 20 个字符',
 							trigger: 'blur'
 						}
 					],

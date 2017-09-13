@@ -14,8 +14,14 @@
 					<template scope="scope">
 						<el-button @click="handleShow(scope.$index, scope.row)" class="hasid" id="626f8c1472bb11e7aad70242ac120006" type="text" size="small">编辑</el-button>
 						<span class="hasid" id="8bcbe83a72bb11e7aad70242ac120006">
-							<el-button type="text" size="small"  v-show="scope.row.status=='禁用'" style="margin-left:10px ;" @click="changestatus(1,scope.row.id)">启用</el-button>
+							<el-button type="text" size="small"  v-show="scope.row.status=='停止'" style="margin-left:10px ;" @click="changestatus(1,scope.row.id)">启用</el-button>
 							<el-button type="text" size="small" v-show="scope.row.status=='启用'" class="not" @click="changestatus(0,scope.row.id)">禁用</el-button>
+              <!--
+                0表示禁用 1表示启用
+                问题是：点击禁用按钮后， scope.row.status 应从启用变为禁用  这样启用按钮才能显示
+
+                问题：sys/bank/list请求后，返回的数据中status字段  都是 ‘停止’ 和 ‘禁用’
+              -->
 						</span>
 					</template>
 
@@ -62,6 +68,7 @@
 
 					<el-form-item label="状态" prop="isEnable">
 						<el-radio-group v-model="addBank.isEnable">
+              <!--0代表禁用  1代表启用-->
 							<el-radio label="启用"></el-radio>
 							<el-radio label="禁用"></el-radio>
 						</el-radio-group>
@@ -117,7 +124,7 @@
 					bankName: '',
 					name: '',
 					account: '',
-					isEnable: '',
+					isEnable: '启用',
 				},
 				updatestatus: {
 					isEnable: '',
@@ -187,7 +194,10 @@
 				let page = this.pageset
         page.token = paramm.getToken()
 				getbanklist(page).then((res) => {
+				  //banklist.status 应为点击保存时携带的状态
+          //0为禁用  1为启用
 					this.banklist = res.data.obj.datas
+          console.log(banklist.status)
 					this.total = Number(res.data.obj.total)
 
 				}).catch(function(err) {
@@ -210,25 +220,39 @@
 			addbank() {
 				//this.$emit('addbank',this.addbankuser)
 				this.addbankuser = true
-
+//        this.$refs.addBank.resetFields();
+        this.addBank = {
+          bankName: '',
+            name: '',
+            account: '',
+            isEnable: '启用',
+        }
 			},
 			//保存银行账户
 			submitForm(formName) {
+			  let _this = this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
-
-						if(this.addBank.isEnable == "禁用") {
-							this.addBank.isEnable = '0'
+            //问题：选中禁用状态，点击保存，展示的却为启用状态
+						if(this.addBank.isEnable == '禁用') {
+							this.addBank.isEnable = 0
 						} else {
-							this.addBank.isEnable = '1'
+							this.addBank.isEnable = 1
 						}
 
 						let para = this.addBank
-            para.token = paramm.getToken()
+          	para.token = paramm.getToken()
+          	console.log(para)
 						addbank(para).then((res) => {
-							this.addbankuser = false
-							this.$message('保存成功！');
-							this.getlist()
+						  //发完请求之后，应该把文本框里面的内容清空
+							if(res.data.error || res.data.err){
+							  paramm.getCode(res.data,_this)
+              }else {
+                paramm.getCode(res.data,_this)
+                this.addbankuser = false
+                this.getlist()
+              }
+							//选择禁用后，列表中的数据应该显示为禁用，而不是启用
 						})
 					} else {
 						this.$message.error('提交错误！');
@@ -271,8 +295,9 @@
 						title: '成功',
 						message: '状态改变成功',
 						type: 'success',
+            //弹窗消失时间
             duration:800
-					});
+					}).close();
 					this.getlist()
 				})
 			}
@@ -327,7 +352,7 @@
 		text-align: right;
 	}
 
-	.el-table .cell {
-		text-align: left;
-	}
+  .el-table .cell {
+    text-align: left;
+  }
 </style>

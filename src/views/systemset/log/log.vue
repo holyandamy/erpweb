@@ -26,9 +26,9 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="操作人">
+				<!--<el-form-item label="操作人">
 					<el-input v-model="formInline.operator" placeholder="操作人"></el-input>
-				</el-form-item>
+				</el-form-item>-->
 
 				<el-form-item>
 					<el-button type="primary"  @click="onSubmit">搜索</el-button>

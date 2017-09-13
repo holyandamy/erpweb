@@ -99,6 +99,10 @@
 				</el-form-item>
 				<el-form-item label="名称">
 					<el-col :span="17">
+            <!--点击添加下级的时候,该文本框的值应清空-->
+            <!--
+              addone点击事件之后，模态框出现 ，此时文本框的值应为空
+            -->
 						<el-input v-model="subordinates.name"></el-input>
 					</el-col>
 				</el-form-item>
@@ -223,6 +227,7 @@
 				this.upname = firstchild.name
 				this.subordinates.path = firstchild.path
 				this.subordinates.parentid = firstchild.id
+        this.subordinates.name = ''
 
 			},
 			//新增下级
