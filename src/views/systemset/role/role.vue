@@ -16,7 +16,7 @@
     </header>
     <section class="padding30">
       <el-table :data="roleList" style="text-align: left; font-size: 12px;">
-        <el-table-column prop="id" label="角色ID">
+        <el-table-column prop="id" label="序号">
         </el-table-column>
         <el-table-column prop="rolename" label="角色名称">
         </el-table-column>
@@ -121,6 +121,10 @@
         rolelist(page).then((res) => {
           this.total = Number(res.data.obj.total);
           this.roleList =Object.assign([],res.data.obj.datas);
+          this.roleList.forEach((item,index) => {
+            item.id = Number(index + 1)
+          })
+          console.log(this.roleList)
         })
       },
 

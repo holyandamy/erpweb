@@ -51,7 +51,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							结算价格：   {{detail.sltprice}}    
+							结算价格： {{detail.sltprice}}
 						</el-col>
 						<el-col :span="12" class="pl-20">
 							负责人：{{detail.creater}}
@@ -59,7 +59,8 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							应收金额：{{detail.orderpay}} <el-button style="margin-left: 50px;" @click="editprice = true">调整价格</el-button>
+							应收金额：{{detail.orderpay}}
+							<el-button style="margin-left: 50px;" @click="editprice = true">调整价格</el-button>
 						</el-col>
 						<el-col :span="12" class="pl-20">
 							客户类型：{{detail.custtypename}}
@@ -100,7 +101,7 @@
 				</el-table-column>
 				<el-table-column prop="code" label="收款单号">
 				</el-table-column>
-				<el-table-column prop="totalfee"  label="金额">
+				<el-table-column prop="totalfee" label="金额">
 				</el-table-column>
 				<el-table-column prop="confirm" label="确认状态">
 				</el-table-column>
@@ -136,7 +137,7 @@
 							<el-button @click="exportnamelist">导出游客名单</el-button>
 							<el-button>下载名单模版</el-button>
 							<el-button>导入游客名单</el-button> 
-							<el-button  v-if="!detail.isconfirm" @click="confirmnamelist=true" class="hasid" id="8dcdad97735d11e788410242ac120009">确认游客名单</el-button> 
+							<el-button  v-if="!detail.isconfirm && !detail.iscancel" @click="confirmnamelist=true" class="hasid" id="8dcdad97735d11e788410242ac120009">确认游客名单</el-button> 
 						</el-col>
 					</el-row>
 				</h2>
@@ -228,12 +229,12 @@
 							</td>
 							<td>
 								<el-button type="text" v-if="!detail.isconfirm" @click="deletepeople(index)">删除</el-button>
-								<el-button type="text" v-else @click="(index)">申请退款</el-button>
+								<el-button type="text"  @click="refund(namelist)" v-else>退团申请</el-button>
 							</td>
 						</tr>
 						<tr>
-							<td colspan="5"> 成人{{detail.sltaduilt*detail.totaladult}} 儿童{{detail.sltchild*detail.totalchild}} 婴儿{{detail.sltbaby*detail.totalbaby}} 单房差{{roomprice}}</td>
-							<td colspan="4" style="text-align: right; padding-right: 20px;">合计：{{detail.sltaduilt*detail.totaladult+detail.sltchild*detail.totalchild+detail.sltbaby*detail.totalbaby+roomprice}}</td>
+							<td colspan="5"> 成人: {{detail.sltaduilt*detail.totaladult}} <span style="margin: 0 20px;">儿童: {{detail.sltchild*detail.totalchild}}</span>婴儿: {{detail.sltbaby*detail.totalbaby}} <span style="margin: 0 20px;"> 单房差: {{roomprice}}</span></td>
+							<td colspan="4" style="text-align: right; padding-right: 20px;">合计金额：{{detail.sltaduilt*detail.totaladult+detail.sltchild*detail.totalchild+detail.sltbaby*detail.totalbaby+roomprice}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -259,7 +260,7 @@
 			</el-table>
 			<div class="button">
 				<el-button type="primary" size="large" @click="save">提交</el-button>
-				<el-button type="primary" size="large"  class="hasid"  id="91102d1d735d11e788410242ac120009" @click="cancelorder">取消订单</el-button>
+				<el-button type="primary" v-if="!detail.isconfirm" size="large" class="hasid" id="91102d1d735d11e788410242ac120009" @click="cancelorder">取消订单</el-button>
 				<el-button size="large" @click="handleHide">返回</el-button>
 			</div>
 		</section>
@@ -323,48 +324,65 @@
     <el-button type="primary" @click="confirmvisitor">确 定</el-button>
   </span>
 		</el-dialog>
-		<el-dialog
-  title="调整价格"
-  :visible.sync="editprice"
-  size="tiny"
-  >
-<el-form ref="form" :model="editpriceform" label-width="80px">
-	<el-form-item label="当前价格">
-   <span style="float: left;"> <b>{{detail.orderpay}}</b></span>
-  </el-form-item>
-  <el-form-item label="需调价为">
-    <el-input v-model="editpriceform.money"></el-input>
-  </el-form-item>
-  <el-form-item label="备注">
-    <el-input type="textarea" v-model="editpriceform.remark"></el-input>
-  </el-form-item>
- 
-</el-form>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="editprice = false">取 消</el-button>
-    <el-button type="primary" @click="confirmprice">确 定</el-button>
-  </span>
-</el-dialog>
+		<el-dialog title="调整价格" :visible.sync="editprice" size="tiny">
+			<el-form ref="editpriceform" :rules="pricerules" :model="editpriceform" label-width="80px">
+				<el-form-item label="当前价格">
+					<span style="float: left;"> <b>{{detail.orderpay}}</b></span>
+				</el-form-item>
+				<el-form-item label="需调价为" prop="money">
+					<el-input v-model="editpriceform.money"></el-input>
+				</el-form-item>
+				<el-form-item label="备注">
+					<el-input type="textarea" v-model="editpriceform.remark"></el-input>
+				</el-form-item>
+
+			</el-form>
+			<span slot="footer" class="dialog-footer">
+		    <el-button @click="editprice = false">取 消</el-button>
+		    <el-button type="primary" @click="confirmprice('editpriceform')">确 定</el-button>
+		  </span>
+		</el-dialog>
 	</div>
 </template>
 <script>
 	import util from '../../../common/js/util'
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
-	import { orderdetail, banlist, collectsave, orderupdate,orderpay, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave,token} from '../../../common/js/config';
+	import { orderdetail, banlist, collectsave, orderupdate, orderpay, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave, orderrefund } from '../../../common/js/config';
 	export default {
 		props: ['listid'],
 		data() {
+			var price = (rule, value, callback) => {
+				let newvalue = Number(value)
+				if(!Number.isInteger(newvalue)) {
+					callback(new Error('请输入数字值!'));
+				} else {
+					if(newvalue < 0) {
+						callback(new Error('必须为正数！'));
+					} else if(newvalue > this.detail.orderfee) {
+						callback(new Error('调整金额不能大于应收金额！'));
+					} else {
+						callback()
+					}
+				}
+			}
 			return {
+				pricerules: {
+					money: [{
+						validator: price,
+						trigger: 'blur',
+						required: true
+					}]
+				},
 				more: '更多',
 				addcollection: false, //新增收款
 				confirmnamelist: false,
-				editprice:false,
-				editpriceform:{
-					id:'',
-					money:'',
-					remark:'',
-					token:paramm.getToken()
+				editprice: false,
+				editpriceform: {
+					id: '',
+					money: '',
+					remark: '',
+					token: paramm.getToken()
 				},
 				detail: {
 					namelist: []
@@ -442,50 +460,96 @@
 				},
 				type: '',
 				alllogs: [],
-				oldtotal:0,
-				roomlength:'',
-				roomprice:0
+				oldtotal: 0,
+				roomlength: '',
+				roomprice: 0
 			}
 		},
 		created() {
 			this.getdetail()
 			this.checkbanklist()
 		},
-		 updated: function() {
+		updated: function() {
 			this.$nextTick(function() {
 				showorhide()
 			})
 		},
 		methods: {
+			refund(info){
+				
+				 this.$confirm('退团申请后该游客信息不可编辑，并且需在订单中添加退款明细', '退团申请', {
+		          confirmButtonText: '确定',
+		          cancelButtonText: '取消',
+		          type: 'warning'
+		        }).then(() => {
+		        	let para = {
+		        		token:paramm.getToken(),
+		        		id:info.id,
+		        		orderId:this.detail.id
+		        	}
+		        	orderrefund(para).then((res) =>{
+		        		console.log(para,res)
+		        		if(res.data.error == 1){
+		        			 this.$message({
+			            type: 'error',
+			            message: res.data.message
+			          });
+		        		}else{
+		        			 this.$message({
+			            type: 'success',
+			            message: '删除成功!'
+			          });
+		        		}
+		        	})
+		         
+		        }).catch(() => {
+		          this.$message({
+		            type: 'info',
+		            message: '已取消删除'
+		          });          
+		        });
+			},
 			//返回列表
 			handleHide: function() {
 				this.$emit('setMode', 'orderlistmodel');
+				this.$emit('getList');
 			},
-			confirmprice(){
-				let para = this.editpriceform
-				para.id = this.detail.id
-				orderpay(para).then((res) =>{
-					console.log(res)
-					if(res.data.error == 1){
-						 this.$message.error(res.data.message);
-					}else{
-						 this.$message({
-				          message: '调价成功',
-				          type: 'success'
-				        });
-				        this.editprice = false
-						this.editpriceform.money = ""
-						this.editpriceform.remark = ""
-						this.getdetail()
+			confirmprice(formName) {
+				this.$refs[formName].validate((valid) => {
+					if(valid) {
+						let para = this.editpriceform
+						para.id = this.detail.id
+						orderpay(para).then((res) => {
+							if(res.data.error == 1) {
+								this.$message.error(res.data.message);
+							} else {
+								this.$message({
+									message: '调价成功',
+									type: 'success'
+								});
+								this.editprice = false
+								this.editpriceform.money = ""
+								this.editpriceform.remark = ""
+								this.getdetail()
+							}
+						})
+					} else {
+
+						this.$message({
+							message: '调价失败！',
+							type: 'error'
+						});
+						return false;
 					}
-					
-				})
+				});
+
 			},
+
 			//天数减少
 			minuday(type) {
 				let index = this.detail.namelist
 				let adult = []
-				let child =[]
+				let child = []
 				let baby = []
 				if(type == "adult") {
 					if(this.detail.totaladult <= 1) {
@@ -493,13 +557,13 @@
 						index = 1
 					} else {
 						this.detail.totaladult -= 1
-						let t 
+						let t
 						for(let i = 0; i < index.length; i++) {
 							if(index[i].type == "成人") {
 								t = i
 							}
 						}
-						index.splice(t,1)
+						index.splice(t, 1)
 					}
 				} else if(type == "child") {
 					if(this.detail.totalchild <= 1) {
@@ -507,14 +571,13 @@
 						index = 1
 					} else {
 						this.detail.totalchild -= 1
-						let t 
+						let t
 						for(let i = 0; i < index.length; i++) {
 							if(index[i].type == "儿童") {
-							
 								t = i
 							}
 						}
-						index.splice(t,1)
+						index.splice(t, 1)
 					}
 				} else if(type == "baby") {
 					if(this.detail.totalbaby <= 1) {
@@ -522,23 +585,21 @@
 						index = 1
 					} else {
 						this.detail.totalbaby -= 1
-						let t 
+						let t
 						for(let i = 0; i < index.length; i++) {
 							if(index[i].type == "婴儿") {
-							
 								t = i
 							}
 						}
-						index.splice(t,1)
+						index.splice(t, 1)
 					}
 				}
-				
 
 			},
 			//天数增加
 			addday(type) {
 				let total = this.detail.totaladult + this.detail.totalchild + this.detail.totalbaby
-				let nowtotal = total - this.oldtotal+1
+				let nowtotal = total - this.oldtotal + 1
 				if(nowtotal > this.detail.surplus) {
 					this.$message({
 						message: '不能超出库存' + this.detail.surplus + '',
@@ -584,26 +645,25 @@
 
 			},
 			//单房差价格
-			addroom(){
+			addroom() {
 				let type = this.detail.namelist
 				let trueroom = []
 				let falseroom = []
-				for(let i =0;i<type.length;i++){
-					if(type[i].room){
+				for(let i = 0; i < type.length; i++) {
+					if(type[i].room) {
 						trueroom.push(type[i].room)
-						this.roomprice = this.detail.sltroom*trueroom.length
-						
+						this.roomprice = this.detail.sltroom * trueroom.length
+
 					}
-					if(type[i].room == false){
-						
+					if(type[i].room == false) {
+
 						falseroom.push(type[i].room)
 
-						this.roomprice = this.detail.sltroom*trueroom.length
-					
+						this.roomprice = this.detail.sltroom * trueroom.length
+
 					}
 				}
-				
-				
+
 			},
 			//删除游客
 			deletepeople(index) {
@@ -617,6 +677,7 @@
 				}
 				orderdetail(para).then((res) => {
 					this.detail = res.data.obj
+					console.log(this.detail)
 					let type = res.data.obj.namelist
 					this.alllogs = res.data.obj.logs
 					this.detail.logs = res.data.obj.logs.slice(0, 3)
@@ -625,6 +686,7 @@
 					let adultAll = []
 					let childAll = []
 					let babyAll = []
+
 					for(let i = 0; i < type.length; i++) {
 						if(type[i].type == 1) {
 							type[i].type = "成人"
@@ -635,18 +697,18 @@
 						} else if(type[i].type == 3) {
 							type[i].type = "婴儿"
 							babyAll.push(type[i])
-						
+
 						}
-						if(type[i].room == true){
+						if(type[i].room == true) {
 							roomtrue.push(type[i].room)
 							this.roomprice = res.data.obj.sltroom * roomtrue.length
 						}
-						
+
 					}
 					let otheradult = this.detail.totaladult - adultAll.length
 					let otherchild = this.detail.totalchild - childAll.length
 					let otherbaby = this.detail.totalbaby - babyAll.length
-					for(let j = 0 ; j <otheradult;j++){
+					for(let j = 0; j < otheradult; j++) {
 						this.detail.namelist.push({
 							name: '',
 							mobile: '',
@@ -655,10 +717,10 @@
 							room: false,
 							remark: '',
 							type: '成人'
-							
+
 						})
 					}
-					for(let j = 0 ;j<otherchild;j++){
+					for(let j = 0; j < otherchild; j++) {
 						this.detail.namelist.push({
 							name: '',
 							mobile: '',
@@ -667,10 +729,10 @@
 							room: false,
 							remark: '',
 							type: '儿童'
-							
+
 						})
 					}
-					for(let j = 0 ;j<otherbaby;j++){
+					for(let j = 0; j < otherbaby; j++) {
 						this.detail.namelist.push({
 							name: '',
 							mobile: '',
@@ -681,7 +743,7 @@
 							type: '婴儿'
 						})
 					}
-					
+
 					//this.detail = res
 				})
 			},
@@ -781,7 +843,7 @@
 					list: this.detail.namelist,
 					token: paramm.getToken()
 				}
-				for(let i = 0; i < this.detail.namelist.length; i++){
+				for(let i = 0; i < this.detail.namelist.length; i++) {
 					if(this.detail.namelist[i].type == "成人") {
 						para.list[i].type = '1'
 					} else if(this.detail.namelist[i].type == "儿童") {
@@ -790,30 +852,22 @@
 						para.list[i].type = '3'
 					}
 				}
-				
+
 				orderupdate(para).then((res) => {
-				for(let i = 0; i < this.detail.namelist.length; i++){
-					if(this.detail.namelist[i].type == "1") {
-						this.detail.namelist[i].type = '成人'
-					} else if(this.detail.namelist[i].type == "2") {
-						this.detail.namelist[i].type = '儿童'
-					} else if((this.detail.namelist[i].type == "3")) {
-						this.detail.namelist[i].type = '婴儿'
+					for(let i = 0; i < this.detail.namelist.length; i++) {
+						if(this.detail.namelist[i].type == "1") {
+							this.detail.namelist[i].type = '成人'
+						} else if(this.detail.namelist[i].type == "2") {
+							this.detail.namelist[i].type = '儿童'
+						} else if((this.detail.namelist[i].type == "3")) {
+							this.detail.namelist[i].type = '婴儿'
+						}
 					}
-				}
 					if(res.data.error == 1) {
-					
 						this.$message({
 							message: res.data.message,
 							type: 'warning'
 						});
-					
-						
-						
-						
-						
-						
-						
 					} else {
 						this.handleHide()
 						this.$message({
@@ -822,34 +876,43 @@
 						});
 
 					}
-					
+
 				})
 			},
 			//取消订单
 			cancelorder() {
+				let _this = this
 				let para = {
-					token:paramm.getToken(),
-					id:this.detail.id
+					token: paramm.getToken(),
+					id: this.detail.id
 				}
-				ordercancel({para}).then((res) => {
-					
+				ordercancel(para).then((res) => {
+					if(res.data.error == 1 || res.data.err) {
+						paramm.getCode(res.data, _this)
+					} else {
+						_this.$message({
+							message: '取消成功！',
+							type: 'success'
+						});
+						this.handleHide()
+					}
 				})
 			},
 			//确认游客名单
 			confirmvisitor() {
 				let para = {
-					token:paramm.getToken(),
-					id:this.detail.id
+					token: paramm.getToken(),
+					id: this.detail.id
 				}
-				
+
 				ordernamelistconfirm(para).then((res) => {
-					console.log(para,res, "确认游客名单")
-					if(res.data.error == 1){
+
+					if(res.data.error == 1) {
 						this.$message({
 							message: res.data.message,
 							type: 'error'
 						});
-					}else{
+					} else {
 						this.$message({
 							message: '保存成功',
 							type: 'success'
@@ -861,11 +924,11 @@
 			//导出游客名单
 			exportnamelist() {
 				let para = {
-					token:paramm.getToken(),
-					id:this.detail.id
+					token: paramm.getToken(),
+					id: this.detail.id
 				}
 				ordernamelistexport(para).then((res) => {
-					console.log(para, res, "导出游客名单")
+
 				})
 			},
 			addcollpay(type) {
@@ -1029,5 +1092,4 @@
 			}
 		}
 	}
-	
 </style>

@@ -30,7 +30,7 @@
 					<el-input v-model="formInline.operator" placeholder="操作人"></el-input>
 				</el-form-item>-->
 				<el-form-item>
-					<el-button type="primary"  @click="onSubmit">搜索</el-button>
+					<el-button type="primary"  @click="onSubmit">查询</el-button>
 				</el-form-item>
 			</el-form>
 			<section class="padding30">
@@ -186,7 +186,11 @@
 		background: white;
 		text-align: right;
 	}
-
+  .el-form {
+    float:left;
+    padding-left:30px;
+    text-align:left;
+  }
 	.el-table .cell {
 		text-align: left;
 	}

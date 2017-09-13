@@ -10,7 +10,7 @@
         <el-form :inline="true" id="search" class="demo-form-inline" @submit.prevent="submit">
           <el-form-item label="创建日期">
 
-            <el-date-picker v-model="search.createtime" onPick type="daterange" placeholder="选择日期范围">
+            <el-date-picker v-model="search.date" onPick type="daterange" placeholder="选择日期范围">
             </el-date-picker>
 
           </el-form-item>
@@ -25,9 +25,15 @@
             <el-input placeholder="订单号" v-model="search.orderno"></el-input>
           </el-form-item>
 
-          <el-form-item label="状态">
-            <el-select v-model="search.state" placeholder="请选择">
+          <el-form-item label="确认状态">
+            <el-select v-model="search.confirmstatus" placeholder="请选择">
               <el-option v-for="item in state" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="核销状态">
+            <el-select v-model="search.verifstatus" placeholder="请选择">
+              <el-option v-for="item in state1" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
@@ -94,27 +100,27 @@
         </el-col>
 
         <!--查看界面-->
-        <el-dialog title="查看" v-model="showFormVisible" :close-on-click-modal="false">
-          <el-form :model="showForm" label-width="80px" ref="showForm">
-            <el-form-item label="创建日期" prop="createtime">
+        <el-dialog title="查看" v-model="showFormVisible" >  <!-- :close-on-click-modal="false"   -->
+          <el-form :model="showForm" label-width="100px" ref="showForm">
+            <el-form-item label="创建日期：" prop="createtime">
               {{showForm.createtime}}
             </el-form-item>
-            <el-form-item label="业务类型" prop="busstypename">
+            <el-form-item label="业务类型：" prop="busstypename">
               {{showForm.busstypename}}
             </el-form-item>
-            <el-form-item label="订单编号" prop="orderno">
+            <el-form-item label="订单编号：" prop="orderno">
               {{showForm.orderno}}
             </el-form-item>
             <!--<el-form-item label="收款单号" prop="code">
                             {{showForm.code}}
                         </el-form-item>-->
-            <el-form-item label="团号" prop="teamno">
+            <el-form-item label="团号：" prop="teamno">
               {{showForm.teamno}}
             </el-form-item>
-            <el-form-item label="线路名称" prop="linename">
+            <el-form-item label="线路名称：" prop="linename">
               {{showForm.linename}}
             </el-form-item>
-            <el-form-item label="付款单位" prop="companyname">
+            <el-form-item label="付款单位：" prop="companyname">
               {{showForm.companyname}}
             </el-form-item>
             <!--<el-form-item label="金额" prop="totalfee">
@@ -123,8 +129,8 @@
                         <el-form-item label="经办人" prop="operator">
                             {{showForm.operator}}
                         </el-form-item>-->
-            <el-form-item label="备注" prop="remark">
-              {{showForm.remark}}
+            <el-form-item label="备注：" prop="remark">
+              {{showForm.remark || '- - -'}}
             </el-form-item>
           </el-form>
 
@@ -157,51 +163,62 @@
         //搜索数据
         search: {
           token:paramm.getToken(),
-          createtime: '',
+          date: '',
           companyname: '',
           teamno: '',
           orderno: '',
-          state: '',
+          confirmstatus: '',
+          verifstatus: '',
           busstypename: ''
         },
         //确认状态
-        state: [{
-          value: '-1',
-          label: '取消选择'
-        },
+        state: [
           {
-            value: '1',
-            label: '未确认'
-          }, {
-            value: '2',
-            label: '确认通过'
-          }, {
-            value: '3',
-            label: '确认不通过'
-          }, {
-            value: '4',
-            label: '待核销'
-          }, {
-            value: '5',
-            label: '核销不通过'
+          value: '-1',
+          label: '全部'
           },
           {
-            value: '6',
-            label: '核销通过'
+            value: '0',
+            label: '未确认'
+          }, {
+            value: '1',
+            label: '确认通过'
+          }, {
+            value: '2',
+            label: '确认不通过'
+          }
+        ],
+        //核销状态
+        state1: [
+          {
+            value: '-1',
+            label: '全部'
+          },
+          {
+          value: '0',
+          label: '待核验'
+          },
+          {
+            value: '1',
+            label: '核验通过'
+          }, {
+            value: '2',
+            label: '核验不通过'
           }
         ],
         //类型
-        type: [{
+        type: [
+          {
           value: '0',
-          label: '取消选择'
-        },
+          label: '全部'
+          },
           {
             value: '1',
             label: '预付款'
           },
           {
             value: '2',
-            label: '订单付款'
+            label: '订单预付款'
           },
           {
             value: '3',
@@ -239,8 +256,13 @@
       }
 
     },
-    mounted(){
-      showorhide()
+//    mounted(){
+//      showorhide()
+//    },
+    updated: function() {
+      this.$nextTick(function() {
+        showorhide()
+      })
     },
     methods: {
       setMode(type) {
@@ -278,8 +300,6 @@
         let para = Object.assign(page,this.search)
         this.listLoading = true;
         getpaylist(para).then((data) => {
-          console.log(123)
-          console.log(data)
           this.total = Number(data.data.obj.total);
           this.tableData = data.data.obj.datas
           this.listLoading = false
@@ -287,17 +307,33 @@
         })
       },
       onSubmit() {
-        let parses = this.search
         this.listLoading = true;
-        let startday = parses.createtime[0]
-        let endday = parses.createtime[1]
+        let dates = ''
+        let startday = this.search.date[0]
+        let endday = this.search.date[1]
         startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
         endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
-        parses.createtime = startday + "|" + endday
+        if(startday == '' && endday == '') {
+          dates = startday + endday
+
+        } else {
+          dates = startday + '|' + endday
+        }
+        let parses = {
+          token: paramm.getToken(),
+          date: dates,
+          companyname: this.search.companyname,
+          teamno: this.search.teamno,
+          orderno: this.search.orderno,
+          confirmstatus: this.search.confirmstatus,
+          verifstatus: this.search.verifstatus,
+          businesstype: this.search.businesstype,
+          pageindex: this.currentPage - 1,
+          pagesize: this.pagesize
+        }
         getpaylist(parses).then((data) => {
           this.tableData = data.data.obj.datas
           this.listLoading = false
-
         })
       },
       //显示查看界面
@@ -308,7 +344,7 @@
     },
     created() {
       //this.totalall()
-      this.getUsers();
+//      this.getUsers();
     }
   }
 </script>

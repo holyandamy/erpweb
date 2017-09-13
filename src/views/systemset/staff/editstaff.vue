@@ -167,8 +167,9 @@
               <el-input type="password" v-model="resetpassword.checkPass" auto-complete="off"></el-input>
             </el-form-item>
 
-            <el-button type="primary" @click="savepass('changepass')">确定</el-button>
-            <el-button @click="resetPassword = false">取消</el-button>
+            <el-form-item>
+              <el-button type="primary" @click="savepass('changepass')">确定</el-button>
+              <el-button @click="resetPassword = false">取消</el-button>
             </el-form-item>
           </el-form>
 
@@ -287,7 +288,7 @@
           username: [{
             validator:checkusername,
             required: true,
-            message: '请输入用户名',
+            //message: '请输入用户名',
             trigger: 'blur'
           },
             {
@@ -348,6 +349,7 @@
     },
     methods: {
       submitForm(formName) {
+        //let _this = this;
         this.$refs[formName].validate((valid) => {
           if(valid) {
             let para = {

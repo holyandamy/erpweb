@@ -24,6 +24,7 @@ export const getcollectlist = params => { return axios.post(`${base}/finance/col
 export const collectsave = params => { return axios.post(`${base}/finance/collect/save`, params).then(res => res); };//收款登记
 export const banlist = params => { return axios.post(`${base}/sys/bank/accounts`, params).then(res => res); };//查询银行账号列表
 export const collectstatus = params => { return axios.post(`${base}/finance/collect/status`, params).then(res => res); };//状态变更
+export const collectdetail = params => { return axios.post(`${base}/finance/collect/detail`, params).then(res => res); };//状态变更
 
 /* 付款 */
 export const getpaylist = params => { return axios.post(`${base}/finance/pay`, params).then(res => res); };//获取付款列表
@@ -56,6 +57,7 @@ export const ordernamelistconfirm = params => { return axios.post(`${base}/order
 export const ordernamelistexport = params => { return axios.post(`${base}/order/namelist/export`, params); };//导出游客名单
 export const orderexportdetail = params => { return axios.post(`${base}/order/export/detail`, params); };//获取确认单详情
 export const orderpay = params => { return axios.post(`${base}/order/pay`, params); };//调整价格
+export const orderrefund = params => { return axios.post(`${base}/order/namelist/refund`, params); };//申请退款
 
 
 

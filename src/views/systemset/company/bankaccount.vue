@@ -240,12 +240,13 @@
               this.addBank.isEnable = 1
             }
 
-            let para = this.addBank
-            para.token = paramm.getToken()
-            addbank(para).then((res) => {
-              //发完请求之后，应该把文本框里面的内容清空
-              if(res.data.error || res.data.err){
-                paramm.getCode(res.data,_this)
+						let para = this.addBank
+          	para.token = paramm.getToken()
+          	console.log(para)
+						addbank(para).then((res) => {
+						  //发完请求之后，应该把文本框里面的内容清空
+							if(res.data.error || res.data.err){
+							  paramm.getCode(res.data,_this)
               }else {
                 paramm.getCode(res.data,_this)
                 this.addbankuser = false

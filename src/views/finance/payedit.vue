@@ -15,7 +15,7 @@
         <el-form-item label="业务类型" prop="businesstype">
           <el-select v-model="collectForm.businesstype" placeholder="选择" @change="changemenu()">
             <el-option label="预付款" value="1"></el-option>
-            <el-option label="订单预收款" value="2"></el-option>
+            <el-option label="订单预付款" value="2"></el-option>
             <el-option label="预付款退款" value="3"></el-option>
             <el-option label="成本单付款" value="4"></el-option>
           </el-select>
@@ -253,10 +253,6 @@
               else {
                 paramm.getCode(res.data, _this)
               }
-              this.$message({
-                message: '提交成功',
-                type: 'success'
-              });
               this.handleHide()
             });
           } else {

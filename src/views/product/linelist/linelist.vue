@@ -64,7 +64,7 @@
 								</el-select>
 							</el-form-item>
 							<el-form-item>
-								<el-button type="primary" class="hasid" id="398e1080734711e788410242ac120009"  @click="getlinelist">搜索</el-button>
+								<el-button type="primary" class="hasid" id="398e1080734711e788410242ac120009"  @click="getlinelist">查询</el-button>
 							</el-form-item>
               <el-form-item   style="margin-left: 0px">
                 <el-button  type="primary" @click="clearGetList">清空查询</el-button>
@@ -85,10 +85,16 @@
 					</el-table-column>
 					<el-table-column prop="days" label="天数" width="90">
 					</el-table-column>
-					<el-table-column prop="creater" label="创建人" width="100">
+					<el-table-column prop="creater" label="创建人" width="150">
 					</el-table-column>
-					<el-table-column prop="approve" label="审批状态" width="110">
+					<el-table-column prop="status" label="状态" width="150">
+						<template scope="scope">
+							<span v-if="scope.row.isenable == true" style="text-align: center;">正常</span>
+							<span v-if="scope.row.isenable == false" style="text-align: center;">停止</span>
+						</template>
 					</el-table-column>
+					<!--<el-table-column prop="approve" label="审批状态" width="110">
+					</el-table-column>-->
 					<el-table-column fixed="right" label="操作" width="110">
 						<template scope="scope">
 							<el-button @click="setMode('lineinfo'),lineinfo(scope)"  type="text" size="small">查看</el-button>
@@ -101,11 +107,12 @@
 									<el-dropdown-menu slot="dropdown">
 									
 										<!--<el-dropdown-item > <a href="javascript:;" @click="handleEdit(scope.$index, scope.row)">编辑</a></el-dropdown-item>-->
-										<el-dropdown-item v-if="scope.row.isApprove == true"><span @click="examine(scope)">线路审核</span></el-dropdown-item>
+										<!--<el-dropdown-item v-if="scope.row.isApprove == true"><span @click="examine(scope)">线路审核</span></el-dropdown-item>-->
 										<el-dropdown-item class="hasid"  id="4dcba294734711e788410242ac120009"><span @click="setMode('editline'),lineinfo(scope)">编辑线路</span></el-dropdown-item>
 										<el-dropdown-item class="hasid"  id="9079b8af734711e788410242ac120009"><span @click="settop(scope)">线路置顶</span></el-dropdown-item>
 										<el-dropdown-item class="hasid"  id="6e3c1a72734711e788410242ac120009"><span @click="updatastatus(scope,4)">查看团期</span></el-dropdown-item>
-										<el-dropdown-item><span @click="stop(scope)">停止</span></el-dropdown-item>
+										<el-dropdown-item  v-if="scope.row.isenable == true"><span @click="stop(scope,1)">停止</span></el-dropdown-item>
+										<el-dropdown-item  v-if="scope.row.isenable == false"><span @click="stop(scope,2)">启用</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 
@@ -130,7 +137,7 @@
 		<EditInfo v-else-if="modeType == 'editline'" @getlinelist="getlinelist" :lineid = 'lineid'  :scope = "scope"  @setMode="setMode"></EditInfo>
 		<AddIine v-else="modeType == 'addline'" @getlinelist="getlinelist"  @setMode="setMode"></AddIine>
 
-		<el-dialog title="线路审核" size="tiny" :visible.sync="examinevisiable">
+		<!--<el-dialog title="线路审核" size="tiny" :visible.sync="examinevisiable">
 			<el-form label-width="80px" :model="examineform" style="text-align: left;">
 				<el-form-item label="状态" prop="approve">
 					<el-radio-group v-model="examineform.approve">
@@ -152,7 +159,7 @@
     <el-button @click="examinevisiable = false">取 消</el-button>
     <el-button type="primary" @click="examineinfo">确 定</el-button>
   </span>
-		</el-dialog>
+		</el-dialog>-->
 
 
 		<el-dialog title="线路置顶" size="lastiny" :visible.sync="topvisiable">
@@ -242,25 +249,25 @@
 							this.kindid =this.linesorts[i].id
 							
 //							document.getElementsByClassName('kindid').childNodes('li')[i].setAttribute('class','checked')
-document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class','checked')
+							document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class','checked')
 							let para = this.search
 							para.categoryid = this.linesorts[i].id, 
 							para.pageindex = this.currentPage-1
 							linelist(para).then((res) => {
 								this.linelist = res.data.obj.datas
-								
-								for(let i = 0 ; i <res.data.obj.datas.length;i++){
-									let list = res.data.obj.datas
-									if(list[i].approve == 0){
-										this.linelist[i].approve = "无须审批"
-									}else if(list[i].approve == 1){
-										this.linelist[i].approve = "待审批"
-									}else if(list[i].approve == 2){
-										this.linelist[i].approve = "通过"
-									}else{
-										this.linelist[i].approve = "拒绝"
-									}
-								}
+//								
+//								for(let i = 0 ; i <res.data.obj.datas.length;i++){
+//									let list = res.data.obj.datas
+//									if(list[i].approve == 0){
+//										this.linelist[i].approve = "无须审批"
+//									}else if(list[i].approve == 1){
+//										this.linelist[i].approve = "待审批"
+//									}else if(list[i].approve == 2){
+//										this.linelist[i].approve = "通过"
+//									}else{
+//										this.linelist[i].approve = "拒绝"
+//									}
+//								}
 								this.total = Number(res.data.obj.total)
 			
 			//					console.log(para)
@@ -297,18 +304,18 @@ document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class
 				linelist(para).then((res) => {
 				console.log(res)
 					this.linelist = res.data.obj.datas
-					for(let i = 0 ; i <res.data.obj.datas.length;i++){
-						let list = res.data.obj.datas
-						if(list[i].approve == 0){
-							this.linelist[i].approve = "无须审批"
-						}else if(list[i].approve == 1){
-							this.linelist[i].approve = "待审批"
-						}else if(list[i].approve == 2){
-							this.linelist[i].approve = "通过"
-						}else{
-							this.linelist[i].approve = "拒绝"
-						}
-					}
+//					for(let i = 0 ; i <res.data.obj.datas.length;i++){
+//						let list = res.data.obj.datas
+//						if(list[i].approve == 0){
+//							this.linelist[i].approve = "无须审批"
+//						}else if(list[i].approve == 1){
+//							this.linelist[i].approve = "待审批"
+//						}else if(list[i].approve == 2){
+//							this.linelist[i].approve = "通过"
+//						}else{
+//							this.linelist[i].approve = "拒绝"
+//						}
+//					}
 					this.total = Number(res.data.obj.total)
 
 //					console.log(para)
@@ -342,29 +349,29 @@ document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class
 				this.scope = scope.row
 			
 			},
-			//线路审核
-			examine(scope) {
-				this.examinevisiable = true
-				this.examineid = scope.row.id
-			},
-			//确定审批
-			examineinfo(){
-				this.examinevisiable = false
-				let para = this.examineform
-				para.id = this.examineid
-				para.approve == 'true' ? para.approve = true:para.approve = false
-				lineapprove(para).then((res) => {
-					if(res.data.error == 1){
-						 this.$message.error(res.data.message);
-					}else{
-						this.$message({
-				          message: '审核状态改变成功!',
-				          type: 'success'
-				        });
-				        this.getlinelist()
-					}
-				})
-			},
+//			//线路审核
+//			examine(scope) {
+//				this.examinevisiable = true
+//				this.examineid = scope.row.id
+//			},
+//			//确定审批
+//			examineinfo(){
+//				this.examinevisiable = false
+//				let para = this.examineform
+//				para.id = this.examineid
+//				para.approve == 'true' ? para.approve = true:para.approve = false
+//				lineapprove(para).then((res) => {
+//					if(res.data.error == 1){
+//						 this.$message.error(res.data.message);
+//					}else{
+//						this.$message({
+//				          message: '审核状态改变成功!',
+//				          type: 'success'
+//				        });
+//				        this.getlinelist()
+//					}
+//				})
+//			},
 			//线路置顶
 			settop(scope){
 				this.topvisiable = true
@@ -392,21 +399,25 @@ document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class
 			handleCurrentChange(){
 				this.getlinelist()
 			},
-			stop(scope){
+			stop(scope,index){
 				let _this = this;
 				let para={
 					token:paramm.getToken(),
 					id:scope.row.id,
 					status:false
 				}
+				if(index == 1){
+					para.status = false
+				}else{
+					para.status = true
+				}
 				linestatus(para).then((res) =>{
-				
 					if(res.data.error == 1 || res.data.err){
 			            paramm.getCode(res.data, _this)
 			          }
 			          else {
 			            paramm.getCode(res.data, _this)
-			           	
+			           	this.getlinelist()
 			          }
 				})
 			},
