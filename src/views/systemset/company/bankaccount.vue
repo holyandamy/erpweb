@@ -241,8 +241,12 @@
 						}
 
 						let para = this.addBank
+<<<<<<< HEAD
           	para.token = paramm.getToken()
           	console.log(para)
+=======
+            para.token = paramm.getToken()
+>>>>>>> 851753386b69aaee5001a7b1ea53678ba0d04db7
 						addbank(para).then((res) => {
 						  //发完请求之后，应该把文本框里面的内容清空
 							if(res.data.error || res.data.err){
@@ -352,7 +356,14 @@
 		text-align: right;
 	}
 
+<<<<<<< HEAD
   .el-table .cell {
     text-align: left;
   }
 </style>
+=======
+	.el-table .cell {
+		text-align: left;
+	}
+</style>
+>>>>>>> 851753386b69aaee5001a7b1ea53678ba0d04db7

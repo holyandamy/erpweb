@@ -36,7 +36,7 @@
             </div>
           </el-form-item>
           <el-form-item   style="margin-left: 50px">
-              <el-button  type="primary" class="hasid" id="23a15b23734511e788410242ac120009" @click="searchGetList">搜索</el-button>
+              <el-button  type="primary" class="hasid" id="23a15b23734511e788410242ac120009" @click="searchGetList">查询</el-button>
             <el-button  type="primary" @click="clearGetList">清空查询</el-button>
           </el-form-item>  <!-- style='margin: 0 40px 0 70px;'  -->
         </el-form>
