@@ -12,25 +12,22 @@
 <script>
 	import { imgupload } from '../../../common/js/upload'
 	export default {
-		props: ['route','editimg','checktop','paras','topimglist'],
+		props: ['route','editimg','checktop','paras'],
 		data() {
 			return {
 				dialogImageUrl: '',
 				dialogVisible: false,
-				imglist: [],
-				topimglist:[]
+				imglist: []
 			}
 		},
-		
 		created(){
 			this.loading()
 		},
 		methods: {
-			loading(){
-				
+			loading(paras){
 				if(this.editimg){
-			
 				let imgurl = this.route.titleimages.split(',')
+				console.log(paras,6666)
 				//console.log(imgurl)
 				let list=[]
 				for(let i = 0;i<imgurl.length;i++){
