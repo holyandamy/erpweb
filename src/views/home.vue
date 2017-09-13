@@ -29,7 +29,7 @@
 						<el-submenu :index="index+''" v-if="!item.leaf">
 
 							<template slot="title"></i>{{item.authname}}</template>
-							<el-menu-item v-for="child in item.childs" :index="child.path" @click="showhome=false,$router.push(child.path)" :key="child.path" v-if="!child.hidden">{{child.authname}}</el-menu-item>
+							<el-menu-item v-for="child in item.childs" :index="child.path" style='min-width: 0 !important;' @click="showhome=false,$router.push(child.path)" :key="child.path" v-if="!child.hidden">{{child.authname}}</el-menu-item>
 						</el-submenu>
 						<el-menu-item v-if="item.leaf&&item.childs.length>0" :index="item.childs[0].path">{{item.childs[0].authname}}</el-menu-item>
 					</template>

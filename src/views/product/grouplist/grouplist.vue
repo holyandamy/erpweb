@@ -151,7 +151,7 @@
         showAdd:false,
         showEdit:false,
         type:[{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
-        type1:[{value:'0',label:'全部'},{value:'1',label:'正常'},{value:'2',label:'停止'},{value:'3',label:'待发团'},{value:'4',label:'已发团'},{value:'5',label:'已结团'}],
+        type1:[{value:'0',label:'全部'},{value:'1',label:'正常'},{value:'2',label:'停止'}],
         total:0,
         currentPage:1,
         pagesize:10,

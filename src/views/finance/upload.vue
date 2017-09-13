@@ -1,6 +1,12 @@
 <template>
   <el-form-item label="上传图片">
-    <el-upload action="http://v0.api.upyun.com/xtimg"  list-type="picture-card" :on-preview="handlePictureCardPreview" :file-list="imglist" :http-request="upload" :on-success="uploadsuccess" :on-remove="handleRemove" multiple>
+    <el-upload action="http://v0.api.upyun.com/xtimg"
+               list-type="picture-card"
+               :on-preview="handlePictureCardPreview"
+               :file-list="imglist"
+               :http-request="upload"
+               :on-success="uploadsuccess"
+               :on-remove="handleRemove" multiple>
       <i class="el-icon-plus"></i>
     </el-upload>
     <el-dialog v-model="dialogVisible" size="tiny">
