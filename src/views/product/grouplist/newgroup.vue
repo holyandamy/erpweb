@@ -280,11 +280,11 @@
     </section>
 
     <!--弹出框-->
-    <el-dialog title="提示" :visible.sync="lineFlag" size="small">
-      <el-form :inline="true" :model="search" class="demo-form-inline" ref="search">
+    <el-dialog title="选择线路" :visible.sync="lineFlag" size="small">
+      <el-form :inline="true"  :model="search" class="demo-form-inline" ref="search">
         <el-form-item label="线路分类">
           <el-select v-model="search.categoryid" placeholder="请选择">
-            <el-option v-for="(linesort,index) in linesorts" :key="linesort.value" :label="linesort.name" :value="linesort.id">
+            <el-option v-for="(linesort,index) in linesorts" :key="linesort.value" :label="linesort.name" :value="linesort.id" >
             </el-option>
           </el-select>
         </el-form-item>
@@ -344,6 +344,7 @@
         notice: '',
         lineItemId: '',
         search: {
+          status: 1,
           token:paramm.getToken(),
           pageindex:0,
           pagesize: 9999,
@@ -757,8 +758,6 @@
           })
         }
         // 2 编辑
-
-
         if(_this.operationType.type == 'edit'){
           _this.checkArr.forEach(function (item) {
             delete item.linename;
@@ -802,106 +801,6 @@
       },
       handleHide: function (option) {
         this.$emit('setMode', 'list', option);
-      },
-
-      submitForm() {
-        let newDate = '';
-        if (this.visitorList.birthday != '') {
-          const mouth = {
-            Jan: '01',
-            Feb: '02',
-            Mar: '03',
-            Apr: '04',
-            May: '05',
-            Jun: '06',
-            Jul: '07',
-            Aug: '08',
-            Sept: '09',
-            Oct: '10',
-            Nov: '11',
-            Dec: '12'
-          }
-          let start = String(this.visitorList.birthday).split(' ');
-          newDate = start[3] + '-' + mouth[start[1]] + '-' + start[2]
-        }
-        let newPostDate = Object.assign({}, this.visitorList)
-        newPostDate.birthday = newDate;
-        newPostDate.sexid = parseInt(newPostDate.sexid);
-        newPostDate.mobile = String(newPostDate.mobile);
-        this.$refs['visitorList'].validate((valid) => {
-          if (valid) {
-            if( this.$parent.operationType.type=='edit') {
-              newPostDate.id=this.$parent.operationType.id;
-              delete  newPostDate.birthday;
-              custupdate(newPostDate).then((backData) => {
-                if (backData.error) {
-                  this.$message.error(backData.massage);
-                }
-                else {
-                  this.handleHide('list');
-                }
-              })
-
-            }
-            else{
-              custsave(newPostDate).then((backData) => {
-                if (backData.error) {
-                  this.$message.error(backData.massage);
-                }
-                else {
-                  this.handleHide('list');
-                }
-              })
-
-            }
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      //获取省级列表
-      getprovince() {
-        let count = "fb0828b148bc48afbab8ef03c55d153b"
-        let para = {
-          id: count,
-          token: paramm.getToken()
-        }
-        province(para).then((res) => {
-          this.province = res.data.obj
-
-        }).catch(function (err) {
-          console.log("连接错误")
-        })
-      },
-      //获取市列表
-      getcity(pro) {
-        city(pro).then((res) => {
-          this.city = res.data.obj
-
-        }).catch(function (err) {
-          console.log("连接错误")
-        })
-      },
-      //获取区列表
-      getdistrict(city) {
-        district(city).then((res) => {
-          this.district = res.data.obj
-
-        }).catch(function (err) {
-          console.log("连接错误")
-        })
-      },
-      //选择城市
-      changecity() {
-        let pro = {
-          id: this.visitorList.provinceid
-        }
-        this.getcity(pro)
-        let city = {
-          id: this.visitorList.cityid
-        }
-        this.getdistrict(city)
       }
     },
     beforeMount () {

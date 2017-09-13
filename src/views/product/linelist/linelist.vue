@@ -418,7 +418,7 @@ document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class
             pagesize:15,
             categoryid:'', //分类id
             toid:'',//目的地id
-            status:'',//状态 1正常，0停止，-1全部，
+            status:'-1',//状态 1正常，0停止，-1全部，
             linename:'',//线路名称
             type:'',//1.国内，2出境，3周边
         }

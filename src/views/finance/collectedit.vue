@@ -21,22 +21,22 @@
         </el-form-item>
         <el-form-item label="订单编号" required prop="orderno" v-show="isshowall">
           <el-col :span="10">
-            <el-input placeholder="HP23083098409283098028450" @blur="typethis" v-model="collectForm.orderno"></el-input>
+            <el-input placeholder="HP201709121344518770" @blur="typethis" v-model="collectForm.orderno" @change='getOrder'></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item label="团号" prop="teamno" v-show="isshowall">
+        <el-form-item label="团号" prop="teamno" v-show="isshowall" >
           <el-col :span="10">
-            <el-input v-model="collectForm.teamno"></el-input>
+            <el-input v-model="collectForm.teamno" :disabled="true"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="线路名称" prop="linename" v-show="isshowall">
           <el-col :span="10">
-            <el-input v-model="collectForm.linename"></el-input>
+            <el-input v-model="collectForm.linename" :disabled="true"></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item label="收款单位" prop="companyname">
+        <el-form-item label="付款单位" prop="companyname">
           <el-col :span="10">
-            <el-input v-model="collectForm.companyname" placeholder="请选择收款单位"></el-input>
+            <el-input v-model="collectForm.companyname" placeholder="请输入付款单位" :disabled = 'collectForm.businesstype == 2'></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -64,17 +64,19 @@
                   </el-col>
                 </td>
                 <td>
-                  <el-col :span="20">
-                    <el-select placeholder="收款账号" v-model="domain.accountid" id="bankvalue">
+                  <el-col :span="20" v-if='domain.type!=1 && domain.type!=7'>
+                    <el-select placeholder="收款账号" v-model="domain.accountid" id="bankvalue" >
                       <el-option v-for="item in banklist" :key="item.bankNameAccount" :label="item.bankNameAccount" :value="item.id">
                       </el-option>
                     </el-select>
                   </el-col>
-
+                  <el-col :span="20" v-if='domain.type==1 || domain.type==7'>
+                     ---
+                  </el-col>
                 </td>
                 <td>
                   <el-col :span="20">
-                    <el-date-picker v-model="domain.linetime" type="date" placeholder="选择日期" :picker-options="pickerOptions0">
+                    <el-date-picker v-model="domain.linetime" type="date"  placeholder="选择日期" :picker-options="pickerOptions0">
                     </el-date-picker>
                   </el-col>
                 </td>
@@ -112,7 +114,7 @@
   import paramm from '../../common/js/getParam'
   import axios from 'axios';
   import util from '../../common/js/util'
-  import { collectsave, banlist,token } from '../../common/js/config';
+  import { collectsave, banlist,token,orderlist } from '../../common/js/config';
   import ImgUpload from './upload'
   import {showorhide} from '../../common/js/showorhid'
   export default {
@@ -168,7 +170,7 @@
 
           companyname: [{
             required: true,
-            message: '请选择付款单位',
+            message: '请输入付款单位',
             trigger: 'blur'
           }]
         },
@@ -206,10 +208,15 @@
     },
     created() {
       let mydate = new Date()
-      let today = mydate.getFullYear() + "-" + (mydate.getMonth() + 1) + "-" + mydate.getDate()
+        console.log(66,  (mydate.getMonth() + 1).toString().length)
+      let M = (mydate.getMonth() + 1).toString().length == 1? '0'+(mydate.getMonth() + 1) : (mydate.getMonth() + 1)
+      let D = (mydate.getDate()).toString().length == 1? '0'+(mydate.getDate()) : (mydate.getDate())
+      let today = mydate.getFullYear() + "-" + M + "-" + D
       this.createtime = today
       this.checkbanklist()
-
+      this.collectForm.detail.forEach(function (item) {
+        item.linetime = today
+      })
 
     },
     mounted(){
@@ -224,7 +231,7 @@
         this.$refs[formName].validate((valid) => {
           if(valid) {
             let para = this.collectForm
-            console.log(this.collectForm)
+            console.log(1111, this.collectForm)
             for(let i =0;i<this.collectForm.detail.length;i++){
               para.detail[i].linetime = (!para.detail[i].linetime || para.detail[i].linetime == '') ? '' : util.formatDate.format(new Date(para.detail[i].linetime), 'yyyy-MM-dd');
             }
@@ -259,7 +266,8 @@
         //				this.$refs.collectForm.validateField('orderno');
       },
       resetForm(formName) {
-        this.$refs[formName].resetFields();
+//        this.$refs[formName].resetFields();
+        this.$emit('toparent', 'collectlist')
       },
       deleteRow(index, rows) {
         rows.splice(index, 1);
@@ -311,6 +319,40 @@
           console.log(res.data)
           this.banklist = res.data.obj
         })
+      },
+      getOrder(){
+        console.log(555);
+        let _this = this;
+        if(this.collectForm.orderno.trim().length == 20){
+          orderlist({
+            creater: "",
+            date: "",
+            hide: false,
+            linename: "",
+            orderno: this.collectForm.orderno.trim(),
+            pageindex: 0,
+            pagesize: 10,
+            source: "",
+            status: "",
+            token: paramm.getToken()
+          }).then((res)=>{
+            if(res.data.error || res.data.err){
+              paramm.getCode(res.data,_this)
+            }else {
+              //没查到订单
+              if(res.data.obj.list.length=0){
+                _this.$message({
+                  message: '你输入的订单有误',
+                  type: 'warning'
+                });
+              }else {
+                _this.collectForm.teamno = res.data.obj.list[0].teamno;
+                _this.collectForm.linename = res.data.obj.list[0].linename;
+                _this.collectForm.companyname = res.data.obj.list[0].contact
+              }
+            }
+          })
+        }
       }
     }
   }

@@ -46,7 +46,7 @@
 						<el-form-item label="审批状态">
 							<el-radio-group v-model="appform.status">
 								<el-radio label="启用"></el-radio>
-								<el-radio label="禁用"></el-radio>
+								<el-radio label="停止"></el-radio>
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label-width="80px">
@@ -125,7 +125,7 @@
 			}
 		},
 		created() {
-			this.getuser()
+      this.getuser()
 			this.appform = this.edit.row
 			this.checkedCities = this.edit.row.executor.split(',')
 			this.checkedapproval = this.edit.row.approver.split(',')
@@ -133,6 +133,7 @@
 		},
 		methods: {
 			onSubmit(formName) {
+			  let _this = this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = {
@@ -142,7 +143,7 @@
 							isenable: '',
 							id: this.edit.row.id
 						}
-						this.appform.isenable == "启用" ? para.isenable = true : para.isenable = false
+						this.appform.status == "启用" ? para.isenable = true : para.isenable = false
 						for(let i = 0; i < this.checkedCities.length; i++) {
 							for(let j = 0; j < this.approvals.length; j++) {
 								if(this.checkedCities[i] == this.approvals[j].username) {
@@ -160,20 +161,12 @@
 						para.executorid = this.approvalsid.join(',')
 						para.approverid = this.approvalsedid.join(',')
 						approveupdate(para).then((res) => {
-							console.log(para,res)
-							if(res.data.error == "1") {
-								this.$notify({
-									title: '错误',
-									message: res.data.message,
-									type: 'error'
-								});
+							if(res.data.error != 0 || res.data.err) {
+								paramm.getCode(res.data, _this)
 							} else {
-								this.$notify({
-									title: '成功',
-									message: '编辑成功！',
-									type: 'success'
-								});
-								this.handleHide()
+                paramm.getCode(res.data, _this)
+                _this.handleHide()
+                _this.$emit('toparent','getlist')
 							}
 
 						})

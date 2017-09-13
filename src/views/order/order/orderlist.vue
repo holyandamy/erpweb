@@ -57,10 +57,10 @@
 				<table width="100%" class="table">
 					<thead>
 						<tr>
-							<td width="40%" style="text-align: left;">订单编号 / 团号 / 线路名称</td>
-							<td width="10%">出团 / 人数</td>
+							<td width="30%" style="text-align: left;">订单编号 / 团号 / 线路名称</td>
+							<td width="8%">出团 / 人数</td>
 							<td width="10%">客户信息</td>
-							<td width="5%">订单金额</td>
+							<td width="7%">订单金额</td>
 							<td width="5%">应收</td>
 							<td width="5%">已收</td>
 							<td width="5%">退款</td>
@@ -344,7 +344,7 @@
 				font-size: 14px;
 				text-align: left;
 				line-height: 40px;
-				padding-left: 20px;
+				padding:0 20px;
 				border-bottom: 3px solid #dee5ec;
 			}
 		}

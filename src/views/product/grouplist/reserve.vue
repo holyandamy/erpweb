@@ -108,7 +108,7 @@
             <div class="bg_white padding-20-50">
               <el-row>
                 <el-col :span="6">
-                  <el-col :span="5" style="line-height: 26px;">成人</el-col>
+                  <el-col :span="5" style="line-height: 55px;">成人</el-col>
                   <el-col :span="19">
                     <!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
                     <div class="el-input-number">
@@ -122,7 +122,7 @@
                   </el-col>
                 </el-col>
                 <el-col :span="6">
-                  <el-col :span="5" style="line-height: 26px;">儿童</el-col>
+                  <el-col :span="5" style="line-height: 55px;">儿童</el-col>
                   <el-col :span="19">
                     <!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
                     <div class="el-input-number">
@@ -136,7 +136,7 @@
                   </el-col>
                 </el-col>
                 <el-col :span="6">
-                  <el-col :span="5" style="line-height: 26px;">婴儿</el-col>
+                  <el-col :span="5" style="line-height: 55px;">婴儿</el-col>
                   <el-col :span="19">
                     <!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
                     <div class="el-input-number">
@@ -284,6 +284,8 @@
             trigger: 'blur',
             required: true,
           }],
+          remark: [
+            { min: 0, max: 120, message: '不能超过120字!', trigger: 'blur' }]
         },
         options: [{
           value: '1',
