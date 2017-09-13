@@ -8,7 +8,7 @@
               <el-input v-model="companyForm.companyName"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="所在城市" prop="province">
+          <el-form-item label="所在城市" prop="provinceId">
             <el-col :span="4">
               <el-select v-model="companyForm.provinceId" placeholder="请选择" @change="changecity('pro')">
                 <el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
@@ -92,8 +92,15 @@
           }
         }
       };
+      //验证所在城市
+      /*var checkprovince = (rule,value,callback) => {
+        if(!value){
+          return false;
+          //return callback(new Error('所在城市不能为空'));
+        }else{
 
-
+        }
+      };*/
       return {
         activeIndex: '3',
         //提交数据
@@ -119,14 +126,14 @@
             message: '请输入公司名称',
             trigger: 'blur'
           },
-            {
+          {
               min: 3,
               max: 50,
               message: '长度在 3 到 50 个字符',
               trigger: 'blur'
-            }
+          }
           ],
-          province: [{
+          provinceId: [{
             required: true,
             message: '请选择地址',
             trigger: 'change'
@@ -207,7 +214,10 @@
       },
       //保存数据
       submitForm(formName) {
+        console.log(999)
         this.$refs[formName].validate((valid) => {
+          //valid值无效
+          console.log('是否有效')
           if(valid) {
             let _this =this;
             let parses = this.companyForm
@@ -216,7 +226,11 @@
             parses.mobile = parses.mobile.toString()
             //如果市或者县为空时，直接阻止发请求
             if(parses.cityId === '' || parses.districtId === ''){
-               alert('所在城市不能为空');
+               //alert('所在城市不能为空');
+               this.$message({
+                 message:'所在市区和县区不能为空',
+                 type:'warning'
+               })
                return false;
             }
             companyupdate(parses).then((res) => {

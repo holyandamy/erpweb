@@ -288,7 +288,7 @@
             trigger: 'blur'
           }],
           roleid: [{
-            required: true,
+            required: false,
             message: '请选择角色',
             trigger: 'blur'
           }],
@@ -315,7 +315,7 @@
         rolelist: [],
         roleids: '',
         isIndeterminate:true,
-        checkdepartment: [],
+        checkdepartment: []
 
       }
     },
@@ -396,6 +396,9 @@
         })
       },
       //选择角色
+      //checkdepartment  rolelist 数组
+      //roleids
+
       comfirmrole() {
         this.finddepartment = false
 

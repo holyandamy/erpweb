@@ -93,7 +93,7 @@
 								</el-col>
 							</el-row>
 						</el-form-item>
-						<el-form-item label="选择角色">
+						<el-form-item label="选择角色" prop="roleid">
 							<el-row>
 								<el-col :span="4">
 									<el-input v-model="roleids"></el-input>
@@ -166,7 +166,7 @@
 						<el-form-item label="请确认新密码" prop="checkPass">
 							<el-input type="password" v-model="resetpassword.checkPass" auto-complete="off"></el-input>
 						</el-form-item>
-
+            <el-form-item>
 						<el-button type="primary" @click="savepass('changepass')">确定</el-button>
 						<el-button @click="resetPassword = false">取消</el-button>
 						</el-form-item>
@@ -257,7 +257,7 @@
 			return {
 				finddep:false,
 				addstaff: {
-					token: token,
+					token: paramm.getToken(),
 					username: '',
 					realname: '',
 					mobile: '',
@@ -265,7 +265,7 @@
 					sex: '',
 					birthday: '',
 					deptid: '',
-					roleid: [],
+					roleid: '',
 					status: '',
 					deptname: '',
 				},
@@ -294,7 +294,7 @@
 					username: [{
               validator:checkusername,
 							required: true,
-							message: '请输入用户名',
+							//message: '请输入用户名',
 							trigger: 'blur'
 						},
 						{
@@ -329,7 +329,7 @@
 					roleid: [{
 						required: true,
 						message: '请选择角色',
-						trigger: 'change'
+						trigger: 'blur'
 					}],
 					status: [{
 						required: true,
@@ -355,6 +355,7 @@
 		},
 		methods: {
 			submitForm(formName) {
+			  let _this = this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = {
@@ -377,6 +378,12 @@
 						para.birthday = (!this.addstaff.birthday || this.addstaff.birthday == '') ? '' : util.formatDate.format(new Date(this.addstaff.birthday), 'yyyy-MM-dd');
 						para.mobile = String(this.addstaff.mobile)
 						editusersave(para).then((res) => {
+              if(res.data.error!=0 || res.data.err){
+                paramm.getCode(res.data, _this)
+              }
+              else {
+                paramm.getCode(res.data, _this)
+              }
 							console.log(para, res)
 							if(res.data.error == 0) {
 								this.$message({

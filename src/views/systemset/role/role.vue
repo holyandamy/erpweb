@@ -102,14 +102,15 @@
           this.modeType='addRole';
       },
       deleteRow(index, rows){
-        this.roleList.splice(index, 1);
+        let _this = this;
         let para ={token:paramm.getToken(),id:rows.id}
         roledel(para).then((res) => {
-          if(res.data.error){
-            this.$message.error(res.data.massage);
-          }
-          else {
+          if(res.data.error!=0 || res.data.err){
+            paramm.getCode(res.data, _this)
+          } else {
+            this.roleList.splice(index, 1);
             this.getList()
+            paramm.getCode(res.data, _this)
           }
         })
       },
