@@ -86,6 +86,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
+
             <el-form-item label="选择部门" prop="deptid">
               <el-row>
                 <el-col :span="4">
@@ -94,10 +95,10 @@
                 <el-col :span="1">&nbsp;</el-col>
                 <el-col :span="4">
                   <el-button @click="finddep = true">查找</el-button>
-
                 </el-col>
               </el-row>
             </el-form-item>
+
             <el-form-item label="选择角色" prop="roleid">
               <el-row>
                 <el-col :span="4">
@@ -109,6 +110,7 @@
                 </el-col>
               </el-row>
             </el-form-item>
+
             <el-form-item label="状态">
               <el-radio-group v-model="addstaff.status">
                 <el-radio label="1">启用</el-radio>
@@ -169,7 +171,7 @@
   import { usersave, getdeplist, rolelist,token} from '../../../common/js/config';
   export default {
     data() {
-      //验证员工编号(不能和已经存在的员工编号相同，)
+      //验证员工编号
       var checkcode = (rule,value,callback) => {
         let codereg = /^[0-9]{1,20}$/;
         if(codereg.test(value)){
@@ -288,7 +290,7 @@
             trigger: 'blur'
           }],
           roleid: [{
-            required: false,
+            required: true,
             message: '请选择角色',
             trigger: 'blur'
           }],
@@ -315,7 +317,7 @@
         rolelist: [],
         roleids: '',
         isIndeterminate:true,
-        checkdepartment: []
+        checkdepartment: [],
 
       }
     },
@@ -396,9 +398,6 @@
         })
       },
       //选择角色
-      //checkdepartment  rolelist 数组
-      //roleids
-
       comfirmrole() {
         this.finddepartment = false
 
@@ -409,7 +408,6 @@
           for(let j = 0 ; j <this.checkdepartment.length;j++){
             if(this.checkdepartment[j] == this.rolelist[i].id){
               roleidlist.push(this.rolelist[i].rolename)
-              console.log(roleidlist)
               this.roleids = roleidlist.join(',')
             }
           }
