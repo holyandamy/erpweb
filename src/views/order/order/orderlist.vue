@@ -47,7 +47,7 @@
 							<el-checkbox v-model="orderinfo.hide">隐藏取消订单</el-checkbox>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" @click="onSubmit">搜索</el-button>
+							<el-button type="primary" @click="onSubmit">查询</el-button>
 						</el-form-item>
 
 					</el-col>
@@ -72,7 +72,8 @@
 				</table>
 
 				<dl class="list" v-for="(list,index) in orderLists">
-					<dt><span>订单编号：{{list.code}} / 馨途订单编号：{{list.sourceid}}</span><span>订单来源：{{list.platformname}}</span> </dt>
+					<dt><span>订单编号：{{list.code}} / 馨途订单编号：{{list.sourceid}}</span><span style="margin-left: 50px;">订单来源：{{list.platformname}}</span> </dt>
+						
 					<dd>
 						<ul>
 							<li style="width: 40%;">{{list.teamno}} <br />{{list.linename}}<br /> 下单时间：{{list.createtime}}</li>
@@ -93,7 +94,7 @@
 							</li>
 							<li style="width: 10%;" class="button">
 								<el-col :span="12">
-									<el-button type="text" @click="confirmnamelists(list)" class="hasid" id="8dcdad97735d11e788410242ac120009">确认名单</el-button>
+									<el-button type="text" v-if="!list.iscancel && !list.isconfirm"  @click="confirmnamelists(list)" class="hasid" id="8dcdad97735d11e788410242ac120009">确认名单</el-button>
 								</el-col>
 								<el-col :span="12">
 									<el-button type="text" class="hasid" id="83b7ed61735d11e788410242ac120009">
@@ -134,7 +135,7 @@
 			</div>
 		</div>
 
-		<OrderInfo v-else @setMode="setMode" :listid="listid"></OrderInfo>
+		<OrderInfo v-else @setMode="setMode" :listid="listid" @getList="getList"></OrderInfo>
 	</div>
 </template>
 
@@ -251,7 +252,7 @@
 				page.pageindex = this.currentPage - 1
 				page.date = dates
 				orderlist(page).then((res) => {
-					console.log(res.data.obj)
+					
 					if(res.data.error == 1){
 						this.$message({
 							message: res.data.message,

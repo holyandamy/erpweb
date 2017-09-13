@@ -43,7 +43,7 @@
 					</el-row>
 					<el-row>
 						<el-form :inline="true" :model="search" class="demo-form-inline">
-							<el-form-item label="状态">
+							<!--<el-form-item label="状态">
 								<el-select v-model="search.status" placeholder="状态">
 
 									<el-option
@@ -52,7 +52,7 @@
         :label="item.label"
         :value="item.value"></el-option>
 								</el-select>
-							</el-form-item>
+							</el-form-item>-->
 							<el-form-item label="线路名称">
 								<el-input style="width: 300px;" v-model="search.linename" placeholder="请输入线路名称关键字"></el-input>
 							</el-form-item>
@@ -66,7 +66,7 @@
 								</el-select>
 							</el-form-item>
 							<el-form-item>
-								<el-button type="primary" @click="getlinelist" class="hasid" id="b6c64c62734711e788410242ac120009">搜索</el-button>
+								<el-button type="primary" @click="getlinelist" class="hasid" id="b6c64c62734711e788410242ac120009">查询</el-button>
 							</el-form-item>
 						</el-form>
 					</el-row>
@@ -161,11 +161,11 @@
 					linename:'',//线路名称
 					type:'',//1.国内，2出境，3周边
 				},
-				currentPage:0,
+				currentPage:1,
 				linesorts: [], //线路分类
 				destinations: [], //目的地
-				ischecked: 0,
-				checkeddest: 0,
+				ischecked: -2,
+				checkeddest: -2,
 				linelist: [], //线路列表
 				selectid:'',
 				examineid:''
@@ -183,32 +183,30 @@
 		methods: {
 			//筛选线路分类
 			changecondition(index,list) {
-				this.ischecked = index
-
+				
 				let listid = '0'
 				if(index == '-1'){
-
 					listid = '0'
-					this.ischecked = -1
+					this.ischecked = '-1'
 					this.search.categoryid = ''
-
+				
 				}else{
+					this.ischecked = index
 					listid = list.id
 					this.search.categoryid = list.id
 				}
-			let para = {token:paramm.getToken(),categoryid:listid}
-			destlist(para).then((res) => {
-					this.destinations = res.data.obj
-
-
+				let para = {token:paramm.getToken(),categoryid:listid}
+				destlist(para).then((res) => {
+						this.destinations = res.data.obj
 				})
 			},
 			//获取线路列表
 			getlinelist(){
 				let para = this.search
+				para.pageindex = this.currentPage-1
 				para.token = paramm.getToken()
 				templatelist(para).then((res) => {
-					console.log(res)
+					console.log(para,res)
 					this.linelist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
 //					console.log(para)
@@ -243,7 +241,7 @@
 			},
 
 			handleCurrentChange(){
-
+					this.getlinelist()
 			}
 
 		}

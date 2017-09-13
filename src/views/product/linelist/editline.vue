@@ -143,10 +143,15 @@
 							<el-form-item label="集合地点" prop="station" label-width="120px">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-
-							<ImgLoad @geturl="geturl" :checktop="checktop" :topimglist="topimglist"></ImgLoad>
-
-						</el-col>
+							<el-form-item label="上传图片" label-width="120px">
+							<el-upload action="http://v0.api.upyun.com/xtimg" accept="image/jpeg,image/gif,image/png"  list-type="picture-card" :on-preview="handlePictureCardPreview" :file-list="topimglist" :http-request="upload" :on-success="uploadsuccess" :on-remove="handleRemove" multiple>
+								<i class="el-icon-plus"></i>
+							</el-upload>
+							<el-dialog v-model="dialogVisible" size="tiny">
+								<img width="100%" :src="dialogImageUrl" alt="">
+							</el-dialog>
+						</el-form-item>
+					</el-col>
 					</el-row>
 				</div>
 	<h2 class="d_jump">编辑行程</h2>
@@ -315,6 +320,7 @@
 
 <script>
 	import UE from '../../common/ue.vue';
+	import { imgupload } from '../../../common/js/upload'
 	import { linesave, province, city, district, categoryall, linecategorytype, lineupdate, linedetail,token } from '../../../common/js/config';
 	import ImgLoad from './upload'
 	import check from '../../../common/js/check'
@@ -497,13 +503,16 @@
 				editimg:true,
 				paras:'',
 				checktop:true,
-				topimglist:''
+				topimglist:[]
+				
 			}
 		},
 		created(){
-
 			this.getlineinfo()
 			this.getprovince()
+		},
+		mounted(){
+			
 		},
 		methods: {
 			geturl(url){
@@ -517,7 +526,46 @@
 				linedetail(para).then((res) => {
 					this.baseForm = res.data.obj
 					this.paras = this.baseForm.images
-					this.topimglist = res.data.obj.images
+					if(this.paras!=''){
+						if(this.paras.indexOf(',')>-1){
+						let list = this.paras.split(',')
+						for(let i =0;i<list.length;i++){
+							this.topimglist.push({
+								url:list[i],
+								uid:'2'
+							})
+						}
+						
+					}else{
+						this.topimglist.push({
+							url:this.paras,
+							uid:'222'
+						})
+						
+					}
+					}
+					for(let i = 0;i<this.baseForm.routes.length;i++){
+						
+						if(this.baseForm.routes[i].titleimages!=''){
+							if(this.baseForm.routes[i].titleimages.indexOf(',')>-1){
+						let list = this.baseForm.routes[i].titleimages.split(',')
+						for(let i =0;i<list.length;i++){
+							this.imglist.push({
+								url:list[i],
+								uid:'2'
+							})
+						}
+						
+					}else{
+						this.imglist.push({
+							url:this.paras,
+							uid:'222'
+						})
+						
+					}
+						}
+					}
+
 					res.data.obj.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
 					this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0){
@@ -528,7 +576,7 @@
 						this.editorhtml = res.data.obj.routes[0].content
 
 					}
-					console.log(res.data.obj)
+			
 					let categorytype = res.data.obj.categorytype
 					switch(categorytype) {
 						case 0:
@@ -726,7 +774,7 @@
 						}
 						
 						para.token = paramm.getToken()
-						console.log(para)
+					
 						lineupdate(para).then((res) => {
 							
 							if(res.data.error == 1) {
@@ -756,10 +804,10 @@
 				this.$refs[formName].resetFields();
 			},
 			handleRemove(file, fileList) {
-				console.log(file, fileList);
+				
 			},
 			handlePreview(file) {
-				console.log(file);
+			
 			},
 			//天数减少
 			minuday() {
@@ -871,7 +919,7 @@
 			//插入交通工具
 			inserttype(str) {
 				let tc = event.currentTarget.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("insertinput")[0]
-				console.log(tc)
+				
 				let ts = tc.getElementsByTagName("input")[0];
 				let tclen = ts.value.length
 				tc.focus();
@@ -880,6 +928,50 @@
 				} else {
 					ts.value = ts.value.substr(0, ts.selectionStart) + str + ts.value.substring(ts.selectionStart, tclen);
 				}
+			},
+			async upload(file) {
+				const files = await imgupload(file)
+				return files.file
+			},
+			uploadsuccess(response, file, fileList) {
+				let all = []
+				let title=[]
+				let titlename = []
+				for(let i = 0;i<fileList.length;i++){
+					if(fileList[i].url){
+						title.push(fileList[i].url)
+					}else{
+						titlename.push(fileList[i].raw.url)
+					}
+					all = title.concat(titlename)
+				}
+				if(all.length == 1){
+					this.baseForm.images = JSON.stringify(all)
+				}else{
+					this.baseForm.images = all.join(',')
+				}
+
+				},
+			handleRemove(file, fileList) {
+				let index
+				for(let i = 0; i < this.imglist.length; i++) {
+					index = i
+				}
+				this.imglist.splice(index, 1)
+				let titlename = []
+				for(let i = 0; i < this.imglist.length; i++) {
+					titlename.push(this.imglist[i].raw.url)
+				}
+				if(this.checktop){
+					let imageurl = titlename.join(',')
+					this.$emit('geturl',imageurl); 
+				}else{
+					this.route.titleimages = titlename.join(',')
+				}
+			},
+			handlePictureCardPreview(file) {
+				this.dialogImageUrl = file.url;
+				this.dialogVisible = true;
 			}
 
 		}
