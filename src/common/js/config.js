@@ -24,12 +24,13 @@ export const getcollectlist = params => { return axios.post(`${base}/finance/col
 export const collectsave = params => { return axios.post(`${base}/finance/collect/save`, params).then(res => res); };//收款登记
 export const banlist = params => { return axios.post(`${base}/sys/bank/accounts`, params).then(res => res); };//查询银行账号列表
 export const collectstatus = params => { return axios.post(`${base}/finance/collect/status`, params).then(res => res); };//状态变更
-export const collectdetail = params => { return axios.post(`${base}/finance/collect/detail`, params).then(res => res); };//状态变更
+export const collectdetail = params => { return axios.post(`${base}/finance/collect/detail`, params).then(res => res); };//详情
 
 /* 付款 */
 export const getpaylist = params => { return axios.post(`${base}/finance/pay`, params).then(res => res); };//获取付款列表
-export const getpayedit = params => { return axios.post(`${base}/finance/pay/status`, params).then(res => res); };//付款状态编辑
 export const paysave = params => { return axios.post(`${base}/finance/pay/save`, params).then(res => res); };//收款登记
+export const paystatus = params => { return axios.post(`${base}/finance/pay/status`, params).then(res => res); };//状态变更
+export const paydetail = params => { return axios.post(`${base}/finance/pay/detail`, params).then(res => res); };//详情
 
 /* 发团列表 */
 export const teamlist = params => { return axios.post(`${base}/line/team/list`, params).then(res => res); };//发团列表

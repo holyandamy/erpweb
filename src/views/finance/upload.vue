@@ -1,7 +1,7 @@
 <template>
   <el-form-item label="上传图片">
-    <el-upload action="http://v0.api.upyun.com/xtimg"  list-type="picture-card" :on-preview="handlePictureCardPreview" :file-list="imglist" :http-request="upload" :on-success="uploadsuccess" :on-remove="handleRemove" multiple>
-      <i class="el-icon-plus"></i>
+    <el-upload action="http://v0.api.upyun.com/xtimg"  list-type="picture-card" :on-preview="handlePictureCardPreview" :file-list="imglist" :http-request="upload" :on-success="uploadsuccess"  :on-remove="handleRemove" multiple>
+      <i class="el-icon-plus"></i> <!-- :before-upload="beforeAvatarUpload"  -->
     </el-upload>
     <el-dialog v-model="dialogVisible" size="tiny">
       <img width="100%" :src="dialogImageUrl" alt="">
@@ -32,9 +32,9 @@
         let list = []
         for(let i = 0 ; i <this.imglist.length;i++){
           //限制图片的数量
-          /*if(this.imglist.length > 10){
-            return false;
-          }*/
+//          if(this.imglist.length > 10){
+//            break;
+//          }
           list.push(this.imglist[i].raw.url)
           this.imagelist = list.join(',')
           this.$emit("imagelistchange",this.imagelist)
@@ -64,6 +64,9 @@
         if (!isLt1M) {
           this.$message.error('上传头像图片大小不能超过 1MB!');
         }
+//        if(this.imglist.length > 10){
+//          this.$message.error('wwwww');
+//        }
         return isLt1M;
       }
     }
