@@ -42,10 +42,12 @@
 									<el-radio label="1">跟团游</el-radio>
 								</el-radio-group>
 							</el-form-item>
-							<el-form-item label="收客类型"  prop="typepeo">
-								<el-checkbox label="成人"  v-model="baseForm.isadult"></el-checkbox>
-								<el-checkbox label="儿童"  v-model="baseForm.ischild"></el-checkbox>
-								<el-checkbox label="老人"  v-model="baseForm.isbaby"></el-checkbox>
+							<el-form-item label="收客类型" prop="checkpeople" label-width="120px">
+								<el-checkbox-group v-model="baseForm.checkpeople">
+								<el-checkbox label="成人" v-model="baseForm.isadult"></el-checkbox>
+								<el-checkbox label="儿童" v-model="baseForm.ischild"></el-checkbox>
+								<el-checkbox label="婴儿" v-model="baseForm.isbaby"></el-checkbox>
+								 </el-checkbox-group>
 							</el-form-item>
 							<el-form-item label="出港地" prop="fromprovinceid">
 								<el-col :span="5">
@@ -352,35 +354,35 @@
 			return {
 				headerqq:{},
 				traffics: [{
-					value: '1',
+					value: 1,
 					label: '飞机'
 				}, {
-					value: '2',
+					value: 2,
 					label: '动车'
 				}, {
-					value: '3',
+					value: 3,
 					label: '火车'
 				}, {
-					value: '4',
+					value: 4,
 					label: '高铁'
 				}, {
-					value: '5',
+					value: 5,
 					label: '大巴'
 				}, {
-					value: '6',
+					value: 6,
 					label: '轮船'
 				}], //出行方式
 				categoryids: [{
-					value: '0',
+					value: 0,
 					label: '全部'
 				}, {
-					value: '1',
+					value: 1,
 					label: '国内游'
 				}, {
-					value: '2',
+					value: 2,
 					label: '出境游'
 				}, {
-					value: '3',
+					value: 3,
 					label: '周边游'
 				}], //线路分类
 				categorytypes: [],
@@ -432,6 +434,7 @@
 					outremark: '',
 					innerremark: '',
 					includePkg: '',
+					checkpeople:[],
 					routes: [{
 						'number': 1,
 						'title': '',
@@ -454,15 +457,16 @@
 					name: [{
 						required: true,
 						message: '请填写线路名称',
-						trigger: 'blur'
+						trigger: 'blur,change'
 					}],
-					teamno: [{ validator:check.teanno, trigger: 'blur', required: true}
+					teamno: [{ validator:check.teanno, trigger: 'blur,change', required: true}
 					],
 					type: [{
 						required: true,
 						message: '请选择出行方式',
 						trigger: 'change'
 					}],
+				checkpeople: [{ type: 'array', required: true, message: '请至少选择一个收客类型', trigger: 'change' }],
 				typepeo: [{required: true,trigger: 'change', validator:typepeocheck}],
 				fromprovinceid: [{required: true, trigger: 'change',validator:startaddresscheck}],
 				backaddress: [{ required: true,trigger: 'change',  validator:endcheck}]
@@ -553,10 +557,32 @@
 					if(valid) {
 						let para = this.baseForm
 						let html = this.$refs.ue.getUEContent()
+						for(let i = 0;i<para.checkpeople.length;i++){
+							if(para.checkpeople[i] == "成人"){
+								para.isadult = true
+							}else if(para.checkpeople[i] == "儿童"){
+								para.ischild = true
+							}else if(para.isbaby[i] == "婴儿"){
+								para.ischild = true
+							}
+						}
 						if(this.editor == false) {
 							//基本录入
 							para.routes = this.baseForm.routes
 							para.edittype = 0
+							for(let i = 0 ; i<para.routes.length ;i++){
+								console.log(para.routes[i].title)
+								if(para.routes[i].title == ""){
+									this.$message({
+									showClose: true,
+									message: "行程标题不能为空！",
+									type: 'error'
+									});
+									return false
+								}
+								
+							}
+							
 						} else {
 							//自定义录入
 							para.routes[0].content = html
@@ -612,13 +638,13 @@
 			},
 			//天数减少
 			minuday() {
-				let index = this.baseForm.length
+				let index = this.baseForm.routes.length
 				if(this.baseForm.days <= 1) {
 					this.baseForm.days == 1
 					index = 1
 				} else {
 					this.baseForm.days -= 1
-					this.baseForm.routes.splice(index, 1)
+					this.baseForm.routes.splice(index-1, 1)
 				}
 
 			},

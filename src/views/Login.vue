@@ -1,14 +1,14 @@
 <template>
-	<el-form :model="loginForm" :rules="rules2" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+	<el-form @keyup.enter="handleLogin"  :model="loginForm" :rules="rules2" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
 		<div class="loginbg">
 			<div class="logintable">
 				<h3 class="title"><img src="../assets/images/loginlogo.png" alt="" /></h3>
 				<el-form-item prop="username">
-					<input class="login_input " style="border-bottom: 1px solid #ddd;" type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号" />
+					<input class="login_input " @keyup.enter="handleLogin"  style="border-bottom: 1px solid #ddd;" type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号" />
 					<i class="account"></i>
 				</el-form-item>
 				<el-form-item prop="password">
-					<input class="login_input " type="password" @keyup.enter="handleLogin" v-model="loginForm.password" auto-complete="off" placeholder="密码" />
+					<input class="login_input " type="password" @keyup.enter="handleLogin"  v-model="loginForm.password" auto-complete="off" placeholder="密码" />
 					<i class="checkPass"></i>
 				</el-form-item>
 				<el-form-item style="margin-top: 50px; height: 30px; margin-bottom: 15px; ">
@@ -17,7 +17,7 @@
 				</el-form-item>
 
 				<el-form-item style="width:100%;">
-					<el-button type="primary" style="width:100%;" @click.native.prevent="handleLogin">登录</el-button>
+					<el-button type="primary" style="width:100%;"  @keyup.enter="handleLogin"    @click.native.prevent="handleLogin">登录</el-button>
 
 				</el-form-item>
 			</div>
@@ -55,9 +55,12 @@ import Cookies from 'js-cookie';
 			};
 		},
 		methods: {
+			
 			handleLogin() {
+				
 				this.$refs.loginForm.validate(valid => {
                 if (valid) {
+                	
                   this.loading = true;
                   let para = {
 							username: this.loginForm.username,

@@ -137,7 +137,7 @@
 							<el-button @click="exportnamelist">导出游客名单</el-button>
 							<el-button>下载名单模版</el-button>
 							<el-button>导入游客名单</el-button> 
-							<el-button  v-if="!detail.isconfirm && !detail.iscancel" @click="confirmnamelist=true" class="hasid" id="8dcdad97735d11e788410242ac120009">确认游客名单</el-button> 
+							<el-button  v-if = "!detail.isconfirm && detail.iscancel" @click="confirmnamelist=true" class="hasid" id="8dcdad97735d11e788410242ac120009">确认游客名单</el-button> 
 						</el-col>
 					</el-row>
 				</h2>
@@ -260,7 +260,7 @@
 			</el-table>
 			<div class="button">
 				<el-button type="primary" size="large" @click="save">提交</el-button>
-				<el-button type="primary" v-if="!detail.isconfirm" size="large" class="hasid" id="91102d1d735d11e788410242ac120009" @click="cancelorder">取消订单</el-button>
+				<el-button type="primary" v-if="!detail.isconfirm && detail.iscancel" size="large" class="hasid" id="91102d1d735d11e788410242ac120009" @click="cancelorder">取消订单</el-button>
 				<el-button size="large" @click="handleHide">返回</el-button>
 			</div>
 		</section>
@@ -355,7 +355,7 @@
 			var price = (rule, value, callback) => {
 				let newvalue = Number(value)
 				if(!Number.isInteger(newvalue)) {
-					callback(new Error('请输入数字值!'));
+					callback(new Error('请输入正整数!'));
 				} else {
 					if(newvalue < 0) {
 						callback(new Error('必须为正数！'));
@@ -791,7 +791,7 @@
 					collectsave(para).then((res) => {
 						if(res.data.error == 1) {
 							this.$message({
-								message: '提交失败',
+								message:res.data.message,
 								type: 'error'
 							});
 						} else {
@@ -813,7 +813,7 @@
 					paysave(para).then((res) => {
 						if(res.data.error == 1) {
 							this.$message({
-								message: '提交失败',
+								message: res.data.message,
 								type: 'error'
 							});
 						} else {

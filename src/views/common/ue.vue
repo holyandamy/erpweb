@@ -29,11 +29,7 @@
       });
      
     },
-    updated(){
-    	 setTimeout(function(){
-      	 _this.editor.setContent(_this.defaultMsg);
-      },1000)
-    },
+    
     methods: {
       getUEContent() { // 获取内容方法
         return this.editor.getContent()

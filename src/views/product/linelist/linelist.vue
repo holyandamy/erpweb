@@ -110,7 +110,7 @@
 										<!--<el-dropdown-item v-if="scope.row.isApprove == true"><span @click="examine(scope)">线路审核</span></el-dropdown-item>-->
 										<el-dropdown-item class="hasid"  id="4dcba294734711e788410242ac120009"><span @click="setMode('editline'),lineinfo(scope)">编辑线路</span></el-dropdown-item>
 										<el-dropdown-item class="hasid"  id="9079b8af734711e788410242ac120009"><span @click="settop(scope)">线路置顶</span></el-dropdown-item>
-										<el-dropdown-item class="hasid"  id="6e3c1a72734711e788410242ac120009"><span @click="updatastatus(scope,4)">查看团期</span></el-dropdown-item>
+										<el-dropdown-item class="hasid"  id="6e3c1a72734711e788410242ac120009"><span @click="updatastatus(scope)">查看团期</span></el-dropdown-item>
 										<el-dropdown-item  v-if="scope.row.isenable == true"><span @click="stop(scope,1)">停止</span></el-dropdown-item>
 										<el-dropdown-item  v-if="scope.row.isenable == false"><span @click="stop(scope,2)">启用</span></el-dropdown-item>
 									</el-dropdown-menu>
@@ -433,7 +433,12 @@
             linename:'',//线路名称
             type:'',//1.国内，2出境，3周边
         }
-      }
+      },
+      //查看团期
+      updatastatus(scope){
+      	
+      		this.$router.push({ path: '/grouplist', query: { name: scope.row.name}})
+    	}
 
 		}
 	}

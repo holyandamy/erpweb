@@ -170,6 +170,12 @@
         showorhide()
       })
     },
+    mounted(){
+    	
+    	if(this.$route.query.name){
+    		this.getList()
+    	}
+    },
     methods:{
       setMode(type,option,sonData){
         if(sonData) this.editcategory.id = sonData
@@ -222,6 +228,9 @@
         }
         let searchParam = this.searchList
         searchParam.date = dates || ''
+        if(this.$route.query.name){
+        	searchParam.linename = this.$route.query.name
+        }
         grouplist(searchParam).then((res) => {
           if(res.data.error !=0 || res.data.err) {
             paramm.getCode(res.data, _this)

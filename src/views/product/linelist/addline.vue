@@ -46,9 +46,11 @@
 								</el-radio-group>
 							</el-form-item>
 							<el-form-item label="收客类型" prop="checkpeople" label-width="120px">
+								<el-checkbox-group v-model="baseForm.checkpeople" @change="changepeople">
 								<el-checkbox label="成人" v-model="baseForm.isadult"></el-checkbox>
 								<el-checkbox label="儿童" v-model="baseForm.ischild"></el-checkbox>
 								<el-checkbox label="婴儿" v-model="baseForm.isbaby"></el-checkbox>
+								 </el-checkbox-group>
 							</el-form-item>
 							<el-form-item label="出港地" prop="fromprovinceid" label-width="120px">
 								<el-col :span="5">
@@ -184,7 +186,8 @@
 								第<span v-model="route.number">{{index+1}}</span>天
 							</div>
 							<el-row>
-								<el-col :span="7">
+								<el-col :span="7" class="star">
+									<span style="color: red;">*</span>
 									<el-form-item label="标题" prop="title">
 										<el-input v-model="route.title" class="insertinput"></el-input>
 									</el-form-item>
@@ -423,35 +426,35 @@
 				templatevisiable: false,
 				headerqq: {},
 				traffics: [{
-					value: '1',
+					value: 1,
 					label: '飞机'
 				}, {
-					value: '2',
+					value: 2,
 					label: '动车'
 				}, {
-					value: '3',
+					value: 3,
 					label: '火车'
 				}, {
-					value: '4',
+					value: 4,
 					label: '高铁'
 				}, {
-					value: '5',
+					value: 5,
 					label: '大巴'
 				}, {
-					value: '6',
+					value: 6,
 					label: '轮船'
 				}], //出行方式
 				categoryids: [{
-					value: '0',
+					value: 0,
 					label: '全部'
 				}, {
-					value: '1',
+					value: 1,
 					label: '国内游'
 				}, {
-					value: '2',
+					value: 2,
 					label: '出境游'
 				}, {
-					value: '3',
+					value: 3,
 					label: '周边游'
 				}], //线路分类
 				categorytypes: [],
@@ -502,6 +505,7 @@
 					outremark: '',
 					innerremark: '',
 					includePkg: '',
+					checkpeople:[],
 					routes: [{
 						'number': 1,
 						'title': '',
@@ -516,6 +520,7 @@
 
 					}]
 				},
+				
 				baseFormrules: {
 					categorytype: [{
 						required: true,
@@ -525,11 +530,11 @@
 					name: [{
 						required: true,
 						message: '请填写线路名称',
-						trigger: 'blur'
+						trigger: 'blur,change'
 					}],
 					teamno: [{
 						validator: check.teanno,
-						trigger: 'blur',
+						trigger: 'blur,change',
 						required: true
 					}],
 					type: [{
@@ -537,11 +542,7 @@
 						message: '请选择出行方式',
 						trigger: 'change'
 					}],
-					checkpeople: [{
-						required: true,
-						trigger: 'change',
-						validator: isadult
-					}],
+					checkpeople: [{ type: 'array', required: true, message: '请至少选择一个收客类型', trigger: 'change' }],
 					fromprovinceid: [{
 						required: true,
 						validator: startaddresscheck
@@ -649,12 +650,24 @@
 			},
 			//保存表单
 			submitForm(formName) {
-
-				this.$refs[formName].validate((valid) => {
+		
+			this.$refs[formName].validate((valid) => {
 					if(valid) {
+						
 						let para = this.baseForm
 						let html = this.$refs.ue.getUEContent()
 						para.token = paramm.getToken()
+						
+						for(let i = 0;i<para.checkpeople.length;i++){
+							if(para.checkpeople[i] == "成人"){
+								para.isadult = true
+							}else if(para.checkpeople[i] == "儿童"){
+								para.ischild = true
+							}else if(para.isbaby[i] == "婴儿"){
+								para.ischild = true
+							}
+						}
+						
 						let categorytype = para.categorytype
 						switch(categorytype) {
 							case "全部":
@@ -716,14 +729,27 @@
 							//基本录入
 							para.routes = this.baseForm.routes
 							para.edittype = 0
+							for(let i = 0 ; i<para.routes.length ;i++){
+								console.log(para.routes[i].title)
+								if(para.routes[i].title == ""){
+									this.$message({
+									showClose: true,
+									message: "行程标题不能为空！",
+									type: 'error'
+									});
+									return false
+								}
+								
+							}
+							
 						} else {
 							//自定义录入
 							para.routes[0].content = html
 							para.edittype = 1
 						}
-
+	
 						linesave(para).then((res) => {
-
+						
 							if(res.data.error == 1) {
 
 								this.$message({
@@ -759,13 +785,13 @@
 
 			//天数减少
 			minuday() {
-				let index = this.baseForm.length
+				let index = this.baseForm.routes.length
 				if(this.baseForm.days <= 1) {
 					this.baseForm.days == 1
 					index = 1
 				} else {
 					this.baseForm.days -= 1
-					this.baseForm.routes.splice(index, 1)
+					this.baseForm.routes.splice(index-1, 1)
 				}
 
 			},
@@ -876,65 +902,22 @@
 			
 				templatdetail(para).then((res) => {
 					this.baseForm = res.data.obj
-					this.baseForm.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
-					let categorytype = res.data.obj.categorytype
-					switch(categorytype) {
-						case 0:
-							this.baseForm.categorytype = "全部";
-							break;
-						case 1:
-							this.baseForm.categorytype = "国内游";
-							break;
-						case 2:
-							this.baseForm.categorytype = "出境游";
-							break;
-						case 3:
-							this.baseForm.categorytype = "周边游";
-							break;
+					
+					this.baseForm.checkpeople = []
+					this.baseForm.checkpeople.push(this.baseForm.isadult,this.baseForm.ischild,this.baseForm.isbaby)
+					
+					if(this.baseForm.checkpeople[0]){
+						this.baseForm.checkpeople[0] = "成人"
 					}
-					let day = res.data.obj.trafficgo
-					switch(day) {
-						case 1:
-							this.baseForm.trafficgo = "飞机";
-							break;
-						case 2:
-							this.baseForm.trafficgo = "动车";
-							break;
-						case 3:
-							this.baseForm.trafficgo = "火车";
-							break;
-						case 4:
-							this.baseForm.trafficgo = "高铁";
-							break;
-						case 5:
-							this.baseForm.trafficgo = "大巴";
-							break;
-						case 6:
-							this.baseForm.trafficgo = "轮船";
-							break;
+					if(this.baseForm.checkpeople[1]){
+						this.baseForm.checkpeople[1] = "儿童"
 					}
-					let trafficback = res.data.obj.trafficreturn
-					switch(trafficback) {
-						case 1:
-							this.baseForm.trafficreturn = "飞机";
-							break;
-						case 2:
-							this.baseForm.trafficreturn = "动车";
-							break;
-						case 3:
-							this.baseForm.trafficreturn = "火车";
-							break;
-						case 4:
-							this.baseForm.trafficreturn = "高铁";
-							break;
-						case 5:
-							this.baseForm.trafficreturn = "大巴";
-							break;
-						case 6:
-							this.baseForm.detail = "轮船";
-							break;
+					if(this.baseForm.checkpeople[2]){
+						this.baseForm.checkpeople[2] = "婴儿"
 					}
 
+					this.baseForm.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
+				
 					if(res.data.obj.edittype == 0) {
 						//普通输入
 						this.editor = false
@@ -943,18 +926,32 @@
 						//自定义输入
 						this.editor = true
 						this.defaultMsg = this.baseForm.routes[0].content
-//						
-//						this.editor.setContent(this.defaultMsg); 
-//						console.log(this.defaultMsg)
-						
-						//this.baseForm.routes[0].content
+
 						
 						
 					}
 
 				})
 
-			}
+		},
+		changepeople(){
+				if(JSON.stringify(this.baseForm.checkpeople).indexOf("婴儿") > 0){
+					this.baseForm.isbaby = true
+				}else{
+					this.baseForm.isbaby = false
+				}
+				if(JSON.stringify(this.baseForm.checkpeople).indexOf("儿童") > 0){
+					this.baseForm.ischild = true
+				}else{
+					this.baseForm.ischild = false
+				}
+				if(JSON.stringify(this.baseForm.checkpeople).indexOf("成人") > 0){
+					this.baseForm.isadult = true
+				}else{
+					this.baseForm.isadult = false
+				}
+
+		}
 
 		}
 	}
@@ -1105,5 +1102,11 @@
 		
 	}
 	.el-form-item__content,.templatelist{width: 100%;}
+	.star{position: relative;}
+	.star span{
+		position: absolute;
+		left: 40px;
+		top: 15px;
+	}
 	
 </style>
