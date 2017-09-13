@@ -402,7 +402,7 @@
         this.addstaff.roleid = this.checkdepartment
         let roleidlist= []
         for(let i = 0; i < this.rolelist.length; i++) {
-          
+
           for(let j = 0 ; j <this.checkdepartment.length;j++){
             if(this.checkdepartment[j] == this.rolelist[i].id){
               roleidlist.push(this.rolelist[i].rolename)
