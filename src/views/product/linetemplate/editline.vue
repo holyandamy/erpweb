@@ -43,7 +43,7 @@
 								</el-radio-group>
 							</el-form-item>
 							<el-form-item label="收客类型" prop="checkpeople" label-width="120px">
-								<el-checkbox-group v-model="baseForm.checkpeople">
+								<el-checkbox-group v-model="baseForm.checkpeople" @change="changepeople">
 								<el-checkbox label="成人" v-model="baseForm.isadult"></el-checkbox>
 								<el-checkbox label="儿童" v-model="baseForm.ischild"></el-checkbox>
 								<el-checkbox label="婴儿" v-model="baseForm.isbaby"></el-checkbox>
@@ -315,6 +315,7 @@
 	import { province, city, district, categoryall, linecategorytype, templatupdate, templatdetail,token } from '../../../common/js/config';
 	import paramm from '../../../common/js/getParam'
 	import ImgLoad from './upload'
+	import check from '../../../common/js/check'
 	export default {
 		components: {
 			UE,
@@ -322,6 +323,38 @@
 		},
 		props: ['lineid', 'scope','topimglist'],
 		data() {
+			//收客类型
+			var typepeocheck =(rule,value,callback) =>{
+				if(this.baseForm.isadult == false && this.baseForm.isbaby == false && this.baseForm.ischild == false){
+									callback(new Error('请选择收客类型！'));
+								}else{
+									callback()
+								}
+			}
+			//出港地
+			var startaddresscheck = (rule, value, callback) =>{
+				if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' ||this.baseForm.fromdistrictid == ''){
+					callback(new Error('请选择出港地！'));
+				}else{
+					callback()
+				}
+			}
+			//回港地
+			var endcheck = (rule, value, callback) =>{
+				if(this.baseForm.toprovinceid == '' || this.baseForm.tocityid == ''){
+					callback(new Error('请选择目的地！'));
+				}else{
+					callback()
+				}
+			}
+			//
+			var category  = (rule, value, callback) =>{
+				if(this.baseForm.categorytype == '' || this.baseForm.categoryid == ''){
+					callback(new Error('线路分类不能为空！'));
+				}else{
+					callback()
+				}
+			}
 			return {
 				traffics: [{
 					value: 1,
@@ -483,6 +516,18 @@
 				templatdetail(para).then((res) => {
 					this.baseForm = res.data.obj
 					res.data.obj.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
+					this.baseForm.checkpeople = []
+					this.baseForm.checkpeople.push(this.baseForm.isadult,this.baseForm.ischild,this.baseForm.isbaby)
+					
+					if(this.baseForm.checkpeople[0]){
+						this.baseForm.checkpeople[0] = "成人"
+					}
+					if(this.baseForm.checkpeople[1]){
+						this.baseForm.checkpeople[1] = "儿童"
+					}
+					if(this.baseForm.checkpeople[2]){
+						this.baseForm.checkpeople[2] = "婴儿"
+					}
 					this.topimglist = res.data.obj.images
 					this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0){
@@ -578,7 +623,7 @@
 							para.routes = this.baseForm.routes
 							para.edittype = 0
 							for(let i = 0 ; i<para.routes.length ;i++){
-								console.log(para.routes[i].title)
+								
 								if(para.routes[i].title == ""){
 									this.$message({
 									showClose: true,
@@ -596,7 +641,7 @@
 							para.edittype = 1
 						}
 						templatupdate(para).then((res) => {
-							console.log(para)
+							
 							if(res.data.error == 1) {
 								this.$message({
 									showClose: true,
@@ -740,7 +785,7 @@
 			//插入交通工具
 			inserttype(str) {
 				let tc = event.currentTarget.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("insertinput")[0]
-				console.log(tc)
+				
 				let ts = tc.getElementsByTagName("input")[0];
 				let tclen = ts.value.length
 				tc.focus();
@@ -749,7 +794,26 @@
 				} else {
 					ts.value = ts.value.substr(0, ts.selectionStart) + str + ts.value.substring(ts.selectionStart, tclen);
 				}
-			}
+			},
+			changepeople(){
+				
+				if(JSON.stringify(this.baseForm.checkpeople).indexOf("婴儿") > 0){
+					this.baseForm.isbaby = true
+				}else{
+					this.baseForm.isbaby = false
+				}
+				if(JSON.stringify(this.baseForm.checkpeople).indexOf("儿童") > 0){
+					this.baseForm.ischild = true
+				}else{
+					this.baseForm.ischild = false
+				}
+				if(JSON.stringify(this.baseForm.checkpeople).indexOf("成人") > 0){
+					this.baseForm.isadult = true
+				}else{
+					this.baseForm.isadult = false
+				}
+
+		}
 
 		}
 	}
