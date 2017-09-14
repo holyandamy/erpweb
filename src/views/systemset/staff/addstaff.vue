@@ -289,11 +289,11 @@
             message: '请选择部门',
             trigger: 'blur'
           }],
-          roleid: [{
+         /* roleid: [{
             required: true,
             message: '请选择角色',
             trigger: 'blur'
-          }],
+          }],*/
           status: [{
             required: true,
             message: '请选择状态',
