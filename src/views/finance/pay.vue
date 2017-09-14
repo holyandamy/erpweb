@@ -163,7 +163,7 @@
 <script>
   import paramm from '../../common/js/getParam'
   import util from '../../common/js/util'
-  import PayEdit from './payEdit'
+  import PayEdit from './payedit'
   import { getpaylist, paystatus, token,paydetail} from '../../common/js/config';
   import { showorhide } from '../../common/js/showorhid'
   export default {
