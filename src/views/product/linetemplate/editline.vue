@@ -2,15 +2,21 @@
 	<div>
 		<header>
 			<el-row>
+				<el-col :span="4">
+					<el-breadcrumb separator="/">
+            <el-breadcrumb-item><span @click="handleHide()">线路模板</span></el-breadcrumb-item>
+            <el-breadcrumb-item>编辑模板</el-breadcrumb-item>
+           
+          </el-breadcrumb>
+				</el-col>
 				<el-col :span="12">
 					<ul>
 						<li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
 					</ul>
 				</el-col>
-				<el-col :span="12">
-					<el-button @click="handleHide()" style=" margin-top: -10px;">返回线路模板</el-button>
-				</el-col>
+				
 			</el-row>
+			
 		</header>
 		<section>
 
@@ -196,13 +202,13 @@
 								<el-col :span="7">
 									<div class="linetype">
 										<ul>
-											<li @click="inserttype('[飞机]')"></li>
-											<li @click="inserttype('[火车]')"></li>
-											<li @click="inserttype('[汽车]')"></li>
-											<li @click="inserttype('[轮船]')"></li>
-											<li @click="inserttype('[动车]')"></li>
-											<li @click="inserttype('[高铁]')"></li>
-											<li @click="inserttype('[待定]')"></li>
+											<li @click="inserttype('[飞机]',index)"></li>
+											<li @click="inserttype('[火车]',index)"></li>
+											<li @click="inserttype('[汽车]',index)"></li>
+											<li @click="inserttype('[轮船]',index)"></li>
+											<li @click="inserttype('[动车]',index)"></li>
+											<li @click="inserttype('[高铁]',index)"></li>
+											<li @click="inserttype('[待定]',index)"></li>
 
 										</ul>
 									</div>
@@ -783,16 +789,14 @@
 				this.getdistrict(city)
 			},
 			//插入交通工具
-			inserttype(str) {
-				let tc = event.currentTarget.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("insertinput")[0]
-				
-				let ts = tc.getElementsByTagName("input")[0];
-				let tclen = ts.value.length
-				tc.focus();
+			inserttype(str,index) {
+				let listss = document.getElementsByClassName("insertinput")[index].childNodes[2]
+				let lists = listss.value.length
+				listss.focus();
 				if(typeof document.selection != "undefined") {
 					document.selection.createRange().text = str;
 				} else {
-					ts.value = ts.value.substr(0, ts.selectionStart) + str + ts.value.substring(ts.selectionStart, tclen);
+					listss.value = listss.value.substr(0, listss.selectionStart) + str + listss.value.substring(listss.selectionStart, lists);
 				}
 			},
 			changepeople(){

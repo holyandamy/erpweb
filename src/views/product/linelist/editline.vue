@@ -2,15 +2,21 @@
 	<div>
 		<header>
 			<el-row>
+				<el-col :span="4">
+					<el-breadcrumb separator="/">
+            <el-breadcrumb-item><span @click="handleHide()">线路列表</span></el-breadcrumb-item>
+            <el-breadcrumb-item>编辑线路</el-breadcrumb-item>
+           
+          </el-breadcrumb>
+				</el-col>
 				<el-col :span="12">
 					<ul>
 						<li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
 					</ul>
 				</el-col>
-				<el-col :span="12">
-					<el-button @click="handleHide()" style=" margin-top: -10px;">返回线路列表</el-button>
-				</el-col>
+				
 			</el-row>
+			
 		</header>
 		<section>
 
@@ -73,8 +79,7 @@
 									&nbsp;
 								</el-col>
 								<el-col :span="5">
-									
-										<el-select filterable v-model="baseForm.fromdistrictid" placeholder="请选择">
+									<el-select filterable v-model="baseForm.fromdistrictid" placeholder="请选择">
 											<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
@@ -83,11 +88,10 @@
 							</el-form-item>
 							<el-form-item label="目的地" prop ="backaddress" label-width="120px">
 								<el-col :span="5">
-									
-										<el-select filterable v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
+									<el-select filterable v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
 											<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
-										</el-select>
+									</el-select>
 								
 								</el-col>
 								<el-col :span="1">
@@ -145,14 +149,7 @@
 							<el-form-item label="集合地点" prop="station" label-width="120px">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-							<el-form-item label="上传图片" label-width="120px">
-							<el-upload action="http://v0.api.upyun.com/xtimg" accept="image/jpeg,image/gif,image/png"  list-type="picture-card" :on-preview="handlePictureCardPreview" :file-list="topimglist" :http-request="upload" :on-success="uploadsuccess" :on-remove="handleRemove" multiple>
-								<i class="el-icon-plus"></i>
-							</el-upload>
-							<el-dialog v-model="dialogVisible" size="tiny">
-								<img width="100%" :src="dialogImageUrl" alt="">
-							</el-dialog>
-						</el-form-item>
+								<ImgLoad @geturl="geturl" :scope="scope" :checktop="checktop" :scopes="scopes"></ImgLoad>
 					</el-col>
 					</el-row>
 				</div>
@@ -197,14 +194,13 @@
 								<el-col :span="7">
 									<div class="linetype">
 										<ul>
-											<li @click="inserttype('[飞机]')"></li>
-											<li @click="inserttype('[火车]')"></li>
-											<li @click="inserttype('[汽车]')"></li>
-											<li @click="inserttype('[轮船]')"></li>
-											<li @click="inserttype('[动车]')"></li>
-											<li @click="inserttype('[高铁]')"></li>
-											<li @click="inserttype('[待定]')"></li>
-
+											<li @click="inserttype('[飞机]',index)"></li>
+											<li @click="inserttype('[火车]',index)"></li>
+											<li @click="inserttype('[汽车]',index)"></li>
+											<li @click="inserttype('[轮船]',index)"></li>
+											<li @click="inserttype('[动车]',index)"></li>
+											<li @click="inserttype('[高铁]',index)"></li>
+											<li @click="inserttype('[待定]',index)"></li>
 										</ul>
 									</div>
 								</el-col>
@@ -506,7 +502,9 @@
 				editimg:true,
 				paras:'',
 				checktop:true,
-				topimglist:[]
+				scopes:[]
+				
+				
 				
 			}
 		},
@@ -524,10 +522,10 @@
 					token: paramm.getToken(),
 					id: this.lineid
 				}
+				
 				linedetail(para).then((res) => {
 					this.baseForm = res.data.obj
-					this.paras = this.baseForm.images
-					console.log(typeof this.baseForm.trafficgo)
+					this.scopes = res.data.obj.routes
 					this.baseForm.checkpeople = []
 					this.baseForm.checkpeople.push(this.baseForm.isadult,this.baseForm.ischild,this.baseForm.isbaby)
 					
@@ -551,45 +549,45 @@
 
 					}
 					
-				if(this.paras!=''){
-						if(this.paras.indexOf(',')>-1){
-						let list = this.paras.split(',')
-						for(let i =0;i<list.length;i++){
-							this.topimglist.push({
-								url:list[i],
-								uid:'2'
-							})
-						}
-						
-					}else{
-						this.topimglist.push({
-							url:this.paras,
-							uid:'222'
-						})
-						
-					}
-					}
-					for(let i = 0;i<this.baseForm.routes.length;i++){
-						
-						if(this.baseForm.routes[i].titleimages!=''){
-							if(this.baseForm.routes[i].titleimages.indexOf(',')>-1){
-						let list = this.baseForm.routes[i].titleimages.split(',')
-						for(let i =0;i<list.length;i++){
-							this.imglist.push({
-								url:list[i],
-								uid:'2'
-							})
-						}
-						
-					}else{
-						this.imglist.push({
-							url:this.paras,
-							uid:'222'
-						})
-						
-					}
-						}
-					}
+//				if(this.paras!=''){
+//						if(this.paras.indexOf(',')>0){
+//						let list = this.paras.split(',')
+//						for(let i =0;i<list.length;i++){
+//							this.topimglist.push({
+//								url:list[i],
+//								uid:'2'
+//							})
+//						}
+//						console.log(1)
+//						}else{
+//							this.topimglist.push({
+//								url:this.paras,
+//								uid:'222'
+//							})
+//							console.log(2)
+//						}
+//					}
+//					for(let i = 0;i<this.baseForm.routes.length;i++){
+//						
+//						if(this.baseForm.routes[i].titleimages!=''){
+//							if(this.baseForm.routes[i].titleimages.indexOf(',')>-1){
+//						let list = this.baseForm.routes[i].titleimages.split(',')
+//						for(let i =0;i<list.length;i++){
+//							this.imglist.push({
+//								url:list[i],
+//								uid:'2'
+//							})
+//						}
+//						
+//					}else{
+//						this.imglist.push({
+//							url:this.paras,
+//							uid:'222'
+//						})
+//						
+//					}
+//						}
+//					}
 				
 				})
 
@@ -641,7 +639,6 @@
 			},
 			//选择分类
 			checkline() {
-				console.log(this.baseForm.categorytype,'11111')
 				let para = {
 					token: paramm.getToken(),
 					type: this.baseForm.categorytype
@@ -675,7 +672,7 @@
 							para.routes = this.baseForm.routes
 							para.edittype = 0
 							for(let i = 0 ; i<para.routes.length ;i++){
-								console.log(para.routes[i].title)
+							
 								if(para.routes[i].title == ""){
 									this.$message({
 									showClose: true,
@@ -839,62 +836,17 @@
 				this.getdistrict(city)
 			},
 			//插入交通工具
-			inserttype(str) {
-				let tc = event.currentTarget.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("insertinput")[0]
-				
-				let ts = tc.getElementsByTagName("input")[0];
-				let tclen = ts.value.length
-				tc.focus();
+			inserttype(str,index) {
+				let listss = document.getElementsByClassName("insertinput")[index].childNodes[2]
+				let lists = listss.value.length
+				listss.focus();
 				if(typeof document.selection != "undefined") {
 					document.selection.createRange().text = str;
 				} else {
-					ts.value = ts.value.substr(0, ts.selectionStart) + str + ts.value.substring(ts.selectionStart, tclen);
+					listss.value = listss.value.substr(0, listss.selectionStart) + str + listss.value.substring(listss.selectionStart, lists);
 				}
 			},
-			async upload(file) {
-				const files = await imgupload(file)
-				return files.file
-			},
-			uploadsuccess(response, file, fileList) {
-				let all = []
-				let title=[]
-				let titlename = []
-				for(let i = 0;i<fileList.length;i++){
-					if(fileList[i].url){
-						title.push(fileList[i].url)
-					}else{
-						titlename.push(fileList[i].raw.url)
-					}
-					all = title.concat(titlename)
-				}
-				if(all.length == 1){
-					this.baseForm.images = JSON.stringify(all)
-				}else{
-					this.baseForm.images = all.join(',')
-				}
-
-				},
-			handleRemove(file, fileList) {
-				let index
-				for(let i = 0; i < this.imglist.length; i++) {
-					index = i
-				}
-				this.imglist.splice(index, 1)
-				let titlename = []
-				for(let i = 0; i < this.imglist.length; i++) {
-					titlename.push(this.imglist[i].raw.url)
-				}
-				if(this.checktop){
-					let imageurl = titlename.join(',')
-					this.$emit('geturl',imageurl); 
-				}else{
-					this.route.titleimages = titlename.join(',')
-				}
-			},
-			handlePictureCardPreview(file) {
-				this.dialogImageUrl = file.url;
-				this.dialogVisible = true;
-			},
+			
 			changepeople(){
 				
 				if(JSON.stringify(this.baseForm.checkpeople).indexOf("婴儿") > 0){

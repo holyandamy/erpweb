@@ -1,10 +1,22 @@
 <template>
 	<div>
 		<header>
+			<el-row>
+				 <el-col :span="4">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item><span @click="handleHide()">线路列表</span></el-breadcrumb-item>
+            <el-breadcrumb-item>查看列表详情</el-breadcrumb-item>
+           
+          </el-breadcrumb>
+        </el-col>
+				<el-col :span="12">	
 			<ul>
 				<li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
 			</ul>
-			<el-button @click="handleHide()" style="float: left; margin-top: -10px;">返回线路列表</el-button>
+			</el-col>
+			
+</el-row>
+		
 		</header>
 		<section>
 			<h2 class="d_jump">基本信息</h2>
@@ -94,9 +106,10 @@
 					<li>
 						<span>图片</span>
 						<div class="xc">
-							<div v-for="img in route.titleimages">
+							<div v-for="img in route.titleimages" class="bottomimg">
 								<img :src="img" />
 							</div>
+							<div class="clearfix"></div>
 						</div>
 
 					</li>
@@ -260,7 +273,7 @@
 							this.detail.trafficreturn = "大巴";
 							break;
 						case 6:
-							this.detail.detail = "轮船";
+							this.detail.trafficreturn = "轮船";
 							break;
 					}
 
@@ -540,6 +553,13 @@
 			width: 90px;
 			display: inline-block;
 		}
+		li{
+			float: left;
+			margin-right: 30px;
+			img{
+				width: 300px;
+			}
+		}
 	}
 	.logtitle{
 		button{
@@ -547,4 +567,12 @@
 		}
 		
 	}
+	.bottomimg{
+		float: left;
+		margin-right: 30px;
+		img{
+			width: 300px;
+		}
+	}
+	.clearfix{clear: both;}
 </style>
