@@ -56,7 +56,7 @@
                         </el-select>
                       </el-col>
                     </el-form-item>
-                    <el-form-item label="联系人：" prop="name">
+                    <el-form-item label="联系人：" required prop="name">
                       <el-col :span="4">
                         <el-input v-model="visitorList.contact" ></el-input>
                       </el-col>
@@ -330,6 +330,20 @@
       // 点击保存 取消
       submitForm () {
         let _this = this;
+        if(this.visitorList.contact == ''){
+          _this.$message({
+            message: '联系人未填写',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.visitorList.mobile == ''){
+          _this.$message({
+            message: '联系人手机未填写',
+            type: 'warning'
+          });
+          return
+        }
         this.visitorList.adultNum = this.adultArr.length;
         this.visitorList.childNum = this.childArr.length;
         this.visitorList.babyNum = this.babyArr.length;
@@ -340,20 +354,46 @@
             if((item.name && item.certtype && item.cert && item.mobile) || (!item.name && !item.certtype && !item.cert && !item.mobile)){
 //            console.log(1111, _this.visitorList);
             }else {
-              _this.$message({
-                message: '信息未填写完整',
-                type: 'warning'
-              });
-              throw false
+              if(!item.name){
+                _this.$message({
+                  message: '姓名未填写',
+                  type: 'warning'
+                });
+                throw false
+              }
+              if(!item.certtype){
+                _this.$message({
+                  message: '未选择证件类型',
+                  type: 'warning'
+                });
+                throw false
+              }
+              if(!item.cert){
+                _this.$message({
+                  message: '证件号码未填写',
+                  type: 'warning'
+                });
+                throw false
+              }
+              if(!item.mobile){
+                _this.$message({
+                  message: '手机号未填写',
+                  type: 'warning'
+                });
+                throw false
+              }
+
             }
           })
         }catch (e){
           throw e
         }
+        let newChckArr = []
         this.checkArr.forEach(function (item,idx) {
-          if(item.name == '') _this.checkArr.splice(idx,1)
+//          if(item.name == '') _this.checkArr.splice(idx,1)
+          if(item.name != '') newChckArr.push(item)
         })
-        this.visitorList.list = this.checkArr
+        this.visitorList.list = newChckArr
         this.visitorList.mobile = this.visitorList.mobile.toString()
         orderSave(this.visitorList).then(function (res) {
           if(!res.data.error){
