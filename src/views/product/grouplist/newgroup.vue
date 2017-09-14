@@ -205,13 +205,17 @@
                         <el-checkbox v-model="item.checked" @change='sigCheck'></el-checkbox>
                       </td>
                       <td  >
-                        <div class="cell" style='cursor: pointer;' @click='sigDel(idx)'>删除</div>
+                        <div class="cell" style='cursor: pointer;' @click='sigDel(item,idx)'>删除</div>
                       </td>
                       <td width='800'>
                         {{item.starttime || '---'}}
                       </td>
                       <td>
-                        <div class="cell el-tooltip" ><el-input v-model="item.plan"></el-input></div>
+                        <div class="cell" >
+                          <el-input v-model="item.plan"></el-input>
+                          <span v-if="operationType.type == 'edit'" style='color: green;'>已收：{{item.book + item.sit}}</span>
+
+                        </div>
                       </td>
                       <td >
                         <!--{{item.isorder}}-->
@@ -314,7 +318,7 @@
 <script>
   import {address} from '../../../common/js/address'
   import axios from 'axios';
-  import {token,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist,groupupdate,groupdetail} from '../../../common/js/config';
+  import {token,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist,groupupdate,groupdetail,groupDel} from '../../../common/js/config';
   import ElDialog from "../../../../node_modules/element-ui/packages/dialog/src/component";
   import paramm from '../../../common/js/getParam'
   export default {
@@ -555,10 +559,25 @@
         })
       },
       // 全选单选删除
-      sigDel (idx) {
-        this.checkArr.splice(idx, 1)
-        this.startTimeArr.splice(idx, 1)
-        this.TemStArr = []
+      sigDel (item,idx) {
+        let _this = this;
+        if(item.id){
+          groupDel({token:paramm.getToken(),id:item.id}).then((res)=>{
+            if(res.data.error || res.data.err) {
+              paramm.getCode(res.data,_this)
+            }else {
+              paramm.getCode(res.data,_this)
+              _this.checkArr.splice(idx, 1)
+              _this.startTimeArr.splice(idx, 1)
+              _this.TemStArr = []
+            }
+          })
+        }else {
+          _this.checkArr.splice(idx, 1)
+          _this.startTimeArr.splice(idx, 1)
+          _this.TemStArr = []
+        }
+
       },
       sigCheck () {
         let isAll = this.checkArr.every(function (item) {
@@ -661,10 +680,10 @@
           this.linesorts = res.data.obj
         })
       },
-      isTrue (itemm,msg) {
-        if(isNaN(itemm) || parseFloat(itemm)<0) {
+      isTrue (sTime,itemm,msg) {
+        if(isNaN(itemm) || parseFloat(itemm)<0 || parseInt(itemm)!=itemm) {
           this.$message({
-            message: '请输入合法的'+msg,
+            message: sTime+'日'+msg+'为大于或等于0的整数',
             type: 'warning'
           })
           return true
@@ -698,109 +717,45 @@
         }
        try{
          this.checkArr.forEach(function (item,idx) {
-           if(_this.isTrue(item.plan,'计划人数') || _this.isTrue(item.deadline,'截止天数') ||
-             _this.isTrue(item.mktbaby,'婴儿市场价') || _this.isTrue(item.mktchild,'儿童市场价') || _this.isTrue(item.mktaduilt,'成人市场价') || _this.isTrue(item.mktroom,'市场价单房差') ||
-             _this.isTrue(item.sltbaby,'婴儿结算价') || _this.isTrue(item.sltchild,'儿童结算价') || _this.isTrue(item.sltaduilt,'成人结算价') || _this.isTrue(item.sltroom,'结算价单房差')
+           item.surplus = _this.surpluss;
+
+           if(isNaN(item.plan) || parseFloat(item.plan)<=0 || parseInt(item.plan)!=item.plan) {
+             _this.$message({
+               message: item.starttime+'日计划人数为大于或等于1的整数',
+               type: 'warning'
+             })
+             throw false
+           }
+           if(_this.isTrue(item.starttime,item.deadline,'截止天数') ||
+             _this.isTrue(item.starttime,item.mktbaby,'婴儿市场价') || _this.isTrue(item.starttime,item.mktchild,'儿童市场价') || _this.isTrue(item.starttime,item.mktaduilt,'成人市场价') || _this.isTrue(item.starttime,item.mktroom,'市场价单房差') ||
+             _this.isTrue(item.starttime,item.sltbaby,'婴儿结算价') || _this.isTrue(item.starttime,item.sltchild,'儿童结算价') || _this.isTrue(item.starttime,item.sltaduilt,'成人结算价') || _this.isTrue(item.starttime,item.sltroom,'结算价单房差')
            ) throw false
+
+           _this. allChecked = false
+           delete item.checked
          })
        }catch (e){
           throw e
        }
         // 合作平台
+
+        // todo 1.1
         let platforms = [];
-        var checkListNew = []
-        this.checkList.forEach(function (item) {
-          checkListNew.push(item+1)
-        })
+//        var checkListNew = []
+//        this.checkList.forEach(function (item) {
+//          checkListNew.push(item+1)
+//        })
+//        this.pingtai.forEach(function (item,idx) {
+//          if (checkListNew.indexOf(item.platform) != -1) {
+//            platforms.push({platform: item.platform, isenable: true,id: _this.platformId[idx]});
+//          }else {
+//            platforms.push({platform: item.platform, isenable: false,id: _this.platformId[idx]});
+//          }
+//        })
+        // todo 1.2
         this.pingtai.forEach(function (item,idx) {
-          if (checkListNew.indexOf(item.platform) != -1) {
-            platforms.push({platform: item.platform, isenable: true,id: _this.platformId[idx]});
-          }else {
-            platforms.push({platform: item.platform, isenable: false,id: _this.platformId[idx]});
-          }
+          platforms.push({platform: item.platform, isenable: false,id: _this.platformId[idx]})
         })
-
-        try {
-          this.checkArr.forEach(function (item,idx) {
-//            item.confirm = parseFloat(item.confirm);
-            item.surplus = _this.surpluss;
-            if(!item.plan) {
-              _this.$message({
-                message: item.starttime + '日计划人数未填写完整',
-                type: 'warning'
-              });
-              throw false
-            }
-            if(!item.deadline) {
-              _this.$message({
-                message: item.starttime + '日截止天数未填写完整',
-                type: 'warning'
-              });
-              throw false
-            }
-            if(!item.mktbaby) {
-              _this.$message({
-                message: item.starttime + '日婴儿市场价未填写完整',
-                type: 'warning'
-              });
-              throw false
-            }
-            if(!item.mktchild) {
-              _this.$message({
-                message: item.starttime + '日儿童市场价未填写完整',
-                type: 'warning'
-              });
-              throw false
-            }
-            if(!item.mktaduilt) {
-              _this.$message({
-                message: item.starttime + '日成人市场价未填写完整',
-                type: 'warning'
-              });
-              throw false
-            }
-            if(!item.mktroom) {
-              _this.$message({
-                message: item.starttime + '日市场价单房差未填写完整',
-                type: 'warning'
-              });
-              throw false
-            }
-            if(!item.sltbaby) {
-              _this.$message({
-                message: item.starttime + '日婴儿结算价未填写完整',
-                type: 'warning'
-              });
-              throw false
-            }
-            if(!item.sltchild) {
-              _this.$message({
-                message: item.starttime + '日儿童结算价未填写完整',
-                type: 'warning'
-              });
-              throw false
-            }
-            if(!item.sltaduilt) {
-              _this.$message({
-                message: item.starttime + '日成人结算价未填写完整',
-                type: 'warning'
-              });
-              throw false
-            }
-            if(!item.sltroom) {
-              _this.$message({
-                message: item.starttime + '日结算价单房差未填写完整',
-                type: 'warning'
-              });
-              throw false
-            }
-            _this. allChecked = false
-            delete item.checked
-          })
-        }catch (e){
-          throw e
-        }
-
         // 结束时间
         if(_this.operationType.type == 'add'){
           _this.startTimeArr.forEach(function (item) {
@@ -845,10 +800,10 @@
           _this.checkArr.forEach(function (item) {
             delete item.linename;
             delete item.creater;
-            delete item.id;
             delete item.status;
             delete item.teamid;
             delete item.teamno;
+            delete item.surplus;
           })
           groupupdate({
             token: paramm.getToken(),

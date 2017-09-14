@@ -82,7 +82,10 @@
           </el-table-column>
           <el-table-column prop="days" label="天数" width="80">
           </el-table-column>
-          <el-table-column prop="book" label="已售" width="80">
+          <el-table-column label="已售" width="80">
+            <template scope='scope'>
+              {{scope.row.book + scope.row.sit}}
+            </template>
           </el-table-column>
           <el-table-column prop="status" label="状态" width="80">
           </el-table-column>
@@ -171,7 +174,7 @@
       })
     },
     mounted(){
-    	
+
     	if(this.$route.query.name){
     		this.getList()
     	}

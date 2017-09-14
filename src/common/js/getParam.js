@@ -34,6 +34,18 @@ paramm.getCode = (data,thiss) => {
         type: 'warning'
       });
     }
+    if(data.err == 404) {
+      thiss.$message({
+        message: '失败404',
+        type: 'warning'
+      });
+    }
+    if(data.err == 500) {
+      thiss.$message({
+        message: '服务器异常500',
+        type: 'warning'
+      });
+    }
    if(data.err == 502) {
      thiss.$message({
        message: '网络异常',

@@ -230,7 +230,7 @@
         rules: {
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' },
-            { min: 2, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+            { min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur' }
           ],
           sexid: [
             { required: true, message: '请选择活动资源', trigger: 'change' }

@@ -42,6 +42,7 @@ export const orderdet = params => { return axios.post(`${base}/line/team/order/d
 export const groupdetail = params => { return axios.post(`${base}/line/team/detail`, params).then(res => res); };//发团列表 详情
 export const groupupdate = params => { return axios.post(`${base}/line/team/update`, params).then(res => res); };//发团列表 编辑
 export const groupStop = params => { return axios.post(`${base}/line/team/status`, params).then(res => res); };//发团列表 停止
+export const groupDel = params => { return axios.post(`${base}/line/team/del`, params).then(res => res); };//发团列表- 编辑- 删除
 
 /*产品分类*/
 export const linecategorylist = params => { return axios.post(`${base}/line/category/list`, params); };//获取线路管理
