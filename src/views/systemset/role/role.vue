@@ -16,7 +16,7 @@
     </header>
     <section class="padding30">
       <el-table :data="roleList" style="text-align: left; font-size: 12px;">
-        <el-table-column prop="id" label="角色ID">
+        <el-table-column prop="id" label="序号">
         </el-table-column>
         <el-table-column prop="rolename" label="角色名称">
         </el-table-column>
@@ -102,14 +102,15 @@
           this.modeType='addRole';
       },
       deleteRow(index, rows){
-        this.roleList.splice(index, 1);
+        let _this = this;
         let para ={token:paramm.getToken(),id:rows.id}
         roledel(para).then((res) => {
-          if(res.data.error){
-            this.$message.error(res.data.massage);
-          }
-          else {
+          if(res.data.error!=0 || res.data.err){
+            paramm.getCode(res.data, _this)
+          } else {
+            this.roleList.splice(index, 1);
             this.getList()
+            paramm.getCode(res.data, _this)
           }
         })
       },
@@ -120,6 +121,10 @@
         rolelist(page).then((res) => {
           this.total = Number(res.data.obj.total);
           this.roleList =Object.assign([],res.data.obj.datas);
+          this.roleList.forEach((item,index) => {
+            item.id = Number(index + 1)
+          })
+          console.log(this.roleList)
         })
       },
 

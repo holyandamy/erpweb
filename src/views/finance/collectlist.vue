@@ -118,13 +118,13 @@
               {{showForm.busstypename}}
             </el-form-item>
             <el-form-item label="订单编号：" prop="orderno">
-              {{showForm.orderno}}
+              {{showForm.orderno  || '- - -'}}
             </el-form-item>
             <el-form-item label="团号：" prop="teamno">
-              {{showForm.teamno}}
+              {{showForm.teamno || '- - -'}}
             </el-form-item>
             <el-form-item label="线路名称：" prop="linename">
-              {{showForm.linename}}
+              {{showForm.linename || '- - -'}}
             </el-form-item>
             <el-form-item label="付款单位：" prop="companyname">
             {{showForm.companyname}}
@@ -142,8 +142,8 @@
             </el-form-item>
             <el-form-item label="附件图片：">  <!--   prop="remark"  -->
               <ul>
-                <li v-for='imgg in imgArr' style='margin: 10px;'>
-                  <img :src="imgg" alt="" >
+                <li v-for='imgg in imgArr' style='margin: 10px;width: 50%;'>
+                  <img :src="imgg" alt="" style='width: 100%;height: 100%;'>
                 </li>
               </ul>
             </el-form-item>
@@ -155,7 +155,7 @@
         </el-dialog>
       </div>
     </div>
-    <CollectEdit v-else @setMode="setMode" @toparent = 'setMode'></CollectEdit>
+    <CollectEdit v-else @setMode="setMode" @toparent = 'setMode' @getL = 'onSubmit'></CollectEdit>
   </section>
 
 </template>
@@ -356,6 +356,7 @@
             if(res.data.error || res.data.err){
               paramm.getCode(res.data,_this)
             }else {
+              _this.showForm.remark=res.data.obj.remark
               _this.imgArr = res.data.obj.attach.split(',')
               _this.detail = res.data.obj.details
               _this.detail.forEach(function (item,idx) {

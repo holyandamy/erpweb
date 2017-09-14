@@ -54,7 +54,7 @@
 							</el-form-item>
 							<el-form-item label="出港地" prop="fromprovinceid" label-width="120px">
 								<el-col :span="5">
-									<el-select filterable v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom">
+									<el-select filterable v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom('pro')">
 										<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 										</el-option>
 									</el-select>
@@ -65,7 +65,7 @@
 								</el-col>
 								<el-col :span="5">
 
-									<el-select filterable v-model="baseForm.fromcityid" placeholder="请选择" @change="changecityfrom">
+									<el-select filterable v-model="baseForm.fromcityid" placeholder="请选择" @change="changecityfrom('city')">
 										<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 										</el-option>
 									</el-select>
@@ -86,7 +86,7 @@
 							<el-form-item label="目的地" prop="backaddress" label-width="120px">
 								<el-col :span="5">
 
-									<el-select filterable v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
+									<el-select filterable v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback('pro')">
 										<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 										</el-option>
 									</el-select>
@@ -97,7 +97,7 @@
 								</el-col>
 								<el-col :span="5">
 
-									<el-select filterable v-model="baseForm.tocityid" placeholder="请选择" @change="changecityback">
+									<el-select filterable v-model="baseForm.tocityid" placeholder="请选择" @change="changecityback('city')">
 										<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 										</el-option>
 									</el-select>
@@ -847,32 +847,43 @@
 				})
 			},
 			//选择去程城市
-			changecityfrom() {
-				let pro = {
-					id: this.baseForm.fromprovinceid,
-					token: paramm.getToken()
-				}
-				this.getcity(pro)
-				let city = {
-					id: this.baseForm.fromcityid,
-					token: paramm.getToken()
-				}
-				this.getdistrict(city)
+			changecityfrom(val) {
+			  if(val === 'pro'){
+          let pro = {
+            id: this.baseForm.fromprovinceid,
+            token: paramm.getToken()
+          }
+          this.getcity(pro)
+          this.baseForm.fromcityid = ''
+        }else{
+          let city = {
+            id: this.baseForm.fromcityid,
+            token: paramm.getToken()
+          }
+          this.getdistrict(city)
+          this.baseForm.fromdistrictid = ''
+        }
 
 			},
 			//选择返程城市
-			changecityback() {
-				let pro = {
-					id: this.baseForm.toprovinceid,
-					token: paramm.getToken()
-				}
-				this.getcity(pro)
-				let city = {
-					id: this.baseForm.tocityid,
-					token: paramm.getToken()
-				}
-				this.getdistrict(city)
-			},
+      changecityback(val) {
+        if(val === 'pro'){
+          let pro = {
+            id: this.baseForm.toprovinceid,
+            token: paramm.getToken()
+          }
+          this.getcity(pro)
+          this.baseForm.tocityid = ''
+        }else{
+          let city = {
+            id: this.baseForm.tocityid,
+            token: paramm.getToken()
+          }
+          this.getdistrict(city)
+          this.baseForm.todistrictid = ''
+        }
+
+      },
 			//插入交通工具
 			inserttype(str) {
 				let tc = event.currentTarget.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("insertinput")[0]
@@ -899,7 +910,7 @@
 					token: paramm.getToken(),
 					id: this.templateselectid
 				}
-			
+
 				templatdetail(para).then((res) => {
 					this.baseForm = res.data.obj
 					
@@ -984,7 +995,7 @@
 			}
 		}
 	}
-	
+
 	section {
 		margin-top: 60px;
 		padding: 0 30px;
@@ -1060,11 +1071,11 @@
 			}
 		}
 	}
-	
+
 	.linetype li:last-child {
 		border-right: 0!important;
 	}
-	
+
 	.file {
 		position: relative;
 		display: inline-block;
@@ -1082,13 +1093,13 @@
 		float: left;
 		margin-top: 5px;
 	}
-	
+
 	.el-upload-list__item-actions {
 		display: none;
 	}
 	.fromwidth{
 		width: 100%;
-		
+
 		.templatelist .el-radio{
 		padding: 10px 0;
 		margin-left: 15px;
@@ -1097,9 +1108,9 @@
 		line-height: 20px;
 		margin-right: 3%;
 		overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-		
+
 	}
-		
+
 	}
 	.el-form-item__content,.templatelist{width: 100%;}
 	.star{position: relative;}

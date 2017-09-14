@@ -30,7 +30,7 @@ paramm.getCode = (data,thiss) => {
     }
     if(data.err == 401) {
       thiss.$message({
-        message: '请登录',
+        message: '请重新登陆',
         type: 'warning'
       });
     }

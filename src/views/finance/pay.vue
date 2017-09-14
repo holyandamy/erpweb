@@ -1,8 +1,9 @@
 <template>
   <section>
-    <div v-if="showedit == 'pay'">
+    <div v-if="showedit == 'collectlist'">
       <header>
-        <el-button type="primary" @click="setMode('payedit')" class="hasid" id="fd05293f72b911e7aad70242ac120006">付款登记</el-button>
+        <el-button type="primary" @click="setMode('collectedit')" class="hasid" id="fd05293f72b911e7aad70242ac120006">
+          付款登记
         </el-button>
         <el-button :plain="true" type="info">导出Excel</el-button>
       </header>
@@ -33,41 +34,50 @@
           </el-form-item>
           <el-form-item label="核销状态">
             <el-select v-model="search.verifstatus" placeholder="请选择">
-              <el-option v-for="item in state1" :key="item.value" :label="item.label" :value="item.value">
+              <el-option v-for="item in verifstatuss" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="业务类型">
-            <el-select v-model="search.busstypename" placeholder="请选择">
+            <el-select v-model="search.businesstype" placeholder="请选择">
               <el-option v-for="item in type " :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit" class="hasid" id="e1adf55a72b911e7aad70242ac120006">查询</el-button>
+            <el-button type="primary" class="hasid" id="e1adf55a72b911e7aad70242ac120006" @click="onSubmit">查询</el-button>
+            <el-button  type="primary" @click="clearGetList">清空查询</el-button>
           </el-form-item>
         </el-form>
-        <!--v-loading="listLoading"-->
+
         <el-table :data="tableData" v-loading="listLoading" border style="width: 100%; font-size:12px ;">
-          <el-table-column fixed prop="createtime" label="日期" width="100">
+          <el-table-column fixed prop="createtime" label="创建日期" width="100">
           </el-table-column>
           <el-table-column prop="orderno" label="订单编号" width="120">
           </el-table-column>
-          <el-table-column prop="code" label="付款单号" width="180">
-          </el-table-column>
           <el-table-column prop="teamno" label="团号" width="120">
           </el-table-column>
-          <el-table-column prop="linename" label="产品名称" width="300">
+          <el-table-column prop="linename" label="线路名称" width="300">
           </el-table-column>
-          <el-table-column prop="companyname" label="单位名称" width="125">
+          <el-table-column prop="code" label="付款单号" width="180">
           </el-table-column>
           <el-table-column prop="busstypename" label="业务类型" width="120">
           </el-table-column>
+          <el-table-column prop="companyname" label="单位名称" width="125">
+          </el-table-column>
           <el-table-column prop="totalfee" label="金额" width="120">
           </el-table-column>
-          <el-table-column prop="confirm" label="确认状态" width="90">
+          <el-table-column prop="confirm" label="确认状态" width="120" ref="confirm" class="confirm">
+            <template scope="scope">
+              <span v-if="scope.row.confirm == '未确认'" style='color: red;'>{{scope.row.confirm}}</span>
+              <span v-if="scope.row.confirm != '未确认'">{{scope.row.confirm}}</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="verification" label="核销状态" width="90">
+          <el-table-column prop="verification" label="核销状态" width="120">
+            <template scope="scope">
+              <span v-if="scope.row.verification == '未核销'" style='color: red;'>{{scope.row.verification}}</span>
+              <span v-if="scope.row.verification != '未核销'">{{scope.row.verification}}</span>
+            </template>
           </el-table-column>
           <el-table-column prop="operator" label="经办人" width="100">
           </el-table-column>
@@ -75,16 +85,16 @@
 
             <template scope="scope">
               <el-button @click="handleShow(scope.$index, scope.row)" type="text" size="small">查看</el-button>
-              <a href="javascript:;"  v-if="scope.row.cfmValue =='0' || scope.row.verfValue =='0'">
+              <a href="javascript:;" v-if="scope.row.cfmValue !='2' && scope.row.verfValue =='0'">
                 <el-dropdown>
 									<span class="el-dropdown-link">
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item class="hasid" id="1246dc8c72ba11e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">已确认</span></el-dropdown-item>
-                    <!--<el-dropdown-item v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">未确认</span></el-dropdown-item>-->
-                    <el-dropdown-item class="hasid" id="31ce8b2b72ba11e7aad70242ac120006"  v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
-                    <el-dropdown-item class="hasid" id="40da0a9772ba11e7aad70242ac120006"  v-if="scope.row.verfValue =='0'"><span @click="updatastatus(scope,4)">反核销</span></el-dropdown-item>
+                    <el-dropdown-item class="hasid" id="1246dc8c72ba11e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
+                    <el-dropdown-item class="hasid" id="1246dc8c72ba11e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
+                    <el-dropdown-item class="hasid" id="31ce8b2b72ba11e7aad70242ac120006" v-if="scope.row.cfmValue =='1'&&scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
+                    <!--<el-dropdown-item class="hasid" id="b16981ef72b911e7aad70242ac120006" v-if="scope.row.verfValue ==''"><span @click="updatastatus(scope,4)">反核销</span></el-dropdown-item>-->
                   </el-dropdown-menu>
                 </el-dropdown>
               </a>
@@ -94,14 +104,13 @@
         <!--工具条-->
         <el-col :span="24" class="toolbar">
           <!--<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>-->
-          <el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pagesize" layout="total, prev, pager, next" :total="total">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pagesize" layout="total, prev, pager, next" :total="total">
           </el-pagination>
-
         </el-col>
 
         <!--查看界面-->
-        <el-dialog title="查看" v-model="showFormVisible" >  <!-- :close-on-click-modal="false"   -->
-          <el-form :model="showForm" label-width="100px" ref="showForm">
+        <el-dialog title="查看" v-model="showFormVisible">  <!--  点击旁边也可关闭  :close-on-click-modal="false"   -->
+          <el-form :model="showForm" label-width="90px" ref="showForm">
             <el-form-item label="创建日期：" prop="createtime">
               {{showForm.createtime}}
             </el-form-item>
@@ -109,74 +118,87 @@
               {{showForm.busstypename}}
             </el-form-item>
             <el-form-item label="订单编号：" prop="orderno">
-              {{showForm.orderno}}
+              {{showForm.orderno || '- - -'}}
             </el-form-item>
-            <!--<el-form-item label="收款单号" prop="code">
-                            {{showForm.code}}
-                        </el-form-item>-->
             <el-form-item label="团号：" prop="teamno">
-              {{showForm.teamno}}
+              {{showForm.teamno || '- - -'}}
             </el-form-item>
             <el-form-item label="线路名称：" prop="linename">
-              {{showForm.linename}}
+              {{showForm.linename || '- - -'}}
             </el-form-item>
-            <el-form-item label="付款单位：" prop="companyname">
+            <el-form-item label="收款单位：" prop="companyname">
               {{showForm.companyname}}
             </el-form-item>
-            <!--<el-form-item label="金额" prop="totalfee">
-                            {{showForm.totalfee}}
-                        </el-form-item>
-                        <el-form-item label="经办人" prop="operator">
-                            {{showForm.operator}}
-                        </el-form-item>-->
             <el-form-item label="备注：" prop="remark">
               {{showForm.remark || '- - -'}}
+            </el-form-item>
+            <el-form-item label="付款明细：">  <!--  prop="detail" -->
+              <el-table :data="detail" border>
+                <el-table-column property="typee" label="付款方式" width="150"></el-table-column>
+                <el-table-column property="accountname" label="付款账户" ></el-table-column>
+                <el-table-column property="linetime" label="到账日期" width="150"></el-table-column>
+                <el-table-column property="fee" label="金额" width="150"></el-table-column>
+              </el-table>
+            </el-form-item>
+            <el-form-item label="附件图片：">  <!--   prop="remark"  -->
+              <ul>
+                <li v-for='imgg in imgArr' style='margin: 10px;width: 50%;'>
+                  <img :src="imgg" alt="" style='width: 100%;height: 100%;'>
+                </li>
+              </ul>
             </el-form-item>
           </el-form>
 
           <div slot="footer" class="dialog-footer">
-            <el-button @click.native="showFormVisible = false">确认</el-button>
-
+            <el-button @click.native="showFormVisible = false">关闭</el-button>
           </div>
         </el-dialog>
       </div>
     </div>
-    <PayEdit v-else @setMode="setMode"></PayEdit>
+    <PayEdit v-else @setMode="setMode" @toparent = 'setMode' @getL = 'onSubmit'></PayEdit>
   </section>
 
 </template>
 
 <script>
   import paramm from '../../common/js/getParam'
-  import axios from 'axios';
   import util from '../../common/js/util'
-  import PayEdit from './payedit'
-  import { getpaylist, getpayedit,token} from '../../common/js/config';
-  import {showorhide} from '../../common/js/showorhid'
+  import PayEdit from './payEdit'
+  import { getpaylist, paystatus, token,paydetail} from '../../common/js/config';
+  import { showorhide } from '../../common/js/showorhid'
   export default {
     components: {
-      PayEdit
+      PayEdit,
     },
     data() {
       return {
-        showedit: 'pay',
+        detail: [],
+        imgArr: [],
+        showedit: 'collectlist',
         //搜索数据
         search: {
-          token:paramm.getToken(),
+          token: paramm.getToken(),
           date: '',
           companyname: '',
           teamno: '',
           orderno: '',
-          confirmstatus: '',
-          verifstatus: '',
-          busstypename: ''
+          confirmstatus: '-1',
+          verifstatus: '-1',
+          businesstype: '0',
+          pageindex: 0,
+          pagesize: 10
         },
+        pageset: {
+          pageindex: '',
+          pagesize: ''
+        },
+        currentPage: 1,
+
         //确认状态
-        state: [
-          {
+        state: [{
           value: '-1',
           label: '全部'
-          },
+        },
           {
             value: '0',
             label: '未确认'
@@ -188,30 +210,28 @@
             label: '确认不通过'
           }
         ],
-        //核销状态
-        state1: [
+        verifstatuss: [
           {
             value: '-1',
             label: '全部'
           },
           {
-          value: '0',
-          label: '待核验'
+            value: '0',
+            label: '待核销'
+          }, {
+            value: '1',
+            label: '核销通过'
           },
           {
-            value: '1',
-            label: '核验通过'
-          }, {
             value: '2',
-            label: '核验不通过'
+            label: '核销不通过'
           }
         ],
         //类型
-        type: [
-          {
+        type: [{
           value: '0',
           label: '全部'
-          },
+        },
           {
             value: '1',
             label: '预付款'
@@ -226,7 +246,7 @@
           },
           {
             value: '4',
-            label: '预付款退款'
+            label: '预收款退款'
           }
         ],
         tableData: [],
@@ -247,38 +267,37 @@
         },
         total: 0,
         pagesize: 10,
-        currentPage: 1,
-        pageset: {
-          pageindex: '',
-          pagesize: ''
-        }
+        qr: true,
+        hx: true,
+        dataid: []
 
       }
 
     },
-//    mounted(){
-//      showorhide()
-//    },
+
     updated: function() {
       this.$nextTick(function() {
         showorhide()
       })
     },
     methods: {
-      setMode(type) {
-        this.showedit = type
-      },
-
-      //		状态编辑
-      updatastatus(scope, i) {
-        let para = {
+      // 清空查询
+      clearGetList () {
+        this. search = {
           token: paramm.getToken(),
-          id: scope.row.id,
-          status: i
+          date: '',
+          companyname: '',
+          teamno: '',
+          orderno: '',
+          confirmstatus: '-1',
+          verifstatus: '-1',
+          businesstype: '0',
+          pageindex: 0,
+          pagesize: 10
         }
-        getpayedit(para).then((res) => {
-          console.log(res)
-        })
+      },
+      setMode(type) {
+        this.showedit = type;
       },
       totalall: function() {
         //				for(let i = 0; i < this.tableData.length; i++) {
@@ -287,27 +306,14 @@
         //				}
 
       },
-      handleCurrentChange(val) {
-        this.page = val;
-        this.getUsers();
-      },
-      //获取用户列表
-      getUsers() {
-        let page = {}
-        page.pageindex = this.currentPage - 1
-        page.pagesize = this.pagesize
-        page.token =  paramm.getToken()
-        let para = Object.assign(page,this.search)
-        this.listLoading = true;
-        getpaylist(para).then((data) => {
-          this.total = Number(data.data.obj.total);
-          this.tableData = data.data.obj.datas
-          this.listLoading = false
+      handleSizeChange(val) {
 
-        })
       },
+
       onSubmit() {
+        let _this = this;
         this.listLoading = true;
+
         let dates = ''
         let startday = this.search.date[0]
         let endday = this.search.date[1]
@@ -331,21 +337,71 @@
           pageindex: this.currentPage - 1,
           pagesize: this.pagesize
         }
-        getpaylist(parses).then((data) => {
-          this.tableData = data.data.obj.datas
-          this.listLoading = false
+
+        getpaylist(parses).then((res) => {
+          if(res.data.error || res.data.err){
+            paramm.getCode(res.data,_this)
+            return
+          }else {
+            _this.tableData = res.data.obj.datas
+            _this.total = Number(res.data.obj.total);
+            _this.listLoading = false
+          }
         })
       },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.onSubmit();
+      },
       //显示查看界面
-      handleShow: function(index, row) {
+      handleShow (idx, row) {
+        let _this = this;
+        paydetail({token: paramm.getToken(),id:row.id}).then((res)=>{
+          if(res.data.error || res.data.err){
+            paramm.getCode(res.data,_this)
+          }else {
+            _this.showForm.remark=res.data.obj.remark
+            _this.imgArr = res.data.obj.attach.split(',')
+            _this.detail = res.data.obj.details
+            _this.detail.forEach(function (item,idx) {
+              item.typee = {1:'现金',2:'对公汇款',3:'刷卡',4:'支付宝',5:'微信',6:'网银',7:'其他'}[item.type]
+            })
+          }
+        })
         this.showFormVisible = true;
         this.showForm = Object.assign({}, row);
+      },
+      //		状态编辑
+      updatastatus(scope, i) {
+
+        let _this = this;
+        let para = {
+          token: paramm.getToken(),
+          id: scope.row.id,
+          status: i
+        }
+        paystatus(para).then((res) => {
+          if(res.data.error != 0 || res.data.err) {
+            paramm.getCode(res.data,_this)
+          } else {
+            paramm.getCode(res.data,_this);
+            _this.onSubmit()
+          }
+
+        })
       }
     },
-    created() {
-      //this.totalall()
-//      this.getUsers();
-    }
+    filters: {
+      statusFilter(status) {
+        const statusMap = {
+          published: 'success',
+          draft: 'gray',
+          deleted: 'danger'
+        };
+        return statusMap[status]
+      }
+    },
+
   }
 </script>
 <style scoped lang="scss">
@@ -388,5 +444,8 @@
 
   a {
     color: #fff;
+  }
+  .hasid {
+    display: none;
   }
 </style>
