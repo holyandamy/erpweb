@@ -98,7 +98,7 @@
                 </el-col>
               </el-row>
             </el-form-item>
-            <el-form-item label="选择角色">
+            <el-form-item label="选择角色" prop="roleid">
               <el-row>
                 <el-col :span="4">
                   <el-input v-model="roleids"></el-input>
@@ -169,7 +169,7 @@
   import { usersave, getdeplist, rolelist,token} from '../../../common/js/config';
   export default {
     data() {
-      //验证员工编号
+      //验证员工编号(不能和已经存在的员工编号相同，)
       var checkcode = (rule,value,callback) => {
         let codereg = /^[0-9]{1,20}$/;
         if(codereg.test(value)){
@@ -287,11 +287,11 @@
             message: '请选择部门',
             trigger: 'blur'
           }],
-          /*roleid: [{
-                        required: true,
-                        message: '请选择角色',
-                        trigger: 'blur'
-                    }],*/
+          roleid: [{
+            required: true,
+            message: '请选择角色',
+            trigger: 'blur'
+          }],
           status: [{
             required: true,
             message: '请选择状态',
@@ -402,10 +402,11 @@
         this.addstaff.roleid = this.checkdepartment
         let roleidlist= []
         for(let i = 0; i < this.rolelist.length; i++) {
-
+          
           for(let j = 0 ; j <this.checkdepartment.length;j++){
             if(this.checkdepartment[j] == this.rolelist[i].id){
               roleidlist.push(this.rolelist[i].rolename)
+              console.log(roleidlist)
               this.roleids = roleidlist.join(',')
             }
           }

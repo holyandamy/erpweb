@@ -60,6 +60,7 @@
 			},
 			//新增银行账户
 			addbank() {
+			  //新建银行账户的时候应该要把上一次的数据清空
 				this.$refs.BankAccount.addbank()
 			},
 			//新增部门
