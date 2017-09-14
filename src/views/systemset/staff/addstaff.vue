@@ -289,11 +289,11 @@
             message: '请选择部门',
             trigger: 'blur'
           }],
-         /* roleid: [{
+          roleid: [{
             required: true,
             message: '请选择角色',
             trigger: 'blur'
-          }],*/
+          }],
           status: [{
             required: true,
             message: '请选择状态',
@@ -401,7 +401,7 @@
       comfirmrole() {
         this.finddepartment = false
 
-        this.addstaff.roleid = this.checkdepartment
+        this.addstaff.roleid = this.checkdepartment.toString()
         let roleidlist= []
         for(let i = 0; i < this.rolelist.length; i++) {
 

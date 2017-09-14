@@ -1,6 +1,13 @@
 <template>
 	<el-form-item label="上传图片" style="text-align: left;">
-		<el-upload action="http://v0.api.upyun.com/xtimg"  list-type="picture-card" :on-preview="handlePictureCardPreview" :file-list="imglist" :http-request="upload" :on-success="uploadsuccess" :on-remove="handleRemove">
+		<el-upload action="http://v0.api.upyun.com/xtimg"
+               accept="image/gif,ima"
+               list-type="picture-card"
+               :on-preview="handlePictureCardPreview"
+               :file-list="imglist"
+               :http-request="upload"
+               :on-success="uploadsuccess"
+               :on-remove="handleRemove">
 			<i class="el-icon-plus"></i>
 		</el-upload>
 		<el-dialog v-model="dialogVisible" size="tiny">
@@ -19,7 +26,7 @@
 				dialogVisible: false,
 				imglist: [],
 				imagelist:''
-				
+
 			}
 		},
 		methods: {
@@ -30,7 +37,7 @@
 					status:'success'
 				})
 				console.log(this.imglist,logo)
-				
+
 			},
 			//图片上传
 			async upload(file) {
@@ -38,7 +45,7 @@
 				return files.file
 			},
 			uploadsuccess(response, file, fileList) {
-				
+
 				if(fileList.length>1){
 					this.imglist.splice(1,1)
 					this.$message({
@@ -51,11 +58,12 @@
 					for(let i = 0 ; i <this.imglist.length;i++){
 						list.push(this.imglist[i].raw.url)
 						this.imagelist = list.join(',')
+            console.log(typeof this.imagelist)
 						this.$emit("imagelistchange",this.imagelist)
 					}
 				}
-				
-				
+
+
 			},
 			handleRemove(file, fileList) {
 				let index
@@ -67,7 +75,7 @@
 				for(let i = 0 ; i <this.imglist.length;i++){
 					list.push(this.imglist[i].raw.url)
 					this.imagelist = list.join(',')
-					this.$emit("imagelistchange",this.imagelist) 
+					this.$emit("imagelistchange",this.imagelist)
 				}
 			},
 			handlePictureCardPreview(file) {

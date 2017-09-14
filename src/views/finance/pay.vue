@@ -5,7 +5,7 @@
         <el-button type="primary" @click="setMode('collectedit')" class="hasid" id="fd05293f72b911e7aad70242ac120006">
           付款登记
         </el-button>
-        <el-button :plain="true" type="info">导出Excel</el-button>
+        <a target='_blank' :href="plusSrc" @click="payexport"><el-button>导出excel</el-button></a>
       </header>
       <div class="container">
         <el-form :inline="true" id="search" class="demo-form-inline" @submit.prevent="submit">
@@ -166,12 +166,15 @@
   import PayEdit from './payedit'
   import { getpaylist, paystatus, token,paydetail} from '../../common/js/config';
   import { showorhide } from '../../common/js/showorhid'
+  //导出excel
   export default {
     components: {
       PayEdit,
     },
     data() {
       return {
+        baseUrll: 'http://api.erp.we2tu.com/api/finance/pay/export',
+        plusSrc: '',
         detail: [],
         imgArr: [],
         showedit: 'collectlist',
@@ -282,6 +285,27 @@
     },
     methods: {
       // 清空查询
+      payexport() {
+        let dates = ''
+        let startday = this.search.date[0]
+        let endday = this.search.date[1]
+        startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
+        endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
+        if(startday == '' && endday == '') {
+          dates = startday + endday
+        } else {
+          dates = startday + '|' + endday
+        }
+        this.plusSrc = this.baseUrll + '?'
+          + 'date=' + dates +'&'
+          + 'token=' + paramm.getToken() +'&'
+          + 'companyname=' + this.search.companyname +'&'
+          + 'teamno=' + this.search.teamno +'&'
+          + 'orderno=' + this.search.orderno +'&'
+          + 'confirmstatus=' + this.search.confirmstatus +'&'
+          + 'verifstatus=' + this.search.verifstatus +'&'
+          + 'businesstype=' + this.search.businesstype;
+      },
       clearGetList () {
         this. search = {
           token: paramm.getToken(),

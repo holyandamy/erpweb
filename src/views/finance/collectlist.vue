@@ -5,7 +5,7 @@
         <el-button type="primary" @click="setMode('collectedit')" class="hasid" id="5e47a82072b911e7aad70242ac120006">
           收款登记
         </el-button>
-        <el-button :plain="true" type="info">导出Excel</el-button>
+        <a id='downloadd' target='_blank'  :href='plusSrc' @click="collectexport"><el-button >导出excel</el-button></a>
       </header>
       <div class="container">
         <el-form :inline="true" id="search" class="demo-form-inline" @submit.prevent="submit">
@@ -126,19 +126,26 @@
             <el-form-item label="线路名称：" prop="linename">
               {{showForm.linename || '- - -'}}
             </el-form-item>
-            <el-form-item label="付款单位：" prop="companyname">
+            <el-form-item label="收款单位：" prop="companyname">
             {{showForm.companyname}}
             </el-form-item>
             <el-form-item label="备注：" prop="remark">
               {{showForm.remark || '- - -'}}
             </el-form-item>
-            <el-form-item label="收款明细：">  <!--  prop="detail" -->
+            <el-form-item label="收款明细：" prop="detail">  <!--  prop="detail" -->
               <el-table :data="detail" border>
                 <el-table-column property="typee" label="收款方式" width="150"></el-table-column>
                 <el-table-column property="accountname" label="收款账户" ></el-table-column>
                 <el-table-column property="linetime" label="到账日期" width="150"></el-table-column>
                 <el-table-column property="fee" label="金额" width="150"></el-table-column>
               </el-table>
+              <el-col :span="24">
+                <table style="border:1px solid #ccc;margin-top:10px" :data="detail" width="100%">
+                  <tr v-for="item in detail">
+                    <td style="text-align:right">金额合计:￥{{item.fee}}元</td>
+                  </tr>
+                </table>
+              </el-col>
             </el-form-item>
             <el-form-item label="附件图片：">  <!--   prop="remark"  -->
               <ul>
@@ -159,19 +166,21 @@
   </section>
 
 </template>
-
 <script>
   import paramm from '../../common/js/getParam'
   import util from '../../common/js/util'
   import CollectEdit from './collectedit'
   import { getcollectlist, collectstatus, token,collectdetail} from '../../common/js/config';
   import { showorhide } from '../../common/js/showorhid'
+  //导出excel
   export default {
     components: {
       CollectEdit,
     },
     data() {
       return {
+        baseUrll: 'http://api.erp.we2tu.com/api/finance/collect/export',
+        plusSrc: '',
         detail: [],
         imgArr: [],
         showedit: 'collectlist',
@@ -277,9 +286,31 @@
       })
     },
     methods: {
+      //导出excel
+      collectexport() {
+        let dates = ''
+        let startday = this.search.date[0]
+        let endday = this.search.date[1]
+        startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
+        endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
+        if(startday == '' && endday == '') {
+          dates = startday + endday
+        } else {
+          dates = startday + '|' + endday
+        }
+        this.plusSrc = this.baseUrll + '?'
+          + 'date=' + dates +'&'
+          + 'token=' + paramm.getToken() +'&'
+          + 'companyname=' + this.search.companyname +'&'
+          + 'teamno=' + this.search.teamno +'&'
+          + 'orderno=' + this.search.orderno +'&'
+          + 'confirmstatus=' + this.search.confirmstatus +'&'
+          + 'verifstatus=' + this.search.verifstatus +'&'
+          + 'businesstype=' + this.search.businesstype;
+      },
       // 清空查询
       clearGetList () {
-        this. search = {
+        this.search = {
             token: paramm.getToken(),
             date: '',
             companyname: '',
@@ -443,5 +474,8 @@
   }
   .hasid {
     display: none;
+  }
+  #downloadd{
+    display: inline-block;
   }
 </style>

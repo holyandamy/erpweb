@@ -94,8 +94,14 @@
 
                 </td>
               </tr>
+              <tr v-for="item in collectForm.detail">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>金额合计:￥{{item.fee}}元</td>
+              </tr>
             </table>
-
           </el-col>
         </el-form-item>
         <ImgUpload @imagelistchange="imagelistchange"></ImgUpload>

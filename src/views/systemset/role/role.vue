@@ -16,8 +16,10 @@
     </header>
     <section class="padding30">
       <el-table :data="roleList" style="text-align: left; font-size: 12px;">
-        <el-table-column prop="id" label="序号">
+        <el-table-column prop="number" label="序号">
         </el-table-column>
+       <!-- <el-table-column prop="id" label="角色ID">
+        </el-table-column>-->
         <el-table-column prop="rolename" label="角色名称">
         </el-table-column>
         <el-table-column prop="createtime" label="添加时间">
@@ -52,7 +54,7 @@
 	import { showorhide } from '../../../common/js/showorhid'
   import axios from 'axios';
   import AddRole from './addrole';
-  import {token,rolelist,roledel} from '../../../common/js/config';
+  import {token,rolelist,roledel, roledetail} from '../../../common/js/config';
   export default {
     components: {
       AddRole, // add role
@@ -97,9 +99,20 @@
 
       },
       editorFn(rows){
-          this.operationType.type='edit';
-          this.operationType.id=rows.id;
-          this.modeType='addRole';
+        this.operationType.type='edit';
+        this.operationType.id=rows.id;
+        this.modeType='addRole';
+        //发送请求
+        let _this = this;
+        let para = {token:paramm.getToken(),id:rows.id}
+        roledetail(para).then((res) => {
+          if(res.data.error !=0 || res.data.err) {
+            paramm.getCode(res.data,_this)
+          }else{
+            //paramm.getCode(res.data,_this)
+          }
+        })
+
       },
       deleteRow(index, rows){
         let _this = this;
@@ -121,8 +134,9 @@
         rolelist(page).then((res) => {
           this.total = Number(res.data.obj.total);
           this.roleList =Object.assign([],res.data.obj.datas);
+
           this.roleList.forEach((item,index) => {
-            item.id = Number(index + 1)
+            item.number = Number(index + 1)
           })
           console.log(this.roleList)
         })

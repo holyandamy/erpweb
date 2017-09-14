@@ -176,6 +176,7 @@
         this.$emit('setMode', 'role',option);
       },
       clickChangeChildState:function (newObject){
+        console.log(999)
         this.changeStateOfChildNodes(newObject,newObject.status)
       },
       getData(mapDate){
@@ -193,10 +194,12 @@
       //post date
       submitFn:function () {
         let _this = this;
+
         if (this.roleName.length == 0) {
           this.$message.error('请输入角色名！');
           return
         }
+
         let newAuths=this.getData(this.roleMap).split(',')
         newAuths.pop();
         if( this.$parent.operationType.type!='edit'){
@@ -215,8 +218,7 @@
               this.handleHide('add');
             }
           })
-        }
-        else {
+        } else {
           let editPostData = {
             token:paramm.getToken(),
             name: this.roleName,
@@ -225,12 +227,18 @@
             id:this.$parent.operationType.id,
           };
           roleupdate(editPostData).then((backData) => {
-            if(backData.error){
+            if(backData.data.error!=0 || backData.data.err){
+              paramm.getCode(backData.data, _this)
+            } else {
+              paramm.getCode(backData.data, _this)
+              this.handleHide('edit');
+            }
+            /*if(backData.error){
               this.$message.error(backData.massage);
             }
             else {
               this.handleHide('edit');
-            }
+            }*/
           })
         }
       }
