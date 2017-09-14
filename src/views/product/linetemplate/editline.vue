@@ -2,15 +2,21 @@
 	<div>
 		<header>
 			<el-row>
+				<el-col :span="4">
+					<el-breadcrumb separator="/">
+            <el-breadcrumb-item><span @click="handleHide()">线路模板</span></el-breadcrumb-item>
+            <el-breadcrumb-item>编辑模板</el-breadcrumb-item>
+           
+          </el-breadcrumb>
+				</el-col>
 				<el-col :span="12">
 					<ul>
 						<li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
 					</ul>
 				</el-col>
-				<el-col :span="12">
-					<el-button @click="handleHide()" style=" margin-top: -10px;">返回线路模板</el-button>
-				</el-col>
+				
 			</el-row>
+			
 		</header>
 		<section>
 
@@ -43,7 +49,7 @@
 								</el-radio-group>
 							</el-form-item>
 							<el-form-item label="收客类型" prop="checkpeople" label-width="120px">
-								<el-checkbox-group v-model="baseForm.checkpeople">
+								<el-checkbox-group v-model="baseForm.checkpeople" @change="changepeople">
 								<el-checkbox label="成人" v-model="baseForm.isadult"></el-checkbox>
 								<el-checkbox label="儿童" v-model="baseForm.ischild"></el-checkbox>
 								<el-checkbox label="婴儿" v-model="baseForm.isbaby"></el-checkbox>
@@ -196,13 +202,13 @@
 								<el-col :span="7">
 									<div class="linetype">
 										<ul>
-											<li @click="inserttype('[飞机]')"></li>
-											<li @click="inserttype('[火车]')"></li>
-											<li @click="inserttype('[汽车]')"></li>
-											<li @click="inserttype('[轮船]')"></li>
-											<li @click="inserttype('[动车]')"></li>
-											<li @click="inserttype('[高铁]')"></li>
-											<li @click="inserttype('[待定]')"></li>
+											<li @click="inserttype('[飞机]',index)"></li>
+											<li @click="inserttype('[火车]',index)"></li>
+											<li @click="inserttype('[汽车]',index)"></li>
+											<li @click="inserttype('[轮船]',index)"></li>
+											<li @click="inserttype('[动车]',index)"></li>
+											<li @click="inserttype('[高铁]',index)"></li>
+											<li @click="inserttype('[待定]',index)"></li>
 
 										</ul>
 									</div>
@@ -315,6 +321,7 @@
 	import { province, city, district, categoryall, linecategorytype, templatupdate, templatdetail,token } from '../../../common/js/config';
 	import paramm from '../../../common/js/getParam'
 	import ImgLoad from './upload'
+	import check from '../../../common/js/check'
 	export default {
 		components: {
 			UE,
@@ -322,6 +329,38 @@
 		},
 		props: ['lineid', 'scope','topimglist'],
 		data() {
+			//收客类型
+			var typepeocheck =(rule,value,callback) =>{
+				if(this.baseForm.isadult == false && this.baseForm.isbaby == false && this.baseForm.ischild == false){
+									callback(new Error('请选择收客类型！'));
+								}else{
+									callback()
+								}
+			}
+			//出港地
+			var startaddresscheck = (rule, value, callback) =>{
+				if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' ||this.baseForm.fromdistrictid == ''){
+					callback(new Error('请选择出港地！'));
+				}else{
+					callback()
+				}
+			}
+			//回港地
+			var endcheck = (rule, value, callback) =>{
+				if(this.baseForm.toprovinceid == '' || this.baseForm.tocityid == ''){
+					callback(new Error('请选择目的地！'));
+				}else{
+					callback()
+				}
+			}
+			//
+			var category  = (rule, value, callback) =>{
+				if(this.baseForm.categorytype == '' || this.baseForm.categoryid == ''){
+					callback(new Error('线路分类不能为空！'));
+				}else{
+					callback()
+				}
+			}
 			return {
 				traffics: [{
 					value: 1,
@@ -483,6 +522,18 @@
 				templatdetail(para).then((res) => {
 					this.baseForm = res.data.obj
 					res.data.obj.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
+					this.baseForm.checkpeople = []
+					this.baseForm.checkpeople.push(this.baseForm.isadult,this.baseForm.ischild,this.baseForm.isbaby)
+					
+					if(this.baseForm.checkpeople[0]){
+						this.baseForm.checkpeople[0] = "成人"
+					}
+					if(this.baseForm.checkpeople[1]){
+						this.baseForm.checkpeople[1] = "儿童"
+					}
+					if(this.baseForm.checkpeople[2]){
+						this.baseForm.checkpeople[2] = "婴儿"
+					}
 					this.topimglist = res.data.obj.images
 					this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0){
@@ -578,7 +629,7 @@
 							para.routes = this.baseForm.routes
 							para.edittype = 0
 							for(let i = 0 ; i<para.routes.length ;i++){
-								console.log(para.routes[i].title)
+								
 								if(para.routes[i].title == ""){
 									this.$message({
 									showClose: true,
@@ -596,7 +647,7 @@
 							para.edittype = 1
 						}
 						templatupdate(para).then((res) => {
-							console.log(para)
+							
 							if(res.data.error == 1) {
 								this.$message({
 									showClose: true,
@@ -738,18 +789,35 @@
 				this.getdistrict(city)
 			},
 			//插入交通工具
-			inserttype(str) {
-				let tc = event.currentTarget.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("insertinput")[0]
-				console.log(tc)
-				let ts = tc.getElementsByTagName("input")[0];
-				let tclen = ts.value.length
-				tc.focus();
+			inserttype(str,index) {
+				let listss = document.getElementsByClassName("insertinput")[index].childNodes[2]
+				let lists = listss.value.length
+				listss.focus();
 				if(typeof document.selection != "undefined") {
 					document.selection.createRange().text = str;
 				} else {
-					ts.value = ts.value.substr(0, ts.selectionStart) + str + ts.value.substring(ts.selectionStart, tclen);
+					listss.value = listss.value.substr(0, listss.selectionStart) + str + listss.value.substring(listss.selectionStart, lists);
 				}
-			}
+			},
+			changepeople(){
+				
+				if(JSON.stringify(this.baseForm.checkpeople).indexOf("婴儿") > 0){
+					this.baseForm.isbaby = true
+				}else{
+					this.baseForm.isbaby = false
+				}
+				if(JSON.stringify(this.baseForm.checkpeople).indexOf("儿童") > 0){
+					this.baseForm.ischild = true
+				}else{
+					this.baseForm.ischild = false
+				}
+				if(JSON.stringify(this.baseForm.checkpeople).indexOf("成人") > 0){
+					this.baseForm.isadult = true
+				}else{
+					this.baseForm.isadult = false
+				}
+
+		}
 
 		}
 	}
