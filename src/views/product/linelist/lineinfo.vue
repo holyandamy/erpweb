@@ -20,7 +20,7 @@
 								<li><span>收客类型</span>
 									<el-checkbox label="成人" prop="isadult" disabled v-model="detail.isadult"></el-checkbox>
 									<el-checkbox label="儿童" prop="ischild" disabled v-model="detail.ischild"></el-checkbox>
-									<el-checkbox label="老人" prop="isbaby" disabled v-model="detail.isbaby"></el-checkbox>
+									<el-checkbox label="婴儿" prop="isbaby" disabled v-model="detail.isbaby"></el-checkbox>
 								</li>
 
 							</ul>
@@ -141,9 +141,17 @@
 				</ul>
 			</div>
 
-			<h2 class="d_jump">操作日志 </h2>
+			<h2 class="d_jump" ><el-row>
+						<el-col :span="2">操作日志
+						</el-col>
+						<el-col :span="12" class="logtitle">
+							<el-button type="text" @click="showmore" style="float: left;">{{more}}</el-button>
+							<i v-if="more == '更多'" class="el-icon-arrow-down" style="font-size: 12px; margin: 0 0 0 5px;"></i>
+							<i v-else class="el-icon-arrow-up" style="font-size: 12px; margin: 0 0 0 5px;"></i>
+						</el-col>
+					</el-row> </h2>
 
-			<el-table :data="loglist" border style="width: 100%">
+			<el-table :data="loglist" border style="width: 100%; margin-bottom: 40px;" >
 				<el-table-column prop="creater" label="操作人" width="180">
 				</el-table-column>
 				<el-table-column prop="createtime" label="操作时间" width="180">
@@ -169,8 +177,8 @@
 				loglist: [],
 				edittype: true,
 				imglist: [],
-				toplist: []
-
+				toplist: [],
+				more: '更多'
 			}
 		},
 		mounted: function() {
@@ -178,6 +186,16 @@
 			console.log(this.lineid)
 		},
 		methods: {
+			showmore(val) {
+				if(this.more == "更多") {
+					this.loglist = this.oldloglist
+					this.more = "收起"
+				} else {
+					this.more = "更多"
+					this.loglist = this.detail.logs.slice(0, 3)
+				}
+
+			},
 			getlineinfo() {
 				let para = {
 					token: paramm.getToken(),
@@ -185,7 +203,9 @@
 				}
 				linedetail(para).then((res) => {
 					this.detail = res.data.obj
+					this.oldloglist=res.data.obj.logs
 					this.loglist = res.data.obj.logs
+					this.loglist = res.data.obj.logs.slice(0, 3)
 					let categorytype = res.data.obj.categorytype
 					switch(categorytype) {
 						case 0:
@@ -520,5 +540,11 @@
 			width: 90px;
 			display: inline-block;
 		}
+	}
+	.logtitle{
+		button{
+			margin-top: 15px;
+		}
+		
 	}
 </style>
