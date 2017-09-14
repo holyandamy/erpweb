@@ -12,7 +12,7 @@
 
 				</el-row>
 			</header>
-			<el-form :inline="true" :model="formInline" class="demo-form-inline hasid" style="text-align: left!important; padding-left: 30px; float: left;" id="54bfe60304f84742bd37e2d93c3924da">
+			<el-form :inline="true" :model="formInline" class="demo-form-inline hasid" id="54bfe60304f84742bd37e2d93c3924da" style="float:left;text-align:left;padding-left:30px">
 				<el-form-item label="操作模块">
 					<el-input v-model="formInline.moudle" placeholder="操作模块"></el-input>
 				</el-form-item>
@@ -29,7 +29,6 @@
 				<!--<el-form-item label="操作人">
 					<el-input v-model="formInline.operator" placeholder="操作人"></el-input>
 				</el-form-item>-->
-
 				<el-form-item>
 					<el-button type="primary"  @click="onSubmit">查询</el-button>
 				</el-form-item>
@@ -187,7 +186,11 @@
 		background: white;
 		text-align: right;
 	}
-
+  .el-form {
+    float:left;
+    padding-left:30px;
+    text-align:left;
+  }
 	.el-table .cell {
 		text-align: left;
 	}
