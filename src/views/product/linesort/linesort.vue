@@ -137,7 +137,7 @@
 		},
     methods:{
       jump (scope) {
-      	console.log(scope.row.name)
+     
         this.$router.push({path: '/linelist',query: {name: scope.row.name}})
       },
       deleteRow(index, rows){

@@ -34,7 +34,7 @@
             <el-input v-model="collectForm.linename" :disabled="true"></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item label="付款单位" prop="companyname">
+        <el-form-item label="付款单位" required prop="companyname">
           <el-col :span="10">
             <el-input v-model="collectForm.companyname" placeholder="请输入付款单位" :disabled = 'collectForm.businesstype == 2'></el-input>
           </el-col>
@@ -101,7 +101,7 @@
         </el-form-item>
         <ImgUpload @imagelistchange="imagelistchange"></ImgUpload>
         <el-form-item>
-          <el-button class="hasid" id="869cc288735d11e788410242ac120009" type="primary" @click="submitForm('collectForm')">保 存</el-button>
+          <el-button type="primary" @click="submitForm('collectForm')">保 存</el-button>
           <el-button @click="resetForm('collectForm')">取消</el-button>
         </el-form-item>
 
@@ -162,17 +162,21 @@
           }],
         },
         rules: {
-          businesstypename: [{
+          businesstype: [{
             required: true,
             message: '请选择业务类型',
             trigger: 'change'
           }],
-
-          companyname: [{
-            required: true,
-            message: '请输入付款单位',
-            trigger: 'blur'
-          }]
+//          orderno: [{
+//            required: true,
+//            message: '请输入订单编号',
+//            trigger: 'blur'
+//          }],
+//          companyname: [{
+//            required: true,
+//            message: '请输入付款单位',
+//            trigger: 'blur'
+//          }]
         },
         accounts: [],
         types: [{ //1现金，2对公汇款，3刷卡，4支付宝，5微信，6网银，7其他
@@ -204,23 +208,22 @@
             label: '其他'
           }
         ],
+        today: ''
       }
     },
     created() {
+      let _this =this;
       let mydate = new Date()
         console.log(66,  (mydate.getMonth() + 1).toString().length)
       let M = (mydate.getMonth() + 1).toString().length == 1? '0'+(mydate.getMonth() + 1) : (mydate.getMonth() + 1)
       let D = (mydate.getDate()).toString().length == 1? '0'+(mydate.getDate()) : (mydate.getDate())
-      let today = mydate.getFullYear() + "-" + M + "-" + D
-      this.createtime = today
+      this.today = mydate.getFullYear() + "-" + M + "-" + D
+      this.createtime = this.today
       this.checkbanklist()
       this.collectForm.detail.forEach(function (item) {
-        item.linetime = today
+        item.linetime = _this.today
       })
 
-    },
-    mounted(){
-      showorhide()
     },
     methods: {
       handleHide: function() {
@@ -228,6 +231,77 @@
       },
       submitForm(formName) {
         let _this = this;
+        if(this.collectForm.businesstype == '') {
+          this.$message({
+            message: '请选择业务类型',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.collectForm.businesstype != '2' && this.collectForm.companyname == '') {
+          this.$message({
+            message: '请填写付款单位',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.collectForm.businesstype == '2' && this.collectForm.orderno == '') {
+          this.$message({
+            message: '请填写订单编号',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.collectForm.businesstype == '2' && this.collectForm.companyname == '') {
+          this.$message({
+            message: '您填写的订单号有误',
+            type: 'warning'
+          });
+          return
+        }
+        try {
+          this.collectForm.detail.forEach(function (item,idx) {
+            if(item.type == '') {
+              _this.$message({
+                message: '请选择收款方式',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(item.fee == '') {
+              _this.$message({
+                message: '请填写金额',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(isNaN(item.fee) || parseFloat(item.fee) < 0) {
+              _this.$message({
+                message: '请填写合法金额',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(item.fee.length > 10) {
+              _this.$message({
+                message: '金额最大不超多10位',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(item.type != '1' && item.type != '7') {
+              if(item.accountid == ''){
+                _this.$message({
+                  message: '请选择收款账号',
+                  type: 'warning'
+                });
+                throw false
+              }
+            }
+          })
+        }catch (e){
+          throw e
+        }
         this.$refs[formName].validate((valid) => {
           if(valid) {
             let para = this.collectForm
@@ -241,12 +315,9 @@
               }
               else {
                 paramm.getCode(res.data, _this)
+                this.handleHide()
+                _this.$emit('getL', 'onSubmit')
               }
-              this.$message({
-                message: '提交成功',
-                type: 'success'
-              });
-              this.handleHide()
             });
           } else {
             console.log('error submit!!');
@@ -279,10 +350,11 @@
         console.log(file);
       },
       addDomain() {
+        let _this = this;
         let list ={
           type:'',
           accountid: '',
-          linetime: '',
+          linetime: _this.today,
           fee: '',
         }
         this.collectForm.detail.push(list);
@@ -301,6 +373,10 @@
       changemenu() {
         let changetype = this.collectForm.businesstype
         if(changetype == 1 || changetype == 3) {
+          this.collectForm.orderno = ''
+          this.collectForm.teamno = ''
+          this.collectForm.linename = ''
+          this.collectForm.companyname = ''
           //预收款、预付款退款
           this.isshowall = false
           this.typethis()
@@ -340,15 +416,20 @@
               paramm.getCode(res.data,_this)
             }else {
               //没查到订单
-              if(res.data.obj.list.length=0){
+              if(res.data.obj.datas.length==0){
                 _this.$message({
                   message: '你输入的订单有误',
                   type: 'warning'
                 });
               }else {
-                _this.collectForm.teamno = res.data.obj.list[0].teamno;
-                _this.collectForm.linename = res.data.obj.list[0].linename;
-                _this.collectForm.companyname = res.data.obj.list[0].contact
+                _this.collectForm.teamno = res.data.obj.datas[0].teamno;
+                _this.collectForm.linename = res.data.obj.datas[0].linename;
+                _this.collectForm.lineid = res.data.obj.datas[0].lineid;
+                if(res.data.obj.datas[0].companyname) {
+                  _this.collectForm.companyname = res.data.obj.datas[0].companyname
+                }else {
+                  _this.collectForm.companyname = res.data.obj.datas[0].contact
+                }
               }
             }
           })
@@ -396,5 +477,4 @@
   .delete {
     margin-left:0
   }
-  .hasid{display: none;}
 </style>

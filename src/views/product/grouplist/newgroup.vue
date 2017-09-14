@@ -17,7 +17,7 @@
         <el-col :span="20" style="width: 100%">
           <el-form :model="groupList"  ref="visitorList"   :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;">
             <div style="width:100%;float: left;overflow:hidden">
-              <el-form-item label="选择线路：">
+              <el-form-item label="选择线路：" required>
                 <el-button @click="getcategoryall()">选择</el-button>
                 <span class='routeName' style='padding-left: 10px;' v-text='routeName'>222</span>
               </el-form-item>
@@ -27,7 +27,7 @@
                   <el-input
                     type="textarea"
                     :autosize="{ minRows: 3, maxRows: 5}"
-                    placeholder="请输入内容"
+                    placeholder="限120字以内!"
                     v-model="notify">
                   </el-input>
                 </el-col>
@@ -39,6 +39,7 @@
               <el-form-item label="发团时间：" prop="date">
                 <el-col :span="4" style="width: 100%;margin-right: 10px">
                   <el-date-picker
+                    :editable = false
                     @change='addTr'
                     v-model="value1"
                     type="date"
@@ -62,7 +63,7 @@
                   <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style=" width: 100%;text-align: center">
                     <thead>
                     <tr style="text-align: center">
-                      <th colspan="1" rowspan="1" class="is-leaf"  >
+                      <th colspan="1" rowspan="1" class="is-leaf" >
                         <div class="cell">序号</div>
                       </th>
                       <th colspan="1" rowspan="1" class="is-leaf"   >
@@ -660,13 +661,30 @@
           this.linesorts = res.data.obj
         })
       },
+      isTrue (itemm,msg) {
+        if(isNaN(itemm) || parseFloat(itemm)<0) {
+          this.$message({
+            message: '请输入合法的'+msg,
+            type: 'warning'
+          })
+          return true
+        }
+      },
       // 点击保存 取消
       save () {
         let _this = this;
-        // 列表数据
+        // 线路
         if(!this.lineid) {
           this.$message({
             message: '请选择线路',
+            type: 'warning'
+          });
+          return;
+        }
+        // 集合通知
+        if(this.notify.toString().length >120) {
+          this.$message({
+            message: '集合通知不能超过120字',
             type: 'warning'
           });
           return;
@@ -678,6 +696,16 @@
           });
           return;
         }
+       try{
+         this.checkArr.forEach(function (item,idx) {
+           if(_this.isTrue(item.plan,'计划人数') || _this.isTrue(item.deadline,'截止天数') ||
+             _this.isTrue(item.mktbaby,'婴儿市场价') || _this.isTrue(item.mktchild,'儿童市场价') || _this.isTrue(item.mktaduilt,'成人市场价') || _this.isTrue(item.mktroom,'市场价单房差') ||
+             _this.isTrue(item.sltbaby,'婴儿结算价') || _this.isTrue(item.sltchild,'儿童结算价') || _this.isTrue(item.sltaduilt,'成人结算价') || _this.isTrue(item.sltroom,'结算价单房差')
+           ) throw false
+         })
+       }catch (e){
+          throw e
+       }
         // 合作平台
         let platforms = [];
         var checkListNew = []
@@ -694,13 +722,74 @@
 
         try {
           this.checkArr.forEach(function (item,idx) {
-            item.confirm = parseFloat(item.confirm);
+//            item.confirm = parseFloat(item.confirm);
             item.surplus = _this.surpluss;
-//            item.endtime = _this.TemStArr[idx] || ''
-            if(!item.plan || !item.deadline || !item.mktbaby || !item.mktchild || !item.mktaduilt || !item.mktroom
-              || !item.sltbaby || !item.sltchild || !item.sltaduilt || !item.sltroom) {
+            if(!item.plan) {
               _this.$message({
-                message: item.starttime + '日信息未填写完整',
+                message: item.starttime + '日计划人数未填写完整',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(!item.deadline) {
+              _this.$message({
+                message: item.starttime + '日截止天数未填写完整',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(!item.mktbaby) {
+              _this.$message({
+                message: item.starttime + '日婴儿市场价未填写完整',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(!item.mktchild) {
+              _this.$message({
+                message: item.starttime + '日儿童市场价未填写完整',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(!item.mktaduilt) {
+              _this.$message({
+                message: item.starttime + '日成人市场价未填写完整',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(!item.mktroom) {
+              _this.$message({
+                message: item.starttime + '日市场价单房差未填写完整',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(!item.sltbaby) {
+              _this.$message({
+                message: item.starttime + '日婴儿结算价未填写完整',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(!item.sltchild) {
+              _this.$message({
+                message: item.starttime + '日儿童结算价未填写完整',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(!item.sltaduilt) {
+              _this.$message({
+                message: item.starttime + '日成人结算价未填写完整',
+                type: 'warning'
+              });
+              throw false
+            }
+            if(!item.sltroom) {
+              _this.$message({
+                message: item.starttime + '日结算价单房差未填写完整',
                 type: 'warning'
               });
               throw false
@@ -737,10 +826,7 @@
             details: _this.checkArr
           }).then(res =>{
             if(res.data.error || res.data.err) {
-              this.$message({
-                message: res.data.message || '失败',
-                type: 'error'
-              });
+              paramm.getCode(res.data, _this)
               //减去之前加上的时间
               _this.startTimeArr.forEach(function (item) {
                 _this.TemStArr.push(_this.getDateEnd(item, _this.checkItem.days,false))
@@ -749,10 +835,7 @@
               return
             }
             if(!res.data.error) {
-              this.$message({
-                message: '创建成功',
-                type: 'success'
-              });
+              paramm.getCode(res.data, _this)
               _this.$emit('setMode', 'list');
             }
           })

@@ -14,7 +14,7 @@
 		</header>
 		<section>
 
-			<el-form :model="baseForm" ref="baseForm" label-width="100px" class="demo-baseForm">
+			<el-form :model="baseForm" :rules="baseFormrules" ref="baseForm" label-width="100px" class="demo-baseForm">
 				<h2 class="d_jump">基本信息</h2>
 				<div class="baseinfo">
 					<el-row>
@@ -42,10 +42,12 @@
 									<el-radio label="1">跟团游</el-radio>
 								</el-radio-group>
 							</el-form-item>
-							<el-form-item label="收客类型">
-								<el-checkbox label="成人" prop="isadult" v-model="baseForm.isadult"></el-checkbox>
-								<el-checkbox label="儿童" prop="ischild" v-model="baseForm.ischild"></el-checkbox>
-								<el-checkbox label="老人" prop="isbaby" v-model="baseForm.isbaby"></el-checkbox>
+							<el-form-item label="收客类型" prop="checkpeople" label-width="120px">
+								<el-checkbox-group v-model="baseForm.checkpeople">
+								<el-checkbox label="成人" v-model="baseForm.isadult"></el-checkbox>
+								<el-checkbox label="儿童" v-model="baseForm.ischild"></el-checkbox>
+								<el-checkbox label="婴儿" v-model="baseForm.isbaby"></el-checkbox>
+								 </el-checkbox-group>
 							</el-form-item>
 							<el-form-item label="出港地" prop="fromprovinceid">
 								<el-col :span="5">
@@ -322,35 +324,35 @@
 		data() {
 			return {
 				traffics: [{
-					value: '1',
+					value: 1,
 					label: '飞机'
 				}, {
-					value: '2',
+					value: 2,
 					label: '动车'
 				}, {
-					value: '3',
+					value: 3,
 					label: '火车'
 				}, {
-					value: '4',
+					value: 4,
 					label: '高铁'
 				}, {
-					value: '5',
+					value: 5,
 					label: '大巴'
 				}, {
-					value: '6',
+					value: 6,
 					label: '轮船'
 				}], //出行方式
 				categoryids: [{
-					value: '0',
+					value: 0,
 					label: '全部'
 				}, {
-					value: '1',
+					value: 1,
 					label: '国内游'
 				}, {
-					value: '2',
+					value: 2,
 					label: '出境游'
 				}, {
-					value: '3',
+					value: 3,
 					label: '周边游'
 				}], //线路分类
 				categorytypes: [],
@@ -404,6 +406,7 @@
 					outremark: '',
 					innerremark: '',
 					includePkg: '',
+					checkpeople:[],
 					routes: [{
 						'number': 1,
 						'title': '',
@@ -417,52 +420,38 @@
 
 					}]
 				},
-				rules: {
+				baseFormrules: {
+					categorytype: [{
+						required: true,
+						trigger: 'change',
+						validator: category
+					}],
 					name: [{
-							required: true,
-							message: '请输入活动名称',
-							trigger: 'blur'
-						},
-						{
-							min: 3,
-							max: 5,
-							message: '长度在 3 到 5 个字符',
-							trigger: 'blur'
-						}
-					],
-					region: [{
 						required: true,
-						message: '请选择活动区域',
-						trigger: 'change'
+						message: '请填写线路名称',
+						trigger: 'blur,change'
 					}],
-					date1: [{
-						type: 'date',
-						required: true,
-						message: '请选择日期',
-						trigger: 'change'
-					}],
-					date2: [{
-						type: 'date',
-						required: true,
-						message: '请选择时间',
-						trigger: 'change'
+					teamno: [{
+						validator: check.teanno,
+						trigger: 'blur,change',
+						required: true
 					}],
 					type: [{
-						type: 'array',
 						required: true,
-						message: '请至少选择一个活动性质',
+						message: '请选择出行方式',
 						trigger: 'change'
 					}],
-					resource: [{
+					checkpeople: [{ type: 'array', required: true, message: '请至少选择一个收客类型', trigger: 'change' }],
+					fromprovinceid: [{
 						required: true,
-						message: '请选择活动资源',
-						trigger: 'change'
+						validator: startaddresscheck
 					}],
-					desc: [{
+					backaddress: [{
 						required: true,
-						message: '请填写活动形式',
-						trigger: 'blur'
-					}]
+						trigger: 'change',
+						validator: endcheck
+					}],
+					//				title:[{ required: true,trigger: 'blur', validator:checktitle}]
 				},
 				province: [],
 				city: [],
@@ -502,64 +491,7 @@
 						this.editor = true
 						this.editorhtml = res.data.obj.routes[0].content
 					}
-					console.log(res.data.obj)
-					let categorytype = res.data.obj.categorytype
-					switch(categorytype) {
-						case 0:
-							this.baseForm.categorytype = "全部";
-							break;
-						case 1:
-							this.baseForm.categorytype = "国内游";
-							break;
-						case 2:
-							this.baseForm.categorytype = "出境游";
-							break;
-						case 3:
-							this.baseForm.categorytype = "周边游";
-							break;
-					}
-					let day = res.data.obj.trafficgo
-					switch(day) {
-						case 1:
-							this.baseForm.trafficgo = "飞机";
-							break;
-						case 2:
-							this.baseForm.trafficgo = "动车";
-							break;
-						case 3:
-							this.baseForm.trafficgo = "火车";
-							break;
-						case 4:
-							this.baseForm.trafficgo = "高铁";
-							break;
-						case 5:
-							this.baseForm.trafficgo = "大巴";
-							break;
-						case 6:
-							this.baseForm.trafficgo = "轮船";
-							break;
-					}
-					let trafficback = res.data.obj.trafficreturn
-					switch(trafficback) {
-						case 1:
-							this.baseForm.trafficreturn = "飞机";
-							break;
-						case 2:
-							this.baseForm.trafficreturn = "动车";
-							break;
-						case 3:
-							this.baseForm.trafficreturn = "火车";
-							break;
-						case 4:
-							this.baseForm.trafficreturn = "高铁";
-							break;
-						case 5:
-							this.baseForm.trafficreturn = "大巴";
-							break;
-						case 6:
-							this.baseForm.detail = "轮船";
-							break;
-					}
+					
 
 				})
 
@@ -630,71 +562,36 @@
 					if(valid) {
 						let para = this.baseForm
 						para.token = paramm.getToken()
-						let categorytype = para.categorytype
-					switch(categorytype) {
-						case "全部":
-							this.baseForm.categorytype = 0 ;
-							break;
-						case "国内游":
-							this.baseForm.categorytype = 1;
-							break;
-						case "出境游":
-							this.baseForm.categorytype = 2;
-							break;
-						case "周边游":
-							this.baseForm.categorytype = 3;
-							break;
-					}
-					let day = para.trafficgo
-					switch(day) {
-						case "飞机":
-							this.baseForm.trafficgo = 1;
-							break;
-						case "动车":
-							this.baseForm.trafficgo = 2;
-							break;
-						case "火车":
-							this.baseForm.trafficgo = 3;
-							break;
-						case "高铁":
-							this.baseForm.trafficgo = 4;
-							break;
-						case "大巴":
-							this.baseForm.trafficgo = 5;
-							break;
-						case "轮船":
-							this.baseForm.trafficgo = 6;
-							break;
-					}
-					let trafficback =para.trafficreturn
-					switch(trafficback) {
-						case "飞机":
-							this.baseForm.trafficreturn = 1;
-							break;
-						case "动车":
-							this.baseForm.trafficreturn = 2;
-							break;
-						case "火车":
-							this.baseForm.trafficreturn = 3;
-							break;
-						case "高铁":
-							this.baseForm.trafficreturn = 4;
-							break;
-						case "大巴":
-							this.baseForm.trafficreturn = 5;
-							break;
-						case "轮船":
-							this.baseForm.trafficreturn = 6;
-							break;
-					}
+						let html = this.$refs.ue.getUEContent()
+						for(let i = 0;i<para.checkpeople.length;i++){
+							if(para.checkpeople[i] == "成人"){
+								para.isadult = true
+							}else if(para.checkpeople[i] == "儿童"){
+								para.ischild = true
+							}else if(para.isbaby[i] == "婴儿"){
+								para.ischild = true
+							}
+						}
 					
 						if(this.editor == false) {
 							//基本录入
 							para.routes = this.baseForm.routes
 							para.edittype = 0
+							for(let i = 0 ; i<para.routes.length ;i++){
+								console.log(para.routes[i].title)
+								if(para.routes[i].title == ""){
+									this.$message({
+									showClose: true,
+									message: "行程标题不能为空！",
+									type: 'error'
+									});
+									return false
+								}
+								
+							}
+							
 						} else {
 							//自定义录入
-							let html = this.$refs.ue.getUEContent()
 							para.routes[0].content = html
 							para.edittype = 1
 						}
@@ -734,13 +631,13 @@
 			},
 			//天数减少
 			minuday() {
-				let index = this.baseForm.length
+				let index = this.baseForm.routes.length
 				if(this.baseForm.days <= 1) {
 					this.baseForm.days == 1
 					index = 1
 				} else {
 					this.baseForm.days -= 1
-					this.baseForm.routes.splice(index, 1)
+					this.baseForm.routes.splice(index-1, 1)
 				}
 
 			},

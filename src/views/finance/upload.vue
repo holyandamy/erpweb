@@ -38,9 +38,9 @@
         let list = []
         for(let i = 0 ; i <this.imglist.length;i++){
           //限制图片的数量
-          /*if(this.imglist.length > 10){
-            return false;
-          }*/
+//          if(this.imglist.length > 10){
+//            break;
+//          }
           list.push(this.imglist[i].raw.url)
           this.imagelist = list.join(',')
           this.$emit("imagelistchange",this.imagelist)
@@ -70,6 +70,9 @@
         if (!isLt1M) {
           this.$message.error('上传头像图片大小不能超过 1MB!');
         }
+//        if(this.imglist.length > 10){
+//          this.$message.error('wwwww');
+//        }
         return isLt1M;
       }
     }

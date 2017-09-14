@@ -98,17 +98,17 @@
 								</el-col>
 								<el-col :span="12">
 									<el-button type="text" class="hasid" id="83b7ed61735d11e788410242ac120009">
-										<router-link to="/singlegroup">出团单</router-link>
+										<router-link  target="_blank" to="/singlegroup">出团单</router-link>
 									</el-button>
 								</el-col>
 								<el-col :span="12">
 									<el-button type="text" class="hasid" id="7db5db31735d11e788410242ac120009">
-										<router-link :to="{path:'/singlegroup',query: {id: list.id}}">行程单</router-link>
+										<router-link  target="_blank" :to="{path:'/singlegroup',query: {id: list.id}}">行程单</router-link>
 									</el-button>
 								</el-col>
 								<el-col :span="12">
 									<el-button type="text" class="hasid" id="80c08aca735d11e788410242ac120009">
-										<router-link :to="{path:'/confirm',query: {id: list.id}}">确认单</router-link>
+										<router-link  target="_blank" :to="{path:'/confirm',query: {id: list.id}}">确认单</router-link>
 									</el-button>
 								</el-col>
 								<el-col :span="12">
