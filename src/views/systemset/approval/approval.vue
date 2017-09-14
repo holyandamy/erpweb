@@ -9,7 +9,7 @@
 							<el-breadcrumb-item>审批配置</el-breadcrumb-item>
 						</el-breadcrumb>
 					</el-col>
-					<el-col :span="12">
+					<el-col :span="12" style="text-align:right">
 						<el-button style='border-color: #9ad4d6;  color: #2cb1b6;  float: right;  margin-top: -10px;' id="ba2ec1611d0b4c718fbb5377e379e15f" class="hasid" @click="setMode('addapproval')">新增审批</el-button>
 					</el-col>
 				</el-row>

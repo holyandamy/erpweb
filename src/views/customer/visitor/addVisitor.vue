@@ -63,13 +63,13 @@
             </el-form-item>
             <el-form-item label="游客区域" prop="">
               <el-col :span="4" style="width: 110px;margin-right: 10px">
-                <el-select v-model="visitorList.provinceid" placeholder="请选择" @change="changecity">
+                <el-select v-model="visitorList.provinceid" placeholder="请选择" @change="changecity('pro')">
                   <el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
               </el-col>
               <el-col :span="4" style="width: 110px;margin-right: 10px">
-                <el-select v-model="visitorList.cityid" placeholder="请选择" @change="changecity">
+                <el-select v-model="visitorList.cityid" placeholder="请选择" @change="changecity('city')">
                   <el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
@@ -363,19 +363,24 @@
         })
       },
       //选择城市
-      changecity() {
-        let _this = this;
-        let pro = {
-          id: _this.visitorList.provinceid,
-          token: paramm.getToken()
+      changecity(val) {
+        if(val === 'pro'){
+          let pro = {
+            id: this.visitorList.provinceid,
+            token: paramm.getToken()
+          }
+          this.getcity(pro)
+          this.visitorList.cityid = ''
+        }else{
+          let city = {
+            id: this.visitorList.cityid,
+            token: paramm.getToken()
+          }
+          this.getdistrict(city)
+          this.visitorList.districtid = ''
         }
-        this.getcity(pro)
-        let city = {
-          id: _this.visitorList.cityid,
-          token: paramm.getToken()
-        }
-        this.getdistrict(city)
       }
+
     }
 
   }

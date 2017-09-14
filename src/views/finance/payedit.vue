@@ -103,7 +103,7 @@
         <ImgUpload @imagelistchange="imagelistchange"></ImgUpload>
         <el-form-item>
           <el-button type="primary" @click="submitForm('collectForm')">保 存</el-button>
-          <el-button @click="resetForm('collectForm')">取消</el-button>
+          <el-button @click="handleHide">取消</el-button>
         </el-form-item>
 
       </el-form>
