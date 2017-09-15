@@ -95,7 +95,7 @@
 						<el-col :span="12">收款详情</el-col>
 						<el-col :span="12"><el-button @click="addcollpay('collect')" class="hasid" id="869cc288735d11e788410242ac120009">新增收款</el-button></el-col>
 					</el-row>
-				</h2>
+			</h2>
 			<el-table :data="detail.collections" show-summary border style="width: 100%">
 				<el-table-column prop="createtime" label="创建日期">
 				</el-table-column>
@@ -136,8 +136,8 @@
 						<el-col :span="12">
 							<el-button @click="exportnamelist">导出游客名单</el-button>
 							<el-button>下载名单模版</el-button>
-							<el-button>导入游客名单</el-button> 
-							<el-button  v-if = "!detail.isconfirm && detail.iscancel" @click="confirmnamelist=true" class="hasid" id="8dcdad97735d11e788410242ac120009">确认游客名单</el-button> 
+							<el-button>导入游客名单</el-button>
+							<el-button  v-if = "!detail.isconfirm && detail.iscancel" @click="confirmnamelist=true" class="hasid" id="8dcdad97735d11e788410242ac120009">确认游客名单</el-button>
 						</el-col>
 					</el-row>
 				</h2>
@@ -476,7 +476,7 @@
 		},
 		methods: {
 			refund(info){
-				
+
 				 this.$confirm('退团申请后该游客信息不可编辑，并且需在订单中添加退款明细', '退团申请', {
 		          confirmButtonText: '确定',
 		          cancelButtonText: '取消',
@@ -501,12 +501,12 @@
 			          });
 		        		}
 		        	})
-		         
+
 		        }).catch(() => {
 		          this.$message({
 		            type: 'info',
 		            message: '已取消删除'
-		          });          
+		          });
 		        });
 			},
 			//返回列表
@@ -984,7 +984,7 @@
 			color: #333;
 		}
 	}
-	
+
 	section {
 		margin: 0 30px;
 		h2 {
@@ -1047,7 +1047,7 @@
 			padding: 20px 50px;
 		}
 	}
-	
+
 	.info:before {
 		position: absolute;
 		content: '';
@@ -1057,7 +1057,7 @@
 		left: 50%;
 		top: 80px;
 	}
-	
+
 	.collecttable {
 		border: 1px solid #dee5ec;
 		border-radius: 5px;
@@ -1073,12 +1073,12 @@
 			border-bottom: 1px solid #dee5ec;
 		}
 	}
-	
+
 	.button {
 		margin: 30px 0;
 		text-align: left;
 	}
-	
+
 	.el-input-number {
 		width: 120px;
 		.el-input-number__increase,

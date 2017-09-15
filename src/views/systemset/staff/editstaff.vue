@@ -93,7 +93,7 @@
                 </el-col>
               </el-row>
             </el-form-item>
-            <el-form-item label="选择角色">
+            <el-form-item label="选择角色" prop="roleid">
               <el-row>
                 <el-col :span="4">
                   <el-input v-model="roleids"></el-input>
@@ -259,7 +259,7 @@
           sex: '',
           birthday: '',
           deptid: '',
-          roleid: [],
+          roleid: ([].toString()),
           status: '',
           deptname: '',
         },
@@ -338,7 +338,7 @@
         rolelists: [],
         roleids: '',
         checkdepartment: [],
-        roleid:[],
+        roleid:[].toString(),
         checkeddepar:''
 
       }
@@ -350,6 +350,7 @@
     methods: {
       submitForm(formName) {
         //let _this = this;
+        console.log(typeof this.addstaff.roleid)
         this.$refs[formName].validate((valid) => {
           if(valid) {
             let para = {
@@ -417,7 +418,7 @@
       comfirmrole() {
         this.finddepartment = false
         let role = [];
-        this.addstaff.roleid = this.checkdepartment
+        this.addstaff.roleid = String(this.checkdepartment)
         for(let i = 0; i < this.checkdepartment.length; i++) {
           for(let j =0;j<this.rolelists.length;j++){
             console.log(this.rolelists[j].id)
