@@ -2,15 +2,21 @@
 	<div>
 		<header>
 			<el-row>
+				<el-col :span="4">
+					<el-breadcrumb separator="/">
+            <el-breadcrumb-item><span @click="handleHide()">线路列表</span></el-breadcrumb-item>
+            <el-breadcrumb-item>新增线路</el-breadcrumb-item>
+           
+          </el-breadcrumb>
+				</el-col>
 				<el-col :span="12">
 					<ul>
 						<li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
 					</ul>
 				</el-col>
-				<el-col :span="12">
-					<el-button @click="handleHide()" style=" margin-top: -10px;">返回线路列表</el-button>
-				</el-col>
+				
 			</el-row>
+			
 		</header>
 		<section>
 
@@ -55,7 +61,7 @@
 							<el-form-item label="出港地" prop="fromprovinceid" label-width="120px">
 								<el-col :span="5">
 									<el-select filterable v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom('pro')">
-										<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
+										<el-option v-for="item in province" :key="item.id" :label="item.name" :value="item.id">
 										</el-option>
 									</el-select>
 
@@ -66,7 +72,7 @@
 								<el-col :span="5">
 
 									<el-select filterable v-model="baseForm.fromcityid" placeholder="请选择" @change="changecityfrom('city')">
-										<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
+										<el-option v-for="item in city" :key="item.id" :label="item.name" :value="item.id">
 										</el-option>
 									</el-select>
 
@@ -77,7 +83,7 @@
 								<el-col :span="5">
 
 									<el-select filterable v-model="baseForm.fromdistrictid" placeholder="请选择">
-										<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
+										<el-option v-for="item in district" :key="item.id" :label="item.name" :value="item.id">
 										</el-option>
 									</el-select>
 
@@ -87,7 +93,7 @@
 								<el-col :span="5">
 
 									<el-select filterable v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback('pro')">
-										<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
+										<el-option v-for="item in province" :key="item.id" :label="item.name" :value="item.id">
 										</el-option>
 									</el-select>
 
@@ -98,7 +104,7 @@
 								<el-col :span="5">
 
 									<el-select filterable v-model="baseForm.tocityid" placeholder="请选择" @change="changecityback('city')">
-										<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
+										<el-option v-for="item in city" :key="item.id" :label="item.name" :value="item.id">
 										</el-option>
 									</el-select>
 
@@ -109,7 +115,7 @@
 								<el-col :span="5">
 
 									<el-select filterable v-model="baseForm.todistrictid" placeholder="请选择">
-										<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
+										<el-option v-for="item in district" :key="item.id" :label="item.name" :value="item.id">
 										</el-option>
 									</el-select>
 
@@ -150,7 +156,7 @@
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
 
-							<ImgLoad @geturl="geturl" :checktop="checktop"></ImgLoad>
+							<ImgLoad @geturl="geturl" :scope="scope" :checktop="checktop"></ImgLoad>
 
 						</el-col>
 					</el-row>
@@ -195,13 +201,13 @@
 								<el-col :span="7">
 									<div class="linetype">
 										<ul>
-											<li @click="inserttype('[飞机]')"></li>
-											<li @click="inserttype('[火车]')"></li>
-											<li @click="inserttype('[汽车]')"></li>
-											<li @click="inserttype('[轮船]')"></li>
-											<li @click="inserttype('[动车]')"></li>
-											<li @click="inserttype('[高铁]')"></li>
-											<li @click="inserttype('[待定]')"></li>
+											<li @click="inserttype('[飞机]',index)"></li>
+											<li @click="inserttype('[火车]',index)"></li>
+											<li @click="inserttype('[汽车]',index)"></li>
+											<li @click="inserttype('[轮船]',index)"></li>
+											<li @click="inserttype('[动车]',index)"></li>
+											<li @click="inserttype('[高铁]',index)"></li>
+											<li @click="inserttype('[待定]',index)"></li>
 
 										</ul>
 									</div>
@@ -353,7 +359,6 @@
 	import axios from 'axios';
 	import UE from '../../common/ue.vue';
 	import { linesave, province, city, district, categoryall, linecategorytype, templatelist, templatdetail, token } from '../../../common/js/config';
-	import { imgupload } from '../../../common/js/upload'
 	import paramm from '../../../common/js/getParam'
 	import check from '../../../common/js/check'
 	import ImgLoad from './upload'
@@ -412,6 +417,7 @@
 				temcates: '',
 				categorytypetem: '',
 				templatelists: [],
+				istemplate:false,
 				//模板列表请求参数
 				addtemplateform: {
 					token: paramm.getToken(),
@@ -565,9 +571,9 @@
 
 			}
 		},
-		mounted: function() {
+		created(){
 			this.getprovince()
-
+			
 		},
 		methods: {
 			geturl(url) {
@@ -668,63 +674,6 @@
 							}
 						}
 						
-						let categorytype = para.categorytype
-						switch(categorytype) {
-							case "全部":
-								this.baseForm.categorytype = 0;
-								break;
-							case "国内游":
-								this.baseForm.categorytype = 1;
-								break;
-							case "出境游":
-								this.baseForm.categorytype = 2;
-								break;
-							case "周边游":
-								this.baseForm.categorytype = 3;
-								break;
-						}
-						let day = para.trafficgo
-						switch(day) {
-							case "飞机":
-								this.baseForm.trafficgo = 1;
-								break;
-							case "动车":
-								this.baseForm.trafficgo = 2;
-								break;
-							case "火车":
-								this.baseForm.trafficgo = 3;
-								break;
-							case "高铁":
-								this.baseForm.trafficgo = 4;
-								break;
-							case "大巴":
-								this.baseForm.trafficgo = 5;
-								break;
-							case "轮船":
-								this.baseForm.trafficgo = 6;
-								break;
-						}
-						let trafficback = para.trafficreturn
-						switch(trafficback) {
-							case "飞机":
-								this.baseForm.trafficreturn = 1;
-								break;
-							case "动车":
-								this.baseForm.trafficreturn = 2;
-								break;
-							case "火车":
-								this.baseForm.trafficreturn = 3;
-								break;
-							case "高铁":
-								this.baseForm.trafficreturn = 4;
-								break;
-							case "大巴":
-								this.baseForm.trafficreturn = 5;
-								break;
-							case "轮船":
-								this.baseForm.trafficreturn = 6;
-								break;
-						}
 						if(this.editor == false) {
 							//基本录入
 							para.routes = this.baseForm.routes
@@ -824,76 +773,85 @@
 				province(para).then((res) => {
 					this.province = res.data.obj
 
-				}).catch(function(err) {
-					console.log("连接错误")
 				})
 			},
 			//获取市列表
 			getcity(pro) {
 				city(pro).then((res) => {
 					this.city = res.data.obj
-
-				}).catch(function(err) {
-					console.log("连接错误")
-				})
+				
+					
+			})
 			},
 			//获取区列表
 			getdistrict(city) {
 				district(city).then((res) => {
 					this.district = res.data.obj
 
-				}).catch(function(err) {
-					console.log("连接错误")
 				})
 			},
 			//选择去程城市
 			changecityfrom(val) {
+			
 			  if(val === 'pro'){
-          let pro = {
-            id: this.baseForm.fromprovinceid,
-            token: paramm.getToken()
-          }
-          this.getcity(pro)
-          this.baseForm.fromcityid = ''
-        }else{
-          let city = {
-            id: this.baseForm.fromcityid,
-            token: paramm.getToken()
-          }
-          this.getdistrict(city)
-          this.baseForm.fromdistrictid = ''
-        }
+			  	
+		          let pro = {
+		            id: this.baseForm.fromprovinceid,
+		            token: paramm.getToken()
+		          }
+		          this.getcity(pro)
+		         if(!this.istemplate){
+		          	
+		         	 this.baseForm.fromcityid = ''
+		          }
+		         
+		        }else{
+		        	
+		          let city = {
+		            id: this.baseForm.fromcityid,
+		            token: paramm.getToken()
+		          }
+		          this.getdistrict(city)
+		          if(!this.istemplate){
+		          	this.baseForm.fromdistrictid = ''
+		          }
+		          
+		        }
 
 			},
 			//选择返程城市
-      changecityback(val) {
-        if(val === 'pro'){
-          let pro = {
-            id: this.baseForm.toprovinceid,
-            token: paramm.getToken()
-          }
-          this.getcity(pro)
-          this.baseForm.tocityid = ''
-        }else{
-          let city = {
-            id: this.baseForm.tocityid,
-            token: paramm.getToken()
-          }
-          this.getdistrict(city)
-          this.baseForm.todistrictid = ''
-        }
-
-      },
+		      changecityback(val) {
+		        if(val === 'pro'){
+		          let pro = {
+		            id: this.baseForm.toprovinceid,
+		            token: paramm.getToken()
+		          }
+		          this.getcity(pro)
+		          if(!this.istemplate){
+		          this.baseForm.tocityid = ''
+					}		          
+		        }else{
+		          let city = {
+		            id: this.baseForm.tocityid,
+		            token: paramm.getToken()
+		          }
+		          this.getdistrict(city)
+		          if(!this.istemplate){
+		          	this.baseForm.todistrictid = ''
+		          }
+		          
+		        }
+		
+		      },
 			//插入交通工具
-			inserttype(str) {
-				let tc = event.currentTarget.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("insertinput")[0]
-				let ts = tc.getElementsByTagName("input")[0];
-				let tclen = ts.value.length
-				tc.focus();
+			inserttype(str,index) {
+				let listss = document.getElementsByClassName("insertinput")[index].childNodes[2]
+				let lists = listss.value.length
+				listss.focus();
 				if(typeof document.selection != "undefined") {
 					document.selection.createRange().text = str;
 				} else {
-					ts.value = ts.value.substr(0, ts.selectionStart) + str + ts.value.substring(ts.selectionStart, tclen);
+					listss.value = listss.value.substr(0, listss.selectionStart) + str + listss.value.substring(listss.selectionStart, lists);
 				}
 			},
 			//模板查询
@@ -910,10 +868,10 @@
 					token: paramm.getToken(),
 					id: this.templateselectid
 				}
-
 				templatdetail(para).then((res) => {
 					this.baseForm = res.data.obj
-					
+					this.scope = res.data.obj
+					this.istemplate = true
 					this.baseForm.checkpeople = []
 					this.baseForm.checkpeople.push(this.baseForm.isadult,this.baseForm.ischild,this.baseForm.isbaby)
 					
@@ -932,15 +890,12 @@
 					if(res.data.obj.edittype == 0) {
 						//普通输入
 						this.editor = false
-						console.log(1)
+						
 					} else {
 						//自定义输入
 						this.editor = true
 						this.defaultMsg = this.baseForm.routes[0].content
-
-						
-						
-					}
+				}
 
 				})
 

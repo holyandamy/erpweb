@@ -337,9 +337,16 @@
           });
           return
         }
-        if(this.visitorList.mobile == ''){
+        if(this.visitorList.mobile == '' || !( /^1[34578]\d{9}$/.test(this.visitorList.mobile)) ){
           _this.$message({
-            message: '联系人手机未填写',
+            message: '请填写正确的联系人手机',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.visitorList.remark.length > 120){
+          _this.$message({
+            message: '备注不能超过120字',
             type: 'warning'
           });
           return
@@ -351,12 +358,12 @@
         this.visitorList.type = this.operationType.type;
         try {
           this.checkArr.forEach(function (item) {
-            if((item.name && item.certtype && item.cert && item.mobile) || (!item.name && !item.certtype && !item.cert && !item.mobile)){
+            if(!item.name && !item.certtype && !item.cert && !item.mobile){
 //            console.log(1111, _this.visitorList);
             }else {
-              if(!item.name){
+              if(item.name == '' || item.name.length<2){
                 _this.$message({
-                  message: '姓名未填写',
+                  message: '姓名为2 到 15 个字符',
                   type: 'warning'
                 });
                 throw false
@@ -368,16 +375,58 @@
                 });
                 throw false
               }
-              if(!item.cert){
+              if(item.cert==''){
                 _this.$message({
                   message: '证件号码未填写',
                   type: 'warning'
                 });
                 throw false
               }
-              if(!item.mobile){
+              if(item.certtype==1){
+                let cardOne1 = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/;
+                let cardOne2 = /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+                if (!(cardOne1.test(item.cert) || cardOne2.test(item.cert))) {
+                  _this.$message({
+                    message: '请输入正确的身份证号码',
+                    type: 'warning'
+                  });
+                  throw false
+                }
+              }
+              if(item.certtype==2){
+                let cardTwo1 = /^[a-zA-Z]{5,17}$/;
+                let cardTwo2 = /^[a-zA-Z0-9]{5,17}$/;
+                if (!(cardTwo1.test(item.cert) || cardTwo2.test(item.cert))) {
+                  _this.$message({
+                    message: '请输入正确的护照号码',
+                    type: 'warning'
+                  });
+                  throw false
+                }
+              }
+              if(item.certtype==3){
+                let cardThree1 = /南字第(\d{8})号|北字第(\d{8})号|沈字第(\d{8})号|兰字第(\d{8})号|成字第(\d{8})号|济字第(\d{8})号|广字第(\d{8})号|海字第(\d{8})号|空字第(\d{8})号|参字第(\d{8})号|政字第(\d{8})号|后字第(\d{8})号|装字第(\d{8})号/;
+                if (!(cardThree1.test(item.cert))) {
+                  _this.$message({
+                    message: '请输入正确的军官证号码',
+                    type: 'warning'
+                  });
+                  throw false
+                }
+              }
+              if(item.certtype==4){
+                let cardFour1 = /^[HMhm]{1}([0-9]{10}|[0-9]{8})$/;
+                if (!(cardFour1.test(item.cert))) {
+                  _this.$message({
+                    message: '请输入正确的港澳通行证号码',
+                    type: 'warning'
+                  });
+                  throw false
+                }
+              }
+              if( item.mobile == '' || !( /^1[34578]\d{9}$/.test(item.mobile))){
                 _this.$message({
-                  message: '手机号未填写',
+                  message: '请填写正确的手机号',
                   type: 'warning'
                 });
                 throw false
@@ -396,17 +445,11 @@
         this.visitorList.list = newChckArr
         this.visitorList.mobile = this.visitorList.mobile.toString()
         orderSave(this.visitorList).then(function (res) {
-          if(!res.data.error){
-            _this.$message({
-              message: '提交成功',
-              type: 'success'
-            });
-            _this.$emit('setMode', 'list');
+          if(res.data.error || res.data.err){
+            paramm.getCode(res.data,_this)
           }else {
-            _this.$message({
-              message: res.data.message,
-              type: 'error'
-            });
+            paramm.getCode(res.data,_this)
+            _this.$emit('setMode', 'list');
           }
         })
       },

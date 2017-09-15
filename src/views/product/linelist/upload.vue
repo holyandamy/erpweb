@@ -12,7 +12,7 @@
 <script>
 	import { imgupload } from '../../../common/js/upload'
 	export default {
-		props: ['route','editimg','checktop','paras'],
+		props: ['route','editimg','checktop','scope'],
 		data() {
 			return {
 				dialogImageUrl: '',
@@ -21,25 +21,31 @@
 			}
 		},
 		created(){
-			this.loading()
+			let topimg = this.scope.images
+			let botimg = this.route
+			if(topimg == ""){
+					
+						this.imglist = []
+					}else{
+					
+						if(topimg.indexOf(',') == -1){
+							this.imglist.push({
+								url:topimg,
+								uid:''
+							})
+						}else{
+							let lists = topimg.split(',')
+							for(let i=0;i<lists.length;i++){
+								this.imglist.push({
+									url:lists[i],
+									uid:''
+								})
+							}
+						}
+					}
 		},
 		methods: {
-			loading(paras){
-				if(this.editimg){
-				let imgurl = this.route.titleimages.split(',')
-				console.log(paras,6666)
-				//console.log(imgurl)
-				let list=[]
-				for(let i = 0;i<imgurl.length;i++){
-					let oldimglist = {}
-					oldimglist.url = imgurl[i]
-					list.push(oldimglist)
-				}
-				this.imglist = list
-			
-				
-			}
-			},
+
 			//图片上传
 			async upload(file) {
 				const files = await imgupload(file)

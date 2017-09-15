@@ -1,10 +1,22 @@
 <template>
 	<div>
 		<header>
+			<el-row>
+				<el-col :span="4">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item><span @click="handleHide()">线路模板</span></el-breadcrumb-item>
+            <el-breadcrumb-item>查看模板详情</el-breadcrumb-item>
+           
+          </el-breadcrumb>
+        </el-col>
+				<el-col :span="12">	
 			<ul>
 				<li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
 			</ul>
-			<el-button @click="handleHide()" style="float: left; margin-top: -10px;">返回线路模板</el-button>
+			</el-col>
+			 
+</el-row>
+		
 		</header>
 		<section>
 			<h2 class="d_jump">基本信息</h2>
@@ -228,7 +240,7 @@
 						  this.detail.trafficreturn = "大巴";
 						  break;
 						case 6:
-						  this.detail.detail = "轮船";
+						  this.detail.trafficreturn = "轮船";
 						  break;
 						}
 							
@@ -444,6 +456,7 @@
 				font-size: 14px;
 				font-family: 'Avenir', Helvetica, Arial, sans-serif;
 				color: #333;
+				    white-space: pre-wrap;
 			}
 	.content{padding: 20px 30px; background: #fff;}
 	.topimglist{
