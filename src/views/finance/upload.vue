@@ -7,7 +7,7 @@
                :file-list="imglist"
                :http-request="upload"
                :on-success="uploadsuccess"
-               :disabled="count > 10 ? true : false"
+               :disabled="count < 10 ? false : true"
                :on-remove="handleRemove" multiple>
       <i class="el-icon-plus"></i>
     </el-upload>
@@ -22,11 +22,11 @@
   export default {
     data() {
       return {
+        count:0,
         dialogImageUrl: '',
         dialogVisible: false,
         imglist: [],
-        imagelist:'',
-        count:0
+        imagelist:''
       }
     },
     methods: {
@@ -36,10 +36,12 @@
         return files.file
       },
       uploadsuccess(response, file, fileList) {
+        console.log(777)
         this.count++
-        if(this.count > 10) {
-           return false
-        }
+        console.log(this.count)
+        /*if(this.count > 10) {
+          return false
+        }*/
         this.imglist = fileList
         let list = []
         for(let i = 0 ; i <this.imglist.length;i++){
