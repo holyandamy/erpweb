@@ -180,25 +180,19 @@
           }]
         },
         province: [],
-        city: [],
+        city:[],
         district: [],
         logo:''
 
       }
     },
     created() {
-      this.getinfo()
-      this.getprovince()
-
+      this.getinfo() //能拿到provinceId，cityId，districtId
     },
     updated: function() {
       this.$nextTick(function() {
         showorhide()
       })
-    },
-    //观察省的变化
-    watch:{
-
     },
     methods: {
       //获取公司信息
@@ -206,10 +200,23 @@
         let para={token:paramm.getToken()}
         companydetail(para).then((res) =>{
           this.companyForm = res.data.obj
-          console.log(this.companyForm)
           this.logo = res.data.obj.logo
-          console.log(res.data.obj)
           this.$refs.logos.loading(this.logo)
+          //省的展示
+          this.getprovince() //拿到了省的数据，应该根据返回的id再回去市和区的数据并展示
+          //console.log(this.companyForm.provinceId)
+          let province = {
+            id: this.companyForm.provinceId,
+            token:paramm.getToken()
+          }
+          //获取市区列表
+          this.getcity(province)
+          //获取区县列表
+          let city = {
+            id: this.companyForm.cityId,
+            token:paramm.getToken()
+          }
+          this.getdistrict(city)
         })
       },
       //保存数据
@@ -272,7 +279,7 @@
       getcity(pro) {
         city(pro).then((res) => {
           this.city = res.data.obj
-
+          console.log(this.city)
         }).catch(function(err) {
           console.log("连接错误")
         })
@@ -295,7 +302,7 @@
           }
           this.getcity(pro)
           this.companyForm.cityId = ""
-        }else{
+        }else if(val === 'city'){
           let city = {
             id: this.companyForm.cityId,
             token:paramm.getToken()

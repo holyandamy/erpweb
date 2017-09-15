@@ -2,7 +2,7 @@
   <el-form-item label="上传图片">
     <el-upload action="http://v0.api.upyun.com/xtimg"
                list-type="picture-card"
-               accept="image/gif,image/jpeg,image/png"
+               accept="image/bmp,image/jpeg,image/png"
                :on-preview="handlePictureCardPreview"
                :file-list="imglist"
                :http-request="upload"
@@ -36,7 +36,10 @@
         return files.file
       },
       uploadsuccess(response, file, fileList) {
-        console.log(777)
+        this.$message({
+          message:'只能上传jpg,png,bmp格式的图片',
+          type:'warning'
+        })
         this.count++
         console.log(this.count)
         if(this.count > 9){
@@ -72,6 +75,7 @@
         }
       },
       handlePictureCardPreview(file) {
+        console.log(9999)
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },

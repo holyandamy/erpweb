@@ -259,7 +259,7 @@
           sex: '',
           birthday: '',
           deptid: '',
-          roleid: [],
+          roleid: '',
           status: '',
           deptname: '',
         },
@@ -320,11 +320,11 @@
             message: '请选择部门',
             trigger: 'blur'
           }],
-          /*roleid: [{
+          roleid: [{
             required: true,
             message: '请选择角色',
             trigger: 'change'
-          }],*/
+          }],
           status: [{
             required: true,
             message: '请选择状态',
@@ -369,7 +369,7 @@
               password: this.addstaff.password
             }
             this.addstaff.status == "启用" ? para.status = true : para.status = false
-            this.addstaff.sex == "男" ? para.sex = "1" : para.sex = "2"
+            this.addstaff.sex == "男" ? para.sex = 1 : para.sex = 2
             para.birthday = (!this.addstaff.birthday || this.addstaff.birthday == '') ? '' : util.formatDate.format(new Date(this.addstaff.birthday), 'yyyy-MM-dd');
             para.mobile = String(this.addstaff.mobile)
             editusersave(para).then((res) => {
@@ -418,7 +418,7 @@
       comfirmrole() {
         this.finddepartment = false
         let role = [];
-        this.addstaff.roleid = this.checkdepartment
+        this.addstaff.roleid = String(this.checkdepartment)
         for(let i = 0; i < this.checkdepartment.length; i++) {
           for(let j =0;j<this.rolelists.length;j++){
             console.log(this.rolelists[j].id)
@@ -452,8 +452,8 @@
           res.data.obj.sex == 1 ? this.addstaff.sex = "男" : this.addstaff.sex = "女"
           res.data.obj.status == true ? this.addstaff.status = "启用" : this.addstaff.status = "禁用"
           this.checkeddepar = res.data.obj.deptname
-          this.roleid = res.data.obj.roleid
-          console.log(res.data.obj)
+          this.roleid = res.data.obj.roleid.join(',')
+          console.log(res.data.obj.roleid)
 
 
         }).then(()=>{
@@ -465,9 +465,10 @@
           rolelist(para).then((res) => {
             this.rolelists = res.data.obj.datas
             let role = []
-            for(let i = 0 ; i <this.roleid.length;i++){
+            console.log(typeof this.roleid)
+            for(let i = 0 ; i <this.roleid.split(',').length;i++){
               for(let j=0;j<this.rolelists.length;j++){
-                if(this.roleid[i] == this.rolelists[j].id){
+                if(this.roleid.split(',')[i] == this.rolelists[j].id){
                   role.push(this.rolelists[j].rolename)
                   this.roleids = role.join(',')
                   this.checkdepartment.push(this.rolelists[j].id)

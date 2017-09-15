@@ -182,11 +182,11 @@
       };
       //验证用户名
       var checkusername = (rule,value,callback) => {
-        let usernamereg = /^[a-z0-9A-Z]{6,16}$/;
+        let usernamereg = /^[a-z0-9A-Z]{1,20}$/;
         if(usernamereg.test(value)){
           callback()
         }else{
-          callback(new Error('用户名由6~20位的字母或数字组成'))
+          callback(new Error('用户名由1~20位的字母或数字组成'))
         }
       };
       //验证手机号码
@@ -258,7 +258,7 @@
           username: [{
             validator:checkusername,
             required: true,
-            message: '请输入用户名',
+            //message: '请输入用户名',
             trigger: 'blur'
           },
             {
