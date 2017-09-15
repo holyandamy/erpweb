@@ -113,7 +113,7 @@
 
             <el-form-item label-width="100px">
               <el-button type="primary" @click="submitForm('addstaff')">保存</el-button>
-              <el-button @click="resetForm('addstaff')">重置</el-button>
+              <el-button @click="handleHide()">取消</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -259,7 +259,7 @@
           sex: '',
           birthday: '',
           deptid: '',
-          roleid: ([].toString()),
+          roleid: [],
           status: '',
           deptname: '',
         },
@@ -320,11 +320,11 @@
             message: '请选择部门',
             trigger: 'blur'
           }],
-          roleid: [{
+          /*roleid: [{
             required: true,
             message: '请选择角色',
             trigger: 'change'
-          }],
+          }],*/
           status: [{
             required: true,
             message: '请选择状态',
@@ -338,7 +338,7 @@
         rolelists: [],
         roleids: '',
         checkdepartment: [],
-        roleid:[].toString(),
+        roleid:[],
         checkeddepar:''
 
       }
@@ -418,7 +418,7 @@
       comfirmrole() {
         this.finddepartment = false
         let role = [];
-        this.addstaff.roleid = String(this.checkdepartment)
+        this.addstaff.roleid = this.checkdepartment
         for(let i = 0; i < this.checkdepartment.length; i++) {
           for(let j =0;j<this.rolelists.length;j++){
             console.log(this.rolelists[j].id)

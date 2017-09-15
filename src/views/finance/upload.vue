@@ -6,8 +6,8 @@
                :on-preview="handlePictureCardPreview"
                :file-list="imglist"
                :http-request="upload"
-               :on-success="uploadsuccess"
                :disabled="count < 10 ? false : true"
+               :on-success="uploadsuccess"
                :on-remove="handleRemove" multiple>
       <i class="el-icon-plus"></i>
     </el-upload>
@@ -39,9 +39,12 @@
         console.log(777)
         this.count++
         console.log(this.count)
-        /*if(this.count > 10) {
-          return false
-        }*/
+        if(this.count > 9){
+          this.$message({
+            message:'只可上传10张图片',
+            type:'warning'
+          })
+        }
         this.imglist = fileList
         let list = []
         for(let i = 0 ; i <this.imglist.length;i++){
