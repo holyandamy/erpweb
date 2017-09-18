@@ -141,8 +141,8 @@
               </el-table>
               <el-col :span="24">
                 <table style="border:1px solid #ccc;margin-top:10px" :data="detail" width="100%">
-                  <tr v-for="item in detail">
-                    <td style="text-align:right">金额合计:￥{{item.fee}}元</td>
+                  <tr>
+                    <td style="text-align:right">金额合计:￥{{totalfee}}元</td>
                   </tr>
                 </table>
               </el-col>
@@ -179,6 +179,7 @@
     },
     data() {
       return {
+        totalfee:0,
         baseUrll: 'http://api.erp.we2tu.com/api/finance/collect/export',
         plusSrc: '',
         detail: [],
@@ -279,7 +280,11 @@
     }
 
     },
-
+    created() {
+      this.collectForm.detail.forEach((item) => {
+        this.totalfee += item.fee
+      })
+    },
     updated: function() {
       this.$nextTick(function() {
         showorhide()

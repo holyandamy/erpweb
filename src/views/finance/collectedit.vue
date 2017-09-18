@@ -94,12 +94,10 @@
 
                 </td>
               </tr>
-              <tr v-for="item in collectForm.detail">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>金额合计:￥{{item.fee}}元</td>
+            </table>
+            <table width="90%" style="border:1px solid #ccc;margin-top:10px">
+              <tr>
+                <td style="text-align:right">金额合计:￥{{totalfee}}元</td>
               </tr>
             </table>
           </el-col>
@@ -213,7 +211,8 @@
             label: '其他'
           }
         ],
-        today: ''
+        today: '',
+        totalfee:0
       }
     },
     created() {
@@ -227,6 +226,7 @@
       this.checkbanklist()
       this.collectForm.detail.forEach(function (item) {
         item.linetime = _this.today
+        _this.totalfee += item.fee
       })
 
     },
