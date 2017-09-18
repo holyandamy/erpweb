@@ -82,16 +82,14 @@
                 </td>
                 <td>
                   <el-col :span="20">
-                    <el-input v-model="domain.fee" placeholder="金额"></el-input>
+                    <el-input v-model="domain.fee" placeholder="金额" @input='addMoney'></el-input>
                   </el-col>
                 </td>
                 <td>
                   <el-col :span="20">
                     <el-button type="text" @click="addDomain">新增</el-button>
                     <el-button type="text" class="delete" @click.prevent="removeDomain(domain)">删除</el-button>
-
                   </el-col>
-
                 </td>
               </tr>
             </table>
@@ -212,7 +210,7 @@
           }
         ],
         today: '',
-        totalfee:0
+        totalfee: 0
       }
     },
     created() {
@@ -226,11 +224,20 @@
       this.checkbanklist()
       this.collectForm.detail.forEach(function (item) {
         item.linetime = _this.today
-        _this.totalfee += item.fee
       })
 
     },
     methods: {
+      addMoney(){
+        let _this = this;
+        _this.totalfee = 0;
+        this.collectForm.detail.forEach(function (item) {
+          console.log(111, parseFloat(item.fee));
+          if(item.fee) _this.totalfee += parseFloat(item.fee)
+        })
+        console.log(3333, this.collectForm.detail);
+      },
+
       handleHide: function() {
         this.$emit('setMode', 'collectlist');
       },

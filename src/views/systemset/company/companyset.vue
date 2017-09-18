@@ -16,7 +16,7 @@
               </el-select>
             </el-col>
             <el-col :span="4">
-              <el-select v-model="companyForm.cityId" placeholder="请选择" @change="changecity('city')">
+              <el-select v-model="companyForm.cityId" placeholder="请选择"  @change="changecity('city')">
                 <el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
                 </el-option>
               </el-select>
@@ -280,7 +280,6 @@
       //获取市列表
       getcity(pro) {
         city(pro).then((res) => {
-          //console.log(res)
           this.city = res.data.obj
           //console.log(this.city)
         }).catch(function(err) {
@@ -291,7 +290,7 @@
       getdistrict(city) {
         district(city).then((res) => {
           this.district = res.data.obj
-
+          //console.log(this.district)
         }).catch(function(err) {
           console.log("连接错误")
         })

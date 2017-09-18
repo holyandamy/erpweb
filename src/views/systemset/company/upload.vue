@@ -1,7 +1,7 @@
 <template>
 	<el-form-item label="上传图片" style="text-align: left;">
 		<el-upload action="http://v0.api.upyun.com/xtimg"
-               accept="image/gif,ima"
+               accept="image/bmp,image/jpeg,image/png"
                list-type="picture-card"
                :on-preview="handlePictureCardPreview"
                :file-list="imglist"
@@ -45,7 +45,10 @@
 				return files.file
 			},
 			uploadsuccess(response, file, fileList) {
-
+        this.$message({
+          message:'只能上传jpg,png,bmp格式的图片',
+          type:'warning'
+        })
 				if(fileList.length>1){
 					this.imglist.splice(1,1)
 					this.$message({
