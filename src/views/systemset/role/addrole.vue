@@ -16,12 +16,14 @@
         <el-input v-model="roleName" class="role-name-input" placeholder="请输入内容" ></el-input>
       </div>
       <div class="bigItem" v-for="value in roleMap.childs">
+
         <div class="bigTitle"><el-checkbox v-model="value.status" @change="clickChangeChildState(value)" >{{value.authname}}</el-checkbox></div>
         <div class="add-role-item " v-for="sValue in value.childs">
           <div class="left"><el-checkbox :disabled="!value.status"  v-model="sValue.status" @change="clickChangeChildState(sValue)">{{sValue.authname}}</el-checkbox></div>
           <div class="right" >
             <div v-for="tValue in sValue.childs" style="float: left">
               <el-checkbox  :disabled="!value.status || !sValue.status" v-model="tValue.status" >{{tValue.authname}}</el-checkbox>
+                            <!--只要有一个不可用，就不能用-->
             </div>
           </div>
         </div>
