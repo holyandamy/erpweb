@@ -99,7 +99,7 @@
               </el-row>
             </el-form-item>
 
-            <el-form-item label="选择角色" prop="roleid">
+            <el-form-item label="选择角色" prop="roleid" required>
               <el-row>
                 <el-col :span="4">
                   <el-input v-model="roleids"></el-input>
@@ -289,11 +289,11 @@
             message: '请选择部门',
             trigger: 'blur'
           }],
-          roleid: [{
+          /*roleid: [{
             required: true,
             message: '请选择角色',
             trigger: 'blur'
-          }],
+          }],*/
           status: [{
             required: true,
             message: '请选择状态',
@@ -327,6 +327,14 @@
     },
     methods: {
       submitForm(formName) {
+        if(!this.addstaff.roleid.length) {
+          this.$message({
+            message: '角色不能为空',
+            type: 'warning'
+          })
+          return
+        }
+
         let _this = this;
         this.$refs[formName].validate((valid) => {
           if(valid) {
@@ -401,7 +409,8 @@
       comfirmrole() {
         this.finddepartment = false
 
-        this.addstaff.roleid = this.checkdepartment.toString()
+        //this.addstaff.roleid = this.checkdepartment.toString()
+        this.addstaff.roleid = this.checkdepartment
         let roleidlist= []
         for(let i = 0; i < this.rolelist.length; i++) {
 
