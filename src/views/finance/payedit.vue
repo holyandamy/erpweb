@@ -83,7 +83,7 @@
                 </td>
                 <td>
                   <el-col :span="20">
-                    <el-input v-model="domain.fee" placeholder="金额"></el-input>
+                    <el-input v-model="domain.fee" placeholder="金额" @input='addMoney'></el-input>
                   </el-col>
                 </td>
                 <td>
@@ -95,15 +95,13 @@
 
                 </td>
               </tr>
-              <tr v-for="item in collectForm.detail">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>金额合计:￥{{item.fee}}元</td>
+
+            </table>
+            <table width="90%" style="border:1px solid #ccc;margin-top:10px">
+              <tr>
+                <td style="text-align:right">金额合计:￥{{totalfee}}元</td>
               </tr>
             </table>
-
           </el-col>
         </el-form-item>
         <ImgUpload @imagelistchange="imagelistchange"></ImgUpload>
@@ -215,7 +213,8 @@
             label: '其他'
           }
         ],
-        today: ''
+        today: '',
+        totalfee:0
       }
     },
     created() {
@@ -233,6 +232,15 @@
 
     },
     methods: {
+      addMoney(){
+        let _this = this;
+        _this.totalfee = 0;
+        this.collectForm.detail.forEach(function (item) {
+          console.log(111, parseFloat(item.fee));
+          if(item.fee) _this.totalfee += parseFloat(item.fee)
+        })
+        console.log(3333, this.collectForm.detail);
+      },
       handleHide: function() {
         this.$emit('setMode', 'collectlist');
       },

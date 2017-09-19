@@ -83,20 +83,19 @@
 
             <el-form-item label="选择部门" prop="deptid">
               <el-row>
-                <el-col :span="4">
+                <el-col :span="12">
                   <el-input v-model="checkeddepar"></el-input>
                 </el-col>
                 <el-col :span="1">&nbsp;</el-col>
                 <el-col :span="4">
                   <el-button @click="finddep = true">查找</el-button>
-
                 </el-col>
               </el-row>
             </el-form-item>
-            <el-form-item label="选择角色" prop="roleid">
+            <el-form-item label="选择角色" prop="roleid" required>
               <el-row>
-                <el-col :span="4">
-                  <el-input v-model="roleids"></el-input>
+                <el-col :span="12">
+                  <el-input v-model="roleids" ></el-input>
                 </el-col>
                 <el-col :span="1">&nbsp;</el-col>
                 <el-col :span="4">
@@ -133,7 +132,7 @@
 			  </span>
     </el-dialog>
     <!--部门选择-->
-    <el-dialog title="选择角色" :visible.sync="finddep" size="tiny">
+    <el-dialog title="选择部门" :visible.sync="finddep" size="tiny">
       <ul class="dapul">
         <li v-for="department in departments">
           <el-radio class="radio" v-model="addstaff.deptid" :label="department.id">{{department.name}}</el-radio>
@@ -320,11 +319,11 @@
             message: '请选择部门',
             trigger: 'blur'
           }],
-          roleid: [{
+          /*roleid: [{
             required: true,
             message: '请选择角色',
-            trigger: 'change'
-          }],
+            trigger: 'blur'
+          }],*/
           status: [{
             required: true,
             message: '请选择状态',
@@ -349,8 +348,17 @@
     },
     methods: {
       submitForm(formName) {
-        //let _this = this;
-        console.log(typeof this.addstaff.roleid)
+        //let _this = this
+//        this.addstaff.roleid = this.addstaff.roleid  //这里一变成string,然后编辑角色就无值了
+        console.log(1111222, this.addstaff.roleid);
+        console.log(111122233, this.addstaff.roleid.length);
+        if(!this.addstaff.roleid.length) {
+          this.$message({
+            message: '角色不能为空',
+            type: 'warning'
+          })
+          return
+        }
         this.$refs[formName].validate((valid) => {
           if(valid) {
             let para = {
@@ -373,14 +381,14 @@
             para.birthday = (!this.addstaff.birthday || this.addstaff.birthday == '') ? '' : util.formatDate.format(new Date(this.addstaff.birthday), 'yyyy-MM-dd');
             para.mobile = String(this.addstaff.mobile)
             editusersave(para).then((res) => {
-              console.log(para, res)
+              //console.log(para, res)
               if(res.data.error == 0) {
                 this.$message({
                   message: "编辑成功！",
                   type: 'success'
                 });
+                console.log(this.addstaff.roleid)
                 this.handleHide()
-
               } else {
                 this.$message({
                   message: res.data.message,
@@ -418,17 +426,16 @@
       comfirmrole() {
         this.finddepartment = false
         let role = [];
-        this.addstaff.roleid = String(this.checkdepartment)
+        this.addstaff.roleid = this.checkdepartment  //this.addstaff.roleid必须是字符串
         for(let i = 0; i < this.checkdepartment.length; i++) {
           for(let j =0;j<this.rolelists.length;j++){
-            console.log(this.rolelists[j].id)
             if(this.rolelists[j].id == this.checkdepartment[i]){
               role.push(this.rolelists[j].rolename)
               this.roleids = role.join(',')
             }
           }
-
         }
+
       },
       findrole(){
         this.finddepartment = true
@@ -441,21 +448,21 @@
           this.rolelists = res.data.obj.datas
         })
 
-      },//传值
+      },
+      //传值
       getinfo() {
         let para = {
           token: paramm.getToken(),
           id: this.edituser.row.id
         }
+        console.log(this.edituser.row.id)
         userdetail(para).then((res) => {
           this.addstaff = res.data.obj
+          console.log(1111,this.addstaff.roleid)  //object  没有数据的原因  数据的格式不对
           res.data.obj.sex == 1 ? this.addstaff.sex = "男" : this.addstaff.sex = "女"
           res.data.obj.status == true ? this.addstaff.status = "启用" : this.addstaff.status = "禁用"
           this.checkeddepar = res.data.obj.deptname
           this.roleid = res.data.obj.roleid.join(',')
-          console.log(res.data.obj.roleid)
-
-
         }).then(()=>{
           let para = {
             token:paramm.getToken(),
@@ -465,7 +472,7 @@
           rolelist(para).then((res) => {
             this.rolelists = res.data.obj.datas
             let role = []
-            console.log(typeof this.roleid)
+            //console.log(typeof this.roleid)  //string
             for(let i = 0 ; i <this.roleid.split(',').length;i++){
               for(let j=0;j<this.rolelists.length;j++){
                 if(this.roleid.split(',')[i] == this.rolelists[j].id){
