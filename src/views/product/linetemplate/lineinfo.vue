@@ -6,17 +6,17 @@
           <el-breadcrumb separator="/">
             <el-breadcrumb-item><span @click="handleHide()">线路模板</span></el-breadcrumb-item>
             <el-breadcrumb-item>查看模板详情</el-breadcrumb-item>
-           
+
           </el-breadcrumb>
         </el-col>
-				<el-col :span="12">	
+				<el-col :span="12">
 			<ul>
 				<li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
 			</ul>
 			</el-col>
-			 
+
 </el-row>
-		
+
 		</header>
 		<section>
 			<h2 class="d_jump">基本信息</h2>
@@ -26,38 +26,38 @@
 					<el-row>
 						<el-col :span="12">
 							<ul>
-								<li><span>线路分类</span> {{detail.categorytype}} -- {{detail.categoryName}}</li>
-								<li><span>出行方式</span>{{detail.type == 1?'跟团游':'自由行'}}</li>
+								<li><span>线路分类：</span> {{detail.categorytype}} -- {{detail.categoryName}}</li>
+								<li><span>出行方式：</span>{{detail.type == 1?'跟团游':'自由行'}}</li>
 								<!--出行方式:1跟团游，2自由行-->
-								<li><span>收客类型</span>
+								<li><span>收客类型：</span>
 								<el-checkbox label="成人" prop="isadult" disabled v-model="detail.isadult"></el-checkbox>
 								<el-checkbox label="儿童" prop="ischild" disabled v-model="detail.ischild"></el-checkbox>
-								<el-checkbox label="老人" prop="isbaby" disabled v-model="detail.isbaby"></el-checkbox>
+								<el-checkbox label="婴儿" prop="isbaby" disabled v-model="detail.isbaby"></el-checkbox>
 							</li>
-								
+
 							</ul>
 						</el-col>
 						<el-col :span="12">
 							<ul style="padding-left: 30px;">
-								<li><span>出港地</span>{{detail.depart}}</li>
-								<li><span>目的地</span>{{detail.dest}}</li>
-								<li><span>交通工具</span>去：{{detail.trafficgo}} | 返：{{detail.trafficreturn}}</li>
-								
+								<li><span>出港地：</span>{{detail.depart}}</li>
+								<li><span>目的地：</span>{{detail.dest}}</li>
+								<li><span>交通工具：</span>去：{{detail.trafficgo}} | 返：{{detail.trafficreturn}}</li>
+
 								<!--去程交通：1飞机，2动车，3火车，4高铁，5大巴，6轮船-->
 							</ul>
 						</el-col>
 						<p>
-							<span style="float: left;">线路说明</span><pre><div class="xc" style="float: left; line-height: 26px;">{{detail.remark}}</div></pre>
+							<span style="float: left;">线路说明：</span><pre><div class="xc" style="float: left; line-height: 26px;">{{detail.remark}}</div></pre>
 						</p>
 						<div style="clear: both;"></div>
 						<p>
-							<span>集合地点</span>{{detail.station}}
+							<span>集合地点：</span>{{detail.station}}
 						</p>
 							<div class="topimglist">
-							<span style="float: left;">图片</span><div class="xc" style="float: left; line-height: 26px;">
+							<span style="float: left;">图片：</span><div class="xc" style="float: left; line-height: 26px;">
 								<ul>
-									<li v-for="img in toplist">
-										<img :src="img"/>
+									<li  style='float:left;' v-for="img in toplist">
+										<img style='width: 168px;height: 168px;margin: 0 10px;' :src="img"/>
 									</li>
 								</ul>
 							</div>
@@ -76,37 +76,37 @@
 				</div>
 				<ul>
 					<li>
-						<span>三餐</span>
+						<span>三餐：</span>
 						<div class="xc">
-							
+
 							<el-checkbox label="早"  disabled v-model="route.isbreakfast"></el-checkbox>
 								<el-checkbox label="中"  disabled v-model="route.islunch"></el-checkbox>
 								<el-checkbox label="晚"  disabled v-model="route.isdinner"></el-checkbox>
 							</div>
 					</li>
 					<li>
-						<span>住宿</span>
+						<span>住宿：</span>
 						<div class="xc">
 							{{route.hotel}}
 						</div>
 					</li>
 					<li>
-						<span>行程</span>
+						<span>行程：</span>
 						<div class="xc">
 						<pre>{{route.content}}</pre></div>
 					</li>
 					<li>
-						<span>备注</span>
+						<span>备注：</span>
 						<div class="xc">
 							{{route.remark}}
 						</div>
 
 					</li>
 					<li>
-						<span>图片</span>
+						<span>图片：</span>
 						<div class="xc">
-							<div v-for="img in route.titleimages">
-							<img :src="img"/>
+							<div  >
+							<img v-for="img in route.titleimages" style='width: 168px;height: 168px;margin: 0 10px;' :src="img"/>
 							</div>
 						</div>
 
@@ -114,7 +114,7 @@
 				</ul>
 			</div>
 			<div class="content" v-else>
-				
+
 				<span v-html="detail.routes[0].content">
 				  {{detail.routes[0].content}}
 				</span>
@@ -122,23 +122,23 @@
 			<h2 class="d_jump">预定须知</h2>
 			<div class="bgfff">
 				<ul class="notes">
-					<li><span style="line-height: 26px;">不含项目</span>
+					<li><span style="line-height: 26px;">不含项目：</span>
 
 						<div class="xc">
 							{{detail.excludePkg}}
 						</div>
 					</li>
-					<li><span>产品亮点</span><div class="xc"><pre>{{detail.feature}}</pre></div></li>
-					<li><span>包含项目</span><div class="xc"><pre>{{detail.includePkg}}</pre></div></li>
-					<li><span>购物安排</span><div class="xc"><pre>{{detail.shopping}}</pre></div></li>
-					<li><span>温馨提示</span><div class="xc"><pre>{{detail.reminder}}</pre></div></li>
-					<li><span>儿童/老人</span><div class="xc"><pre>{{detail.childolder}}</pre></div></li>
-					<li><span>对外备注</span><div class="xc"><pre>{{detail.outremark}}</pre></div></li>
-					<li><span>内部备注</span><div class="xc"><pre>{{detail.innerremark}}</pre></div></li>
+					<li><span>产品亮点：</span><div class="xc"><pre>{{detail.feature}}</pre></div></li>
+					<li><span>包含项目：</span><div class="xc"><pre>{{detail.includePkg}}</pre></div></li>
+					<li><span>购物安排：</span><div class="xc"><pre>{{detail.shopping}}</pre></div></li>
+					<li><span>温馨提示：</span><div class="xc"><pre>{{detail.reminder}}</pre></div></li>
+					<li><span>儿童/老人：</span><div class="xc"><pre>{{detail.childolder}}</pre></div></li>
+					<li><span>对外备注：</span><div class="xc"><pre>{{detail.outremark}}</pre></div></li>
+					<li><span>内部备注：</span><div class="xc"><pre>{{detail.innerremark}}</pre></div></li>
 				</ul>
 			</div>
-			
-			
+
+
 		</section>
 	</div>
 </template>
@@ -182,7 +182,7 @@
 						this.edittype = false
 					let str = this.detail.routes[0].content
 					this.detail.routes[0].content = str
-                    
+
 					}
 					let categorytype =  res.data.obj.categorytype
 					switch (categorytype){
@@ -243,13 +243,13 @@
 						  this.detail.trafficreturn = "轮船";
 						  break;
 						}
-							
+
 				})
-				
+
 			},
 			jump(index) {
 				this.active=index
-				
+
 				// 用 class="d_jump" 添加锚点
 				let jump = document.querySelectorAll('.d_jump')
 				let total = jump[index].offsetTop
@@ -266,29 +266,29 @@
 
 				function smoothDown() {
 					if(distance < total) {
-						distance += step　　　　　　　 
-						document.body.scrollTop = distance 
-						document.documentElement.scrollTop = distance 
-						window.pageYOffset = distance 
+						distance += step　　　　　　　
+						document.body.scrollTop = distance
+						document.documentElement.scrollTop = distance
+						window.pageYOffset = distance
 						setTimeout(smoothDown, 10)
 					} else {
-						document.body.scrollTop = total 
-						document.documentElement.scrollTop = total 
-						window.pageYOffset = total 
+						document.body.scrollTop = total
+						document.documentElement.scrollTop = total
+						window.pageYOffset = total
 					}
 				}
 
 				function smoothUp() {
 					if(distance > total) {
 						distance -= step　　　　　　　
-						document.body.scrollTop = distance 
-						document.documentElement.scrollTop = distance 
-						window.pageYOffset = distance 
+						document.body.scrollTop = distance
+						document.documentElement.scrollTop = distance
+						window.pageYOffset = distance
 						setTimeout(smoothUp, 10)
 					} else {
-						document.body.scrollTop = total 
-						document.documentElement.scrollTop = total 
-						window.pageYOffset = total 
+						document.body.scrollTop = total
+						document.documentElement.scrollTop = total
+						window.pageYOffset = total
 					}
 				}
 			},
@@ -326,7 +326,7 @@
 			border-top-right-radius: 5px;
 		}
 	}
-	
+
 	section {
 		margin-top: 60px;
 		padding: 0 30px;
@@ -344,7 +344,7 @@
 		.bgfff {
 			background: #fff;
 			padding: 0 40px 20px 40px;
-			
+
 			h3 {
 				font-size: 18px;
 				line-height: 28px;
@@ -377,7 +377,7 @@
 			}
 			.notes {
 				font-size: 14px;
-				
+
 				li {
 					padding: 20px 0;
 					span {
@@ -441,7 +441,7 @@
 			}
 		}
 	}
-	
+
 	.linecenter:after {
 		content: '';
 		position: absolute;

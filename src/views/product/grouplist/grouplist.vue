@@ -3,14 +3,14 @@
     <div  v-if="modeType == 'list'" >
       <header>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="20">
             <el-breadcrumb separator="/">
               <el-breadcrumb-item>产品管理</el-breadcrumb-item>
               <el-breadcrumb-item>发团列表</el-breadcrumb-item>
             </el-breadcrumb>
           </el-col>
-          <el-col :span="12">
-            <el-button id="5c18b1d0734611e788410242ac120009" class="defaultbutton hasid" @click="setMode('newGroup','add')" >新增发团计划</el-button>
+          <el-col :span="4">
+            <el-button style='float: right;  margin-top: -10px;' type="primary"  id="5c18b1d0734611e788410242ac120009" class="hasid" @click="setMode('newGroup','add')" >发团计划</el-button>
           </el-col>
         </el-row>
       </header>
@@ -49,12 +49,12 @@
           <el-row>
            <el-form-item label="线路名称"  >
              <el-col :span="4"   >
-               <el-input v-model="searchList.linename"></el-input>
+               <el-input v-model="searchList.linename" placeholder='线路名称'></el-input>
              </el-col>
            </el-form-item>
            <el-form-item label="团号">
              <el-col :span="4" style="width: 150px">
-               <el-input v-model="searchList.teamname"></el-input>
+               <el-input v-model="searchList.teamname" placeholder='团号'></el-input>
              </el-col>
            </el-form-item>
             <el-form-item   style="margin: 0 30px 0 40px;">
@@ -72,31 +72,38 @@
           </el-table-column>
           <el-table-column prop="linename" label="线路名称" >
           </el-table-column>
-          <el-table-column prop="starttime" label="出发日期" width="130">
+          <el-table-column prop="starttime" label="出发日期" width="110">
           </el-table-column>
-          <el-table-column prop="endtime" label="回团日期" width="130">
+          <el-table-column prop="endtime" label="回团日期" width="110">
           </el-table-column>
-          <el-table-column prop="plan" label="计划人数" width="80">
+          <el-table-column prop="plan" label="计划人数" width="90">
           </el-table-column>
-          <el-table-column prop="surplus" label="余位" width="80">
+          <el-table-column prop="surplus" label="余位" width="70">
           </el-table-column>
-          <el-table-column prop="days" label="天数" width="80">
+          <el-table-column prop="days" label="天数" width="70">
           </el-table-column>
-          <el-table-column label="已售" width="80">
-            <template scope='scope'>
-              {{scope.row.book + scope.row.sit}}
-            </template>
+          <el-table-column prop="book" label="预定" width="70">
           </el-table-column>
+          <el-table-column prop="sit" label="占位" width="70">
+          </el-table-column>
+          <!--<el-table-column label="已售" width="80">-->
+            <!--<template scope='scope'>-->
+              <!--{{scope.row.book + scope.row.sit}}-->
+            <!--</template>-->
+          <!--</el-table-column>-->
           <el-table-column prop="status" label="状态" width="80">
           </el-table-column>
-          <el-table-column prop="creater" label="发布人" width="130">
+          <el-table-column prop="approveName" label="审批状态" width="90">
           </el-table-column>
-          <el-table-column  label="操作" width="200">
+          <el-table-column prop="creater" label="发布人" width="100">
+          </el-table-column>
+          <el-table-column  label="操作" width="180">
             <template scope="scope">
-              <el-button class="hasid" id="521410f9734611e788410242ac120009" @click="setMode('groupinfo'),editorFn(scope.row,'groupinfo')" type="text" size="small" >下单</el-button>
+              <el-button v-if='scope.row.isApprove' type="text" size="small" @click='setAppId(scope.row.id)'>审核</el-button>
+              <el-button v-if="scope.row.isorder && scope.row.status =='待发团'&&(scope.row.approve==0||scope.row.approve==1)" class="hasid" id="521410f9734611e788410242ac120009" @click="setMode('groupinfo'),editorFn(scope.row,'groupinfo')" type="text" size="small" >下单</el-button>
               <el-button class="hasid" id="6f6276e6734611e788410242ac120009" @click="setMode('newGroup','edit'),editorFn(scope.row,'newGroup')" type="text" size="small">编辑</el-button>  <!-- editorFn(scope.row)  -->
-              <!--<el-button @click="setMode('newGroup','detail'),editorFn(scope.row,'newGroup')" type="text" size="small">详情</el-button>-->
-              <el-button class="hasid" id="8929e4a7734611e788410242ac120009" type="text" size="small" @click="deleteRow(scope.$index, scope.row)">{{{false:'启用',true:'停止'}[scope.row.isenable]}}</el-button>
+              <el-button  @click="setMode('groupnamelist'),editorFn(scope.row,'groupnamelist')" type="text" size="small">出团名单</el-button>
+              <el-button class="hasid" id="8929e4a7734611e788410242ac120009" type="text" size="small" @click="deleteRow(scope.$index, scope.row)">{{{false:'启用',true:'封团'}[scope.row.isenable]}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -111,8 +118,30 @@
           </el-pagination>
         </div>
       </section>
+      <el-dialog title="" :visible.sync="dialogFormVisible" size='tiny' :close-on-click-modal=false>
+        <el-form :model="form">
+          <el-form-item label="线路审核：" :label-width="formLabelWidth" style='text-align: left;'>
+            <el-radio class="radio" v-model="radio" label="1">审核通过</el-radio>
+            <el-radio class="radio" v-model="radio" label="2">拒绝</el-radio>
+          </el-form-item>
+          <el-form-item label="备注：" :label-width="formLabelWidth">
+            <el-input
+              type="textarea"
+              :rows="3"
+              placeholder="不超过120字!"
+              v-model="form.remark">
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="examineCancel">取 消</el-button>
+          <el-button type="primary" @click="examineSure">确 定</el-button>
+        </div>
+      </el-dialog>
+
     </div>
     <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="setMode" @editorFn='editorFn'  :categoryId="editcategory.id"></GroupInfo>
+    <Groupnamelist v-else-if="modeType == 'groupnamelist'" @setMode="setMode"   :categoryId="editcategory.id"></Groupnamelist>
     <GroupReserve v-else-if="modeType == 'groupreserve'" @setMode="setMode" :categoryId="editcategory.id"></GroupReserve>
     <Grouporder v-else-if="modeType == 'order'"  @setMode="setMode" :operationType="operationType" ></Grouporder>
     <Reserve v-else-if="modeType == 'reserve'" @setMode="setMode" :categoryId="editcategory.id" :operationType="operationType"></Reserve>  <!-- @setMode="setMode"   :categoryId="editcategory.id"-->
@@ -125,9 +154,10 @@
   import GroupInfo from './groupinfo'
   import GroupReserve from './groupreserve'
   import Reserve from './reserve'
+  import Groupnamelist from './groupnamelist'
   import util from '../../../common/js/util'
   import axios from 'axios'
-  import {token,grouplist,linecategorydelete,groupStop} from '../../../common/js/config'
+  import {token,grouplist,linecategorydelete,groupStop,groupApprove} from '../../../common/js/config'
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   export default {
@@ -136,7 +166,8 @@
       NewGroup,
       GroupInfo,
       GroupReserve,
-      Reserve
+      Reserve,
+      Groupnamelist
     },
     data() {
       return {
@@ -154,14 +185,22 @@
         showAdd:false,
         showEdit:false,
         type:[{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
-        type1:[{value:'0',label:'全部'},{value:'1',label:'正常'},{value:'2',label:'停止'}],
+        type1:[{value:'0',label:'全部'},{value:'2',label:'已封团'},{value:'3',label:'待发团'},{value:'4',label:'行程中'},{value:'5',label:'已结团'},],
         total:0,
         currentPage:1,
         pagesize:10,
         operationType:{type:'add',id:''},
         lineList:[],
         editcategory:{},
-        optionName: '新增发团计划'
+        optionName: '新增发团计划',
+        dialogFormVisible: false,
+        form: {
+          remark:'',
+        },
+        radio: '1',
+        formLabelWidth: '100px',
+        approveId: ''
+
       }
     },
     // 进入获取列表
@@ -180,6 +219,37 @@
     	}
     },
     methods:{
+      // 审核确定 取消
+      setAppId (id) {
+        this.dialogFormVisible = true;
+        this.approveId = id
+      },
+      examineSure () {
+        let _this = this;
+        this.form.approve = _this.radio == '1'? true: false;
+        this.form.id = _this.approveId;
+        this.form.token = paramm.getToken();
+        groupApprove(this.form).then((res)=>{
+            if(res.data.error || res.data.err) {
+              paramm.getCode(res.data,_this);
+            }else {
+              paramm.getCode(res.data,_this);
+              _this.dialogFormVisible = false;
+              _this.form= {
+                remark:'',
+              }
+              _this.radio = '1'
+            }
+
+        })
+      },
+      examineCancel () {
+        this.dialogFormVisible = false
+        this.form= {
+          remark:'',
+        }
+        this.radio = '1'
+      },
       setMode(type,option,sonData){
         if(sonData) this.editcategory.id = sonData
         this.operationType.type=option;
@@ -268,6 +338,7 @@
             pagesize: 10
         };
         this.date = ''
+        this.$router.push({ path: '/grouplist'})
       }
 
     }
@@ -282,10 +353,6 @@
     margin-bottom: 30px;
     padding-top: 20px;
     .defaultbutton{
-      border-color:#9ad4d6 ;
-      color: #2cb1b6;
-      float: right;
-      margin-top: -10px;
     }
     .el-menu-item{
       height: 36px;

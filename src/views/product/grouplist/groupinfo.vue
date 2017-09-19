@@ -24,26 +24,26 @@
             <el-row>
               <el-col :span="12">
                 <ul>
-                  <li><span>线路名称</span> {{detail.name || ''}}</li>  <!-- -- {{detail.categoryName}}-->
-                  <li><span>团号</span>{{detail.teamno }}</li>
+                  <li><span>线路名称：</span> {{detail.name || ''}}</li>  <!-- -- {{detail.categoryName}}-->
+                  <li><span>团号：</span>{{detail.teamno }}</li>
                   <!--出行方式:1跟团游，2自由行-->
-                  <li><span>结算价格</span>
-                    成人 {{detailOut.sltaduilt}} /
-                    儿童 {{detailOut.sltchild}} /
-                    婴儿 {{detailOut.sltbaby}}
+                  <li><span>结算价格：</span>
+                    成人： {{detailOut.sltaduilt}}元/人 &nbsp;&nbsp; /
+                    儿童： {{detailOut.sltchild}}元/人 &nbsp;&nbsp;  /
+                    婴儿： {{detailOut.sltbaby}}元/人
                   </li>
 
                 </ul>
               </el-col>
               <el-col :span="12">
                 <ul style="padding-left: 30px;">
-                  <li><span>出发时间</span>{{detailOut.starttime}}</li>
-                  <li><span>回团时间</span>{{detailOut.endtime}}</li>
+                  <li><span>出发日期：</span>{{detailOut.starttime}}</li>
+                  <li><span>回团日期：</span>{{detailOut.endtime}}</li>
                 </ul>
               </el-col>
               <div style="clear: both;"></div>
               <p>
-                <span>集合通知</span>{{detail.notify}}
+                <span>集合通知：</span>{{detail.notify}}
               </p>
             </el-row>
             <el-table :data="groupList"
@@ -70,8 +70,8 @@
               <el-table-column label="操作">
                 <template scope="scope">
                   <el-button class="hasid" id="b6152355735911e788410242ac120009" @click="setModee(2)" type="text" size="small">预定</el-button>
-                  <el-button class="hasid" id="b175d38b735911e788410242ac120009" @click="setModee(1)" type="text" size="small">占位</el-button>
-                  <el-button class="hasid" id="6f6276e6734611e788410242ac120009" @click="setModEdit(detailOut.teamid)" type="text" size="small">编辑</el-button>
+                  <!--<el-button class="hasid" id="b175d38b735911e788410242ac120009" @click="setModee(1)" type="text" size="small">占位</el-button>-->
+                  <el-button class="hasid" id="6f6276e6734611e788410242ac120009" @click="setModEdit(detailOut.teamid)" type="text" size="small">编辑团期</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -85,10 +85,10 @@
             <el-row>
               <el-col :span="12">
                 <ul>
-                  <li><span>线路分类</span> {{detail.categorytype}} -- {{detail.categoryName}}</li>
-                  <li><span>出行方式</span>{{detail.type == 1 ? '跟团游' : '自由行'}}</li>
+                  <li><span>线路分类：</span> {{detail.categorytype}} -- {{detail.categoryName}}</li>
+                  <li><span>出行方式：</span>{{detail.type == 1 ? '跟团游' : '自由行'}}</li>
                   <!--出行方式:1跟团游，2自由行-->
-                  <li><span>收客类型</span>
+                  <li><span>收客类型：</span>
                     <el-checkbox label="成人" prop="isadult" disabled v-model="detail.isadult"></el-checkbox>
                     <el-checkbox label="儿童" prop="ischild" disabled v-model="detail.ischild"></el-checkbox>
                     <el-checkbox label="婴儿" prop="isbaby" disabled v-model="detail.isbaby"></el-checkbox>
@@ -98,27 +98,30 @@
               </el-col>
               <el-col :span="12">
                 <ul style="padding-left: 30px;">
-                  <li><span>出港地</span>{{detail.depart}}</li>
-                  <li><span>目的地</span>{{detail.dest}}</li>
-                  <li><span>交通工具</span>去：{{detail.trafficgo}} | 返：{{detail.trafficreturn}}</li>
+                  <li><span>出港地：</span>{{detail.depart}}</li>
+                  <li><span>目的地：</span>{{detail.dest}}</li>
+                  <li><span>交通工具：</span>去：{{{1:'飞机',2:'动车',3:'火车',4:'高铁',5:'大巴',6:'轮船'}[detail.trafficgo]}} | 返：{{{1:'飞机',2:'动车',3:'火车',4:'高铁',5:'大巴',6:'轮船'}[detail.trafficreturn]}}</li>
 
                   <!--去程交通：1飞机，2动车，3火车，4高铁，5大巴，6轮船-->
                 </ul>
               </el-col>
               <p>
-                <span style="float: left;">线路说明</span>
+                <span style="float: left;">线路说明：</span>
               <pre><div class="xc" style="float: left; line-height: 26px;">{{detail.remark}}</div></pre>
               </p>
               <div style="clear: both;"></div>
               <p>
-                <span>集合地点</span>{{detail.station}}
+                <span>集合地点：</span>{{detail.station}}
               </p>
               <div class="topimglist">
-                <span style="float: left;">图片</span>
+                <span style="float: left;">图片：</span>
                 <div class="xc" style="float: left; line-height: 26px;">
                   <ul>
-                    <li v-for="img in toplist">
-                      <img :src="img"/>
+                    <li v-if='toplist' v-for="img in toplist" style='float: left;'>
+                      <img style='width: 168px;height: 168px;margin: 0 10px;' :src="img"/>
+                    </li>
+                    <li v-if='!toplist'>
+                      ---
                     </li>
                   </ul>
                 </div>
@@ -167,11 +170,13 @@
             <li>
               <span>图片</span>
               <div class="xc">
-                <div v-for="img in route.titleimages.split(',')">
-                  <img :src="img"/>
+                <div v-if='!route.titleimages' v-for="img in route.titleimages.split(',')">
+                  <img style='width: 168px;height: 168px;margin: 0 10px;' :src="img"/>
+                </div>
+                <div v-if='route.titleimages'>
+                  ---
                 </div>
               </div>
-
             </li>
           </ul>
         </div>
@@ -184,38 +189,38 @@
         <h2 class="d_jump">预定须知</h2>
         <div class="bgfff">
           <ul class="notes">
-            <li><span style="line-height: 26px;">不含项目</span>
+            <li><span style="line-height: 26px;">不含项目：</span>
 
               <div class="xc">
                 {{detail.excludePkg}}
               </div>
             </li>
-            <li><span>包含项目</span>
+            <li><span>包含项目：</span>
               <div class="xc">
                 <pre>{{detail.includePkg}}</pre>
               </div>
             </li>
-            <li><span>购物安排</span>
+            <li><span>购物安排：</span>
               <div class="xc">
                 <pre>{{detail.shopping}}</pre>
               </div>
             </li>
-            <li><span>温馨提示</span>
+            <li><span>温馨提示：</span>
               <div class="xc">
                 <pre>{{detail.reminder}}</pre>
               </div>
             </li>
-            <li><span>儿童/老人</span>
+            <li><span>儿童/老人：</span>
               <div class="xc">
                 <pre>{{detail.childolder}}</pre>
               </div>
             </li>
-            <li><span>对外备注</span>
+            <li><span>对外备注：</span>
               <div class="xc">
                 <pre>{{detail.outremark}}</pre>
               </div>
             </li>
-            <li><span>内部备注</span>
+            <li><span>内部备注：</span>
               <div class="xc">
                 <pre>{{detail.innerremark}}</pre>
               </div>
@@ -228,8 +233,9 @@
             <el-checkbox :label="idx" :key="item.name" style="margin-right: 40px;" v-for='(item,idx) in pingtai'>{{item.name}}</el-checkbox>
           </el-checkbox-group>
         </div>
-
       </section>
+      <el-button class='back-list' type="primary" @click="backList">返回</el-button>
+
     </div>
   </div>
 </template>
@@ -417,6 +423,9 @@
         }
       },
       //返回线路列表
+      backList: function () {
+        this.$emit('setMode', 'list');
+      },
       handleHide: function () {
         this.$emit('setMode', 'list');
       },
@@ -622,9 +631,14 @@
     }
   }
   .pingtai{
-    padding: 0 0 30px 40px;
+    padding: 20px 0 30px 40px;
+    background-color: #fff;
   }
   .hasid {
     display: none;
+  }
+  .back-list{
+    width: 120px;
+    margin: 20px 0 50px 0;
   }
 </style>

@@ -18,17 +18,17 @@
 					<el-col :span="22">
 
 						<el-form-item label="订单编号">
-							<el-input v-model="orderinfo.orderno" placeholder="订单编号"></el-input>
+							<el-input v-model="orderinfo.orderno" placeholder="请输入订单编号"></el-input>
 						</el-form-item>
 						<el-form-item label="线路名称">
-							<el-input v-model="orderinfo.linename" placeholder="线路名称"></el-input>
+							<el-input v-model="orderinfo.linename" placeholder="请输入线路名称"></el-input>
 						</el-form-item>
-						<el-form-item label="操作时间">
-							<el-date-picker v-model="orderinfo.date" type="daterange" placeholder="选择日期范围">
+						<el-form-item label="出团日期">
+							<el-date-picker v-model="date" type="daterange" placeholder="选择日期范围">
 							</el-date-picker>
 						</el-form-item>
-						<el-form-item label="下单人">
-							<el-input v-model="orderinfo.creater" placeholder="下单人"></el-input>
+						<el-form-item label="负责人">
+							<el-input v-model="orderinfo.creater" placeholder="请输入负责人"></el-input>
 						</el-form-item>
 						<el-form-item label="订单状态">
 							<el-select v-model="orderinfo.status" clearable placeholder="订单状态">
@@ -42,12 +42,19 @@
 								</el-option>
 							</el-select>
 						</el-form-item>
+            <el-form-item label="结算状态">
+              <el-select v-model="orderinfo.source" clearable placeholder="结算状态">
+                <el-option v-for="item in optionsfrom1" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
 						<el-form-item>
 
 							<el-checkbox v-model="orderinfo.hide">隐藏取消订单</el-checkbox>
 						</el-form-item>
 						<el-form-item>
 							<el-button type="primary" @click="onSubmit">查询</el-button>
+              <el-button  type="primary" @click="clearGetList">清空查询</el-button>
 						</el-form-item>
 
 					</el-col>
@@ -57,15 +64,17 @@
 				<table width="100%" class="table">
 					<thead>
 						<tr>
-							<td width="30%" style="text-align: left;">订单编号 / 团号 / 线路名称</td>
-							<td width="8%">出团 / 人数</td>
-							<td width="10%">客户信息</td>
+							<td width="23%" style="text-align: left;">订单编号 / 团号 / 线路名称</td>
+							<td width="9%">出团 / 人数</td>
+							<td width="8%">客户信息</td>
 							<td width="7%">订单金额</td>
 							<td width="5%">应收</td>
-							<td width="5%">已收</td>
-							<td width="5%">退款</td>
-							<td width="10%">状态</td>
-							<td width="10%">负责人 / 操作</td>
+							<td width="6%">已收</td>
+							<td width="6%">退款</td>
+							<td width="10%">结算状态</td>
+							<td width="10%">订单状态</td>
+							<td width="10%">负责人</td>
+							<td width="10%"> 操作</td>
 						</tr>
 
 					</thead>
@@ -73,10 +82,10 @@
 
 				<dl class="list" v-for="(list,index) in orderLists">
 					<dt><span>订单编号：{{list.code}} / 馨途订单编号：{{list.sourceid}}</span><span style="margin-left: 50px;">订单来源：{{list.platformname}}</span> </dt>
-						
+
 					<dd>
 						<ul>
-							<li style="width: 40%;">{{list.teamno}} <br />{{list.linename}}<br /> 下单时间：{{list.createtime}}</li>
+							<li style="width: 30%;">{{list.teamno}} <br />{{list.linename}}<br /> 下单时间：{{list.createtime}}</li>
 							<li style="width: 10%;">出团：{{list.starttime}} <br /> 人数：{{list.custnumber}}</li>
 							<li style="width: 10%;">{{list.companyname}} <br /> {{list.contactmobile}}
 							</li>
@@ -84,14 +93,16 @@
 							<li style="width: 5%;">￥{{list.orderpay}}</li>
 							<li style="width: 5%;">￥{{list.collection}}</li>
 							<li style="width: 5%;">￥{{list.pay}}</li>
+              <li style="width: 10%;"></li>
 							<li style="width: 10%;">
-								
-							<span v-if="list.status == '未确认'" style="color: #ff780b;">{{list.status}}</span>	
-							<span v-else-if="list.status == '名单不全'" style="color: #f24d4d;">{{list.status}}</span>	
-							<span v-else-if="list.status == '已确认'" style="color: #4bba46;">{{list.status}}</span>	
-							<span v-else="list.status == '已支付'" style="color: #666666;">{{list.status}}</span>	
-								
+
+							<span v-if="list.status == '未确认'" style="color: #ff780b;">{{list.status}}</span>
+							<span v-else-if="list.status == '名单不全'" style="color: #f24d4d;">{{list.status}}</span>
+							<span v-else-if="list.status == '已确认'" style="color: #4bba46;">{{list.status}}</span>
+							<span v-else="list.status == '已支付'" style="color: #666666;">{{list.status}}</span>
+
 							</li>
+              <li style="width: 10%;">{{list.creater}}</li>
 							<li style="width: 10%;" class="button">
 								<el-col :span="12">
 									<el-button type="text" v-if="!list.iscancel && !list.isconfirm"  @click="confirmnamelists(list)" class="hasid" id="8dcdad97735d11e788410242ac120009">确认名单</el-button>
@@ -129,10 +140,14 @@
 				</el-dialog>
 
 			</section>
+
 			<div class="page">
-				<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pagesize" layout="total, prev, pager, next" :total="total">
+        <div style='text-align: left;'>
+          <el-button v-if='isShowJs'  type="primary" >批量结算</el-button>
+        </div>
+        <el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pagesize" layout="total, prev, pager, next" :total="total">
 				</el-pagination>
-			</div>
+      </div>
 		</div>
 
 		<OrderInfo v-else @setMode="setMode" :listid="listid" @getList="getList"></OrderInfo>
@@ -145,21 +160,23 @@
 	import OrderInfo from './orderinfo'
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
-	export default {
+  import util from '../../../common/js/util'
+  export default {
 		components: {
 			OrderInfo
 		},
 		data() {
 			return {
+        isShowJs: false,
 				confirmnamelist: false,
 				nameid: '',
 				total: 0,
 				currentPage: 1,
 				pagesize: 10,
-				orderinfo: {
+        date: '',
+        orderinfo: {
 					orderno: '',
 					linename: '',
-					date: '',
 					creater: '',
 					status: '',
 					source: '',
@@ -174,27 +191,49 @@
 					label: '全部'
 				}, {
 					value: '1',
-					label: '名单不全'
-				}, {
-					value: '2',
 					label: '未确认'
 				}, {
-					value: '3',
+					value: '2',
 					label: '已确认'
 				}, {
+					value: '3',
+					label: '已出团'
+				}, {
 					value: '4',
-					label: '已支付'
-				}],
+					label: '已取消'
+				}, {
+          value: '5',
+          label: '部分退款'
+        }, {
+          value: '6',
+          label: '全额退款'
+        }],
 				optionsfrom: [{
 					value: '0',
 					label: '全部'
-				}, {
-					value: '1',
+				},  {
+          value: '1',
+          label: '内部'
+        },{
+					value: '2',
 					label: '馨·欢途'
 				}, {
-					value: '2',
+					value: '3',
 					label: '馨·驰誉'
 				}],
+        optionsfrom1: [{
+          value: '0',
+          label: '全部'
+        }, {
+          value: '1',
+          label: '已结算'
+        }, {
+          value: '2',
+          label: '可结算'
+        }, {
+          value: '3',
+          label: '未结算'
+        }],
 				setmode: 'orderlistmodel',
 				listid: ''
 
@@ -215,7 +254,7 @@
 					token: paramm.getToken(),
 					id: this.nameid
 				}
-				
+
 			ordernamelistconfirm(para).then((res) => {
 					if(res.data.error == 1) {
 						this.$message({
@@ -236,10 +275,10 @@
 				this.setmode = type
 			},
 			getList() {
-				
+
 				let dates = ''
-				let startday = this.orderinfo.date[0]
-				let endday = this.orderinfo.date[1]
+				let startday = this.date[0]
+				let endday = this.date[1]
 				startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
 				endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
 				if(startday == '' && endday == '') {
@@ -252,7 +291,7 @@
 				page.pageindex = this.currentPage - 1
 				page.date = dates
 				orderlist(page).then((res) => {
-					
+
 					if(res.data.error == 1){
 						this.$message({
 							message: res.data.message,
@@ -262,9 +301,10 @@
 						this.orderLists = res.data.obj.datas
 						this.total = Number(res.data.obj.total)
 					}
-					
+
 				})
-			},
+        this.isShowJs = true
+      },
 			handleCurrentChange(val) {
 				this.getList()
 			},
@@ -273,7 +313,22 @@
 			},
 			passinfo(val) {
 				this.listid = val.id
-			}
+			},
+      // 清空查询
+      clearGetList () {
+        this. orderinfo= {
+           orderno: '',
+           linename: '',
+           creater: '',
+           status: '',
+           source: '',
+           hide: false,
+           token: paramm.getToken(),
+           pageindex: 0,
+           pagesize: 10
+        };
+        this.date = ''
+      }
 		}
 	}
 </script>
@@ -282,7 +337,7 @@
 	.not:hover {
 		color: red;
 	}
-	
+
 	header {
 		padding: 0 40px;
 		background: white;
@@ -319,25 +374,25 @@
 			color: #333;
 		}
 	}
-	
+
 	.padding30 {
 		padding: 0 30px;
 	}
-	
+
 	.page {
 		padding: 15px 30px;
 		background: white;
 		text-align: right;
 	}
-	
+
 	.el-table .cell {
 		text-align: left;
 	}
-	
+
 	.el-breadcrumb {
 		margin-bottom: 20px;
 	}
-	
+
 	.table {
 		thead {
 			td {
@@ -356,7 +411,7 @@
 			}
 		}
 	}
-	
+
 	.list {
 		margin-top: 10px;
 		background: #fff;
@@ -407,11 +462,11 @@
 			}
 		}
 	}
-	
+
 	.list:hover {
 		border: 1px solid #9ad4d6;
 	}
-	
+
 	.button {
 		.el-button {
 			padding: 7px 3px;
@@ -420,13 +475,13 @@
 			}
 		}
 	}
-	
+
 	.demo-form-inline {
 		float: left;
 		text-align: left;
 		padding-left: 30px;
 	}
-	
+
 	.page {
 		margin: 0 30px;
 		margin-top: 20px;

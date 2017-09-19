@@ -264,7 +264,7 @@
 				<el-button size="large" @click="handleHide">返回</el-button>
 			</div>
 		</section>
-		<el-dialog title="新增收款" :visible.sync="addcollection" size="large">
+		<el-dialog :title="type=='pay'?'新增退款':'新增收款'" :visible.sync="addcollection" size="large">
 			<table border="" cellspacing="" cellpadding="" width="100%" class="collecttable">
 				<tr>
 					<th>收款方式</th>

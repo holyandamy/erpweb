@@ -55,12 +55,12 @@ import Cookies from 'js-cookie';
 			};
 		},
 		methods: {
-			
+
 			handleLogin() {
-				
+
 				this.$refs.loginForm.validate(valid => {
                 if (valid) {
-                	
+
                   this.loading = true;
                   let para = {
 							username: this.loginForm.username,

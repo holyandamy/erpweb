@@ -15,9 +15,9 @@
                 <li><span>团号：</span>{{detail.teamno }}</li>
                 <!--出行方式:1跟团游，2自由行-->
                 <li><span>结算价格：</span>
-                  成人 {{detailOut.sltaduilt}} /
-                  儿童 {{detailOut.sltchild}} /
-                  婴儿 {{detailOut.sltbaby}}
+                  成人： {{detailOut.sltaduilt}}元/人 &nbsp;&nbsp;  /
+                  儿童： {{detailOut.sltchild}}元/人 &nbsp;&nbsp;  /
+                  婴儿： {{detailOut.sltbaby}}元/人
                 </li>
 
               </ul>
