@@ -117,14 +117,14 @@
             <el-form-item label="业务类型：" prop="busstypename">
               {{showForm.busstypename}}
             </el-form-item>
-            <el-form-item label="订单编号：" prop="orderno">
-              {{showForm.orderno || '- - -'}}
+            <el-form-item label="订单编号：" prop="orderno" v-if="showForm.orderno">
+              {{showForm.orderno}}
             </el-form-item>
-            <el-form-item label="团号：" prop="teamno">
-              {{showForm.teamno || '- - -'}}
+            <el-form-item label="团号：" prop="teamno" v-if="showForm.teamno">
+              {{showForm.teamno}}
             </el-form-item>
-            <el-form-item label="线路名称：" prop="linename">
-              {{showForm.linename || '- - -'}}
+            <el-form-item label="线路名称：" prop="linename" v-if="showForm.linename">
+              {{showForm.linename}}
             </el-form-item>
             <el-form-item label="收款单位：" prop="companyname">
               {{showForm.companyname}}
@@ -139,6 +139,13 @@
                 <el-table-column property="linetime" label="到账日期" width="150"></el-table-column>
                 <el-table-column property="fee" label="金额" width="150"></el-table-column>
               </el-table>
+              <el-col :span="24">
+                <table style="border:1px solid #ccc;margin-top:10px"  width="100%">
+                  <tr>
+                    <td style="text-align:right">金额合计:￥{{summoney}}元</td>
+                  </tr>
+                </table>
+              </el-col>
             </el-form-item>
             <el-form-item label="附件图片：">  <!--   prop="remark"  -->
               <ul>
@@ -173,6 +180,7 @@
     },
     data() {
       return {
+        summoney:'',
         baseUrll: 'http://api.erp.we2tu.com/api/finance/pay/export',
         plusSrc: '',
         detail: [],
@@ -387,6 +395,7 @@
             _this.showForm.remark=res.data.obj.remark
             _this.imgArr = res.data.obj.attach.split(',')
             _this.detail = res.data.obj.details
+            _this.summoney = res.data.obj.totalfee
             _this.detail.forEach(function (item,idx) {
               item.typee = {1:'现金',2:'对公汇款',3:'刷卡',4:'支付宝',5:'微信',6:'网银',7:'其他'}[item.type]
             })

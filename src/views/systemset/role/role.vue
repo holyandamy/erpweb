@@ -10,7 +10,7 @@
           </el-breadcrumb>
         </el-col>
         <el-col :span="12">
-          <el-button class="defaultbutton hasid" id="444b97a172bc11e7aad70242ac120006" @click="setMode('addrole','add')">新增角色</el-button>
+          <el-button style='border-color:#9ad4d6 ;  color: #2cb1b6;  float: right;  margin-top: -10px;' class="hasid" id="444b97a172bc11e7aad70242ac120006" @click="setMode('addrole','add')">新增角色</el-button>
         </el-col>
       </el-row>
     </header>
@@ -160,10 +160,6 @@
     margin-bottom: 30px;
     padding-top: 20px;
     .defaultbutton{
-      border-color:#9ad4d6 ;
-      color: #2cb1b6;
-      float: right;
-      margin-top: -10px;
     }
     .el-menu-item{
       height: 36px;
@@ -202,4 +198,8 @@
     text-align: left;
   }
   .el-breadcrumb{font-size:18px ; margin-bottom: 20px;}
+
+  .hasid {
+    display: none;
+  }
 </style>

@@ -39,24 +39,25 @@
         return files.file
       },
       uploadsuccess(response, file, fileList) {
-        /*if(this.count > 9){
+        if(fileList.length > 10) {
+          this.imglist.splice(1,1)
           this.$message({
-            message:'只可上传10张图片',
+            message:'最多只能上传十张图片',
             type:'warning'
           })
-        }*/
-        this.imglist = fileList
-        let list = []
-        for(let i = 0 ; i <this.imglist.length;i++){
-          //限制图片的数量
-          /*if(this.imglist.length > 10){
-            break;
-          }*/
-          list.push(this.imglist[i].raw.url)
-          this.imagelist = list.join(',')
-          this.$emit("imagelistchange",this.imagelist)
+        }else{
+          this.imglist = fileList
+          let list = []
+          for(let i = 0 ; i <this.imglist.length;i++){
+            //限制图片的数量
+            /*if(this.imglist.length > 10){
+              break;
+            }*/
+            list.push(this.imglist[i].raw.url)
+            this.imagelist = list.join(',')
+            this.$emit("imagelistchange",this.imagelist)
+          }
         }
-
       },
       handleRemove(file, fileList) {
         let index
@@ -88,10 +89,6 @@
         }
         if (!isLt1M) {
           this.$message.error('上传头像图片大小不能超过 1MB!');
-        }
-        if(this.count > 11){
-          this.$message.error('上传图片的数量不能超过10张!');
-          return false
         }
         return isLt1M;
       }
