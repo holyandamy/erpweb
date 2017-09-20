@@ -6,7 +6,7 @@
 					<el-breadcrumb separator="/">
             <el-breadcrumb-item><span @click="handleHide()">线路列表</span></el-breadcrumb-item>
             <el-breadcrumb-item>编辑线路</el-breadcrumb-item>
-           
+
           </el-breadcrumb>
 				</el-col>
 				<el-col :span="12">
@@ -14,9 +14,9 @@
 						<li v-for="(menu,index) in menus" :class="{active:active==index}" @click="jump(index)">{{menu}}</li>
 					</ul>
 				</el-col>
-				
+
 			</el-row>
-			
+
 		</header>
 		<section>
 
@@ -25,7 +25,7 @@
 			<div class="baseinfo">
 					<el-row>
 						<el-col :span="21">
-							<el-form-item label="选择线路分类" prop="categorytype" label-width="120px">
+							<el-form-item label="选择线路分类：" prop="categorytype" label-width="120px">
 								<el-select filterable v-model="baseForm.categorytype" placeholder="请选择" @change="checkline">
 									<el-option v-for="item in categoryids" :key="item.label" :label="item.label" :value="item.value">
 									</el-option>
@@ -36,44 +36,44 @@
 								</el-select>
 							</el-form-item>
 
-							<el-form-item label="线路名称" prop="name" label-width="120px">
+							<el-form-item label="线路名称：" prop="name" label-width="120px">
 								<el-input v-model="baseForm.name"></el-input>
 							</el-form-item>
-							<el-form-item label="团号代码" prop="teamno" label-width="120px">
+							<el-form-item label="团号代码：" prop="teamno" label-width="120px">
 								<el-input v-model="baseForm.teamno"></el-input>
 							</el-form-item>
-							<el-form-item label="出行方式" prop="type" label-width="120px">
+							<el-form-item label="出行方式：" prop="type" label-width="120px">
 								<el-radio-group v-model="baseForm.type">
 									<el-radio label="2">自由行</el-radio>
 									<el-radio label="1">跟团游</el-radio>
 								</el-radio-group>
 							</el-form-item>
-							<el-form-item label="收客类型" prop="checkpeople" label-width="120px">
+							<el-form-item label="收客类型：" prop="checkpeople" label-width="120px">
 								<el-checkbox-group v-model="baseForm.checkpeople" @change="changepeople">
 								<el-checkbox label="成人" v-model="baseForm.isadult"></el-checkbox>
 								<el-checkbox label="儿童" v-model="baseForm.ischild"></el-checkbox>
 								<el-checkbox label="婴儿" v-model="baseForm.isbaby"></el-checkbox>
 								 </el-checkbox-group>
 							</el-form-item>
-							<el-form-item label="出港地" prop="fromprovinceid" label-width="120px">
+							<el-form-item label="出港地：" prop="fromprovinceid" label-width="120px">
 								<el-col :span="5">
-									
+
 										<el-select filterable v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom">
 											<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									
+
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
 								</el-col>
 								<el-col :span="5">
-									
+
 										<el-select filterable v-model="baseForm.fromcityid" placeholder="请选择" @change="changecityfrom">
 											<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-								
+
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
@@ -83,27 +83,27 @@
 											<el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-								
+
 								</el-col>
 							</el-form-item>
-							<el-form-item label="目的地" prop ="backaddress" label-width="120px">
+							<el-form-item label="目的地：" prop ="backaddress" label-width="120px">
 								<el-col :span="5">
 									<el-select filterable v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback">
 											<el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 									</el-select>
-								
+
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
 								</el-col>
 								<el-col :span="5">
-									
+
 										<el-select filterable v-model="baseForm.tocityid" placeholder="请选择" @change="changecityback">
 											<el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
 											</el-option>
 										</el-select>
-									
+
 								</el-col>
 								<el-col :span="1">
 									&nbsp;
@@ -115,7 +115,7 @@
 										</el-select>
 								</el-col>
 							</el-form-item>
-							<el-form-item label="交通工具" label-width="120px">
+							<el-form-item label="交通工具：" label-width="120px">
 								<el-col :span="2">
 									去程
 								</el-col>
@@ -143,13 +143,21 @@
 								</el-col>
 
 							</el-form-item>
-							<el-form-item label="线路说明" prop="remark" label-width="120px">
+							<el-form-item label="线路说明：" prop="remark" label-width="120px">
 								<el-input type="textarea" v-model="baseForm.remark"></el-input>
 							</el-form-item>
-							<el-form-item label="集合地点" prop="station" label-width="120px">
+							<el-form-item label="集合地点：" prop="station" label-width="120px">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-								<ImgLoad @geturl="geturl" :scope="scope" :checktop="checktop" :scopes="scopes"></ImgLoad>
+              <el-form-item label="图片：">
+                <ul v-if='baseImages' >
+                  <li style='float:left;'  v-for="imgSrc0 in baseImages.split(',')">
+                    <img style='width: 148px;height: 148px;margin: 0 10px;' :src='imgSrc0' alt="">
+                  </li>
+                </ul>
+                <ImgLoad @geturl="geturl"  :checktop="checktop"></ImgLoad>   <!--  :scope="scope"  -->
+              </el-form-item>
+
 					</el-col>
 					</el-row>
 				</div>
@@ -186,7 +194,7 @@
 							</div>
 							<el-row>
 								<el-col :span="7">
-									<el-form-item label="标题">
+									<el-form-item label="标题：">
 										<el-input v-model="route.title" class="insertinput"></el-input>
 
 									</el-form-item>
@@ -207,7 +215,7 @@
 							</el-row>
 							<el-row>
 								<el-col :span="7">
-									<el-form-item label="三餐">
+									<el-form-item label="三餐：">
 										<el-checkbox v-model="route.isbreakfast">早</el-checkbox>
 										<el-checkbox v-model="route.islunch">中</el-checkbox>
 										<el-checkbox v-model="route.isdinner">晚</el-checkbox>
@@ -215,14 +223,14 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="住宿" prop="hotel">
+									<el-form-item label="住宿：" prop="hotel">
 										<el-input v-model="route.hotel"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-									<el-form-item label="行程" prop="content">
+									<el-form-item label="行程：" prop="content">
 										<el-input type="textarea" v-model="route.content"></el-input>
 									</el-form-item>
 								</el-col>
@@ -231,7 +239,7 @@
 
 							<el-row>
 								<el-col :span="14">
-									<el-form-item label="备注" prop="remark">
+									<el-form-item label="备注：" prop="remark">
 										<el-input type="textarea" v-model="route.remark"></el-input>
 									</el-form-item>
 								</el-col>
@@ -239,7 +247,15 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-									<ImgLoad :route="route" :editimg="editimg"></ImgLoad>
+                  <el-form-item label="图片：" >
+                    <ul v-if='routeTit.length>0' style='float:left;'>
+                      <li style='float: left;' v-for="imgSrc in routeTit[index].split(',')">
+                        <img style='width: 148px;height: 148px;margin: 0 10px;' :src='imgSrc' alt="">
+                      </li>
+                    </ul>
+                    <ImgLoad @getRouteImages ='getRouteImages' :idx="index"></ImgLoad>
+                  </el-form-item>
+
 								</el-col>
 
 							</el-row>
@@ -254,40 +270,40 @@
 				<div class="baseinfo">
 					<el-row>
 						<el-col :span="20">
-							<el-form-item label="产品亮点" prop="feature">
+							<el-form-item label="产品亮点：" prop="feature">
 								<el-input type="textarea" v-model="baseForm.feature"></el-input>
 							</el-form-item>
-							<el-form-item label="购物安排" prop="shopping">
+							<el-form-item label="购物安排：" prop="shopping">
 								<el-input type="textarea" v-model="baseForm.shopping"></el-input>
 							</el-form-item>
 							<el-row>
 								<el-col :span="12">
-									<el-form-item label="包含项目" prop="includePkg">
+									<el-form-item label="包含项目：" prop="includePkg">
 										<el-input type="textarea" v-model="baseForm.includePkg"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">
-									<el-form-item label="不含项目" prop="excludePkg">
+									<el-form-item label="不含项目：" prop="excludePkg">
 										<el-input type="textarea" v-model="baseForm.excludePkg"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row>
 								<el-col :span="12">
-									<el-form-item label="温馨提示" prop="reminder">
+									<el-form-item label="温馨提示：" prop="reminder">
 										<el-input type="textarea" v-model="baseForm.reminder"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">
-									<el-form-item label="儿童/老人" prop="childolder">
+									<el-form-item label="儿童/老人：" prop="childolder">
 										<el-input type="textarea" v-model="baseForm.childolder"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
-							<el-form-item label="对外备注" prop="outremark">
+							<el-form-item label="对外备注：" prop="outremark">
 								<el-input type="textarea" v-model="baseForm.outremark"></el-input>
 							</el-form-item>
-							<el-form-item label="内部备注" prop="innerremark">
+							<el-form-item label="内部备注：" prop="innerremark">
 								<el-input type="textarea" v-model="baseForm.innerremark"></el-input>
 							</el-form-item>
 						</el-col>
@@ -373,6 +389,9 @@
 				}
 			}
 			return {
+        urlAdd: '',
+        baseImages: '',
+        routeTit: [],
 				selfedit:false,
 				traffics: [{
 					value: 1,
@@ -480,8 +499,6 @@
 						message: '请填写线路名称',
 						trigger: 'blur,change'
 					}],
-					teamno: [{ validator:check.teanno, trigger: 'blur,change', required: true}
-					],
 					type: [{
 						required: true,
 						message: '请选择出行方式',
@@ -503,32 +520,57 @@
 				paras:'',
 				checktop:true,
 				scopes:[]
-				
-				
-				
+
+
+
 			}
 		},
-		
+
 		mounted(){
 			this.getlineinfo()
 			this.getprovince()
 		},
 		methods: {
-			geturl(url){
-				 this.baseForm.images = url
-			},
+      geturl(url) {
+        this.urlAdd= url
+      },
+      getRouteImages(url,idx) {
+        let _this =this;
+        if(this.routeTit.length>0){
+          this.routeTit.forEach(function (item,index) {
+            if(index == idx){
+              if(item){
+                _this.routeTit[index] = item+ ',' + url
+              }else {
+                _this.routeTit[index]  = url
+              }
+            }
+          })
+        }
+      },
+//			geturl(url){
+//				 this.baseForm.images = url
+//			},
 			getlineinfo() {
+        let _this =this;
 				let para = {
 					token: paramm.getToken(),
 					id: this.lineid
 				}
-				
+
 				linedetail(para).then((res) => {
 					this.baseForm = res.data.obj
+          this.baseImages = res.data.obj.images
+          if(res.data.obj.routes.length>0){
+            res.data.obj.routes.forEach(function (item) {
+              _this.routeTit.push(item.titleimages)
+            })
+          }
+
 					this.scopes = res.data.obj.routes
 					this.baseForm.checkpeople = []
 					this.baseForm.checkpeople.push(this.baseForm.isadult,this.baseForm.ischild,this.baseForm.isbaby)
-					
+
 					if(this.baseForm.checkpeople[0]){
 						this.baseForm.checkpeople[0] = "成人"
 					}
@@ -548,7 +590,7 @@
 						this.editorhtml = res.data.obj.routes[0].content
 
 					}
-					
+
 //				if(this.paras!=''){
 //						if(this.paras.indexOf(',')>0){
 //						let list = this.paras.split(',')
@@ -568,7 +610,7 @@
 //						}
 //					}
 //					for(let i = 0;i<this.baseForm.routes.length;i++){
-//						
+//
 //						if(this.baseForm.routes[i].titleimages!=''){
 //							if(this.baseForm.routes[i].titleimages.indexOf(',')>-1){
 //						let list = this.baseForm.routes[i].titleimages.split(',')
@@ -578,17 +620,17 @@
 //								uid:'2'
 //							})
 //						}
-//						
+//
 //					}else{
 //						this.imglist.push({
 //							url:this.paras,
 //							uid:'222'
 //						})
-//						
+//
 //					}
 //						}
 //					}
-				
+
 				})
 
 			},
@@ -654,8 +696,20 @@
 			},
 			//保存表单
 			submitForm(formName) {
+        let _this = this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
+            if(this.baseForm.images && this.urlAdd) {
+              this.baseForm.images = this.baseImages+ ',' + this.urlAdd
+            }else {
+              this.baseForm.images = this.baseImages
+            }
+            if(this.baseForm.routes.length>0){
+              this.baseForm.routes.forEach(function (item,idx) {
+                item.titleimages = _this.routeTit[idx]
+              })
+            }
+
 						let para = this.baseForm
 						for(let i = 0;i<para.checkpeople.length;i++){
 							if(para.checkpeople[i] == "成人"){
@@ -672,7 +726,7 @@
 							para.routes = this.baseForm.routes
 							para.edittype = 0
 							for(let i = 0 ; i<para.routes.length ;i++){
-							
+
 								if(para.routes[i].title == ""){
 									this.$message({
 									showClose: true,
@@ -681,21 +735,21 @@
 									});
 									return false
 								}
-								
+
 							}
-							
+
 						} else {
 							//自定义录入
 							let html = this.$refs.ue.getUEContent()
 							para.edittype = 1
 							para.routes[0].content = html
-							
+
 						}
-						
+
 						para.token = paramm.getToken()
-					
+
 						lineupdate(para).then((res) => {
-							
+
 							if(res.data.error == 1) {
 								this.$message({
 									showClose: true,
@@ -723,10 +777,10 @@
 				this.$refs[formName].resetFields();
 			},
 			handleRemove(file, fileList) {
-				
+
 			},
 			handlePreview(file) {
-			
+
 			},
 			//天数减少
 			minuday() {
@@ -846,9 +900,9 @@
 					listss.value = listss.value.substr(0, listss.selectionStart) + str + listss.value.substring(listss.selectionStart, lists);
 				}
 			},
-			
+
 			changepeople(){
-				
+
 				if(JSON.stringify(this.baseForm.checkpeople).indexOf("婴儿") > 0){
 					this.baseForm.isbaby = true
 				}else{

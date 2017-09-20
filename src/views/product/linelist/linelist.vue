@@ -98,14 +98,14 @@
 					<el-table-column fixed="right" label="操作" width="110">
 						<template scope="scope">
 							<el-button @click="setMode('lineinfo'),lineinfo(scope)"  type="text" size="small">查看</el-button>
-							
+
 							<a href="javascript:;" class="operation">
 								<el-dropdown>
 									<span class="el-dropdown-link">
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
 									<el-dropdown-menu slot="dropdown">
-									
+
 										<!--<el-dropdown-item > <a href="javascript:;" @click="handleEdit(scope.$index, scope.row)">编辑</a></el-dropdown-item>-->
 										<!--<el-dropdown-item v-if="scope.row.isApprove == true"><span @click="examine(scope)">线路审核</span></el-dropdown-item>-->
 										<el-dropdown-item class="hasid"  id="4dcba294734711e788410242ac120009"><span @click="setMode('editline'),lineinfo(scope)">编辑线路</span></el-dropdown-item>
@@ -225,18 +225,18 @@
 		},
 		created(){
 			this.getcategoryall()
-			
+
 		},
 		updated: function () {
 		  this.$nextTick(function () {
 		    showorhide()
-		   
-		    
+
+
 		  })
-		 
+
 		},
 		mounted(){
-			this.getcategoryall() 
+			this.getcategoryall()
 		},
 		methods: {
 			//线路分类筛选
@@ -247,15 +247,16 @@
 					for(let i = 0 ; i <this.linesorts.length;i++){
 						if(this.$route.query.name == this.linesorts[i].name){
 							this.kindid =this.linesorts[i].id
-							
+
 //							document.getElementsByClassName('kindid').childNodes('li')[i].setAttribute('class','checked')
 							document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class','checked')
 							let para = this.search
-							para.categoryid = this.linesorts[i].id, 
+							para.categoryid = this.linesorts[i].id,
 							para.pageindex = this.currentPage-1
 							linelist(para).then((res) => {
-								this.linelist = res.data.obj.datas
-//								
+                this.linelist = res.data.obj.datas
+
+//
 //								for(let i = 0 ; i <res.data.obj.datas.length;i++){
 //									let list = res.data.obj.datas
 //									if(list[i].approve == 0){
@@ -269,7 +270,7 @@
 //									}
 //								}
 								this.total = Number(res.data.obj.total)
-			
+
 			//					console.log(para)
 							})
 						}
@@ -328,7 +329,7 @@
 					this.linesorts = res.data.obj
 					this.checkkind()
 				})
-				
+
 			},
 			changedest(index,destination) {
 				if(index == -1){
@@ -347,7 +348,7 @@
 			lineinfo(scope){
 				this.lineid = scope.row.id
 				this.scope = scope.row
-			
+
 			},
 //			//线路审核
 //			examine(scope) {
@@ -423,6 +424,7 @@
 			},
       // 清空查询
       clearGetList () {
+			  this.ischecked=-1
         this.search= {
           token:paramm.getToken(),
             pageindex:0,
@@ -433,10 +435,12 @@
             linename:'',//线路名称
             type:'',//1.国内，2出境，3周边
         }
+        this.$router.push({path: '/linelist'})
+
       },
       //查看团期
       updatastatus(scope){
-      	
+
       		this.$router.push({ path: '/grouplist', query: { name: scope.row.name}})
     	}
 

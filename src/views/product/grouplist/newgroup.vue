@@ -21,7 +21,11 @@
                 <el-button @click="getcategoryall()">选择</el-button>
                 <span class='routeName' style='padding-left: 10px;' v-text='routeName'>222</span>
               </el-form-item>
-
+              <el-form-item label="取消政策：" >
+                订单确认后 &nbsp;&nbsp;&nbsp;
+                <el-input v-model="cancell"  style='width: 8%;'> </el-input>
+                小时内未完成订单金额收款，则订单取消，释放对应库存。不填则永久不取消。
+              </el-form-item>
               <el-form-item label="集合通知：" prop="notify">
                 <el-col :span="4" style="width: 100%;margin-right: 10px">
                   <el-input
@@ -39,6 +43,7 @@
               <el-form-item label="发团时间：" prop="date">
                 <el-col :span="4" style="width: 100%;margin-right: 10px">
                   <el-date-picker
+                    :clearable = false
                     :editable = false
                     @change='addTr'
                     v-model="value1"
@@ -90,6 +95,9 @@
                       <th colspan="4" rowspan="1" class="is-leaf"  style="text-align: center"  >
                         <div class="cell">结算价/元</div>
                       </th>
+                      <th colspan="4" rowspan="1" class="is-leaf"  style="text-align: center"  >
+                        <div class="cell">成本价/元</div>
+                      </th>
                       <th class="gutter" style="width: 0px;"></th>
                     </tr>
                     </thead>
@@ -130,6 +138,18 @@
                         <div class="cell el-tooltip" >成人</div>
                       </td>
                       <td  >
+                        <div class="cell el-tooltip" >单房差</div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" >婴儿</div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" >儿童</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" >成人</div>
+                      </td>
+                      <td >
                         <div class="cell el-tooltip" >单房差</div>
                       </td>
                       <td  >
@@ -186,6 +206,7 @@
                       <td >
                         <div class="cell el-tooltip" ><el-input v-model="allmktroom" @change='allMktroom'></el-input></div>
                       </td>
+
                       <td  >
                         <div class="cell el-tooltip" ><el-input v-model="allsltbaby" @change='allSltbaby'></el-input></div>
                       </td>
@@ -197,6 +218,19 @@
                       </td>
                       <td >
                         <div class="cell el-tooltip" ><el-input v-model="allsltroom" @change='allSltroom'></el-input></div>
+                      </td>
+
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="allcostbaby" @change='allCostbaby'></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="allcostchild" @change='allCostchild'></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="allcostaduilt" @change='allCostaduilt'></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allcostroom" @change='allCostroom'></el-input></div>
                       </td>
                     </tr>
                     <tr class="el-table__row" v-for='(item,idx) in checkArr' v-if='checkArr.length>0'>
@@ -243,6 +277,7 @@
                       <td  >
                         <div class="cell el-tooltip" ><el-input v-model="item.mktroom"></el-input></div>
                       </td>
+
                       <td  >
                         <div class="cell el-tooltip" ><el-input v-model="item.sltbaby"></el-input></div>
                       </td>
@@ -254,6 +289,19 @@
                       </td>
                       <td >
                         <div class="cell el-tooltip" ><el-input v-model="item.sltroom"></el-input></div>
+                      </td>
+
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="item.costbaby"></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="item.costchild"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="item.costaduilt"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="item.costroom"></el-input></div>
                       </td>
                     </tr>
                     <!----></tbody>
@@ -429,6 +477,7 @@
         mktaduilt: '',
         allmktroom: '',
         mktroom: '',
+
         allsltbaby: '',
         sltbaby: '',
         allsltchild: '',
@@ -437,10 +486,21 @@
         sltaduilt: '',
         allsltroom: '',
         sltroom: '',
+
+        allcostbaby: '',
+        costbaby: '',
+        allcostchild: '',
+        costchild: '',
+        allcostaduilt: '',
+        costaduilt: '',
+        allcostroom: '',
+        costroom: '',
         checkArr: [
 //          {checked: '',time: ''}
         ],
         notify: '',
+        cancell: '',
+        cancellId: '',
         routeName: '',
         checkItem: '',
         temTime: '',
@@ -482,6 +542,8 @@
           _this.idd = res.data.obj.id
           _this.lineid = res.data.obj.lineid
           _this.notify = res.data.obj.notify
+          _this.cancell = res.data.obj.rules[0].releasetime/60
+          _this.cancellId = res.data.obj.rules[0].id
           let _thiss = _this
           res.data.obj.platforms.forEach(function (item) {
             if(item.isenable)  _thiss.checkList.push(item.platform - 1)
@@ -523,6 +585,19 @@
       },
       allSltroom () {
         this.changeParam('sltroom', 'allsltroom')
+      },
+
+      allCostbaby () {
+        this.changeParam('costbaby', 'allcostbaby')
+      },
+      allCostchild () {
+        this.changeParam('costchild', 'allcostchild')
+      },
+      allCostaduilt () {
+        this.changeParam('costaduilt', 'allcostaduilt')
+      },
+      allCostroom () {
+        this.changeParam('costroom', 'allcostroom')
       },
       // 儿童
       allMktchild () {
@@ -638,6 +713,10 @@
             sltchild: '',
             sltaduilt: '',
             sltroom: '',
+            costbaby: '',
+            costchild: '',
+            costaduilt: '',
+            costroom: '',
             book: 0,
             sit: 0,
             isenable: true
@@ -702,6 +781,16 @@
           });
           return;
         }
+        // 取消政策
+        if(this.cancell) {
+          if(isNaN(this.cancell) || parseFloat(this.cancell)<0){
+            _this.$message({
+              message: '取消政策时间为大于等于0的数字',
+              type: 'warning'
+            });
+            return;
+          }
+        }
         // 集合通知
         if(this.notify.toString().length >120) {
           this.$message({
@@ -730,7 +819,8 @@
            }
            if(_this.isTrue(item.starttime,item.deadline,'截止天数') ||
              _this.isTrue(item.starttime,item.mktbaby,'婴儿市场价') || _this.isTrue(item.starttime,item.mktchild,'儿童市场价') || _this.isTrue(item.starttime,item.mktaduilt,'成人市场价') || _this.isTrue(item.starttime,item.mktroom,'市场价单房差') ||
-             _this.isTrue(item.starttime,item.sltbaby,'婴儿结算价') || _this.isTrue(item.starttime,item.sltchild,'儿童结算价') || _this.isTrue(item.starttime,item.sltaduilt,'成人结算价') || _this.isTrue(item.starttime,item.sltroom,'结算价单房差')
+             _this.isTrue(item.starttime,item.sltbaby,'婴儿结算价') || _this.isTrue(item.starttime,item.sltchild,'儿童结算价') || _this.isTrue(item.starttime,item.sltaduilt,'成人结算价') || _this.isTrue(item.starttime,item.sltroom,'结算价单房差') ||
+             _this.isTrue(item.starttime,item.costbaby,'婴儿成本价') || _this.isTrue(item.starttime,item.costchild,'儿童成本价') || _this.isTrue(item.starttime,item.costaduilt,'成人成本价') || _this.isTrue(item.starttime,item.costroom,'成本价单房差')
            ) throw false
 
            _this. allChecked = false
@@ -779,6 +869,7 @@
             token: paramm.getToken(),
             lineid: _this.lineid,
             notify: _this.notify || '',
+            rules: [{releasetime:_this.cancell*60,type:1}] || [],
             platforms: platforms,
             details: _this.checkArr
           }).then(res =>{
@@ -811,6 +902,7 @@
             token: paramm.getToken(),
             lineid: _this.lineid,
             notify: _this.notify || '',
+            rules: [{releasetime:_this.cancell*60,type:1,id:_this.cancellId}] || [],
             platforms: platforms,
             details: _this.checkArr,
             id: _this.idd

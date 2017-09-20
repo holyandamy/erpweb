@@ -137,7 +137,6 @@
 		},
     methods:{
       jump (scope) {
-     
         this.$router.push({path: '/linelist',query: {name: scope.row.name}})
       },
       deleteRow(index, rows){
@@ -205,7 +204,7 @@
       	let page = this.pageset
     	  page.pageindex = this.currentPage-1
         page.pagesize = this.pagesize
-        
+
         linecategorylist(page).then((res) => {
         	 console.log(page,res)
           this.lineList = res.data.obj.datas

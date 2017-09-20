@@ -1,5 +1,5 @@
 <template>
-	<el-form-item label="上传图片" label-width="120px">
+	<el-form-item label="" label-width="120px">
 		<el-upload action="http://v0.api.upyun.com/xtimg" accept="image/jpeg,image/gif,image/png" list-type="picture-card" :on-preview="handlePictureCardPreview" :file-list="imglist" :http-request="upload" :on-success="uploadsuccess" :on-remove="handleRemove" multiple>
 			<i class="el-icon-plus"></i>
 		</el-upload>
@@ -12,7 +12,7 @@
 <script>
 	import { imgupload } from '../../../common/js/upload'
 	export default {
-		props: ['route','editimg','checktop','paras','topimglist'],
+		props: ['idx','route','editimg','checktop','paras','topimglist'],
 		data() {
 			return {
 				dialogImageUrl: '',
@@ -23,26 +23,26 @@
 		},
 		mounted(){
 			this.loading()
-			
-			
+
+
 		},
 		methods: {
 			loading(){
 			if(this.editimg){
-				let imgurl = this.scope.route.titleimages.split(',')
-				
+				/*let imgurl = this.scope.route.titleimages.split(',')
+
 				let list=[]
 				for(let i = 0;i<imgurl.length;i++){
 					let oldimglist = {}
 					oldimglist.url = imgurl[i]
 					list.push(oldimglist)
 				}
-				this.imglist = list
-				
+				this.imglist = list*/
+
 				//let topimgurl = this.route.images.split(',')
-				
+
 				//this.topimglist = topimgurl
-				
+
 			}
 			},
 			//图片上传
@@ -55,18 +55,19 @@
 				let titlename = []
 				for(let i = 0; i < this.imglist.length; i++) {
 					titlename.push(this.imglist[i].raw.url)
-					
+
 				}
-				
+
 				if(this.checktop){
 					let imageurl = titlename.join(',')
-					this.$emit('geturl',imageurl); 
-				
+					this.$emit('geturl',imageurl);
+
 				}else{
-					this.route.titleimages = titlename.join(',')
-				}
-				
-				
+//					this.route.titleimages = titlename.join(',')
+          this.$emit('getRouteImages',titlename.join(','),this.idx);
+        }
+
+
 				},
 			handleRemove(file, fileList) {
 				let index
@@ -80,10 +81,11 @@
 				}
 				if(this.checktop){
 					let imageurl = titlename.join(',')
-					this.$emit('geturl',imageurl); 
+					this.$emit('geturl',imageurl);
 				}else{
-					this.route.titleimages = titlename.join(',')
-				}
+//					this.route.titleimages = titlename.join(',')
+          this.$emit('getRouteImages',titlename.join(','),this.idx);
+        }
 			},
 			handlePictureCardPreview(file) {
 				this.dialogImageUrl = file.url;
