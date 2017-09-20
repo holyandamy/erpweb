@@ -373,7 +373,7 @@
       },
       removeDomain(item) {
         var index = this.collectForm.detail.indexOf(item)
-        if(index !== -1) {
+        if(index !== -1 && index !== 0 ) {
           this.collectForm.detail.splice(index, 1)
         }
       },

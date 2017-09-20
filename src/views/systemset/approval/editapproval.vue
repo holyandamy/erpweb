@@ -19,7 +19,6 @@
 						<el-form-item label="被审批人员" prop='executor'>
 							<el-row>
 								<el-col :span="19">
-
 									<el-input v-model="appform.executor"></el-input>
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
@@ -34,7 +33,6 @@
 						<el-form-item label="审批人">
 							<el-row>
 								<el-col :span="19">
-
 									<el-input v-model="appform.approver"></el-input>
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
@@ -68,6 +66,9 @@
 				<el-button @click="dialogFormVisible = false">取 消</el-button>
 				<el-button type="primary" @click="comfirm()">确 定</el-button>
 			</div>
+      <!--
+        点取消按钮 应该恢复到之前选中的数据 而不是简单的让弹窗消失
+      -->
 		</el-dialog>
 		<!-- 审批人员 -->
 		<el-dialog title="选择审批人员" size="tiny" :visible.sync="approvalVisible" style="text-align: left;">

@@ -10,13 +10,13 @@
           </el-form-item>
           <el-form-item label="所在城市" prop="provinceId">
             <el-col :span="4">
-              <el-select v-model="companyForm.provinceId" placeholder="请选择" @change="changecity('pro')">
+              <el-select v-model="companyForm.provinceId" placeholder="请选择" @change="changecity">
                 <el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
                 </el-option>
               </el-select>
             </el-col>
             <el-col :span="4">
-              <el-select v-model="companyForm.cityId" placeholder="请选择"  @change="changecity('city')">
+              <el-select v-model="companyForm.cityId" placeholder="请选择"  @change="changedistrict">
                 <el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
                 </el-option>
               </el-select>
@@ -294,23 +294,19 @@
         })
       },
       //选择城市
-      changecity(val) {
-        if(val =="pro"){
-          let pro = {
-            id: this.companyForm.provinceId,
-            token:paramm.getToken()
-          }
-          this.getcity(pro)
-          this.companyForm.cityId = ""
-        }else if(val === 'city'){
-          let city = {
-            id: this.companyForm.cityId,
-            token:paramm.getToken()
-          }
-          this.getdistrict(city)
-          this.companyForm.districtId=""
+      changecity() {
+        let pro = {
+          id:this.companyForm.provinceId,
+          token:paramm.getToken()
         }
-
+        this.getcity(pro)
+      },
+      changedistrict() {
+        let city = {
+          id:this.companyForm.cityId,
+          token:paramm.getToken()
+        }
+        this.getdistrict(city)
       },
       imagelistchange(val){
         this.companyForm.logo = val

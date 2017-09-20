@@ -90,7 +90,7 @@
             <el-form-item label="选择部门" prop="deptid">
               <el-row>
                 <el-col :span="4">
-                  <el-input v-model="checkeddepar"></el-input>
+                  <el-input v-model="checkeddepar" disabled></el-input>
                 </el-col>
                 <el-col :span="1">&nbsp;</el-col>
                 <el-col :span="4">
@@ -102,7 +102,7 @@
             <el-form-item label="选择角色" prop="roleid" required>
               <el-row>
                 <el-col :span="4">
-                  <el-input v-model="roleids"></el-input>
+                  <el-input v-model="roleids" disabled></el-input>
                 </el-col>
                 <el-col :span="1">&nbsp;</el-col>
                 <el-col :span="4">
