@@ -476,4 +476,8 @@
 	div.add i {
 		color: #3ec3c8;
 	}
+
+  .hasid {
+    display:none
+  }
 </style>

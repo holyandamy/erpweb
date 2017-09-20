@@ -179,9 +179,9 @@
             required: false,
           }]
         },
-        province: [],
+        province:[],
         city:[],
-        district: [],
+        district:[],
         logo:''
 
       }
@@ -199,20 +199,18 @@
       getinfo(){
         let para={token:paramm.getToken()}
         companydetail(para).then((res) =>{
-          this.companyForm = res.data.obj
+          this.companyForm = res.data.obj // 已经有provinceId  cityId  districtId
           this.logo = res.data.obj.logo
           this.$refs.logos.loading(this.logo)
           //省的展示
-          this.getprovince() //拿到了省的数据，应该根据返回的id再回去市和区的数据并展示
-          //console.log(this.companyForm.provinceId)
+          this.getprovince()
+          //市的展示
           let province = {
             id: this.companyForm.provinceId,
             token:paramm.getToken()
           }
-          //获取市区列表
           this.getcity(province)
-          //获取区县列表
-          //console.log(this.companyForm.cityId)
+          //区的展示
           let city = {
             id: this.companyForm.cityId,
             token:paramm.getToken()
@@ -371,5 +369,9 @@
 
   .el-select {
     margin-right: 15px;
+  }
+
+  .hasid {
+    display:none;
   }
 </style>

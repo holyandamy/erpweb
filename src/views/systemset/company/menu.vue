@@ -107,5 +107,9 @@
 			border-top-right-radius: 5px;
 			color: #333;
 		}
+
+    .hasid {
+      display:none
+    }
 	}
 </style>

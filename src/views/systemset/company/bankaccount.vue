@@ -355,4 +355,8 @@
   .el-table .cell {
     text-align: left;
   }
+
+  .hasid {
+    display:none
+  }
 </style>

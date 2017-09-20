@@ -213,7 +213,7 @@
       };
       //验证用户名
       var checkusername = (rule,value,callback) => {
-        let usernamereg = /^[a-z0-9A-Z]{6,16}$/;
+        let usernamereg = /^[a-z0-9A-Z]{6,20}$/;
         if(usernamereg.test(value)){
           callback()
         }else{
@@ -425,6 +425,7 @@
       //选择角色
       comfirmrole() {
         this.finddepartment = false
+
         let role = [];
         this.addstaff.roleid = this.checkdepartment  //this.addstaff.roleid必须是字符串
         for(let i = 0; i < this.checkdepartment.length; i++) {
@@ -442,7 +443,7 @@
         let para = {
           token: paramm.getToken(),
           pageIndex: 0,
-          pageSize: 10
+          pageSize: '30'
         }
         rolelist(para).then((res) => {
           this.rolelists = res.data.obj.datas
@@ -467,7 +468,7 @@
           let para = {
             token:paramm.getToken(),
             pageIndex: 0,
-            pageSize: 10
+            pageSize: 30
           }
           rolelist(para).then((res) => {
             this.rolelists = res.data.obj.datas
@@ -611,5 +612,16 @@
   .bg_white {
     background: #fff;
     padding: 20px 35px;
+  }
+
+  .dapul {
+    li {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 10px;
+      ul {
+        margin-left: 40px;
+      }
+    }
   }
 </style>

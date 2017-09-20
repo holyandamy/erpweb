@@ -198,4 +198,7 @@
 	.el-breadcrumb {
 		margin-bottom: 20px;
 	}
+  .hasid {
+    display: none;
+  }
 </style>
