@@ -59,8 +59,8 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							应收金额：{{detail.orderpay}}
-							<el-button style="margin-left: 50px;" @click="editprice = true">调整价格</el-button>
+              订单金额：{{detail.orderpay}}
+							<el-button style="margin-left: 50px;" @click="editprice = true" v-if='detail.settle!=1'>调整价格</el-button>
 						</el-col>
 						<el-col :span="12" class="pl-20">
 							客户类型：{{detail.custtypename}}
@@ -93,10 +93,10 @@
 			<h2>
 					<el-row>
 						<el-col :span="12">收款详情</el-col>
-						<el-col :span="12"><el-button @click="addcollpay('collect')" class="hasid" id="869cc288735d11e788410242ac120009">新增收款</el-button></el-col>
+						<el-col :span="12"><el-button v-if='detail.status==2||detail.status==3' @click="addcollpay('collect')" class="hasid" id="869cc288735d11e788410242ac120009">添加收款</el-button></el-col>
 					</el-row>
 			</h2>
-			<el-table :data="detail.collections" show-summary border style="width: 100%">
+			<el-table :data="detail.collections"  border style="width: 100%"> <!--  show-summary   -->
 				<el-table-column prop="createtime" label="创建日期">
 				</el-table-column>
 				<el-table-column prop="code" label="收款单号">
@@ -110,13 +110,16 @@
 				<el-table-column prop="remark" label="备注">
 				</el-table-column>
 			</el-table>
+      <el-row>
+        <el-col style='text-align: left;padding: 20px 0;font-weight: bold;'>收款合计：￥{{sumShou}}元</el-col>
+      </el-row>
 			<h2>
 					<el-row>
 						<el-col :span="12">退款详情</el-col>
-						<el-col :span="12"><el-button @click="addcollpay('pay')"  class="hasid" id="89cec1b8735d11e788410242ac120009">新增退款</el-button></el-col>
+						<el-col :span="12"><el-button v-if="detail.status==2||detail.status==3" @click="addcollpay('pay')"  class="hasid" id="89cec1b8735d11e788410242ac120009">添加退款</el-button></el-col>
 					</el-row>
 				</h2>
-			<el-table :data="detail.pays" show-summary border style="width: 100%">
+			<el-table :data="detail.pays" border style="width: 100%">
 				<el-table-column prop="createtime" label="创建日期">
 				</el-table-column>
 				<el-table-column prop="code" label="收款单号">
@@ -130,6 +133,9 @@
 				<el-table-column prop="remark" label="备注">
 				</el-table-column>
 			</el-table>
+      <el-row>
+        <el-col style='text-align: left;padding: 20px 0;font-weight: bold;'>退款合计：￥{{sumFu}}元</el-col>
+      </el-row>
 			<h2>
 					<el-row>
 						<el-col :span="12">游客信息</el-col>
@@ -143,44 +149,44 @@
 				</h2>
 			<div class="bg_white padding-20-50">
 				<el-row>
-					<el-col :span="3">
+					<el-col :span="5">
 						<el-col :span="5" style="line-height: 26px;">成人</el-col>
 						<el-col :span="19">
 							<!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
 							<div class="el-input-number">
 								<!--is-disabled-->
-								<span class="el-input-number__decrease" @click="minuday('adult')"><i class="el-icon-minus"></i></span>
-								<span class="el-input-number__increase" @click="addday('adult')"><i class="el-icon-plus"></i></span>
-								<div class="el-input"><input v-model="detail.totaladult" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
+								<span v-if="detail.status<=1" class="el-input-number__decrease" @click="minuday('adult')"><i class="el-icon-minus"></i></span>
+								<span v-if="detail.status<=1" class="el-input-number__increase" @click="addday('adult')"><i class="el-icon-plus"></i></span>
+								<div class="el-input"><input :disabled="detail.status>1" v-model="detail.totaladult" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
 
 								</div>
 							</div>
 						</el-col>
 					</el-col>
-					<el-col :span="3">
+					<el-col :span="5">
 						<el-col :span="5" style="line-height: 26px;">儿童</el-col>
 						<el-col :span="19">
 							<!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
 							<div class="el-input-number">
 								<!--is-disabled-->
-								<span class="el-input-number__decrease" @click="minuday('child')"><i class="el-icon-minus"></i></span>
-								<span class="el-input-number__increase" @click="addday('child')"><i class="el-icon-plus"></i></span>
-								<div class="el-input"><input v-model="detail.totalchild" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
+								<span   v-if="detail.status<=1" class="el-input-number__decrease" @click="minuday('child')"><i class="el-icon-minus"></i></span>
+								<span   v-if="detail.status<=1" class="el-input-number__increase" @click="addday('child')"><i class="el-icon-plus"></i></span>
+								<div class="el-input"><input :disabled="detail.status>1" v-model="detail.totalchild" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
 
 								</div>
 							</div>
 						</el-col>
 
 					</el-col>
-					<el-col :span="3">
+					<el-col :span="5">
 						<el-col :span="5" style="line-height: 26px;">婴儿</el-col>
 						<el-col :span="19">
 							<!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
 							<div class="el-input-number">
 								<!--is-disabled-->
-								<span class="el-input-number__decrease" @click="minuday('baby')"><i class="el-icon-minus"></i></span>
-								<span class="el-input-number__increase" @click="addday('baby')"><i class="el-icon-plus"></i></span>
-								<div class="el-input"><input v-model="detail.totalbaby" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
+								<span  v-if="detail.status<=1" class="el-input-number__decrease" @click="minuday('baby')"><i class="el-icon-minus"></i></span>
+								<span  v-if="detail.status<=1" class="el-input-number__increase" @click="addday('baby')"><i class="el-icon-plus"></i></span>
+								<div class="el-input"><input :disabled="detail.status>1" v-model="detail.totalbaby" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
 
 								</div>
 							</div>
@@ -228,8 +234,8 @@
 								<el-input v-model="namelist.remark" placeholder="备注"></el-input>
 							</td>
 							<td>
-								<el-button type="text" v-if="!detail.isconfirm" @click="deletepeople(index)">删除</el-button>
-								<el-button type="text"  @click="refund(namelist)" v-else>退团申请</el-button>
+								<el-button type="text" v-if="detail.status==1" @click="deletepeople(index)">删除</el-button>
+								<el-button type="text" v-if="namelist.name&&(detail.status==2||detail.status==3)"  @click="refund(namelist)">申请退团</el-button>
 							</td>
 						</tr>
 						<tr>
@@ -260,7 +266,8 @@
 			</el-table>
 			<div class="button">
 				<el-button type="primary" size="large" @click="save">提交</el-button>
-				<el-button type="primary" v-if="!detail.isconfirm && detail.iscancel" size="large" class="hasid" id="91102d1d735d11e788410242ac120009" @click="cancelorder">取消订单</el-button>
+				<!--<el-button type="primary" v-if="!detail.isconfirm && detail.iscancel" size="large" class="hasid" id="91102d1d735d11e788410242ac120009" @click="cancelorder">取消订单</el-button>-->
+				<el-button type="primary" v-if="detail.status==1||detail.status==2||detail.status==3" size="large" class="hasid" id="91102d1d735d11e788410242ac120009" @click="cancelorder">{{{1:'取消订单',2:'退团',3:'退团'}[detail.status]}}</el-button>
 				<el-button size="large" @click="handleHide">返回</el-button>
 			</div>
 		</section>
@@ -359,8 +366,8 @@
 				} else {
 					if(newvalue < 0) {
 						callback(new Error('必须为正数！'));
-					} else if(newvalue > this.detail.orderfee) {
-						callback(new Error('调整金额不能大于应收金额！'));
+					} else if((newvalue < this.sumFu) || (newvalue < this.sumShou)) {
+						callback(new Error('调整金额需大于收款合计和退款合计！'));
 					} else {
 						callback()
 					}
@@ -462,7 +469,9 @@
 				alllogs: [],
 				oldtotal: 0,
 				roomlength: '',
-				roomprice: 0
+				roomprice: 0,
+        sumShou: 0,
+        sumFu: 0
 			}
 		},
 		created() {
@@ -515,26 +524,23 @@
 				this.$emit('getList');
 			},
 			confirmprice(formName) {
+			  let _this =this;
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let para = this.editpriceform
 						para.id = this.detail.id
 						orderpay(para).then((res) => {
-							if(res.data.error == 1) {
-								this.$message.error(res.data.message);
+							if(res.data.error || res.data.err) {
+								paramm.getCode(res.data,_this)
 							} else {
-								this.$message({
-									message: '调价成功',
-									type: 'success'
-								});
-								this.editprice = false
+                paramm.getCode(res.data,_this)
+                this.editprice = false
 								this.editpriceform.money = ""
 								this.editpriceform.remark = ""
 								this.getdetail()
 							}
 						})
 					} else {
-
 						this.$message({
 							message: '调价失败！',
 							type: 'error'
@@ -671,13 +677,24 @@
 			},
 			//获取详情
 			getdetail() {
+			  let _this =this;
 				let para = {
 					id: this.listid,
 					token: paramm.getToken()
 				}
+        _this.sumFu =  _this.sumShou = 0;
 				orderdetail(para).then((res) => {
 					this.detail = res.data.obj
-					console.log(this.detail)
+          if(this.detail.collections.length>0){
+            this.detail.collections.forEach(function (item) {
+              _this.sumShou += parseFloat(item.totalfee)
+            })
+          }
+          if(this.detail.pays.length>0){
+            this.detail.pays.forEach(function (item) {
+              _this.sumFu += parseFloat(item.totalfee)
+            })
+          }
 					let type = res.data.obj.namelist
 					this.alllogs = res.data.obj.logs
 					this.detail.logs = res.data.obj.logs.slice(0, 3)

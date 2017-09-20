@@ -100,14 +100,11 @@
 							<el-button @click="setMode('lineinfo'),lineinfo(scope)"  type="text" size="small">查看</el-button>
 
 							<a href="javascript:;" class="operation">
-								<el-dropdown>
+								<el-dropdown @visible-change="toDown">
 									<span class="el-dropdown-link">
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
 									<el-dropdown-menu slot="dropdown">
-
-										<!--<el-dropdown-item > <a href="javascript:;" @click="handleEdit(scope.$index, scope.row)">编辑</a></el-dropdown-item>-->
-										<!--<el-dropdown-item v-if="scope.row.isApprove == true"><span @click="examine(scope)">线路审核</span></el-dropdown-item>-->
 										<el-dropdown-item class="hasid"  id="4dcba294734711e788410242ac120009"><span @click="setMode('editline'),lineinfo(scope)">编辑线路</span></el-dropdown-item>
 										<el-dropdown-item class="hasid"  id="9079b8af734711e788410242ac120009"><span @click="settop(scope)">线路置顶</span></el-dropdown-item>
 										<el-dropdown-item class="hasid"  id="6e3c1a72734711e788410242ac120009"><span @click="updatastatus(scope)">查看团期</span></el-dropdown-item>
@@ -115,9 +112,6 @@
 										<el-dropdown-item  v-if="scope.row.isenable == false"><span @click="stop(scope,2)">启用</span></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
-
-
-
 							</a>
 
 						</template>
@@ -239,6 +233,9 @@
 			this.getcategoryall()
 		},
 		methods: {
+      toDown(){
+        showorhide()
+      },
 			//线路分类筛选
 			checkkind(){
 //				this.$route.query.name
@@ -556,4 +553,7 @@
 			text-align: center;
 		}
 	}
+  .hasid {
+    display: none;
+  }
 </style>

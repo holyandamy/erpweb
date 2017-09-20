@@ -359,7 +359,6 @@
         try {
           this.checkArr.forEach(function (item) {
             if(!item.name && !item.certtype && !item.cert && !item.mobile){
-//            console.log(1111, _this.visitorList);
             }else {
               if(item.name == '' || item.name.length<2){
                 _this.$message({
@@ -566,7 +565,6 @@
         }
         let _this = this;
         if(this.visitorList.custtype == 2 && this.visitorList.comname.toString().length>4){
-          console.log(1111, {token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''});
           reserveNum({token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''}).then(function (res) {
             _this.companyArr = res.data.obj
             _this.jidiaoArr = _this.companyArr

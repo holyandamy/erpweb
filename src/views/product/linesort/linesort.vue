@@ -155,6 +155,7 @@
       editorFn(rows){
         this.editcategory.id=rows.id;
         this.editcategory.name=rows.name;
+        this.editcategory.type=rows.type;
         this.showEdit=true;
       },
       saveEdit(){
@@ -206,7 +207,6 @@
         page.pagesize = this.pagesize
 
         linecategorylist(page).then((res) => {
-        	 console.log(page,res)
           this.lineList = res.data.obj.datas
           this.total = Number(res.data.obj.total)
         })

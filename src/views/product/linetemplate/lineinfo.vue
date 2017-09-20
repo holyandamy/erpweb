@@ -169,7 +169,6 @@
 				templatdetail(para).then((res) => {
 					this.detail = res.data.obj
 					this.toplist = this.detail.images.split(',')
-					console.log(this.detail)
 					for(let i = 0 ; i <this.detail.routes.length;i++){
 						let arr = []
 						arr = res.data.obj.routes[i].titleimages.split(',')

@@ -21,7 +21,6 @@
 			}
 		},
 		created(){
-      console.log(111,this.scope);
 			let botimg = this.route
       if(this.scope ) {
         if(this.scope.images == ""){
@@ -57,7 +56,6 @@
 				return files.file
 			},
 			uploadsuccess(response, file, fileList) {
-        console.log(2222, fileList);
         this.imglist = fileList
 				let titlename = []
 				for(let i = 0; i < this.imglist.length; i++) {
@@ -65,14 +63,11 @@
 				}
 
 				if(this.checktop){
-          console.log(3333);
           let imageurl = titlename.join(',')
 					this.$emit('geturl',imageurl);
 
 				}else{
-          console.log(444,this.idx);
           this.$emit('getRouteImages',titlename.join(','),this.idx);
-
 //          this.route.titleimages = titlename.join(',')
 				}
 
