@@ -196,7 +196,6 @@
 		},
 		mounted: function() {
 			this.getlineinfo()
-			console.log(this.lineid)
 		},
 		methods: {
 			showmore(val) {

@@ -183,13 +183,13 @@
 		methods: {
 			//筛选线路分类
 			changecondition(index,list) {
-				
+
 				let listid = '0'
 				if(index == '-1'){
 					listid = '0'
 					this.ischecked = '-1'
 					this.search.categoryid = ''
-				
+
 				}else{
 					this.ischecked = index
 					listid = list.id
@@ -206,7 +206,6 @@
 				para.pageindex = this.currentPage-1
 				para.token = paramm.getToken()
 				templatelist(para).then((res) => {
-					console.log(para,res)
 					this.linelist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
 //					console.log(para)
@@ -226,7 +225,6 @@
 				}else{
 					this.checkeddest = index
 					this.search.toid = destination.id
-					console.log(destination.id)
 				}
 
 			},

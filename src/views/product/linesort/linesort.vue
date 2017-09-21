@@ -15,6 +15,31 @@
         </el-row>
       </header>
       <section class="padding30">
+        <el-form    ref="searchList" label-width="100px" class="demo-ruleForm" style="text-align: left;">
+          <el-row>
+            <el-form-item label="系统分类" prop="categoryType"  style="width: 326px" >
+              <el-select v-model="searchList.systemType"  >
+                <el-option  v-for="item in type"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="分类名称">
+              <el-col :span="4"   >
+                <el-input v-model="searchList.typename" placeholder='分类名称'></el-input>
+              </el-col>
+            </el-form-item>
+            <el-form-item   style="margin: 0 30px 0 40px;"><!-- class="hasid" id="49641a18734611e788410242ac120009"  -->
+              <el-button  type="primary" @click="searchGetList">查询</el-button>
+            </el-form-item>
+            <el-form-item   style="margin-left: 0px">
+              <el-button  type="primary" @click="clearGetList">清空查询</el-button>
+            </el-form-item>
+          </el-row>
+        </el-form>
+
         <el-table :data="lineList" style="text-align: left; font-size: 12px;" >
           <el-table-column prop="typeName" label="系统分类">
           </el-table-column>
@@ -93,6 +118,14 @@
   export default {
     data() {
       return {
+        searchList:{
+          systemType: '',
+          typename: '',
+          token: paramm.getToken(),
+          pageindex:0,
+          pagesize: 10
+        },
+        type:[{value:'0', label:'全部'}, {value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
         lineList:[],
         addcategory:{
           token:paramm.getToken(),
@@ -106,7 +139,6 @@
         },
         showAdd:false,
         showEdit:false,
-        type:[{value:'1',label:'国内游'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
         rules: {
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' },
@@ -128,7 +160,7 @@
       }
     },
     created(){
-      this.getList()
+//      this.getList()
     },
     updated: function() {
 			this.$nextTick(function() {
@@ -155,6 +187,7 @@
       editorFn(rows){
         this.editcategory.id=rows.id;
         this.editcategory.name=rows.name;
+        this.editcategory.type=rows.type;
         this.showEdit=true;
       },
       saveEdit(){
@@ -204,9 +237,10 @@
       	let page = this.pageset
     	  page.pageindex = this.currentPage-1
         page.pagesize = this.pagesize
+        page.systemType = this.searchList.systemType
+        page.typename = this.searchList.typename
 
         linecategorylist(page).then((res) => {
-        	 console.log(page,res)
           this.lineList = res.data.obj.datas
           this.total = Number(res.data.obj.total)
         })
@@ -214,6 +248,20 @@
 		//分页
       handleCurrentChange(val) {
         this.getList()
+      },
+      //点击查询
+      searchGetList(){
+        this.getList();
+      },
+      // 清空查询
+      clearGetList () {
+        this.searchList = {
+          systemType: '',
+          typename: '',
+          token: paramm.getToken(),
+          pageindex:0,
+          pagesize: 10
+        }
       }
 
     }

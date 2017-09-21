@@ -15,7 +15,7 @@
     <section class="padding30">
       <el-row class="bg_white">
         <el-col :span="20" style="width: 100%">
-          <el-form :model="groupList"  ref="visitorList"   :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;">
+          <el-form :model="groupList"  ref="groupList"   :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;"><!-- visitorList  -->
             <div style="width:100%;float: left;overflow:hidden">
               <el-form-item label="选择线路：" required>
                 <el-button @click="getcategoryall()">选择</el-button>
@@ -32,7 +32,7 @@
                     type="textarea"
                     :autosize="{ minRows: 3, maxRows: 5}"
                     placeholder="限120字以内!"
-                    v-model="notify">
+                    v-model="groupList.notify">
                   </el-input>
                 </el-col>
               </el-form-item>
@@ -333,7 +333,7 @@
     </section>
 
     <!--弹出框-->
-    <el-dialog title="选择线路" :visible.sync="lineFlag" size="small" >
+    <el-dialog title="选择线路" :visible.sync="lineFlag" size="" >
       <el-form :inline="true"  :model="search" class="demo-form-inline" ref="search">
         <el-form-item label="线路分类">
           <el-select v-model="search.categoryid" placeholder="请选择">
@@ -419,7 +419,8 @@
           cityid: '',
           districtid: '',
           tourtype: '',
-          birthday:''
+          birthday:'',
+          notify:''
         },
         address:{
           provinceList:[],
@@ -445,6 +446,10 @@
           certno:[
             { required: false,  min: 7, max: 18, message: '请输入正确的格式', trigger: 'blur' }
           ],
+          notify: [
+//            { required: true, message: '请输入活动名称', trigger: 'blur' },
+            { min: 0, max: 120, message: '不能超过120字!', trigger: 'blur' }
+            ]
 
         },
         province: [],
@@ -541,7 +546,7 @@
           _this.routeName = res.data.obj.linename
           _this.idd = res.data.obj.id
           _this.lineid = res.data.obj.lineid
-          _this.notify = res.data.obj.notify
+          _this.groupList.notify = res.data.obj.notify
           _this.cancell = res.data.obj.rules[0].releasetime/60
           _this.cancellId = res.data.obj.rules[0].id
           let _thiss = _this
@@ -792,7 +797,7 @@
           }
         }
         // 集合通知
-        if(this.notify.toString().length >120) {
+        if(this.groupList.notify.toString().length >120) {
           this.$message({
             message: '集合通知不能超过120字',
             type: 'warning'
@@ -868,7 +873,7 @@
           groupsave({
             token: paramm.getToken(),
             lineid: _this.lineid,
-            notify: _this.notify || '',
+            notify: _this.groupList.notify || '',
             rules: [{releasetime:_this.cancell*60,type:1}] || [],
             platforms: platforms,
             details: _this.checkArr
@@ -901,7 +906,7 @@
           groupupdate({
             token: paramm.getToken(),
             lineid: _this.lineid,
-            notify: _this.notify || '',
+            notify: _this.groupList.notify || '',
             rules: [{releasetime:_this.cancell*60,type:1,id:_this.cancellId}] || [],
             platforms: platforms,
             details: _this.checkArr,
@@ -1020,5 +1025,8 @@
   }
   table{
     font-size:12px;
+  }
+  .cell{
+    padding: 0 5px;
   }
 </style>

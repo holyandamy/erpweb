@@ -666,7 +666,8 @@
 				})
 			},
 			checklinetem() {
-				let para = {
+        this.addtemplateform.type = this.categorytypetem
+        let para = {
 					token: paramm.getToken(),
 					type: this.categorytypetem
 				}

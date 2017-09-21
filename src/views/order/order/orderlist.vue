@@ -9,14 +9,11 @@
 							<el-breadcrumb-item>订单列表</el-breadcrumb-item>
 						</el-breadcrumb>
 					</el-col>
-
 				</el-row>
 			</header>
-
-			<el-form :inline="true" :model="orderinfo" class="demo-form-inline hasid  ssss" style="text-align: left; padding-left: 30px;" id="bc6051cd735911e788410242ac120009">
+			<el-form :inline="true" :model="orderinfo"  style="text-align: left; padding-left: 30px;float: left;">
 				<el-row>
 					<el-col :span="22">
-
 						<el-form-item label="订单编号">
 							<el-input v-model="orderinfo.orderno" placeholder="请输入订单编号"></el-input>
 						</el-form-item>
@@ -42,21 +39,25 @@
 								</el-option>
 							</el-select>
 						</el-form-item>
+            <el-form-item label="是否退款">
+              <el-select v-model="orderinfo.refund" clearable placeholder="是否退款">
+                <el-option v-for="item in optionsfrom2" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="结算状态">
-              <el-select v-model="orderinfo.source" clearable placeholder="结算状态">
+              <el-select v-model="orderinfo.settle" clearable placeholder="结算状态">
                 <el-option v-for="item in optionsfrom1" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
 						<el-form-item>
-
 							<el-checkbox v-model="orderinfo.hide">隐藏取消订单</el-checkbox>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" @click="onSubmit">查询</el-button>
+							<el-button class="hasid" id="bc6051cd735911e788410242ac120009" type="primary" @click="onSubmit">查询</el-button>
               <el-button  type="primary" @click="clearGetList">清空查询</el-button>
 						</el-form-item>
-
 					</el-col>
 				</el-row>
 			</el-form>
@@ -76,10 +77,9 @@
 							<td width="10%">负责人</td>
 							<td width="10%"> 操作</td>
 						</tr>
-
 					</thead>
 				</table>
-
+        <div v-loading="listLoading" v-if='isLoadd && orderLists.length==0' element-loading-text="拼命加载中" style='height: 200px;'></div>
 				<dl class="list" v-for="(list,index) in orderLists">
 					<dt><span>订单编号：{{list.code}} / 馨途订单编号：{{list.sourceid}}</span><span style="margin-left: 50px;">订单来源：{{list.platformname}}</span> </dt>
 
@@ -93,57 +93,88 @@
 							<li style="width: 5%;">￥{{list.orderpay}}</li>
 							<li style="width: 5%;">￥{{list.collection}}</li>
 							<li style="width: 5%;">￥{{list.pay}}</li>
-              <li style="width: 10%;"></li>
-							<li style="width: 10%;">
-
-							<span v-if="list.status == '未确认'" style="color: #ff780b;">{{list.status}}</span>
-							<span v-else-if="list.status == '名单不全'" style="color: #f24d4d;">{{list.status}}</span>
-							<span v-else-if="list.status == '已确认'" style="color: #4bba46;">{{list.status}}</span>
-							<span v-else="list.status == '已支付'" style="color: #666666;">{{list.status}}</span>
-
-							</li>
+              <li style="width: 10%;">{{list.settleName}}</li>
+							<li style="width: 10%;">{{list.statusName}}</li>
               <li style="width: 10%;">{{list.creater}}</li>
 							<li style="width: 10%;" class="button">
-								<el-col :span="12">
-									<el-button type="text" v-if="!list.iscancel && !list.isconfirm"  @click="confirmnamelists(list)" class="hasid" id="8dcdad97735d11e788410242ac120009">确认名单</el-button>
-								</el-col>
-								<el-col :span="12">
-									<el-button type="text" class="hasid" id="83b7ed61735d11e788410242ac120009">
-										<router-link  target="_blank" to="/singlegroup">出团单</router-link>
-									</el-button>
-								</el-col>
-								<el-col :span="12">
-									<el-button type="text" class="hasid" id="7db5db31735d11e788410242ac120009">
-										<router-link  target="_blank" :to="{path:'/singlegroup',query: {id: list.id}}">行程单</router-link>
-									</el-button>
-								</el-col>
-								<el-col :span="12">
-									<el-button type="text" class="hasid" id="80c08aca735d11e788410242ac120009">
-										<router-link  target="_blank" :to="{path:'/confirm',query: {id: list.id}}">确认单</router-link>
-									</el-button>
-								</el-col>
-								<el-col :span="12">
-									<el-button type="text" @click="setMode('orderinfo'),passinfo(list)">查看</el-button>
-								</el-col>
-
+                <a href="javascript:;" class="operation">
+                  <el-dropdown @visible-change="toDown">
+									<span class="el-dropdown-link">
+						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
+						      </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item>
+                        <el-button  type="text" v-if="list.status == 1"  @click="confirmnamelists(list)"><span style='color: #7e8c8d;'>确认订单</span></el-button>
+                        <el-button  type="text" v-if="list.status == 2"  @click="confirmnamelists1(list)"><span style='color: #7e8c8d;'>出团确认</span></el-button>
+                      </el-dropdown-item>
+                      <el-dropdown-item  >
+                        <el-button type="text" v-if="list.settle == 2" @click='getSettle(list)'>
+                          <span style='color: #7e8c8d;'>结算</span>
+                        </el-button>
+                      </el-dropdown-item>
+                      <el-dropdown-item>
+                        <el-button type="text" @click="setMode('orderinfo'),passinfo(list)">
+                          <span style='color: #7e8c8d;'>查看</span>
+                        </el-button>
+                      </el-dropdown-item>
+                      <el-dropdown-item >
+                      <el-button type="text" class="hasid" id="7db5db31735d11e788410242ac120009">
+                      <!--<router-link  target="_blank" :to="{path:'/singlegroup',query: {id: list.id}}">行程单</router-link>-->
+                      <router-link  target="_blank" :to="{path:'/singlegroup',query: {id: list.id}}">导出行程</router-link>
+                      </el-button>
+                      </el-dropdown-item>
+                      <el-dropdown-item >
+                        <el-button type="text" class="hasid" id="80c08aca735d11e788410242ac120009">
+                          <!--<router-link  target="_blank" :to="{path:'/confirm',query: {id: list.id}}">确认单</router-link>-->
+                          <router-link  target="_blank" :to="{path:'/confirm',query: {id: list.id}}">生成确认单</router-link>
+                        </el-button>
+                      </el-dropdown-item>
+                      <el-dropdown-item >
+                        <el-button type="text" class="hasid" id="83b7ed61735d11e788410242ac120009">
+                          <!--<router-link  target="_blank" to="/singlegroup">出团单</router-link>-->
+                          <router-link  target="_blank" to="/singlegroup">导出出团单</router-link>
+                        </el-button>
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </a>
 							</li>
 						</ul>
 					</dd>
-
 				</dl>
-				<el-dialog title="确认游客名单" :visible.sync="confirmnamelist" size="tiny">
-					<span style="line-height: 25px;">确认游客名单后，游客名单无法删除 <br /> 和修改，并且同步确认馨途平台的订单！</span>
+				<el-dialog title="" :visible.sync="confirmnamelist" size="tiny">
+					<span style="line-height: 25px;">确定要确认订单吗？</span>
 					<span slot="footer" class="dialog-footer">
-    <el-button @click="confirmnamelist = false">取 消</el-button>
-    <el-button type="primary" @click="confirmvisitor">确 定</el-button>
-  </span>
+            <el-button @click="confirmnamelist = false">取 消</el-button>
+            <el-button type="primary" @click="confirmvisitor">确 定</el-button>
+          </span>
 				</el-dialog>
-
+        <el-dialog title="" :visible.sync="confirmnamelist1" size="tiny">
+          <span style="line-height: 25px;">确认后，该订单游客为可出团状态</span>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="confirmnamelist1 = false">取 消</el-button>
+            <el-button type="primary" @click="confirmfin">确 定</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog title="" :visible.sync="isSettle" size="tiny">
+          <span style="line-height: 25px;">确定要结算订单么？</span>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="isSettle = false">取 消</el-button>
+            <el-button type="primary" @click="sureSettle">确 定</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog title="" :visible.sync="isSettleAll" size="tiny">
+          <span style="line-height: 25px;">批量结算当前检索条件下的订单列表中 <br>可结算的订单！此操作不可撤销， <br>请注意。</span>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="isSettleAll = false">取 消</el-button>
+            <el-button type="primary" @click="sureSettleAll">结 算</el-button>
+          </span>
+        </el-dialog>
 			</section>
 
 			<div class="page">
         <div style='text-align: left;'>
-          <el-button v-if='isShowJs'  type="primary" >批量结算</el-button>
+          <el-button v-if='isShowJs'  type="primary" @click='getAllSettle'>批量结算</el-button>
         </div>
         <el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pagesize" layout="total, prev, pager, next" :total="total">
 				</el-pagination>
@@ -156,7 +187,7 @@
 
 <script>
 	import axios from 'axios';
-	import { orderlist, ordernamelistconfirm } from '../../../common/js/config';
+	import { orderlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
 	import OrderInfo from './orderinfo'
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
@@ -167,9 +198,16 @@
 		},
 		data() {
 			return {
+        listLoading: true,
+        isLoadd: false,
         isShowJs: false,
 				confirmnamelist: false,
+				confirmnamelist1: false,
+        isSettle: false,
+        isSettleAll: false,
 				nameid: '',
+				finid: '',
+        settleid: '',
 				total: 0,
 				currentPage: 1,
 				pagesize: 10,
@@ -180,6 +218,8 @@
 					creater: '',
 					status: '',
 					source: '',
+          settle: '',
+          refund: '',
 					hide: false,
 					token: paramm.getToken(),
 					pageindex: 0,
@@ -203,36 +243,43 @@
 					label: '已取消'
 				}, {
           value: '5',
-          label: '部分退款'
-        }, {
-          value: '6',
-          label: '全额退款'
+          label: '已退团'
         }],
 				optionsfrom: [{
-					value: '0',
+					value: '-1',
 					label: '全部'
 				},  {
-          value: '1',
+          value: '0',
           label: '内部'
         },{
 					value: '2',
 					label: '馨·欢途'
 				}, {
-					value: '3',
+					value: '1',
 					label: '馨·驰誉'
 				}],
-        optionsfrom1: [{
+        optionsfrom2: [{
           value: '0',
           label: '全部'
+        }, {
+          value: '1',
+          label: '是'
+        }, {
+          value: '2',
+          label: '否'
+        }],
+        optionsfrom1: [{
+          value: '-1',
+          label: '全部'
+        }, {
+          value: '0',
+          label: '未结算'
         }, {
           value: '1',
           label: '已结算'
         }, {
           value: '2',
           label: '可结算'
-        }, {
-          value: '3',
-          label: '未结算'
         }],
 				setmode: 'orderlistmodel',
 				listid: ''
@@ -243,34 +290,117 @@
 		mounted() {
 			showorhide()
 		},
+//    updated: function() {
+//      this.$nextTick(function() {
+//        showorhide()
+//      })
+//    },
 		methods: {
+      // 鼠标移入下拉显示按钮
+      toDown(){
+        showorhide()
+      },
+      //点击显示弹窗
 			confirmnamelists(list) {
 				this.confirmnamelist = true
 				this.nameid = list.id
 			},
-			//确认游客名单
+      confirmnamelists1(list) {
+        this.confirmnamelist1 = true
+        this.finid = list.id
+      },
+      getSettle(list) {
+        this.isSettle = true
+        this.settleid = list.id
+      },
+      getAllSettle() {
+        this.isSettleAll = true
+      },
+			//确认订单
 			confirmvisitor() {
+        let _this = this;
 				let para = {
 					token: paramm.getToken(),
 					id: this.nameid
 				}
-
 			ordernamelistconfirm(para).then((res) => {
-					if(res.data.error == 1) {
-						this.$message({
-							message: res.data.message,
-							type: 'error'
-						});
+					if(res.data.error || res.data.err) {
+						paramm.getCode(res.data,_this)
 					} else {
-						this.$message({
-							message: '保存成功',
-							type: 'success'
-						});
+            paramm.getCode(res.data,_this)
 						this.getList()
 						this.confirmnamelist = false
 					}
 				})
 			},
+      //出团确认
+      confirmfin() {
+        let _this = this;
+        let para = {
+          token: paramm.getToken(),
+          id: this.finid
+        }
+        orderfin(para).then((res) => {
+          if(res.data.error || res.data.err) {
+            paramm.getCode(res.data,_this)
+          } else {
+            paramm.getCode(res.data,_this)
+            this.getList()
+            this.confirmnamelist1 = false
+          }
+        })
+      },
+      //结算
+      sureSettle() {
+        let _this = this;
+        let para = {
+          token: paramm.getToken(),
+          id: this.settleid
+        }
+        ordersettle(para).then((res) => {
+          if(res.data.error || res.data.err) {
+            paramm.getCode(res.data,_this)
+          } else {
+            paramm.getCode(res.data,_this)
+            this.getList()
+            this.confirmnamelist1 = false
+          }
+        })
+      },
+      //批量结算
+      sureSettleAll() {
+        this.isLoadd = true;
+        let _this =this;
+        let dates = ''
+        let startday = this.date[0]
+        let endday = this.date[1]
+        startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
+        endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
+        if(startday == '' && endday == '') {
+          dates = startday + endday
+        } else {
+          dates = startday + '|' + endday
+        }
+        ordersettlebat({
+          date: dates,
+          orderno: this.orderinfo.orderno,
+          linename: this.orderinfo.linename,
+          creater: this.orderinfo.creater,
+          status: this.orderinfo.status,
+          source: this.orderinfo.source,
+          refund: this.orderinfo.refund,
+          hide: this.orderinfo.hide,
+          token: paramm.getToken()
+        }).then((res)=>{
+          if(res.data.error || res.data.err) {
+            paramm.getCode(res.data,_this)
+          } else {
+            paramm.getCode(res.data,_this)
+            _this.isLoadd = false;
+            _this.getList()
+          }
+        })
+      },
 			setMode(type) {
 				this.setmode = type
 			},
@@ -322,6 +452,8 @@
            creater: '',
            status: '',
            source: '',
+           settle: '',
+           refund: '',
            hide: false,
            token: paramm.getToken(),
            pageindex: 0,
@@ -477,13 +609,13 @@
 	}
 
 	.demo-form-inline {
-		float: left;
-		text-align: left;
-		padding-left: 30px;
 	}
 
 	.page {
 		margin: 0 30px;
 		margin-top: 20px;
 	}
+  .hasid {
+    display: none;
+  }
 </style>

@@ -61,6 +61,9 @@ export const ordernamelistexport = params => { return axios.post(`${base}/order/
 export const orderexportdetail = params => { return axios.post(`${base}/order/export/detail`, params); };//获取确认单详情
 export const orderpay = params => { return axios.post(`${base}/order/pay`, params); };//调整价格
 export const orderrefund = params => { return axios.post(`${base}/order/namelist/refund`, params); };//申请退款
+export const orderfin = params => { return axios.post(`${base}/order/fin`, params); };//订单 出团确认
+export const ordersettle = params => { return axios.post(`${base}/order/settle`, params); };//订单 结算
+export const ordersettlebat = params => { return axios.post(`${base}/order/settle/batch`, params); };//订单 批量结算
 
 
 

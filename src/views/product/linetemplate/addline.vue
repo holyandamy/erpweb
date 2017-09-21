@@ -577,7 +577,6 @@
 							para.routes = this.baseForm.routes
 							para.edittype = 0
 							for(let i = 0 ; i<para.routes.length ;i++){
-								console.log(para.routes[i].title)
 								if(para.routes[i].title == ""){
 									this.$message({
 									showClose: true,
@@ -596,7 +595,6 @@
 						}
 
 						templatsave(para).then((res) => {
-							console.log(para)
 							if(res.data.error == 1) {
 								this.$message({
 									showClose: true,
@@ -610,7 +608,6 @@
 									type: 'success'
 								});
 								this.handleHide()
-								console.log(para, res, "保存线路")
 							}
 
 						})
