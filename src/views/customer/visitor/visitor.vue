@@ -40,7 +40,7 @@
             <el-button  type="primary" @click="clearGetList">清空查询</el-button>
           </el-form-item>  <!-- style='margin: 0 40px 0 70px;'  -->
         </el-form>
-        <el-table :data="visitorList" style="text-align: left; font-size: 12px;">
+        <el-table :data="visitorList" style="text-align: left; font-size: 12px;" :default-sort = "{prop: 'createtime', order: 'descending'}">
           <el-table-column prop="code" label="游客IDs">
           </el-table-column>
           <el-table-column prop="name" label="游客名字">
@@ -51,7 +51,7 @@
           </el-table-column>
           <el-table-column prop="birthday" label="游客生日">
           </el-table-column>
-          <el-table-column prop="createtime" label="添加时间" >
+          <el-table-column prop="createtime" label="添加时间">
           </el-table-column>
 
           <el-table-column  label="操作">
@@ -196,9 +196,9 @@
             mobile:this.searchList.mobile,
           };
          custlist(templateSeacrchList).then((res) => {
-            this.visitorList = res.data.obj.datas
+            this.visitorList = res.data.obj.datas.reverse()
+            console.log(this.visitorList.length)
             this.total = Number(res.data.obj.total)
-
           })
       },
       handleSizeChange(val) {
@@ -218,7 +218,8 @@
             mobile:'',
             date:''
         }
-      }
+      },
+      //对表格进行排序
 
     }
   }

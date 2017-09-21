@@ -1,5 +1,5 @@
 <template>
-	<el-form-item label="上传图片" style="text-align: left;">
+	<el-form-item label="公司logo" style="text-align: left;">
 		<el-upload action="http://v0.api.upyun.com/xtimg"
                list-type="picture-card"
                :on-preview="handlePictureCardPreview"
@@ -46,11 +46,11 @@
 			},
 			uploadsuccess(response, file, fileList) {
 				if(fileList.length>1){
-					this.imglist.splice(1,1)
 					this.$message({
 			          message: '最多只能上传一张图片',
 			          type: 'warning'
 			        });
+          this.imglist.splice(1,1)
 				}else{
 					this.imglist = fileList
 					let list = []

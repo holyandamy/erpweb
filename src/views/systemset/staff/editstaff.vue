@@ -84,7 +84,7 @@
             <el-form-item label="选择部门" prop="deptid">
               <el-row>
                 <el-col :span="12">
-                  <el-input v-model="checkeddepar"></el-input>
+                  <el-input v-model="checkeddepar" disabled></el-input>
                 </el-col>
                 <el-col :span="1">&nbsp;</el-col>
                 <el-col :span="4">
@@ -95,7 +95,7 @@
             <el-form-item label="选择角色" prop="roleid" required>
               <el-row>
                 <el-col :span="12">
-                  <el-input v-model="roleids" ></el-input>
+                  <el-input v-model="roleids" disabled></el-input>
                 </el-col>
                 <el-col :span="1">&nbsp;</el-col>
                 <el-col :span="4">
@@ -159,10 +159,10 @@
         <el-col :span='20'>
 
           <el-form :model="resetpassword" :rules="rules2" ref="changepass" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="请输入旧密码" prop="pass">
+            <el-form-item label="请输入新密码" prop="pass">
               <el-input type="password" v-model="resetpassword.pass" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="请输入新密码" prop="checkPass">
+            <el-form-item label="确认密码" prop="checkPass">
               <el-input type="password" v-model="resetpassword.checkPass" auto-complete="off"></el-input>
             </el-form-item>
 
