@@ -66,27 +66,31 @@
 								</el-select>
 							</el-form-item>
 							<el-form-item>
-								<el-button type="primary" @click="getlinelist" class="hasid" id="b6c64c62734711e788410242ac120009">查询</el-button>
-							</el-form-item>
+								<el-button type="primary" @click="searchGetList" class="hasid" id="b6c64c62734711e788410242ac120009">查询</el-button>
+                <el-button  type="primary" @click="clearGetList">清空查询</el-button>
+              </el-form-item>
 						</el-form>
 					</el-row>
 				</div>
 				<el-table :data="linelist" border style="width: 100%">
 
 					<el-table-column prop="name" label="模板名称">
+            <template scope="scope">
+              {{scope.row.name.length>70?scope.row.name.substring(0,70)+'...':scope.row.name}}
+            </template>
 					</el-table-column>
-					<el-table-column prop="categoryName" label="线路分类"  width="200">
+					<el-table-column prop="categoryName" label="线路分类"  width="220">
 					</el-table-column>
-					<el-table-column prop="depart" label="出发地" width="110">
+					<el-table-column prop="depart" label="出发地" width="200">
 					</el-table-column>
-					<el-table-column prop="dest" label="目的地" width="110">
+					<el-table-column prop="dest" label="目的地" width="200">
 					</el-table-column>
 					<el-table-column prop="days" label="天数" width="90">
 					</el-table-column>
 					<el-table-column prop="creater" label="创建人" width="130">
 					</el-table-column>
 
-					<el-table-column fixed="right" label="操作" width="110">
+					<el-table-column fixed="right" label="操作" width="160">
 						<template scope="scope">
 							<el-button class="hasid" id="d245d97b734711e788410242ac120009" @click="setMode('lineinfo'),lineinfo(scope)" type="text" size="small">查看</el-button>
 							<el-button class="hasid" id="ce9c845e734711e788410242ac120009" @click="setMode('editline'),lineinfo(scope)" type="text" size="small">编辑</el-button>
@@ -154,7 +158,7 @@
 				search: {
 					token:paramm.getToken(),
 					pageindex:0,
-					pagesize:15,
+					pagesize:10,
 					categoryid:'', //分类id
 					toid:'',//目的地id
 					status:'-1',//状态 1正常，0停止，-1全部，
@@ -172,7 +176,7 @@
 			}
 		},
 		created(){
-			this.getlinelist()
+//			this.getlinelist()
 			this.getcategoryall()
 		},
 		updated: function() {
@@ -240,7 +244,26 @@
 
 			handleCurrentChange(){
 					this.getlinelist()
-			}
+			},
+      //点击查询
+      searchGetList(){
+        this.getlinelist()
+      },
+      // 清空查询
+      clearGetList () {
+        this.ischecked = -1
+        this.checkeddest = -1
+        this.search = {
+          token:paramm.getToken(),
+          pageindex:0,
+          pagesize:10,
+          categoryid:'', //分类id
+          toid:'',//目的地id
+          status:'-1',//状态 1正常，0停止，-1全部，
+          linename:'',//线路名称
+          type:'',//1.国内，2出境，3周边
+        }
+      }
 
 		}
 	}

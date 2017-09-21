@@ -31,26 +31,37 @@
             width="100"
             label="序号">
           </el-table-column>
-          <el-table-column prop="teamno" label=" 姓名" width="150">
+          <el-table-column prop="name " label=" 姓名" width="150">
           </el-table-column>
-          <el-table-column prop="linename" label="游客类型" >
+          <el-table-column label="游客类型" >  <!--  prop="type"   -->
+            <template scope="scope">
+              {{{1:"成人",2:"儿童",3:"婴儿"}[scope.row.type]}}
+            </template>
           </el-table-column>
-          <el-table-column prop="linename" label="证件类型" >
+          <el-table-column  label="证件类型" >  <!-- prop="certtype"   -->
+            <template scope="scope">
+              {{{1:"身份证",2:"护照",3:"军官证",4:"港澳通行证"}[scope.row.certtype]}}
+            </template>
           </el-table-column>
-          <el-table-column prop="linename" label="证件号" >
+          <el-table-column prop="cert" label="证件号" >
           </el-table-column>
-          <el-table-column prop="linename" label="手机号" >
+          <el-table-column prop="mobile" label="手机号">
           </el-table-column>
         </el-table>
-        <div class="page">
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
-            :page-size="pagesize"
-            layout="total, prev, pager, next"
-            :total="total">
-          </el-pagination>
+        <!--<div class="page">-->
+          <!--<el-pagination-->
+            <!--@size-change="handleSizeChange"-->
+            <!--@current-change="handleCurrentChange"-->
+            <!--:current-page.sync="currentPage"-->
+            <!--:page-size="pagesize"-->
+            <!--layout="total, prev, pager, next"-->
+            <!--:total="total">-->
+          <!--</el-pagination>-->
+        <!--</div>-->
+        <div style='padding: 30px'>
+          <span style='float: left'>操作人：{{backData.operator||'---'}}</span>
+          <span style='float: right'>打印日期：{{backData.printtime||'---'}}</span>
+          <span></span>
         </div>
       </section>
 
@@ -58,16 +69,18 @@
   </div>
 </template>
 <script>
-  import {token,grouplist} from '../../../common/js/config'
+  import {token,ordernameslist} from '../../../common/js/config'
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   export default {
+    props: ['tdidd'],
     data() {
       return {
         total:0,
-        currentPage:1,
-        pagesize:10,
-        nameList: []
+//        currentPage:1,
+//        pagesize:10,
+        nameList: [],
+        backData: {}
       }
     },
     // 进入获取列表
@@ -87,36 +100,30 @@
     methods:{
       getList(){
         let _this = this
-        grouplist({
-          date: '',
-          categoryType: '',
-          linename: '',
-          teamname: '',
-          status: '',
+        ordernameslist({
           token: paramm.getToken(),
-          pageindex:this.currentPage-1,
-          pagesize: this.pagesize
+          tdid: this.tdidd
         }).then((res) => {
           if(res.data.error || res.data.err) {
             paramm.getCode(res.data, _this)
             return
           }else {
-            _this.nameList = res.data.obj.datas
+            _this.backData = res.data.obj
+            _this.nameList = res.data.obj.namelist
             _this.total = Number(res.data.obj.total)
           }
         })
       },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      //分页
-      handleCurrentChange(val) {
-        this.getList();
-      },
       handleHide: function (option) {
         this.$emit('setMode', 'list', option);
-      }
-
+      },
+      //分页
+//      handleCurrentChange(val) {
+//        this.getList();
+//      },
+//      handleSizeChange(val) {
+//        console.log(`每页 ${val} 条`);
+//      }
     }
   }
 </script>

@@ -54,6 +54,12 @@ import Cookies from 'js-cookie';
 				checked: true
 			};
 		},
+    created(){
+		  let _this= this;
+		  document.onkeyup=function (event) {
+        if(event.keyCode==13) _this.handleLogin()
+      }
+    },
 		methods: {
 
 			handleLogin() {

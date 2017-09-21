@@ -1,7 +1,6 @@
 import Cookies from 'js-cookie';
 export function showorhide(eachlist) {
 	let list = document.getElementsByClassName('hasid')
-  console.log(666, list);
   let token = Cookies.get('token')
 	let tokensession = sessionStorage.getItem('token')
 	let para = {}

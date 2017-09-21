@@ -76,12 +76,15 @@
 					<el-table-column fixed prop="code" label="线路ID" width="90">
 					</el-table-column>
 					<el-table-column prop="name" label="线路名称">
+            <template scope="scope">
+              {{scope.row.name.length>70?scope.row.name.substring(0,70)+'...':scope.row.name}}
+            </template>
 					</el-table-column>
 					<el-table-column prop="categoryName" label="线路分类"  width="200">
 					</el-table-column>
-					<el-table-column prop="depart" label="出发地" width="110">
+					<el-table-column prop="depart" label="出发地" width="160">
 					</el-table-column>
-					<el-table-column prop="dest" label="目的地" width="110">
+					<el-table-column prop="dest" label="目的地" width="160">
 					</el-table-column>
 					<el-table-column prop="days" label="天数" width="90">
 					</el-table-column>
@@ -198,7 +201,7 @@
 				search: {
 					token:paramm.getToken(),
 					pageindex:0,
-					pagesize:15,
+					pagesize:10,
 					categoryid:'', //分类id
 					toid:'',//目的地id
 					status:'-1',//状态 1正常，0停止，-1全部，
@@ -426,7 +429,7 @@
         this.search= {
           token:paramm.getToken(),
             pageindex:0,
-            pagesize:15,
+            pagesize:10,
             categoryid:'', //分类id
             toid:'',//目的地id
             status:'-1',//状态 1正常，0停止，-1全部，
