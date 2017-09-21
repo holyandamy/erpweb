@@ -422,6 +422,7 @@
       // 清空查询
       clearGetList () {
 			  this.ischecked=-1
+			  this.checkeddest=-1
         this.search= {
           token:paramm.getToken(),
             pageindex:0,
