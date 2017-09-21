@@ -334,10 +334,10 @@
 
     <!--弹出框-->
     <el-dialog title="选择线路" :visible.sync="lineFlag" size="" >
-      <el-form :inline="true"  :model="search" class="demo-form-inline" ref="search">
+      <el-form :inline="true"  :model="search" class="demo-form-inline" ref="search" >
         <el-form-item label="线路分类">
-          <el-select v-model="search.categoryid" placeholder="请选择">
-            <el-option v-for="(linesort,index) in linesorts" :key="linesort.value" :label="linesort.name" :value="linesort.id" >
+          <el-select v-model="search.categoryid" placeholder="请选择" :label-width="labelWidth">
+            <el-option v-for="(linesort,index) in linesorts" :key="linesort.value" :label="linesort.name" :value="linesort.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -392,6 +392,7 @@
         }, 1000);
       };
       return {
+        labelWidth: '800px',
         radio: '1',
         lineFlag: false,
         notice: '',
@@ -402,7 +403,7 @@
           pageindex:0,
           pagesize: 9999,
           categoryid:'', //分类id
-          linename:'',//线路名称
+          linename:''//线路名称
         },
         destinations: [],
         groupList: {
@@ -1028,5 +1029,8 @@
   }
   .cell{
     padding: 0 5px;
+  }
+  .demo-form-inline{
+    max-width: 800px;
   }
 </style>

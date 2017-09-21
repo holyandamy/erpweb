@@ -170,10 +170,10 @@
             <li>
               <span>图片</span>
               <div class="xc">
-                <div v-if='!route.titleimages' v-for="img in route.titleimages.split(',')">
+                <div v-if='route.titleimages' v-for="img in route.titleimages">  <!--  .split(',')  -->
                   <img style='width: 168px;height: 168px;margin: 0 10px;' :src="img"/>
                 </div>
-                <div v-if='route.titleimages'>
+                <div v-if='!route.titleimages'>
                   ---
                 </div>
               </div>
@@ -297,7 +297,7 @@
           this.detailOut = res.data.obj
           this.detail = res.data.obj.line
           this.groupList = [res.data.obj]
-          this.toplist = this.detail.images.split(',')
+          if(this.detail.images) this.toplist = this.detail.images.split(',')
           // 设置平台显示状态
           this.detailOut.platforms.forEach(function (item,idx) {
             if(item.isenable) _this.checkList.push(idx)
@@ -305,7 +305,7 @@
 
           for (let i = 0; i < this.detail.routes.length; i++) {
             let arr = []
-            arr = res.data.obj.routes[i].titleimages.split(',')
+            if(res.data.obj.routes[i].titleimages) arr = res.data.obj.routes[i].titleimages.split(',')
             this.detail.routes[i].titleimages = arr
           }
 
