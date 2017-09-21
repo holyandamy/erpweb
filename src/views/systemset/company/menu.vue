@@ -56,7 +56,6 @@
 		methods: {
 			setmode(type) {
 				this.modeType = type
-
 			},
 			//新增银行账户
 			addbank() {

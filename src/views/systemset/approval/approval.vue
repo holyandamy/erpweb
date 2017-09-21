@@ -48,7 +48,7 @@
 				</div>
 			</section>
 		</div>
-		<AppRoval v-else-if="modeType == 'addapproval'" @setMode="setMode" :banklist="banklist"></AppRoval>
+		<AppRoval v-else-if="modeType == 'addapproval'" @setMode="setMode" :banklist="banklist" @getlist="getlist"></AppRoval>
 		<EditRoval :edit="edit" v-else="modeType == 'editroval'" @setMode="setMode" @toparent = 'getlist'></EditRoval>
 	</div>
 

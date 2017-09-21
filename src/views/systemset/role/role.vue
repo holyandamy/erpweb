@@ -15,6 +15,21 @@
       </el-row>
     </header>
     <section class="padding30">
+      <el-form :inline="true"  class="demo-form-inline" style="text-align:left" @submit.prevent="submit">
+        <el-form-item label="状态">
+          <el-select v-model="search.status" placeholder="全部">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="角色名称：">
+          <el-input v-model="search.name" placeholder="请输入关键字"></el-input>
+        </el-form-item>
+        <el-form-item class="btn">
+          <el-button type="primary" @click="onSearch">搜索</el-button>
+          <el-button type="primary">清空查询</el-button>
+        </el-form-item>
+      </el-form>
+
       <el-table :data="roleList" style="text-align: left; font-size: 12px;">
         <el-table-column prop="number" label="序号">
         </el-table-column>
@@ -62,63 +77,80 @@
     data() {
       return {
         roleList: [],
-        modeType:'role',
-        total:0,
-        token:paramm.getToken(),
-        currentPage:1,
-        pagesize:15,
-        operationType:{type:'add',id:''},
-        pageset:{
-          token:paramm.getToken(),
-          pageIndex:0,
-          pageSize:''
+        modeType: 'role',
+        total: 0,
+        token: paramm.getToken(),
+        currentPage: 1,
+        pagesize: 15,
+        operationType: {type: 'add', id: ''},
+        pageset: {
+          token: paramm.getToken(),
+          pageIndex: 0,
+          pageSize: '',
+          isenable:'',
+          name:''
         },
+        //搜索数据
+        search: {
+          name: '',
+          status: ''
+        },
+        options: [
+          {
+            value: 1 ,
+            label: '启用'
+          },
+          {
+            value: 0 ,
+            label: '停止'
+          }
+        ]
       }
     },
-    created(){
-      this.getList()
+    created() {
+      //this.getList()
     },
-    updated: function() {
-			this.$nextTick(function() {
-				showorhide()
-			})
-		},
-    methods:{
-      setMode(type,option){
-        this.operationType.type=option;
-          this.modeType=type;
-          if(type=='role') {
-            if (option == "add") {
-             // this.currentPage = ((this.total + 1) / this.pagesize).floor;
-              this.getList()
-            }
-            else {
-              this.getList()
-            }
+    updated: function () {
+      this.$nextTick(function () {
+        showorhide()
+      })
+    },
+    methods: {
+      setMode(type, option) {
+        this.operationType.type = option;
+        this.modeType = type;
+        if (type == 'role') {
+          if (option == "add") {
+            // this.currentPage = ((this.total + 1) / this.pagesize).floor;
+            this.getList()
           }
+          else {
+            this.getList()
+          }
+        }
 
       },
-      editorFn(rows){
-        this.operationType.type='edit';
-        this.operationType.id=rows.id;
-        this.modeType='addRole';
+      editorFn(rows) {
+        this.operationType.type = 'edit';
+        this.operationType.id = rows.id;
+        this.modeType = 'addRole';
         //发送请求
         let _this = this;
-        let para = {token:paramm.getToken(),id:rows.id}
+        let para = {token: paramm.getToken(), id: rows.id}
         roledetail(para).then((res) => {
-          if(res.data.error !=0 || res.data.err) {
-            paramm.getCode(res.data,_this)
-          }else{
+          if (res.data.error != 0 || res.data.err) {
+            paramm.getCode(res.data, _this)
+          } else {
             //paramm.getCode(res.data,_this)
           }
         })
 
       },
-      deleteRow(index, rows){
+      deleteRow(index, rows) {
         let _this = this;
-        let para ={token:paramm.getToken(),id:rows.id}
+        let para = {token: paramm.getToken(), id: rows.id}
         roledel(para).then((res) => {
-          if(res.data.error!=0 || res.data.err){
+          if (res.data.error != 0 || res.data.err) {
             paramm.getCode(res.data, _this)
           } else {
             this.roleList.splice(index, 1);
@@ -127,19 +159,26 @@
           }
         })
       },
-      getList(){
-        this.pageset.pageIndex = this.currentPage-1;
+      onSearch() {
+        this.getList()
+      },
+      getList() {
+        this.pageset.pageIndex = this.currentPage - 1;
         this.pageset.pageSize = this.pagesize;
-        let page = this.pageset;
+        if(this.search.status === ''){
+          this.pageset.isenable = ''
+        }else{
+          this.pageset.isenable = this.search.status === 1 ? true : false;
+        }
+        let page = this.pageset
         rolelist(page).then((res) => {
-          this.total = Number(res.data.obj.total);
-          this.roleList =Object.assign([],res.data.obj.datas);
-
-          this.roleList.forEach((item,index) => {
-            item.number = Number(index + 1)
-          })
-          console.log(this.roleList)
+          console.log(res.data.obj)
+          //this.total = Number(res.data.obj.total);
+          //this.roleList =Object.assign([],res.data.obj.datas);
+          //this.roleList.forEach((item,index) => {
+          //item.number = Number(index + 1)
         })
+        //console.log(this.roleList)
       },
 
       handleSizeChange(val) {
@@ -148,7 +187,7 @@
       handleCurrentChange(val) {
         this.getList()
       }
-    }
+    },
   }
 </script>
 
@@ -201,5 +240,8 @@
 
   .hasid {
     display: none;
+  }
+  .btn {
+
   }
 </style>
