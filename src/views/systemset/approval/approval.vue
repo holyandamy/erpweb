@@ -23,6 +23,7 @@
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="onSubmit" class="hasid" id="9c468b98329d409fa32210d81d2c0ca6">查询</el-button>
+						<el-button type="primary" @click="clearGetList">清空查询</el-button>
 					</el-form-item>
 				</el-form>
 				<el-table :data="banklist" style="text-align: left; font-size: 12px;">
@@ -125,6 +126,12 @@
 			handleSizeChange(val) {
 				console.log(`每页 ${val} 条`);
 			},
+      //清空查询
+      clearGetList() {
+			  this.formInline = {
+			    search:''
+        }
+      },
 			//分页
 			handleCurrentChange(val) {
 				this.getlist()

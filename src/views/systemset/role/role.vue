@@ -26,7 +26,7 @@
         </el-form-item>
         <el-form-item class="btn">
           <el-button type="primary" @click="onSearch">搜索</el-button>
-          <el-button type="primary">清空查询</el-button>
+          <el-button type="primary" @click="clearGetList">清空查询</el-button>
         </el-form-item>
       </el-form>
 
@@ -162,6 +162,13 @@
       onSearch() {
         this.getList()
       },
+      //清空查询
+      clearGetList() {
+        this.search = {
+          name:'',
+          status:''
+        }
+      },
       getList() {
         this.pageset.pageIndex = this.currentPage - 1;
         this.pageset.pageSize = this.pagesize;
@@ -170,24 +177,24 @@
         }else{
           this.pageset.isenable = this.search.status === 1 ? true : false;
         }
+        this.pageset.name = this.search.name;
         let page = this.pageset
         rolelist(page).then((res) => {
           console.log(res.data.obj)
-          //this.total = Number(res.data.obj.total);
-          //this.roleList =Object.assign([],res.data.obj.datas);
-          //this.roleList.forEach((item,index) => {
-          //item.number = Number(index + 1)
+          this.total = Number(res.data.obj.total);
+          this.roleList =Object.assign([],res.data.obj.datas);
+          this.roleList.forEach((item,index) => {
+              item.number = Number(index + 1)
+          })
         })
-        //console.log(this.roleList)
       },
-
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         this.getList()
       }
-    },
+    }
   }
 </script>
 

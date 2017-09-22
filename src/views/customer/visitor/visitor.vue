@@ -210,7 +210,7 @@
       },
       // 清空查询
       clearGetList () {
-        this. searchList = {
+        this.searchList = {
             pageindex:this.currentPage-1,
             pagesize:this.pagesize,
             token:paramm.getToken(),
