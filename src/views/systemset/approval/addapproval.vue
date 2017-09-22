@@ -19,7 +19,6 @@
 						<el-form-item label="被审批人员" prop='executorid'>
 							<el-row>
 								<el-col :span="19">
-
 									<el-input v-model="appform.executorid"></el-input>
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
@@ -34,7 +33,6 @@
 						<el-form-item label="审批人">
 							<el-row>
 								<el-col :span="19">
-
 									<el-input v-model="appform.approverid"></el-input>
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
@@ -58,7 +56,7 @@
 			</el-row>
 		</section>
 		<!-- 被审批人员 -->
-		<el-dialog title="选择人被审批员" size="tiny" :visible.sync="dialogFormVisible" style="text-align: left;">
+		<el-dialog title="选择被审批人员" size="tiny" :visible.sync="dialogFormVisible" style="text-align: left;">
 			<!--<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
 			<div style="margin: 15px 0;"></div>
 			<el-checkbox-group :min="0" :max="1" v-model="checkedCities" @change="handleCheckedCitiesChange">
@@ -199,6 +197,7 @@
 			},
 			handleHide: function() {
 				this.$emit('setMode', 'approval');
+				this.$emit('getlist')
 			},
 			//获取被审批人员
 			getuser() {

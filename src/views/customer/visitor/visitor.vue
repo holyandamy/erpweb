@@ -15,7 +15,7 @@
         </el-row>
       </header>
       <section class="padding30">
-        <el-form    ref="searchList" label-width="100px" class="demo-ruleForm" style="text-align: left;">
+        <el-form ref="searchList" label-width="100px" class="demo-ruleForm" style="text-align: left;">
           <el-form-item label="游客名称"  >
             <el-col :span="4">
               <el-input v-model="searchList.name"></el-input>
@@ -40,7 +40,7 @@
             <el-button  type="primary" @click="clearGetList">清空查询</el-button>
           </el-form-item>  <!-- style='margin: 0 40px 0 70px;'  -->
         </el-form>
-        <el-table :data="visitorList" style="text-align: left; font-size: 12px;" :default-sort = "{prop: 'createtime', order: 'descending'}">
+        <el-table :data="visitorList" style="text-align: left; font-size: 12px;">
           <el-table-column prop="code" label="游客IDs">
           </el-table-column>
           <el-table-column prop="name" label="游客名字">
@@ -196,7 +196,7 @@
             mobile:this.searchList.mobile,
           };
          custlist(templateSeacrchList).then((res) => {
-            this.visitorList = res.data.obj.datas.reverse()
+            this.visitorList = res.data.obj.datas
             console.log(this.visitorList.length)
             this.total = Number(res.data.obj.total)
           })

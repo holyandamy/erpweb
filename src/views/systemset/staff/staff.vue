@@ -14,7 +14,25 @@
 					</el-col>
 				</el-row>
 			</header>
+
 			<section class="padding30">
+        <el-form :inline="true"  class="demo-form-inline" style="text-align:left" @submit.prevent="submit">
+          <el-form-item label="状态">
+            <el-select v-model="search.status" placeholder="全部">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="姓名：">
+            <el-input v-model="search.name" placeholder="请输入关键字"></el-input>
+          </el-form-item>
+          <el-form-item label="电话号码：">
+            <el-input v-model="search.mobile" placeholder="请输入关键字"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSearch">搜索</el-button>
+            <el-button type="primary">清空查询</el-button>
+          </el-form-item>
+        </el-form>
 
 				<el-table :data="stafflist" style="text-align: left; font-size: 12px;">
 					<el-table-column type="index" label="序号" width="80">
@@ -86,7 +104,10 @@
 				pageset: {
 					token: paramm.getToken(),
 					pageIndex: '',
-					pageSize: ''
+					pageSize: '',
+          isenable:'',
+          name:'',
+          mobile:''
 				},
 				editbank: {
 					bankName: '',
@@ -104,11 +125,27 @@
 					status: false,
 					token: paramm.getToken(),
 					id: ''
-				}
+				},
+        //搜素
+        search:{
+				  status:'',
+          name:'',
+          mobile:''
+        },
+        options: [
+          {
+            value: 1 ,
+            label: '启用'
+          },
+          {
+            value: 0 ,
+            label: '停止'
+          }
+        ]
 			}
 		},
 		created() {
-			this.getlist()
+			//this.getlist()
 		},
 		updated: function() {
 			this.$nextTick(function() {
@@ -120,12 +157,21 @@
 				this.modetype = type
 				this.edituser = scope
 			},
+      onSearch() {
+			  this.getlist()
+      },
 			//获取列表
 			getlist() {
 				this.pageset.pageIndex = this.currentPage - 1
 				this.pageset.pageSize = this.pagesize
+        if(this.search.status === ''){
+          this.pageset.isenable = ''
+        }else{
+          this.pageset.isenable = this.search.status === 1 ? true : false;
+        }
 				let page = this.pageset
 				getuserlist(page).then((res) => {
+				  console.log(res.data.obj)
 					this.stafflist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
 

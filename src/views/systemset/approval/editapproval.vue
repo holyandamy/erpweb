@@ -23,7 +23,7 @@
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
 								<el-col :span="4">
-									<el-button @click="dialogFormVisible = true">查找</el-button>
+									<el-button @click="executorSearch">查找</el-button>
 								</el-col>
 							</el-row>
 						</el-form-item>
@@ -37,7 +37,7 @@
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
 								<el-col :span="4">
-									<el-button @click="approvalVisible = true">查找</el-button>
+									<el-button @click="approverSearch">查找</el-button>
 								</el-col>
 							</el-row>
 						</el-form-item>
@@ -63,7 +63,7 @@
 				<el-checkbox v-for="approval in approvals" :label="approval.username" :key="approval.username">{{approval.username}}</el-checkbox>
 			</el-checkbox-group>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="dialogFormVisible = false">取 消</el-button>
+				<el-button @click="cancelCheck">取 消</el-button>
 				<el-button type="primary" @click="comfirm()">确 定</el-button>
 			</div>
       <!--
@@ -78,7 +78,8 @@
 				<el-checkbox v-for="approval in approvaleds" :label="approval.username" :key="approval.username">{{approval.username}}</el-checkbox>
 			</el-checkbox-group>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="approvalVisible = false">取 消</el-button>
+				<el-button @click="cancelCheckApp">取 消</el-button>
+        <!--approvalVisible = false-->
 				<el-button type="primary" @click="comfirmapp()">确 定</el-button>
 			</div>
 		</el-dialog>
@@ -121,8 +122,9 @@
 				approvalsid: [],
 				approvalsedid: [],
 				approvallist:[],
-				approvaledlist:[]
-
+				approvaledlist:[],
+        oldexecutor:'',
+        oldapprover:''
 			}
 		},
 		created() {
@@ -189,14 +191,41 @@
 //
 //			},
 			handleCheckedCitiesChange(value) {
+			  //console.log(666)
 				let checkedCount = value.length;
 				this.checkAll = checkedCount === this.approvallist.length;
 				this.isIndeterminate = checkedCount > 0 && checkedCount < this.approvallist.length;
 			},
+      //被审批人员查找
+      executorSearch() {
+			  //保存appform.executor
+        this.oldexecutor = this.appform.executor
+        //console.log(this.oldexecutor)
+        this.dialogFormVisible = true
+      },
+      //被审批人员取消  先保存原来的值  appform.executor
+      cancelCheck() {
+			  console.log(typeof this.oldexecutor)
+        this.checkedCities = this.oldexecutor.split(',')
+        this.appform.executor = this.checkedCities.join(",")
+        this.dialogFormVisible = false
+      },
 			comfirm() {
 				this.appform.executor = this.checkedCities.join(",")
 				this.dialogFormVisible = false
 			},
+
+      //审批人查找
+      approverSearch() {
+			  this.oldapprover = this.appform.approver
+        this.approvalVisible = true
+      },
+      //审批人取消
+      cancelCheckApp() {
+			  this.checkedapproval = this.oldapprover.split(',')
+        this.appform.approver = this.checkedapproval.join('')
+        this.approvalVisible = false
+      },
 			//审批人员选择
 			comfirmapp() {
 				this.appform.approver = this.checkedapproval.join(",")
