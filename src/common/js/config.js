@@ -38,12 +38,13 @@ export const grouplist = params => { return axios.post(`${base}/line/team/list`,
 export const reserveNum = params => { return axios.post(`${base}/sys/user/match`, params).then(res => res); };//预定输入手机号或公司名
 export const groupsave = params => { return axios.post(`${base}/line/team/save`, params).then(res => res); };//新增发团计划
 export const orderSave = params => { return axios.post(`${base}/order/save`, params).then(res => res); };//发团 预定
-export const orderdet = params => { return axios.post(`${base}/line/team/order/detail`, params).then(res => res); }//发团 下单详情  TODO
+export const orderdet = params => { return axios.post(`${base}/line/team/order/detail`, params).then(res => res); }//发团 下单详情
 export const groupdetail = params => { return axios.post(`${base}/line/team/detail`, params).then(res => res); };//发团列表 详情
 export const groupupdate = params => { return axios.post(`${base}/line/team/update`, params).then(res => res); };//发团列表 编辑
 export const groupStop = params => { return axios.post(`${base}/line/team/status`, params).then(res => res); };//发团列表 停止
 export const groupDel = params => { return axios.post(`${base}/line/team/del`, params).then(res => res); };//发团列表- 编辑- 删除
 export const groupApprove = params => { return axios.post(`${base}/line/team/approve`, params).then(res => res); };//发团列表- 审批
+export const ordernameslist = params => { return axios.post(`${base}/order/team/namelist`, params).then(res => res); };//发团列表- 出团名单
 
 /*产品分类*/
 export const linecategorylist = params => { return axios.post(`${base}/line/category/list`, params); };//获取线路管理

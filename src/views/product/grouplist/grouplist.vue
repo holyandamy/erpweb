@@ -70,7 +70,10 @@
         <el-table :data="lineList" border style="text-align: left; font-size: 12px;">
           <el-table-column prop="teamno" label=" 团号" width="150">
           </el-table-column>
-          <el-table-column prop="linename" label="线路名称" >
+          <el-table-column prop="linename" label="线路名称">
+            <template scope="scope">
+              {{scope.row.linename.length>70?scope.row.linename.substring(0,70)+'...':scope.row.linename}}
+            </template>
           </el-table-column>
           <el-table-column prop="starttime" label="出发日期" width="110">
           </el-table-column>
@@ -86,11 +89,6 @@
           </el-table-column>
           <el-table-column prop="sit" label="占位" width="70">
           </el-table-column>
-          <!--<el-table-column label="已售" width="80">-->
-            <!--<template scope='scope'>-->
-              <!--{{scope.row.book + scope.row.sit}}-->
-            <!--</template>-->
-          <!--</el-table-column>-->
           <el-table-column prop="status" label="状态" width="80">
           </el-table-column>
           <el-table-column prop="approveName" label="审批状态" width="90">
@@ -141,7 +139,7 @@
 
     </div>
     <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="setMode" @editorFn='editorFn'  :categoryId="editcategory.id"></GroupInfo>
-    <Groupnamelist v-else-if="modeType == 'groupnamelist'" @setMode="setMode"   :categoryId="editcategory.id"></Groupnamelist>
+    <Groupnamelist v-else-if="modeType == 'groupnamelist'" @setMode="setMode"   :tdidd="tdidd"></Groupnamelist>
     <GroupReserve v-else-if="modeType == 'groupreserve'" @setMode="setMode" :categoryId="editcategory.id"></GroupReserve>
     <Grouporder v-else-if="modeType == 'order'"  @setMode="setMode" :operationType="operationType" ></Grouporder>
     <Reserve v-else-if="modeType == 'reserve'" @setMode="setMode" :categoryId="editcategory.id" :operationType="operationType"></Reserve>  <!-- @setMode="setMode"   :categoryId="editcategory.id"-->
@@ -171,6 +169,7 @@
     },
     data() {
       return {
+        tdidd: '',
         date: '',
         searchList:{
           categoryType: '',
@@ -279,6 +278,8 @@
       },
       editorFn(rows,typee){
         this.editcategory.id=rows.id;
+        this.tdidd=rows.teamid;
+        console.log(789, this.tdidd);
         if(typee == 'newGroup') {
           this.editcategory.id=rows.teamid;
         }

@@ -17,7 +17,7 @@
       <section class="padding30">
         <el-form    ref="searchList" label-width="100px" class="demo-ruleForm" style="text-align: left;">
           <el-row>
-            <el-form-item label="系统分类" prop="categoryType"  style="width: 326px" >
+            <el-form-item label="系统分类"  style="width: 326px" >  <!-- prop="categoryType"   -->
               <el-select v-model="searchList.systemType"  >
                 <el-option  v-for="item in type"
                             :key="item.value"
@@ -119,7 +119,7 @@
     data() {
       return {
         searchList:{
-          systemType: '',
+          systemType: '0',
           typename: '',
           token: paramm.getToken(),
           pageindex:0,
@@ -256,7 +256,7 @@
       // 清空查询
       clearGetList () {
         this.searchList = {
-          systemType: '',
+          systemType: '0',
           typename: '',
           token: paramm.getToken(),
           pageindex:0,

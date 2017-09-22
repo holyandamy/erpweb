@@ -168,7 +168,7 @@
 				<div class="tablemenu">
 					<el-button style="float: left;" @click="editor = false; menucheck1=true; menucheck2=false;basetype">普通方式录入<i :class="[{'el-icon-check': menucheck1},'el-icon--right']"></i></el-button>
 					<el-button  style="float: left;"  @click="editor = true; menucheck1=false; menucheck2=true;selftype">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
-					<el-form-item label="行程天数1" style="float: left; margin-bottom: 0;">
+					<el-form-item label="行程天数" style="float: left; margin-bottom: 0;">
 								<el-input  v-model="baseForm.days" v-if="editor" ></el-input>
 								<div class="el-input-number" v-else>
 								<span class="el-input-number__decrease" @click="minuday"><i class="el-icon-minus"></i></span>

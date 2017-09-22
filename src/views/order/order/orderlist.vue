@@ -85,7 +85,7 @@
 
 					<dd>
 						<ul>
-							<li style="width: 30%;">{{list.teamno}} <br />{{list.linename}}<br /> 下单时间：{{list.createtime}}</li>
+							<li style="width: 30%;">{{list.teamno}} <br />{{list.linename.length>70?list.linename.substring(0,70)+'...':list.linename}}<br /> 下单时间：{{list.createtime}}</li>
 							<li style="width: 10%;">出团：{{list.starttime}} <br /> 人数：{{list.custnumber}}</li>
 							<li style="width: 10%;">{{list.companyname}} <br /> {{list.contactmobile}}
 							</li>

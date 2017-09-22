@@ -35,7 +35,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							游客人数：{{detail.totaladult}} 大 {{detail.totalchild}} 小 {{detail.totalbaby}}婴
+							游客人数：{{detail.totaladult}} 大 &nbsp;&nbsp; {{detail.totalchild}} 小 &nbsp;&nbsp; {{detail.totalbaby}}婴
 						</el-col>
 						<el-col :span="12" class="pl-20">
 							出团日期：{{detail.starttime}}
@@ -59,7 +59,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-              订单金额：{{detail.orderpay}}
+              订单金额：{{detail.orderpay}}元
 							<el-button style="margin-left: 50px;" @click="editprice = true" v-if='detail.settle!=1'>调整价格</el-button>
 						</el-col>
 						<el-col :span="12" class="pl-20">
@@ -68,7 +68,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="12">
-							已收金额：{{detail.collection}}
+							已收金额：{{detail.collection}}元
 						</el-col>
 						<el-col :span="12" class="pl-20">
 							联系方式：{{detail.contactmobile}}
@@ -239,8 +239,8 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="5"> 成人: {{detail.sltaduilt*detail.totaladult}} <span style="margin: 0 20px;">儿童: {{detail.sltchild*detail.totalchild}}</span>婴儿: {{detail.sltbaby*detail.totalbaby}} <span style="margin: 0 20px;"> 单房差: {{roomprice}}</span></td>
-							<td colspan="4" style="text-align: right; padding-right: 20px;">合计金额：{{detail.sltaduilt*detail.totaladult+detail.sltchild*detail.totalchild+detail.sltbaby*detail.totalbaby+roomprice}}</td>
+							<td colspan="5"> 成人: ￥{{detail.sltaduilt*detail.totaladult}}元 <span style="margin: 0 20px;">儿童: ￥{{detail.sltchild*detail.totalchild}}元</span>婴儿: ￥{{detail.sltbaby*detail.totalbaby}}元 <span style="margin: 0 20px;"> 单房差: ￥{{roomprice}}元</span></td>
+							<td colspan="4" style="text-align: right; padding-right: 20px;">合计金额：￥{{detail.sltaduilt*detail.totaladult+detail.sltchild*detail.totalchild+detail.sltbaby*detail.totalbaby+roomprice}}元</td>
 						</tr>
 					</tbody>
 				</table>
@@ -352,6 +352,8 @@
 	</div>
 </template>
 <script>
+//  http://img.etu6.org/erp/namelist_template.xls
+//  http://img.happytoo.cn/erp/namelist_template.xls
 	import util from '../../../common/js/util'
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
@@ -852,6 +854,87 @@
 			},
 			//提交表单
 			save() {
+			  let _this =this;
+        try {
+          this.detail.namelist.forEach(function (item,idx) {
+            if(!item.name && !item.certtype && !item.cert && !item.mobile){
+            }else {
+              if(item.name == '' || item.name.length<2){
+                _this.$message({
+                  message: '姓名为2 到 15 个字符',
+                  type: 'warning'
+                });
+                throw false
+              }
+              if(!item.certtype){
+                _this.$message({
+                  message: '未选择证件类型',
+                  type: 'warning'
+                });
+                throw false
+              }
+              if(item.cert==''){
+                _this.$message({
+                  message: '证件号码未填写',
+                  type: 'warning'
+                });
+                throw false
+              }
+              if(item.certtype==1){
+                let cardOne1 = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/;
+                let cardOne2 = /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+                if (!(cardOne1.test(item.cert) || cardOne2.test(item.cert))) {
+                  _this.$message({
+                    message: '请输入正确的身份证号码',
+                    type: 'warning'
+                  });
+                  throw false
+                }
+              }
+              if(item.certtype==2){
+                let cardTwo1 = /^[a-zA-Z]{5,17}$/;
+                let cardTwo2 = /^[a-zA-Z0-9]{5,17}$/;
+                if (!(cardTwo1.test(item.cert) || cardTwo2.test(item.cert))) {
+                  _this.$message({
+                    message: '请输入正确的护照号码',
+                    type: 'warning'
+                  });
+                  throw false
+                }
+              }
+              if(item.certtype==3){
+                let cardThree1 = /南字第(\d{8})号|北字第(\d{8})号|沈字第(\d{8})号|兰字第(\d{8})号|成字第(\d{8})号|济字第(\d{8})号|广字第(\d{8})号|海字第(\d{8})号|空字第(\d{8})号|参字第(\d{8})号|政字第(\d{8})号|后字第(\d{8})号|装字第(\d{8})号/;
+                if (!(cardThree1.test(item.cert))) {
+                  _this.$message({
+                    message: '请输入正确的军官证号码',
+                    type: 'warning'
+                  });
+                  throw false
+                }
+              }
+              if(item.certtype==4){
+                let cardFour1 = /^[HMhm]{1}([0-9]{10}|[0-9]{8})$/;
+                if (!(cardFour1.test(item.cert))) {
+                  _this.$message({
+                    message: '请输入正确的港澳通行证号码',
+                    type: 'warning'
+                  });
+                  throw false
+                }
+              }
+              if( item.mobile == '' || !( /^1[34578]\d{9}$/.test(item.mobile))){
+                _this.$message({
+                  message: '请填写正确的手机号',
+                  type: 'warning'
+                });
+                throw false
+              }
+            }
+          })
+        }catch (e){
+          throw e
+        }
+
 				let para = {
 					id: this.detail.id,
 					adultNum: this.detail.totaladult,
@@ -860,6 +943,7 @@
 					list: this.detail.namelist,
 					token: paramm.getToken()
 				}
+
 				for(let i = 0; i < this.detail.namelist.length; i++) {
 					if(this.detail.namelist[i].type == "成人") {
 						para.list[i].type = '1'
@@ -869,8 +953,13 @@
 						para.list[i].type = '3'
 					}
 				}
-
+        let newChckArr = []
+        para.list.forEach(function (item,idx) {
+          if(item.name != '') newChckArr.push(item)
+        })
+        para.list = newChckArr
 				orderupdate(para).then((res) => {
+
 					for(let i = 0; i < this.detail.namelist.length; i++) {
 						if(this.detail.namelist[i].type == "1") {
 							this.detail.namelist[i].type = '成人'
