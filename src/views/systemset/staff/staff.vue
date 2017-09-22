@@ -30,7 +30,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSearch">搜索</el-button>
-            <el-button type="primary">清空查询</el-button>
+            <el-button type="primary" @click="clearGetList">清空查询</el-button>
           </el-form-item>
         </el-form>
 
@@ -160,6 +160,13 @@
       onSearch() {
 			  this.getlist()
       },
+      clearGetList() {
+			  this.search = {
+          status:'',
+          name:'',
+          mobile:''
+        }
+      },
 			//获取列表
 			getlist() {
 				this.pageset.pageIndex = this.currentPage - 1
@@ -169,6 +176,8 @@
         }else{
           this.pageset.isenable = this.search.status === 1 ? true : false;
         }
+        this.pageset.name = this.search.name;
+        this.pageset.mobile = this.search.mobile;
 				let page = this.pageset
 				getuserlist(page).then((res) => {
 				  console.log(res.data.obj)
