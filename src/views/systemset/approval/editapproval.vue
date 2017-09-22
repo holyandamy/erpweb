@@ -56,7 +56,7 @@
 			</el-row>
 		</section>
 		<!-- 被审批人员 -->
-		<el-dialog title="选择人被审批员" size="tiny" :visible.sync="dialogFormVisible" style="text-align: left;">
+		<el-dialog title="选择被审批人员" size="tiny" :visible.sync="dialogFormVisible" style="text-align: left;" :show-close=false>
 			<!--<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
 			<div style="margin: 15px 0;"></div>
 			<el-checkbox-group :min="1" :max="10" v-model="checkedCities" @change="handleCheckedCitiesChange">
@@ -71,7 +71,7 @@
       -->
 		</el-dialog>
 		<!-- 审批人员 -->
-		<el-dialog title="选择审批人员" size="tiny" :visible.sync="approvalVisible" style="text-align: left;">
+		<el-dialog title="选择审批人员" size="tiny" :visible.sync="approvalVisible" style="text-align: left;" :show-close=false>
 			<!--<el-checkbox  :indeterminate="isIndeterminate" v-model="checkAllapp" @change="appCheckAllChange">全选</el-checkbox>-->
 			<div style="margin: 15px 0;"></div>
 			<el-checkbox-group :min="1" :max="10" v-model="checkedapproval" @change="appCheckedCitiesChange">

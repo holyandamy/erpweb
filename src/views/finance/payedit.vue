@@ -22,7 +22,7 @@
         </el-form-item>
         <el-form-item label="订单编号" required prop="orderno" v-show="isshowall">
           <el-col :span="10">
-            <el-input placeholder="HP201709121344518770" @blur="typethis" v-model="collectForm.orderno" @change='getOrder'></el-input>
+            <el-input @blur="typethis" v-model="collectForm.orderno" @change='getOrder'></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="团号" prop="teamno" v-show="isshowall" >

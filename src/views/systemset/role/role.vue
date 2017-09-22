@@ -16,11 +16,11 @@
     </header>
     <section class="padding30">
       <el-form :inline="true"  class="demo-form-inline" style="text-align:left" @submit.prevent="submit">
-        <el-form-item label="状态">
+        <!--<el-form-item label="状态">
           <el-select v-model="search.status" placeholder="全部">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="角色名称：">
           <el-input v-model="search.name" placeholder="请输入关键字"></el-input>
         </el-form-item>
@@ -87,24 +87,12 @@
           token: paramm.getToken(),
           pageIndex: 0,
           pageSize: '',
-          isenable:'',
           name:''
         },
         //搜索数据
         search: {
-          name: '',
-          status: ''
-        },
-        options: [
-          {
-            value: 1 ,
-            label: '启用'
-          },
-          {
-            value: 0 ,
-            label: '停止'
-          }
-        ]
+          name: ''
+        }
       }
     },
     created() {
@@ -165,18 +153,13 @@
       //清空查询
       clearGetList() {
         this.search = {
-          name:'',
-          status:''
+          name:''
         }
       },
       getList() {
         this.pageset.pageIndex = this.currentPage - 1;
         this.pageset.pageSize = this.pagesize;
-        if(this.search.status === ''){
-          this.pageset.isenable = ''
-        }else{
-          this.pageset.isenable = this.search.status === 1 ? true : false;
-        }
+        this.pageset.isenable = 2
         this.pageset.name = this.search.name;
         let page = this.pageset
         rolelist(page).then((res) => {

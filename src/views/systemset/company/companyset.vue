@@ -202,20 +202,6 @@
           this.companyForm = res.data.obj // 已经有provinceId  cityId  districtId
           this.logo = res.data.obj.logo
           this.$refs.logos.loading(this.logo)
-          //省的展示
-          this.getprovince()
-          //市的展示
-          let province = {
-            id: this.companyForm.provinceId,
-            token:paramm.getToken()
-          }
-          this.getcity(province)
-          //区的展示
-          let city = {
-            id: this.companyForm.cityId,
-            token:paramm.getToken()
-          }
-          this.getdistrict(city)
         })
       },
       //保存数据
@@ -270,7 +256,6 @@
         province(para).then((res) => {
           //console.log(res)
           this.province = res.data.obj
-
         }).catch(function(err) {
           console.log("连接错误")
         })
@@ -295,6 +280,7 @@
       },
       //选择城市
       changecity() {
+        console.log(999,'changecity')
         let pro = {
           id:this.companyForm.provinceId,
           token:paramm.getToken()
@@ -302,6 +288,7 @@
         this.getcity(pro)
       },
       changedistrict() {
+        console.log(1000,'changecity')
         let city = {
           id:this.companyForm.cityId,
           token:paramm.getToken()
