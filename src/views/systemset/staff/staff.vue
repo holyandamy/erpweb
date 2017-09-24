@@ -128,17 +128,21 @@
 				},
         //搜素
         search:{
-				  status:'',
+				  status:'-1',
           name:'',
           mobile:''
         },
         options: [
           {
-            value: 1 ,
+            value: '-1',
+            label:'全部'
+          },
+          {
+            value: '1' ,
             label: '启用'
           },
           {
-            value: 0 ,
+            value: '0' ,
             label: '停止'
           }
         ]
@@ -171,10 +175,12 @@
 			getlist() {
 				this.pageset.pageIndex = this.currentPage - 1
 				this.pageset.pageSize = this.pagesize
-        if(this.search.status === ''){
-          this.pageset.isenable = ''
+        if(this.search.status === '-1'){
+          this.pageset.isenable = 2
+        }else if(this.search.status === '0'){
+          this.pageset.isenable = 0
         }else{
-          this.pageset.isenable = this.search.status === 1 ? true : false;
+          this.pageset.isenable = 1
         }
         this.pageset.name = this.search.name;
         this.pageset.mobile = this.search.mobile;

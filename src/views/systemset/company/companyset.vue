@@ -10,13 +10,13 @@
           </el-form-item>
           <el-form-item label="所在城市" prop="provinceId">
             <el-col :span="4">
-              <el-select v-model="companyForm.provinceId" placeholder="请选择" @change="changecity">
+              <el-select v-model="companyForm.provinceId" placeholder="请选择" @blur="change()">
                 <el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
                 </el-option>
               </el-select>
             </el-col>
             <el-col :span="4">
-              <el-select v-model="companyForm.cityId" placeholder="请选择"  @change="changedistrict">
+              <el-select v-model="companyForm.cityId" placeholder="请选择"  @blur="change()">
                 <el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
                 </el-option>
               </el-select>
@@ -182,8 +182,9 @@
         province:[],
         city:[],
         district:[],
-        logo:''
-
+        logo:'',
+        //触发事件的标志
+        flag:false
       }
     },
     created() {
@@ -198,29 +199,14 @@
       //获取公司信息
       getinfo(){
         let para={token:paramm.getToken()}
-        companydetail(para).then((res) =>{
+        companydetail(para).then((res) => {
           this.companyForm = res.data.obj // 已经有provinceId  cityId  districtId
           this.logo = res.data.obj.logo
           this.$refs.logos.loading(this.logo)
-          //省的展示
-          this.getprovince()
-          //市的展示
-          let province = {
-            id: this.companyForm.provinceId,
-            token:paramm.getToken()
-          }
-          this.getcity(province)
-          //区的展示
-          let city = {
-            id: this.companyForm.cityId,
-            token:paramm.getToken()
-          }
-          this.getdistrict(city)
         })
       },
       //保存数据
       submitForm(formName) {
-        console.log(999)
         this.$refs[formName].validate((valid) => {
           //valid值无效
           console.log('是否有效')
@@ -270,7 +256,6 @@
         province(para).then((res) => {
           //console.log(res)
           this.province = res.data.obj
-
         }).catch(function(err) {
           console.log("连接错误")
         })
@@ -293,15 +278,19 @@
           console.log("连接错误")
         })
       },
+      change() {
+        this.flag ? this.changecity() : this.flag = true
+      },
       //选择城市
       changecity() {
+        console.log(999,'changecity')
+        //获取城市
         let pro = {
           id:this.companyForm.provinceId,
           token:paramm.getToken()
         }
         this.getcity(pro)
-      },
-      changedistrict() {
+        //获取区县
         let city = {
           id:this.companyForm.cityId,
           token:paramm.getToken()
@@ -311,7 +300,6 @@
       imagelistchange(val){
         this.companyForm.logo = val
       }
-
     }
   }
 </script>
