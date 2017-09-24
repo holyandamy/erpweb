@@ -186,7 +186,7 @@
         this.pageset.mobile = this.search.mobile;
 				let page = this.pageset
 				getuserlist(page).then((res) => {
-				  console.log(res.data.obj)
+				  console.log(777,res.data.obj)
 					this.stafflist = res.data.obj.datas
 					this.total = Number(res.data.obj.total)
 
