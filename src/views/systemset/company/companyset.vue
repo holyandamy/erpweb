@@ -10,20 +10,18 @@
           </el-form-item>
           <el-form-item label="所在城市" prop="provinceId">
             <el-col :span="4">
-              <el-select v-model="companyForm.provinceId" placeholder="请选择" @blur="change()">
+              <el-select v-model="companyForm.country" placeholder="请选择" disabled>
+              </el-select>
+            </el-col>
+            <el-col :span="4">
+              <el-select v-model="companyForm.provinceId" placeholder="请选择"  @change="change()">
                 <el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
                 </el-option>
               </el-select>
             </el-col>
             <el-col :span="4">
-              <el-select v-model="companyForm.cityId" placeholder="请选择"  @blur="change()">
+              <el-select v-model="companyForm.cityId" placeholder="请选择">
                 <el-option v-for="item in city" :key="item.name" :label="item.name" :value="item.id">
-                </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="4">
-              <el-select v-model="companyForm.districtId" placeholder="请选择">
-                <el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
                 </el-option>
               </el-select>
             </el-col>
@@ -107,7 +105,7 @@
         companyForm: {
           token: paramm.getToken(),
           companyName: '',
-          countryId: 'fb0828b148bc48afbab8ef03c55d153b',
+          country: '',
           provinceId: '',
           cityId: '',
           districtId: '',
@@ -189,6 +187,7 @@
     },
     created() {
       this.getinfo() //能拿到provinceId，cityId，districtId
+      this.getprovince()
     },
     updated: function() {
       this.$nextTick(function() {
@@ -200,7 +199,13 @@
       getinfo(){
         let para={token:paramm.getToken()}
         companydetail(para).then((res) => {
-          this.companyForm = res.data.obj // 已经有provinceId  cityId  districtId
+          this.companyForm = res.data.obj
+          let pro = {
+            id:this.companyForm.provinceId,
+            token:paramm.getToken()
+          }
+          this.getcity(pro)
+          this.companyForm.country = '中国'
           this.logo = res.data.obj.logo
           this.$refs.logos.loading(this.logo)
         })
@@ -217,10 +222,10 @@
             parses.token = paramm.getToken()
             parses.mobile = parses.mobile.toString()
             //如果市或者县为空时，直接阻止发请求
-            if(parses.cityId === '' || parses.districtId === ''){
+            if(parses.cityId === ''){
                //alert('所在城市不能为空');
                this.$message({
-                 message:'所在市区和县区不能为空',
+                 message:'所在城市不能为空',
                  type:'warning'
                })
                return false;
@@ -248,7 +253,7 @@
       //
       //获取省级列表
       getprovince() {
-        let count = "fb0828b148bc48afbab8ef03c55d153b"
+        let count = "100001"
         let para = {
           id: count,
           token: paramm.getToken()
@@ -270,32 +275,27 @@
         })
       },
       //获取区列表
-      getdistrict(city) {
+      /*getdistrict(city) {
         district(city).then((res) => {
           this.district = res.data.obj
           //console.log(this.district)
         }).catch(function(err) {
           console.log("连接错误")
         })
-      },
+      },*/
       change() {
         this.flag ? this.changecity() : this.flag = true
       },
       //选择城市
       changecity() {
-        console.log(999,'changecity')
+        console.log(777,'changecity')
+        this.companyForm.cityId = ''
         //获取城市
         let pro = {
           id:this.companyForm.provinceId,
           token:paramm.getToken()
         }
         this.getcity(pro)
-        //获取区县
-        let city = {
-          id:this.companyForm.cityId,
-          token:paramm.getToken()
-        }
-        this.getdistrict(city)
       },
       imagelistchange(val){
         this.companyForm.logo = val
