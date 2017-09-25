@@ -243,13 +243,14 @@
 			checkkind(){
 //				this.$route.query.name
 				if(this.$route.query.name){
-					console.log(this.linesorts)
+					console.log(777, this.linesorts)
+					console.log(888, this.$route.query.name)
 					for(let i = 0 ; i <this.linesorts.length;i++){
 						if(this.$route.query.name == this.linesorts[i].name){
 							this.kindid =this.linesorts[i].id
 
 //							document.getElementsByClassName('kindid').childNodes('li')[i].setAttribute('class','checked')
-							document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class','checked')
+							document.getElementsByClassName('kindid')[0].childNodes[i+2].setAttribute('class','checked hasChk')
 							let para = this.search
 							para.categoryid = this.linesorts[i].id,
 							para.pageindex = this.currentPage-1
@@ -276,7 +277,10 @@
 						}
 					}
 					//线路分类过来
-				}
+				}else {
+          console.log(222);
+          document.getElementsByClassName('hasChk')[0].removeAttribute('class')
+        }
 			},
 			//筛选线路分类
 			changecondition(index,list) {
@@ -437,6 +441,7 @@
             type:'',//1.国内，2出境，3周边
         }
         this.$router.push({path: '/linelist'})
+        this.checkkind()
 
       },
       //查看团期

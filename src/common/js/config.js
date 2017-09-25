@@ -110,6 +110,7 @@ export const updatestatus = params => { return axios.post(`${base}/sys/bank/stat
 
 export const companydetail = params => { return axios.post(`${base}/syscfg/company/detail`, params).then(res => res); };//获取公司信息
 export const companyupdate = params => { return axios.post(`${base}/sys/company/update`, params).then(res => res); };//更新公司设置
+export const country = params => { return axios.post(`${base}/sys/country/list`, params).then(res => res); };//获取国家
 export const province = params => { return axios.post(`${base}/sys/province/list`, params).then(res => res); };//获取省
 export const city = params => { return axios.post(`${base}/sys/city/list`, params).then(res => res); };//获取市
 export const district = params => { return axios.post(`${base}/sys/district/list`, params).then(res => res); };//获取区

@@ -87,8 +87,8 @@
           </el-table-column>
           <el-table-column prop="book" label="预定" width="70">
           </el-table-column>
-          <el-table-column prop="sit" label="占位" width="70">
-          </el-table-column>
+          <!--<el-table-column prop="sit" label="占位" width="70">-->
+          <!--</el-table-column>-->
           <el-table-column prop="status" label="状态" width="80">
           </el-table-column>
           <el-table-column prop="approveName" label="审批状态" width="90">
@@ -97,8 +97,8 @@
           </el-table-column>
           <el-table-column  label="操作" width="180">
             <template scope="scope">
-              <el-button v-if='scope.row.isApprove' type="text" size="small" @click='setAppId(scope.row.id)'>审核</el-button>
-              <el-button v-if="scope.row.isorder && scope.row.status =='待发团'&&(scope.row.approve==0||scope.row.approve==1)" class="hasid" id="521410f9734611e788410242ac120009" @click="setMode('groupinfo'),editorFn(scope.row,'groupinfo')" type="text" size="small" >下单</el-button>
+              <el-button v-if='(scope.row.approve==0 && scope.row.isApprove)' type="text" size="small" @click='setAppId(scope.row.id)'>审核</el-button>
+              <el-button v-if="scope.row.isorder && scope.row.status =='待发团'&& (scope.row.approveName =='审批通过' || scope.row.approveName =='无需审批')" class="hasid" id="521410f9734611e788410242ac120009" @click="setMode('groupinfo'),editorFn(scope.row,'groupinfo')" type="text" size="small" >下单</el-button>
               <el-button class="hasid" id="6f6276e6734611e788410242ac120009" @click="setMode('newGroup','edit'),editorFn(scope.row,'newGroup')" type="text" size="small">编辑</el-button>  <!-- editorFn(scope.row)  -->
               <el-button  @click="setMode('groupnamelist'),editorFn(scope.row,'groupnamelist')" type="text" size="small">出团名单</el-button>
               <el-button class="hasid" id="8929e4a7734611e788410242ac120009" type="text" size="small" @click="deleteRow(scope.$index, scope.row)">{{{false:'启用',true:'封团'}[scope.row.isenable]}}</el-button>
@@ -183,7 +183,7 @@
         modeType:'list', /*reserve*/
         showAdd:false,
         showEdit:false,
-        type:[{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
+        type:[{value:'0',label:'全部'},{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
         type1:[{value:'0',label:'全部'},{value:'2',label:'已封团'},{value:'3',label:'待发团'},{value:'4',label:'行程中'},{value:'5',label:'已结团'},],
         total:0,
         currentPage:1,
@@ -233,6 +233,7 @@
               paramm.getCode(res.data,_this);
             }else {
               paramm.getCode(res.data,_this);
+              _this.getList()
               _this.dialogFormVisible = false;
               _this.form= {
                 remark:'',

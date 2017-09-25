@@ -87,8 +87,7 @@
 						<ul>
 							<li style="width: 30%;">{{list.teamno}} <br />{{list.linename.length>70?list.linename.substring(0,70)+'...':list.linename}}<br /> 下单时间：{{list.createtime}}</li>
 							<li style="width: 10%;">出团：{{list.starttime}} <br /> 人数：{{list.custnumber}}</li>
-							<li style="width: 10%;">{{list.companyname}} <br /> {{list.contactmobile}}
-							</li>
+							<li style="width: 10%;">{{list.companyname}} <br /> {{list.contactmobile}}</li>
 							<li style="width: 5%;">￥{{list.orderfee}}</li>
 							<li style="width: 5%;">￥{{list.orderpay}}</li>
 							<li style="width: 5%;">￥{{list.collection}}</li>
@@ -96,11 +95,11 @@
               <li style="width: 10%;">{{list.settleName}}</li>
 							<li style="width: 10%;">{{list.statusName}}</li>
               <li style="width: 10%;">{{list.creater}}</li>
-							<li style="width: 10%;" class="button">
+							<li style="width: 10%;text-align: right;padding: 10px 0 10px 20px;" class="button">
                 <a href="javascript:;" class="operation">
                   <el-dropdown @visible-change="toDown">
-									<span class="el-dropdown-link">
-						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
+									<span class="el-dropdown-link" style='color: #3ec3c8;'>
+						        操作 &nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item>

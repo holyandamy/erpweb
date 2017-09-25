@@ -140,13 +140,21 @@
 					<el-row>
 						<el-col :span="12">游客信息</el-col>
 						<el-col :span="12">
-							<el-button @click="exportnamelist">导出游客名单</el-button>
-							<el-button>下载名单模版</el-button>
-							<el-button>导入游客名单</el-button>
-							<el-button  v-if = "!detail.isconfirm && detail.iscancel" @click="confirmnamelist=true" class="hasid" id="8dcdad97735d11e788410242ac120009">确认游客名单</el-button>
-						</el-col>
+              <!--<el-upload-->
+                <!--class="upload-demo"-->
+                <!--action="http://api.erp.we2tu.com/api/order/namelist/import"-->
+                <!--:on-change="handleChange"-->
+                <!--:file-list="fileList3">-->
+                <!--<el-button size="small" type="primary">点击上传</el-button>-->
+                <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+              <!--</el-upload>-->
+
+							<el-button><a :href="downUrl" class='downModel' @click='downVisList'>导出游客名单</a></el-button>
+							<el-button><a href="http://img.etu6.org/erp/namelist_template.xls" class='downModel' >下载名单模版</a></el-button>
+							<el-button class='containerFather'><input type="file"  id="file1" class='uploadSon'  ><a class='downModel uploadTxt' >导入游客名单</a></el-button>
+						</el-col>  <!-- @change='getFilename'  -->
 					</el-row>
-				</h2>
+			</h2>
 			<div class="bg_white padding-20-50">
 				<el-row>
 					<el-col :span="5">
@@ -265,7 +273,7 @@
 				</el-table-column>
 			</el-table>
 			<div class="button">
-				<el-button type="primary" size="large" @click="save">提交</el-button>
+        <el-button type="primary" size="large" @click="save">提交</el-button>
 				<!--<el-button type="primary" v-if="!detail.isconfirm && detail.iscancel" size="large" class="hasid" id="91102d1d735d11e788410242ac120009" @click="cancelorder">取消订单</el-button>-->
 				<el-button type="primary" v-if="detail.status==1||detail.status==2||detail.status==3" size="large" class="hasid" id="91102d1d735d11e788410242ac120009" @click="cancelorder">{{{1:'取消订单',2:'退团',3:'退团'}[detail.status]}}</el-button>
 				<el-button size="large" @click="handleHide">返回</el-button>
@@ -354,9 +362,12 @@
 <script>
 //  http://img.etu6.org/erp/namelist_template.xls
 //  http://img.happytoo.cn/erp/namelist_template.xls
+//  import Vue from 'vue'
+import axios from 'axios';
 	import util from '../../../common/js/util'
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
+//  import $ from 'jquery'
 	import { orderdetail, banlist, collectsave, orderupdate, orderpay, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave, orderrefund } from '../../../common/js/config';
 	export default {
 		props: ['listid'],
@@ -376,6 +387,17 @@
 				}
 			}
 			return {
+        fileList3: [{
+          name: 'food.jpeg',
+          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+          status: 'finished'
+        }, {
+          name: 'food2.jpeg',
+          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+          status: 'finished'
+        }],
+        downUrl: '',
+        baseUrl: 'http://api.erp.we2tu.com/api/order/namelist/export?',
 				pricerules: {
 					money: [{
 						validator: price,
@@ -486,6 +508,39 @@
 			})
 		},
 		methods: {
+      handleChange (file, fileList) {
+        console.log(4444,file);
+        console.log(5555,fileList);
+        this.fileList3 = fileList.slice(-3);
+      },
+//      ajaxFileUpload () {
+//        console.log(99999);
+//        $.ajaxFileUpload
+//        (
+//          {
+//            url: 'http://api.erp.we2tu.com/api/order/namelist/import', //用于文件上传的服务器端请求地址
+//            secureuri: false, //是否需要安全协议，一般设置为false
+//            fileElementId: 'file1', //文件上传域的ID
+//            dataType: 'json', //返回值类型 一般设置为json
+//            success: function (data, status) //服务器成功响应处理函数
+//            {
+//              $("#img1").attr("src", data.imgurl);
+//              if (typeof (data.error) != 'undefined') {
+//                if (data.error != '') {
+//                  alert(data.error);
+//                } else {
+//                  alert(data.msg);
+//                }
+//              }
+//            },
+//            error: function (data, status, e)//服务器响应失败处理函数
+//            {
+//              alert(e);
+//            }
+//          }
+//        )
+//        return false;
+//      },
 			refund(info){
 
 				 this.$confirm('退团申请后该游客信息不可编辑，并且需在订单中添加退款明细', '退团申请', {
@@ -1027,16 +1082,6 @@
 					}
 				})
 			},
-			//导出游客名单
-			exportnamelist() {
-				let para = {
-					token: paramm.getToken(),
-					id: this.detail.id
-				}
-				ordernamelistexport(para).then((res) => {
-
-				})
-			},
 			addcollpay(type) {
 				this.addcollection = true
 				this.type = type
@@ -1050,7 +1095,82 @@
 					this.detail.logs = this.detail.logs.slice(0, 3)
 				}
 
-			}
+			},
+      // 导出游客名单
+      downVisList(){
+			  let orderIdd = this.detail.id;
+        let tokenn = paramm.getToken();
+        this.downUrl = this.baseUrl + 'id='+orderIdd + '&token='+tokenn
+      },
+      upload(file,method){
+//        if(!window.sessionStorage.getItem('session')){
+//          failToken()
+//          return
+//        }
+//        PARAM.login_token = window.sessionStorage.getItem('session')
+//        PARAM.method = method
+//        let request = GetSignature(PARAM, {}, SECRET)
+//        let dt = {}
+//        Object.assign(dt, request.returns, file)
+//        let formData = new FormData()
+//        for (var k in dt) {
+//          formData.append(k, dt[k])
+//        }
+        return new Promise((resolve, reject) => {
+          Vue.http.post('http://api.erp.we2tu.com/api/order/namelist/import', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data; charset=UTF-8'
+            },
+            emulateJSON: true
+          }).then(function (response) {
+//            if(response.body.Response.ErrCode == 'isv.invalid-parameter:login_token') {
+//              failToken()
+//              return
+//            }
+            resolve(response.body.Response)
+          })
+        })
+      },
+      //导入游客名单
+      getFilename(e){
+//        this.ajaxFileUpload()
+        axios.http.post('http://api.erp.we2tu.com/api/order/namelist/import', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data; charset=UTF-8'
+          },
+          emulateJSON: true
+        }).then(function (response) {
+//            if(response.body.Response.ErrCode == 'isv.invalid-parameter:login_token') {
+//              failToken()
+//              return
+//            }
+          resolve(response.body.Response)
+        })
+
+
+        return
+        console.log(111, e);
+        let files = e.target.files;
+        this.fileUp(files[0], 0,files[0].name)
+      },
+      fileUp(file,i,name){
+        let _this =this;
+        return new Promise ((reslove, reject) => {
+          _this.upload({FILENAME:file,JSON:JSON.stringify(this.uploadObj)}, 'vchange.excel.upload').then((item) => {
+            if (item.responsecode == '200') {
+            } else {
+              this.uploadArr.pop()
+              if (!(item.responsecode) && item.ErrMsg.length > 10) {
+                this.notice({msg: '上传失败', type: 'error'})
+              }
+              if (!(item.responsecode) && item.ErrMsg.length <= 10) {
+                this.notice({msg: item.ErrMsg, type: 'error'})
+              }
+            }
+          })
+          console.log('777', this.uploadArr)
+        })
+      }
 		}
 	}
 </script>
@@ -1198,4 +1318,35 @@
 			}
 		}
 	}
+  .downModel{
+    color: #3ec3c8;
+  }
+  .containerFather{
+    padding: 0;
+    width: 116px;
+    height: 36px;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+
+    .uploadSon{
+      border-radius: 4px;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 1000;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .uploadTxt{
+      position: relative;
+      line-height: 34px;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
 </style>

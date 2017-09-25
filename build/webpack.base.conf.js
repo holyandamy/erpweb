@@ -2,6 +2,7 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var webpack=require("webpack") // todo 9.22
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -58,5 +59,12 @@ module.exports = {
       loaders: ["style", "css", "sass"]
     }
     ]
-  }
+  },
+  plugins: [  // todo 9.22
+    new webpack.optimize.CommonsChunkPlugin('common.js'),
+    new webpack.ProvidePlugin({
+      jQuery: "jquery",
+      $: "jquery"
+    })
+  ]
 }

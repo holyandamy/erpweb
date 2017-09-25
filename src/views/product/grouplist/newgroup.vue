@@ -730,7 +730,10 @@
       },
       //获取线路列表
       queryLine(){
-        this.showNoLine = true
+        let _this = this;
+        setTimeout(function () {
+          _this.showNoLine = true
+        },500)
         linelist(this.search).then((res) => {
           if(!res.err){
             if(!res.error){
