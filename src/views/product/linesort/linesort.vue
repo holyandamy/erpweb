@@ -150,12 +150,12 @@
         },
         total:0,
         currentPage:1,
-        pagesize:15,
+        pagesize:10,
         operationType:{type:'add',id:''},
         pageset:{
           token:paramm.getToken(),
           pageindex:0,
-          pageindex:15
+          pageindex:10
         },
       }
     },

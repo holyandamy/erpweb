@@ -15,7 +15,6 @@ paramm.getToken = () =>{
 *   2 请求返回状态码判断公用方法
 * */
 paramm.getCode = (data,thiss) => {
-  console.log(666, this);
   if(data.error == 0) {
      thiss.$message({
         message: data.message || '成功',

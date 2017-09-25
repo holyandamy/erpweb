@@ -59,10 +59,10 @@
                 label="预订人数"
                 width="180">
               </el-table-column>
-              <el-table-column
-                prop="sit"
-                label="占位">
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="sit"-->
+                <!--label="占位">-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="surplus"
                 label="余位">
