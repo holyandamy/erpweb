@@ -1,6 +1,7 @@
 <template>
   <el-form-item label="上传图片">
     <el-upload action="http://v0.api.upyun.com/xtimg"
+               :headers="obj"
                list-type="picture-card"
                :on-preview="handlePictureCardPreview"
                :file-list="imglist"
@@ -22,6 +23,8 @@
 
 <script>
   import { imgupload } from '../../common/js/upload'
+  import paramm from '../../common/js/getParam'
+
   export default {
     data() {
       return {
@@ -29,12 +32,16 @@
         dialogImageUrl: '',
         dialogVisible: false,
         imglist: [],
-        imagelist:''
+        imagelist:'',
+        obj:{
+          "Authorization":"Basic"
+        }
       }
     },
     methods: {
       //图片上传
       async upload(file) {
+
         const files = await imgupload(file)
         return files.file
       },

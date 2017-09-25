@@ -63,22 +63,18 @@
             </el-form-item>
             <el-form-item label="游客区域" prop="">
               <el-col :span="4" style="width: 110px;margin-right: 10px">
-                <el-select v-model="visitorList.provinceid" placeholder="请选择" @change="changecity">
-                  <!---->
+                <el-select v-model="visitorList.country" placeholder="请选择" disabled>
+                </el-select>
+              </el-col>
+              <el-col :span="4" style="width: 110px;margin-right: 10px">
+                <el-select v-model="visitorList.provinceid" placeholder="请选择" @change="change()">
                   <el-option v-for="item in province" :key="item.name" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
               </el-col>
               <el-col :span="4" style="width: 110px;margin-right: 10px">
-                <el-select v-model="visitorList.cityid" placeholder="请选择" @change="changedistrict">
-                  <!---->
+                <el-select v-model="visitorList.cityid" placeholder="请选择">
                   <el-option v-for="item in cities" :key="item.name" :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-col>
-              <el-col :span="4" style="width: 110px;margin-right: 10px">
-                <el-select v-model="visitorList.districtid" placeholder="请选择">
-                  <el-option v-for="item in district" :key="item.name" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
               </el-col>
@@ -215,6 +211,7 @@
           qq: '',
           weixin: '',
           type: 1,
+          country:'',
           provinceid: '',
           cityid: '',
           districtid: '',
@@ -250,7 +247,9 @@
         },
         province: [],
         cities: [],
-        district: []
+        district: [],
+        //触发事件的标志
+        flag:false
       }
     },
     created() {
@@ -259,6 +258,7 @@
 
       if (this.$parent.operationType.type == 'edit') {
         this.optionName = "编辑游客";
+        //this.flag = true
 //        this.birthdayFlag=false;
         let data = {
           token: paramm.getToken(),
@@ -267,13 +267,13 @@
         custdetail(data).then((res) => {
           if (res.data.error) {
             this.$message.error(res.data.massage);
-          }
-          else {
+          } else {
             let tempEditList = {};
             tempEditList = res.data.obj;
             tempEditList.sexid = String(tempEditList.sexid);
             tempEditList.mobile = parseInt(tempEditList.mobile);
             this.visitorList = Object.assign({}, tempEditList)
+            this.visitorList.country = '中国'
             //成功时的回调
             //市的展示
             console.log(this.visitorList.provinceid);
@@ -282,15 +282,11 @@
               token: paramm.getToken()
             }
             this.getcity(province)
-            //县的展示
-            console.log(this.visitorList.cityid);
-            let city = {
-              id: this.visitorList.cityid,
-              token: paramm.getToken()
-            }
-            this.getdistrict(city)
           }
         })
+      }else {
+        this.visitorList.country = '中国'
+        this.flag = true
       }
     },
     methods: {
@@ -320,6 +316,14 @@
               newPostDate.id = this.$parent.operationType.id;
 //                delete  newPostDate.birthday;
               custupdate(newPostDate).then((backData) => {
+                console.log(newPostDate)
+                if(newPostDate.cityid === '') {
+                  this.$message({
+                    message: '所在城市不能为空',
+                    type: 'warning'
+                  });
+                  return false
+                }
                 if (backData.data.error != 0 || backData.data.err) {
                   paramm.getCode(backData.data, _this)
                 }
@@ -332,6 +336,13 @@
             }
             else {
               custsave(newPostDate).then((backData) => {
+                if(newPostDate.cityid === '') {
+                  this.$message({
+                    message: '所在城市不能为空',
+                    type: 'warning'
+                  });
+                  return false
+                }
                 if (backData.data.error != 0 || backData.data.err) {
                   paramm.getCode(backData.data, _this)
                 }
@@ -350,14 +361,13 @@
       },
       //获取省级列表
       getprovince() {
-        let count = "fb0828b148bc48afbab8ef03c55d153b"
+        let count = "100001"
         let para = {
           id: count,
           token: paramm.getToken()
         }
         province(para).then((res) => {
           this.province = res.data.obj
-
         }).catch(function (err) {
           console.log("连接错误")
         })
@@ -380,22 +390,19 @@
           console.log("连接错误")
         })
       },
+      change() {
+        this.flag ? this.changecity() : this.flag = true
+      },
       //选择城市
       changecity() {
+        console.log(777,'changecity')
         let pro = {
           id:this.visitorList.provinceid,
           token:paramm.getToken()
         }
         this.getcity(pro)
+        this.visitorList.cityid = ''
       },
-      //选择区县
-      changedistrict() {
-        let city = {
-          id:this.visitorList.cityid,
-          token:paramm.getToken()
-        }
-        this.getdistrict(city)
-      }
     }
   }
 </script>
