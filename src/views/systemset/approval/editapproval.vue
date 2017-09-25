@@ -19,7 +19,7 @@
 						<el-form-item label="被审批人员" prop='executor'>
 							<el-row>
 								<el-col :span="19">
-									<el-input v-model="appform.executor"></el-input>
+									<el-input v-model="appform.executor" disabled></el-input>
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
 								<el-col :span="4">
@@ -33,7 +33,7 @@
 						<el-form-item label="审批人">
 							<el-row>
 								<el-col :span="19">
-									<el-input v-model="appform.approver"></el-input>
+									<el-input v-model="appform.approver" disabled></el-input>
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
 								<el-col :span="4">

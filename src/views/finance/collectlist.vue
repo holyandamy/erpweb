@@ -86,8 +86,8 @@
             <template scope="scope">
               <el-button @click="handleShow(scope.$index, scope.row)" type="text" size="small">查看</el-button>
               <a href="javascript:;" v-if="scope.row.cfmValue !='2' && scope.row.verfValue =='0'">
-                <el-dropdown>
-                    <span style="font-size: 12px;color: #3ec3c8;" class="hasid">
+                <el-dropdown>  <!-- display:inline-block !important -->
+                    <span style="font-size: 12px;color: #3ec3c8; display:inline" class="hasid">
                       操作<i class="el-icon-caret-bottom el-icon--right"></i>
                     </span>
                   <el-dropdown-menu slot="dropdown">
@@ -467,10 +467,12 @@
     text-align: right;
   }
 
-  .el-dropdown-link {
+  .el-dropdown {
 
   }
-
+  span.hasid {
+    display:none !important;
+  }
   a {
     color: #fff;
   }

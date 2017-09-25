@@ -70,7 +70,6 @@
             layout="total, prev, pager, next"
             :total="total">
           </el-pagination>
-
         </div>
 
 

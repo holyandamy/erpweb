@@ -61,9 +61,11 @@
               </el-col>
 
             </el-form-item>
-            <el-form-item label="游客区域" prop="">
+            <el-form-item label="游客区域" prop="countryid">
               <el-col :span="4" style="width: 110px;margin-right: 10px">
-                <el-select v-model="visitorList.country" placeholder="请选择" disabled>
+                <el-select v-model="visitorList.countryid" placeholder="请选择">
+                  <el-option v-for="item in countrys" :key="item.id" :label="item.name" :value="item.id">
+                  </el-option>
                 </el-select>
               </el-col>
               <el-col :span="4" style="width: 110px;margin-right: 10px">
@@ -211,7 +213,7 @@
           qq: '',
           weixin: '',
           type: 1,
-          country:'',
+          countryid:'',
           provinceid: '',
           cityid: '',
           districtid: '',
@@ -243,13 +245,21 @@
 //            { required: true,  min: 7, max: 18, message: '请输入正确的格式', trigger: 'blur' }
             {validator: validatePass, trigger: 'blur', required: true}
           ],
-
+          /*countryid:[{
+            required:true,
+            message:'所在区域不能为空',
+            trigger:'change'
+          }]*/
         },
         province: [],
         cities: [],
         district: [],
         //触发事件的标志
-        flag:false
+        flag:false,
+        countrys: [{
+          name: '中国',
+          id: '100001',
+        }]
       }
     },
     created() {
@@ -273,7 +283,7 @@
             tempEditList.sexid = String(tempEditList.sexid);
             tempEditList.mobile = parseInt(tempEditList.mobile);
             this.visitorList = Object.assign({}, tempEditList)
-            this.visitorList.country = '中国'
+            this.visitorList.countryid = '100001'
             //成功时的回调
             //市的展示
             console.log(this.visitorList.provinceid);
@@ -285,7 +295,6 @@
           }
         })
       }else {
-        this.visitorList.country = '中国'
         this.flag = true
       }
     },
@@ -315,15 +324,22 @@
             if (this.$parent.operationType.type == 'edit') {
               newPostDate.id = this.$parent.operationType.id;
 //                delete  newPostDate.birthday;
+              /*if(newPostDate.cityid === '' || newPostDate.provinceid === '') {
+                this.$message({
+                  message: '所在城市不能为空',
+                  type: 'warning'
+                });
+                return false
+              }*/
               custupdate(newPostDate).then((backData) => {
                 console.log(newPostDate)
-                if(newPostDate.cityid === '') {
+                /*if(newPostDate.cityid === '' || newPostDate.provinceid === '') {
                   this.$message({
                     message: '所在城市不能为空',
                     type: 'warning'
                   });
                   return false
-                }
+                }*/
                 if (backData.data.error != 0 || backData.data.err) {
                   paramm.getCode(backData.data, _this)
                 }
@@ -335,14 +351,21 @@
 
             }
             else {
+              /*if(newPostDate.cityid === '' || newPostDate.provinceid === '') {
+                this.$message({
+                  message: '所在城市不能为空',
+                  type: 'warning'
+                });
+                return false
+              }*/
               custsave(newPostDate).then((backData) => {
-                if(newPostDate.cityid === '') {
+                /*if(newPostDate.cityid === '' || newPostDate.provinceid === '') {
                   this.$message({
                     message: '所在城市不能为空',
                     type: 'warning'
                   });
                   return false
-                }
+                }*/
                 if (backData.data.error != 0 || backData.data.err) {
                   paramm.getCode(backData.data, _this)
                 }
