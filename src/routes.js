@@ -17,7 +17,13 @@ import Conmfirm from './views/order/order/comfirm.vue'
 //订单管理
 import orderLineft from './views/order/line/line.vue' //公司管理菜单
 import orderList from './views/order/order/orderlist.vue' //公司管理菜单
-
+import Giveorderlist from './views/order/giveorder/giveorderlist.vue' //
+import Customlist from './views/order/custom/customlist.vue' //
+//报表管理
+import Lineearn from './views/reportform/form/lineearn.vue' //线路营收报表
+import Transferearn from './views/reportform/form/transferearn.vue' //计调营收报表
+import Monthearn from './views/reportform/form/monthearn.vue' //月收款统计
+import Monthspend from './views/reportform/form/monthspend.vue' //月付款统计
 //公司管理
 import Cmanagement from './views/systemset/company/menu.vue' //公司管理菜单
 
@@ -33,7 +39,7 @@ import Staff from './views/systemset/staff/staff.vue' //员工管理
 import Log from './views/systemset/log/log.vue' //操作日志
 //图片库
 
-//客户管理  
+//客户管理
 import Visitor from './views/customer/visitor/visitor.vue' //游客管理
 let routes = [{
 		path: '/login',
@@ -97,10 +103,46 @@ let routes = [{
 				component: orderList,
 				name: '订单列表'
 			},
-
+      {
+        path: '/giveorderlist',
+        component: Giveorderlist,
+        name: '接送订单列表'
+      },
+      {
+        path: '/customlist',
+        component: Customlist,
+        name: '定制需求'
+      }
 		]
 
 	},
+  {
+    path: '/',
+    component: Home,
+    name: '报表管理',
+    children: [{
+        path: '/lineearn',
+        component: Lineearn,
+        name: '线路营收报表',
+      },
+      {
+        path: '/transferearn',
+        component: Transferearn,
+        name: '计调营收报表'
+      },
+      {
+        path: '/monthearn',
+        component: Monthearn,
+        name: '月收款统计'
+      },
+      {
+        path: '/monthspend',
+        component: Monthspend,
+        name: '月付款统计'
+      }
+    ]
+
+  },
 	{
 		path: '/',
 		component: Home,

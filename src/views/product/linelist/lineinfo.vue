@@ -224,7 +224,7 @@
 							this.detail.categorytype = "全部";
 							break;
 						case 1:
-							this.detail.categorytype = "国内游";
+							this.detail.categorytype = "国内";
 							break;
 						case 2:
 							this.detail.categorytype = "出境游";

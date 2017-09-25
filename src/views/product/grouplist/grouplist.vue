@@ -401,6 +401,7 @@
     padding: 15px 30px;
     background: white;
     text-align: right;
+    margin: 0;
   }
   .el-table .cell{
     text-align: left;

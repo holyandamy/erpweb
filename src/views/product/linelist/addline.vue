@@ -529,7 +529,7 @@
 				}], //出行方式
 				categoryids: [{
 					value: 1,
-					label: '国内游'
+					label: '国内'
 				}, {
 					value: 2,
 					label: '出境游'
@@ -804,7 +804,7 @@
             console.log(5555, this.baseForm.routes);
             if(this.baseForm.routes.length>0){
               this.baseForm.routes.forEach(function (item,idx) {
-                item.titleimages = _this.routeTit[idx] || ""
+                item.titleimages = _this.routeTit[idx]
               })
             }
 						let para = this.baseForm
@@ -846,6 +846,7 @@
 						}
 
             console.log(66666, this.baseForm.routes);
+            return
 
 
             linesave(para).then((res) => {

@@ -58,8 +58,8 @@
 								<el-select v-model="search.type" placeholder="线路类型">
 									<el-option label="全部" value="0"></el-option>
 									<el-option label="国内" value="1"></el-option>
-									<el-option label="出境" value="2"></el-option>
-									<el-option label="周边" value="3"></el-option>
+									<el-option label="出境游" value="2"></el-option>
+									<el-option label="周边游" value="3"></el-option>
 
 								</el-select>
 							</el-form-item>

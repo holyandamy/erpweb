@@ -403,7 +403,7 @@
 				}], //出行方式
 				categoryids: [{
 					value: 1,
-					label: '国内游'
+					label: '国内'
 				}, {
 					value: 2,
 					label: '出境游'
