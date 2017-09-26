@@ -86,8 +86,8 @@
             <template scope="scope">
               <el-button @click="handleShow(scope.$index, scope.row)" type="text" size="small">查看</el-button>
               <a href="javascript:;" v-if="scope.row.cfmValue !='2' && scope.row.verfValue =='0'">
-                <el-dropdown>
-									<span class="el-dropdown-link">
+                <el-dropdown @visible-change="toDown">
+									<span el-dropdown-link style="color: #3ec3c8; font-size:12px;">
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
                   <el-dropdown-menu slot="dropdown">
@@ -292,6 +292,9 @@
       })
     },
     methods: {
+      toDown() {
+        showorhide()
+      },
       // 清空查询
       payexport() {
         let dates = ''
@@ -434,7 +437,14 @@
         return statusMap[status]
       }
     },
-
+    directives:{
+      display(el,binding) {
+        if(el.classList.contains('hasid')){
+          //console.log(777,typeof binding.value)
+          el.style.display = 'none'
+        }
+      }
+    }
   }
 </script>
 <style scoped lang="scss">
@@ -457,11 +467,15 @@
     font-size: 12px;
   }
 
+
+  .el-dropdown-menu {
+    width:120px;
+  }
   .el-dropdown-menu li {
     font-size: 12px;
-    a {
-      display: block;
-    }
+    color:#3ec3c8;
+    width:100px;
+    text-align:center;
   }
 
   .pages {
@@ -470,10 +484,6 @@
     text-align: right;
   }
 
-  .el-dropdown-link {
-    font-size: 12px;
-    color: #3ec3c8;
-  }
 
   a {
     color: #fff;

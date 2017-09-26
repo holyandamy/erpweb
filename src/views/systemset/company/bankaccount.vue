@@ -28,7 +28,13 @@
         </el-table-column>
       </el-table>
       <div class="page">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pagesize" layout="total, prev, pager, next" :total="total">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage"
+          :page-size="pagesize"
+          layout="total, prev, pager, next"
+          :total="total">
         </el-pagination>
 
       </div>
@@ -104,7 +110,7 @@
       return {
         activeIndex: "2",
         banklist: [],
-        total: 0,
+        total:0,
         currentPage: 1,
         pagesize: 15,
         showFormVisible: false,
@@ -197,9 +203,7 @@
           //banklist.status 应为点击保存时携带的状态
           //0为禁用  1为启用
           this.banklist = res.data.obj.datas
-          console.log(banklist.status)
           this.total = Number(res.data.obj.total)
-
         }).catch(function(err) {
           console.log("连接错误")
         })
@@ -242,7 +246,6 @@
 
 						let para = this.addBank
           	para.token = paramm.getToken()
-          	console.log(para)
 						addbank(para).then((res) => {
 						  //发完请求之后，应该把文本框里面的内容清空
 							if(res.data.error || res.data.err){

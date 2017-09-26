@@ -10,7 +10,9 @@
           </el-form-item>
           <el-form-item label="所在城市" prop="provinceId">
             <el-col :span="4">
-              <el-select v-model="companyForm.country" placeholder="请选择" disabled>
+              <el-select v-model="companyForm.countryId" placeholder="请选择" disabled>
+                <el-option v-for="item in countrys" :key="item.id" :label="item.name" :value="item.id">
+                </el-option>
               </el-select>
             </el-col>
             <el-col :span="4">
@@ -182,7 +184,11 @@
         district:[],
         logo:'',
         //触发事件的标志
-        flag:false
+        flag:false,
+        countrys: [{
+          name: '中国',
+          id: '100001',
+        }]
       }
     },
     created() {
@@ -205,7 +211,6 @@
             token:paramm.getToken()
           }
           this.getcity(pro)
-          this.companyForm.country = '中国'
           this.logo = res.data.obj.logo
           this.$refs.logos.loading(this.logo)
         })

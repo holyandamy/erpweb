@@ -19,7 +19,7 @@
 						<el-form-item label="被审批人员" prop='executorid'>
 							<el-row>
 								<el-col :span="19">
-									<el-input v-model="appform.executorid"></el-input>
+									<el-input v-model="appform.executorid" disabled></el-input>
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
 								<el-col :span="4">
@@ -30,10 +30,10 @@
 						<el-form-item label="审批功能">
 							线路发布
 						</el-form-item>
-						<el-form-item label="审批人">
+						<el-form-item label="审批人" prop="approverid">
 							<el-row>
 								<el-col :span="19">
-									<el-input v-model="appform.approverid"></el-input>
+									<el-input v-model="appform.approverid"  disabled></el-input>
 								</el-col>
 								<el-col :span="1">&nbsp;</el-col>
 								<el-col :span="4">
@@ -111,7 +111,11 @@
 					executorid: [{
 						required: true,
 						message: '请选择被审批人'
-					}]
+					}],
+          approverid: [{
+					  required:true,
+            message:'请选择审批人'
+          }]
 				},
 				approvalsid: [],
 				approvalsedid: []
