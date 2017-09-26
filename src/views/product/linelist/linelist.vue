@@ -58,8 +58,8 @@
 								<el-select v-model="search.type" placeholder="线路类型">
 									<el-option label="全部" value="0"></el-option>
 									<el-option label="国内" value="1"></el-option>
-									<el-option label="出境" value="2"></el-option>
-									<el-option label="周边" value="3"></el-option>
+									<el-option label="出境游" value="2"></el-option>
+									<el-option label="周边游" value="3"></el-option>
 
 								</el-select>
 							</el-form-item>
@@ -101,18 +101,17 @@
 					<el-table-column fixed="right" label="操作" width="110">
 						<template scope="scope">
 							<el-button @click="setMode('lineinfo'),lineinfo(scope)"  type="text" size="small">查看</el-button>
-
 							<a href="javascript:;" class="operation">
 								<el-dropdown @visible-change="toDown">
 									<span class="el-dropdown-link">
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
 									<el-dropdown-menu slot="dropdown">
-										<el-dropdown-item class="hasid"  id="4dcba294734711e788410242ac120009"><span @click="setMode('editline'),lineinfo(scope)">编辑线路</span></el-dropdown-item>
-										<el-dropdown-item class="hasid"  id="9079b8af734711e788410242ac120009"><span @click="settop(scope)">线路置顶</span></el-dropdown-item>
-										<el-dropdown-item class="hasid"  id="6e3c1a72734711e788410242ac120009"><span @click="updatastatus(scope)">查看团期</span></el-dropdown-item>
-										<el-dropdown-item  v-if="scope.row.isenable == true"><span @click="stop(scope,1)">停止</span></el-dropdown-item>
-										<el-dropdown-item  v-if="scope.row.isenable == false"><span @click="stop(scope,2)">启用</span></el-dropdown-item>
+										<el-dropdown-item class="hasid"  id="4dcba294734711e788410242ac120009"> <el-button type="text" @click="setMode('editline'),lineinfo(scope)">编辑线路</el-button></el-dropdown-item>
+										<el-dropdown-item class="hasid"  id="9079b8af734711e788410242ac120009"><el-button type="text" @click="settop(scope)">线路置顶</el-button></el-dropdown-item>
+										<el-dropdown-item class="hasid"  id="6e3c1a72734711e788410242ac120009"><el-button type="text" @click="updatastatus(scope)">查看团期</el-button></el-dropdown-item>
+										<el-dropdown-item  v-if="scope.row.isenable == true"><el-button type="text" @click="stop(scope,1)">停止</el-button></el-dropdown-item>
+										<el-dropdown-item  v-if="scope.row.isenable == false"><el-button type="text" @click="stop(scope,2)">启用</el-button></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 							</a>

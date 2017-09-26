@@ -75,7 +75,7 @@
           <el-form   label-width="80px" :model="addcategory"  :rules="rules"  ref="addcategory" style="text-align: left;">
             <el-form-item label="系统分类" prop="type"  >
               <el-select v-model="addcategory.type"  >
-                <el-option  v-for="item in type"
+                <el-option  v-for="item in type1"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value"
@@ -126,6 +126,7 @@
           pagesize: 10
         },
         type:[{value:'0', label:'全部'}, {value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
+        type1:[{value:'1',label:'国内'},{value:'2',label:'出境游'},{value:'3',label:'周边游'}],
         lineList:[],
         addcategory:{
           token:paramm.getToken(),
