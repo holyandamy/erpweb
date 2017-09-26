@@ -28,7 +28,7 @@
 							<el-form-item label="模板导入：" label-width="120px">
 								<el-button @click="addtemplate">添加模板</el-button>
 							</el-form-item>
-							<el-form-item label="选择线路分类：" prop="categorytype" label-width="120px">
+							<el-form-item label="选择线路分类：" prop="categorytype" label-width="120px" required>
 								<el-select filterable v-model="baseForm.categorytype" placeholder="请选择" @change="checkline">
 									<el-option v-for="item in categoryids" :key="item.value" :label="item.label" :value="item.value">
 									</el-option>
@@ -51,17 +51,17 @@
 									<el-radio label="1">跟团游</el-radio>
 								</el-radio-group>
 							</el-form-item>
-							<el-form-item label="收客类型：" prop="checkpeople" label-width="120px">
+							<el-form-item label="收客类型：" prop="checkpeople" label-width="120px" required>
 								<el-checkbox-group v-model="baseForm.checkpeople" @change="changepeople">
 								<el-checkbox label="成人" v-model="baseForm.isadult"></el-checkbox>
 								<el-checkbox label="儿童" v-model="baseForm.ischild"></el-checkbox>
 								<el-checkbox label="婴儿" v-model="baseForm.isbaby"></el-checkbox>
 								 </el-checkbox-group>
 							</el-form-item>
-              <el-form-item label="出港地：" prop="fromprovinceid">
+              <el-form-item label="出港地：" prop="fromprovinceid" required>
                 <el-col :span="5">
                   <el-select filterable  v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changeprovincefrom">
-                    <el-option v-for="item in countryy" :key="item.name" :label="item.name" :value="item.id">
+                    <el-option v-for="item in countryy1" :key="item.name" :label="item.name" :value="item.id">
                     </el-option>
                   </el-select>
                 </el-col>
@@ -84,7 +84,7 @@
                   </el-select>
                 </el-col>
               </el-form-item>
-              <el-form-item label="目的地：" prop ="backaddress">
+              <el-form-item label="目的地：" prop ="backaddress" required>
                 <el-col :span="5">
 
                   <el-select filterable  v-model="baseForm.toprovinceid" placeholder="请选择" @change="changeprovinceback">
@@ -116,72 +116,6 @@
 
                 </el-col>
               </el-form-item>
-
-
-							<!--<el-form-item label="出港地：" prop="fromprovinceid" label-width="120px">
-								<el-col :span="5">
-									<el-select filterable v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changecityfrom('pro')">
-										<el-option v-for="item in province" :key="item.id" :label="item.name" :value="item.id">
-										</el-option>
-									</el-select>
-
-								</el-col>
-								<el-col :span="1">
-									&nbsp;
-								</el-col>
-								<el-col :span="5">
-
-									<el-select filterable v-model="baseForm.fromcityid" placeholder="请选择" @change="changecityfrom('city')">
-										<el-option v-for="item in city" :key="item.id" :label="item.name" :value="item.id">
-										</el-option>
-									</el-select>
-
-								</el-col>
-								<el-col :span="1">
-									&nbsp;
-								</el-col>
-								<el-col :span="5">
-
-									<el-select filterable v-model="baseForm.fromdistrictid" placeholder="请选择">
-										<el-option v-for="item in district" :key="item.id" :label="item.name" :value="item.id">
-										</el-option>
-									</el-select>
-
-								</el-col>
-							</el-form-item>-->
-						<!--	<el-form-item label="目的地：" prop="backaddress" label-width="120px">
-								<el-col :span="5">
-
-									<el-select filterable v-model="baseForm.toprovinceid" placeholder="请选择" @change="changecityback('pro')">
-										<el-option v-for="item in province" :key="item.id" :label="item.name" :value="item.id">
-										</el-option>
-									</el-select>
-
-								</el-col>
-								<el-col :span="1">
-									&nbsp;
-								</el-col>
-								<el-col :span="5">
-
-									<el-select filterable v-model="baseForm.tocityid" placeholder="请选择" @change="changecityback('city')">
-										<el-option v-for="item in city" :key="item.id" :label="item.name" :value="item.id">
-										</el-option>
-									</el-select>
-
-								</el-col>
-								<el-col :span="1">
-									&nbsp;
-								</el-col>
-								<el-col :span="5">
-
-									<el-select filterable v-model="baseForm.todistrictid" placeholder="请选择">
-										<el-option v-for="item in district" :key="item.id" :label="item.name" :value="item.id">
-										</el-option>
-									</el-select>
-
-								</el-col>
-							</el-form-item>-->
-
 
 							<el-form-item label="交通工具：" label-width="120px">
 								<el-col :span="2">
@@ -262,8 +196,8 @@
 							</div>
 							<el-row>
 								<el-col :span="7" class="star">
-									<span style="color: red;">*</span>
-									<el-form-item label="标题：" prop="title">
+									<!--<span style="color: red;">*</span>-->
+									<el-form-item label="标题：" prop="title" required>
 										<el-input v-model="route.title" class="insertinput"></el-input>
 									</el-form-item>
 								</el-col>
@@ -299,7 +233,7 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-									<el-form-item label="行程：" prop="content">
+									<el-form-item label="行程：" prop="content" required>
 										<el-input type="textarea" v-model="route.content"></el-input>
 									</el-form-item>
 								</el-col>
@@ -454,7 +388,7 @@
 					callback()
 				}
 			}
-			//出港地
+			/*//出港地
 			var startaddresscheck = (rule, value, callback) => {
 				if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' || this.baseForm.fromdistrictid == '') {
 					callback(new Error('请选择出港地！'));
@@ -469,7 +403,7 @@
 				} else {
 					callback()
 				}
-			}
+			}*/
 			//
 			var category = (rule, value, callback) => {
 				if(this.baseForm.categorytype == '' || this.baseForm.categoryid == '') {
@@ -588,6 +522,11 @@
 				active: 0,
 				fileList: [],
 				customtext: '', //自定义文本内容
+        flagLine: false,
+        flag: false,
+        flag1: false,
+        flagTo: false,
+        flagTo1: false,
 				baseForm: {
 					token: paramm.getToken(),
 					categoryid: '',
@@ -636,11 +575,11 @@
 				},
 
 				baseFormrules: {
-					categorytype: [{
-						required: true,
-						trigger: 'change',
-						validator: category
-					}],
+//					categorytype: [{
+//						required: true,
+//						trigger: 'change',
+//						validator: category
+//					}],
 					name: [{
 						required: true,
 						message: '请填写线路名称',
@@ -650,17 +589,17 @@
 						required: true,
 						message: '请选择出行方式',
 						trigger: 'change'
-					}],
-					checkpeople: [{ type: 'array', required: true, message: '请至少选择一个收客类型', trigger: 'change' }],
-					fromprovinceid: [{
-						required: true,
-						validator: startaddresscheck
-					}],
-					backaddress: [{
-						required: true,
-						trigger: 'change',
-						validator: endcheck
-					}],
+					}]
+//					checkpeople: [{ type: 'array', required: true, message: '请至少选择一个收客类型', trigger: 'change' }],
+//					fromprovinceid: [{
+//						required: true,
+//						validator: startaddresscheck
+//					}],
+//					backaddress: [{
+//						required: true,
+//						trigger: 'change',
+//						validator: endcheck
+//					}],
 					//				title:[{ required: true,trigger: 'blur', validator:checktitle}]
 				},
 				province: [],
@@ -683,11 +622,8 @@
 		methods: {
 			geturl(url) {
         this.urlAdd= url
-        console.log(999, this.urlAdd);
       },
       getRouteImages(url,idx) {
-        console.log(777, url);
-        console.log(888, idx);
         let _this =this;
         if(this.routeTit.length>0){
           this.routeTit.forEach(function (item,index) {
@@ -700,11 +636,9 @@
             }
           })
         }
-        console.log(99, this.routeTit);
       },
 			jump(index) {
 				this.active = index
-
 				// 用 class="d_jump" 添加锚点
 				let jump = document.querySelectorAll('.d_jump')
 				let total = jump[index].offsetTop
@@ -718,7 +652,6 @@
 					step = newTotal / 50
 					smoothUp()
 				}
-
 				function smoothDown() {
 					if(distance < total) {
 						distance += step　　　　　　　
@@ -750,13 +683,14 @@
 
 			//选择分类
 			checkline() {
-//        this.baseForm.fromprovinceid = ''
-//        this.baseForm.fromcityid = ''
-//        this.baseForm.fromdistrictid = ''
-//        this.baseForm.toprovinceid = ''
-//        this.baseForm.tocityid = ''
-//        this.baseForm.todistrictid = ''
-//        this.baseForm.categoryid = ''
+        if(this.flagLine){
+          this.baseForm.toprovinceid = ''
+          this.baseForm.tocityid = ''
+          this.baseForm.todistrictid = ''
+          this.baseForm.categoryid = ''
+        }else {
+          this.flagLine=true
+        }
         if(this.baseForm.categorytype == 1 || this.baseForm.categorytype == 3) {
           this.countryy =  this.countryy1
         }
@@ -793,6 +727,41 @@
 			},
 			//保存表单
 			submitForm(formName) {
+        if(this.baseForm.categorytype == '' || this.baseForm.categoryid == ''){
+          this.$message({
+            message: '请选择线路分类',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.baseForm.name == ''){
+          this.$message({
+            message: '请填写线路名称',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.baseForm.type == ''){
+          this.$message({
+            message: '请选择出行方式',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' ||this.baseForm.fromdistrictid == ''){
+          this.$message({
+            message: '请选择出港地',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.baseForm.toprovinceid == '' || this.baseForm.tocityid == '' ||this.baseForm.todistrictid == ''){
+          this.$message({
+            message: '请选择目的地',
+            type: 'warning'
+          });
+          return
+        }
 			  let _this = this;
 			this.$refs[formName].validate((valid) => {
 					if(valid) {
@@ -801,7 +770,6 @@
             }else {
               this.baseForm.images = this.baseImages
             }
-            console.log(5555, this.baseForm.routes);
             if(this.baseForm.routes.length>0){
               this.baseForm.routes.forEach(function (item,idx) {
                 item.titleimages = _this.routeTit[idx]
@@ -821,6 +789,13 @@
 								para.isbaby = true
 							}
 						}
+            if(para.isadult == false && para.isbaby == false && para.ischild == false){
+              this.$message({
+                message: '请选择收客类型',
+                type: 'warning'
+              });
+              return false
+            }
 
 						if(this.editor == false) {
 							//基本录入
@@ -836,6 +811,14 @@
 									});
 									return false
 								}
+                if(para.routes[i].content == ""){
+                  this.$message({
+                    showClose: true,
+                    message: "行程不能为空！",
+                    type: 'warning'
+                  });
+                  return false
+                }
 
 							}
 
@@ -844,10 +827,6 @@
 							para.routes[0].content = html
 							para.edittype = 1
 						}
-
-            console.log(66666, this.baseForm.routes);
-            return
-
 
             linesave(para).then((res) => {
 
@@ -945,14 +924,13 @@
           id: this.baseForm.fromprovinceid.toString(),
           token: paramm.getToken()
         }
-        if(this.baseForm.categorytype == 1 || this.baseForm.categorytype == 3) {
-          this.getprovince(pro)
+        this.getprovince(pro)
+        if(this.flag){
+          this.baseForm.fromcityid = ''
+          this.baseForm.fromdistrictid = ''
+        }else {
+          this.flag=true
         }
-        if(this.baseForm.categorytype == 2) {
-          this.getcountry(pro)
-        }
-//        this.baseForm.fromcityid = ''
-//        this.baseForm.fromdistrictid = ''
       },
       //去程 市
       changecityfrom() {
@@ -960,13 +938,12 @@
           id: this.baseForm.fromcityid.toString(),
           token: paramm.getToken()
         }
-        if(this.baseForm.categorytype == 1 || this.baseForm.categorytype == 3) {
-          this.getcity(pro)
+        this.getcity(pro)
+        if(this.flag1){
+          this.baseForm.fromdistrictid = ''
+        }else {
+          this.flag1=true
         }
-        if(this.baseForm.categorytype == 2) {
-          this.getdis(pro)
-        }
-//        this.baseForm.fromdistrictid = ''
       },
       //返程 省份
       changeprovinceback() {
@@ -980,8 +957,12 @@
         if(this.baseForm.categorytype == 2) {
           this.getcountryTo(pro)
         }
-//        this.baseForm.tocityid = ''
-//        this.baseForm.todistrictid = ''
+        if(this.flagTo){
+          this.baseForm.tocityid = ''
+          this.baseForm.todistrictid = ''
+        }else {
+          this.flagTo=true
+        }
       },
       //返程 市
       changecityback() {
@@ -995,7 +976,11 @@
         if(this.baseForm.categorytype == 2) {
           this.getdisTo(pro)
         }
-//        this.baseForm.todistrictid = ''
+        if(this.flagTo1){
+          this.baseForm.todistrictid = ''
+        }else {
+          this.flagTo1=true
+        }
       },
       //获取国家列表
       getcountryTo(pro) {

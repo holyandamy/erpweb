@@ -172,7 +172,9 @@
 				<el-table-column prop="content" label="操作内容">
 				</el-table-column>
 			</el-table>
-
+      <div style='margin: 30px auto;text-align: center;'>
+        <el-button type="primary" style='width: 130px;' @click="handleHide()">返 回</el-button>
+      </div>
 		</section>
 	</div>
 </template>
@@ -296,11 +298,11 @@
 									this.detail.routes[i].titleimages = arr
 								} else {
 									let arr = []
-									arr = res.data.obj.routes[i].titleimages.split(',')
-									this.detail.routes[i].titleimages = arr
+                  res.data.obj.routes[i].titleimages==''?arr=[]: arr = res.data.obj.routes[i].titleimages.split(',')
+                  this.detail.routes[i].titleimages = arr
 								}
 							} else {
-								res.data.obj.routes[i].titleimages = " "
+								res.data.obj.routes[i].titleimages = []
 							}
 						}
 						this.edittype = true

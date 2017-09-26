@@ -48,17 +48,17 @@
 									<el-radio label="1">跟团游</el-radio>
 								</el-radio-group>
 							</el-form-item>
-							<el-form-item label="收客类型：" prop="checkpeople" label-width="120px">
+							<el-form-item label="收客类型：" prop="checkpeople" label-width="120px" required>
 								<el-checkbox-group v-model="baseForm.checkpeople">
 								<el-checkbox label="成人" v-model="baseForm.isadult"></el-checkbox>
 								<el-checkbox label="儿童" v-model="baseForm.ischild"></el-checkbox>
 								<el-checkbox label="婴儿" v-model="baseForm.isbaby"></el-checkbox>
 								 </el-checkbox-group>
 							</el-form-item>
-              <el-form-item label="出港地：" prop="fromprovinceid">
+              <el-form-item label="出港地：" prop="fromprovinceid" required>
                 <el-col :span="5">
                   <el-select filterable  v-model="baseForm.fromprovinceid" placeholder="请选择" @change="changeprovincefrom">
-                    <el-option v-for="item in countryy" :key="item.name" :label="item.name" :value="item.id">
+                    <el-option v-for="item in countryy1" :key="item.name" :label="item.name" :value="item.id">
                     </el-option>
                   </el-select>
                 </el-col>
@@ -107,7 +107,7 @@
 										</el-select>
 								</el-col>
 							</el-form-item>-->
-							<el-form-item label="目的地：" prop ="backaddress">
+							<el-form-item label="目的地：" prop ="backaddress" required>
 								<el-col :span="5">
 
 										<el-select filterable  v-model="baseForm.toprovinceid" placeholder="请选择" @change="changeprovinceback">
@@ -247,7 +247,7 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-									<el-form-item label="行程：" prop="content">
+									<el-form-item label="行程：" prop="content" required>
 										<el-input type="textarea" v-model="route.content"></el-input>
 									</el-form-item>
 								</el-col>
@@ -357,7 +357,7 @@
 								}
 			}
 			//出港地
-			var startaddresscheck = (rule, value, callback) =>{
+			/*var startaddresscheck = (rule, value, callback) =>{
 				if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' ||this.baseForm.fromdistrictid == ''){
 					callback(new Error('请选择出港地！'));
 				}else{
@@ -371,7 +371,7 @@
 				}else{
 					callback()
 				}
-			}
+			}*/
 			//
 			var category  = (rule, value, callback) =>{
 				if(this.baseForm.categorytype == '' || this.baseForm.categoryid == ''){
@@ -468,7 +468,7 @@
 					categorytype: '',
 					name: '',
 					teamno: '',
-					type: " 1",
+					type: "",
 					isadult: false,
 					ischild: false,
 					isbaby: false,
@@ -509,11 +509,11 @@
 					}]
 				},
 				baseFormrules: {
-					categorytype: [{
-						required: true,
-						trigger: 'change',
-						validator:category
-					}],
+//					categorytype: [{
+//						required: true,
+//						trigger: 'change',
+//						validator:category
+//					}],
 					name: [{
 						required: true,
 						message: '请填写线路名称',
@@ -524,10 +524,10 @@
 						message: '请选择出行方式',
 						trigger: 'change'
 					}],
-				checkpeople: [{ type: 'array', required: true, message: '请至少选择一个收客类型', trigger: 'change' }],
+//				checkpeople: [{ type: 'array', required: true, message: '请至少选择一个收客类型', trigger: 'change' }],
 				typepeo: [{required: true,trigger: 'change', validator:typepeocheck}],
-				fromprovinceid: [{required: true, trigger: 'change',validator:startaddresscheck}],
-				backaddress: [{ required: true,trigger: 'change',  validator:endcheck}]
+//				fromprovinceid: [{required: true, trigger: 'change',validator:startaddresscheck}],
+//				backaddress: [{ required: true,trigger: 'change',  validator:endcheck}]
 				},
 				province: [],
 				city: [],
@@ -593,9 +593,6 @@
 			},
 			//选择分类
 			checkline() {
-        this.baseForm.fromprovinceid = ''
-        this.baseForm.fromcityid = ''
-        this.baseForm.fromdistrictid = ''
         this.baseForm.toprovinceid = ''
         this.baseForm.tocityid = ''
         this.baseForm.todistrictid = ''
@@ -622,8 +619,52 @@
 			},
 			//保存表单
 			submitForm(formName) {
+        if(this.baseForm.categorytype == '' || this.baseForm.categoryid == ''){
+          this.$message({
+            message: '请选择线路分类',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.baseForm.name == ''){
+          this.$message({
+            message: '请填写线路名称',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.baseForm.type == ''){
+          this.$message({
+            message: '请选择出行方式',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' ||this.baseForm.fromdistrictid == ''){
+          this.$message({
+            message: '请选择出港地',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.baseForm.toprovinceid == '' || this.baseForm.tocityid == '' ||this.baseForm.todistrictid == ''){
+          this.$message({
+            message: '请选择目的地',
+            type: 'warning'
+          });
+          return
+        }
+
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
+//            if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' ||this.baseForm.fromdistrictid == ''){
+//              thiss.$message({
+//                message: data.message || '成功',
+//                type: 'success'
+//              });
+//            }
+
+
 						let para = this.baseForm
 						let html = this.$refs.ue.getUEContent()
             if(para.checkpeople.indexOf('成人')!= -1) {
@@ -635,6 +676,13 @@
             if(para.checkpeople.indexOf('婴儿')!= -1) {
               para.isbaby = true
             }
+            if(para.isadult == false && para.isbaby == false && para.ischild == false){
+              this.$message({
+                message: '请选择收客类型',
+                type: 'warning'
+              });
+              return false
+            }
 						if(this.editor == false) {
 							//基本录入
 							para.routes = this.baseForm.routes
@@ -644,10 +692,18 @@
 									this.$message({
 									showClose: true,
 									message: "行程标题不能为空！",
-									type: 'error'
+									type: 'warning'
 									});
 									return false
 								}
+                if(para.routes[i].content == ""){
+                  this.$message({
+                    showClose: true,
+                    message: "行程不能为空！",
+                    type: 'warning'
+                  });
+                  return false
+                }
 
 							}
 
@@ -791,12 +847,12 @@
           id: this.baseForm.fromprovinceid.toString(),
           token: paramm.getToken()
         }
-        if(this.baseForm.categorytype == 1 || this.baseForm.categorytype == 3) {
+//        if(this.baseForm.categorytype == 1 || this.baseForm.categorytype == 3) {
           this.getprovince(pro)
-        }
-        if(this.baseForm.categorytype == 2) {
-          this.getcountry(pro)
-        }
+//        }
+//        if(this.baseForm.categorytype == 2) {
+//          this.getcountry(pro)
+//        }
         this.baseForm.fromcityid = ''
         this.baseForm.fromdistrictid = ''
       },
@@ -806,12 +862,12 @@
           id: this.baseForm.fromcityid.toString(),
           token: paramm.getToken()
         }
-        if(this.baseForm.categorytype == 1 || this.baseForm.categorytype == 3) {
+//        if(this.baseForm.categorytype == 1 || this.baseForm.categorytype == 3) {
           this.getcity(pro)
-        }
-        if(this.baseForm.categorytype == 2) {
-          this.getdis(pro)
-        }
+//        }
+//        if(this.baseForm.categorytype == 2) {
+//          this.getdis(pro)
+//        }
         this.baseForm.fromdistrictid = ''
       },
 

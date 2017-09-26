@@ -138,7 +138,9 @@
 				</ul>
 			</div>
 
-
+      <div style='margin: 30px auto;text-align: center;'>
+        <el-button type="primary" style='width: 130px;' @click="handleHide()">返 回</el-button>
+      </div>
 		</section>
 	</div>
 </template>
@@ -168,10 +170,10 @@
 				}
 				templatdetail(para).then((res) => {
 					this.detail = res.data.obj
-					this.toplist = this.detail.images.split(',')
-					for(let i = 0 ; i <this.detail.routes.length;i++){
+          this.detail.images==''? this.toplist=[] : this.toplist = this.detail.images.split(',')
+          for(let i = 0 ; i <this.detail.routes.length;i++){
 						let arr = []
-						arr = res.data.obj.routes[i].titleimages.split(',')
+            res.data.obj.routes[i].titleimages==''?arr=[]: arr = res.data.obj.routes[i].titleimages.split(',')
 						this.detail.routes[i].titleimages = arr
 
 					}
@@ -201,6 +203,9 @@
 				let day=res.data.obj.trafficgo
 						switch (day)
 						{
+            case 0:
+              this.detail.trafficgo = "---";
+              break;
 						case 1:
 						  this.detail.trafficgo = "飞机";
 						  break;
@@ -223,6 +228,9 @@
 						let trafficback=res.data.obj.trafficreturn
 						switch (trafficback)
 						{
+            case 0:
+              this.detail.trafficreturn = "---";
+              break;
 						case 1:
 						  this.detail.trafficreturn = "飞机";
 						  break;

@@ -95,43 +95,38 @@
               <li style="width: 10%;">{{list.settleName}}</li>
 							<li style="width: 10%;">{{list.statusName}}</li>
               <li style="width: 10%;">{{list.creater}}</li>
-							<li style="width: 10%;text-align: right;padding: 10px 0 10px 20px;" class="button">
-                <a href="javascript:;" class="operation">
-                  <el-dropdown @visible-change="toDown">
+							<li style="width: 12%;text-align: center;padding: 10px 10px 10px 0px;" class="button">
+                <el-button type="text" @click="setMode('orderinfo'),passinfo(list)">查看</el-button>
+
+                <a href="javascript:;" class="operation" >
+                  <el-dropdown @visible-change="toDown" style='position: initial;'>
 									<span class="el-dropdown-link" style='color: #3ec3c8;'>
-						        操作 &nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-caret-bottom el-icon--right"></i>
+						        操作 <i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item>
-                        <el-button  type="text" v-if="list.status == 1"  @click="confirmnamelists(list)"><span style='color: #7e8c8d;'>确认订单</span></el-button>
-                        <el-button  type="text" v-if="list.status == 2"  @click="confirmnamelists1(list)"><span style='color: #7e8c8d;'>出团确认</span></el-button>
+                        <el-button  type="text" v-if="list.status == 1"  @click="confirmnamelists(list)">确认订单</el-button>
+                        <el-button  type="text" v-if="list.status == 2"  @click="confirmnamelists1(list)">出团确认</el-button>
                       </el-dropdown-item>
                       <el-dropdown-item  >
-                        <el-button type="text" v-if="list.settle == 2" @click='getSettle(list)'>
-                          <span style='color: #7e8c8d;'>结算</span>
-                        </el-button>
-                      </el-dropdown-item>
-                      <el-dropdown-item>
-                        <el-button type="text" @click="setMode('orderinfo'),passinfo(list)">
-                          <span style='color: #7e8c8d;'>查看</span>
-                        </el-button>
+                        <el-button type="text" v-if="list.settle == 2" @click='getSettle(list)'>结算</el-button>
                       </el-dropdown-item>
                       <el-dropdown-item >
                       <el-button type="text" class="hasid" id="7db5db31735d11e788410242ac120009">
                       <!--<router-link  target="_blank" :to="{path:'/singlegroup',query: {id: list.id}}">行程单</router-link>-->
-                      <router-link  target="_blank" :to="{path:'/singlegroup',query: {id: list.id}}">导出行程</router-link>
+                      <router-link  target="_blank" :to="{path:'/singlegroup',query: {id: list.id}}" style='color: #3ec3c8;'>导出行程</router-link>
                       </el-button>
                       </el-dropdown-item>
                       <el-dropdown-item >
                         <el-button type="text" class="hasid" id="80c08aca735d11e788410242ac120009">
                           <!--<router-link  target="_blank" :to="{path:'/confirm',query: {id: list.id}}">确认单</router-link>-->
-                          <router-link  target="_blank" :to="{path:'/confirm',query: {id: list.id}}">生成确认单</router-link>
+                          <router-link  target="_blank" :to="{path:'/confirm',query: {id: list.id}}" style='color: #3ec3c8;'>生成确认单</router-link>
                         </el-button>
                       </el-dropdown-item>
-                      <el-dropdown-item >
+                      <el-dropdown-item>
                         <el-button type="text" class="hasid" id="83b7ed61735d11e788410242ac120009">
                           <!--<router-link  target="_blank" to="/singlegroup">出团单</router-link>-->
-                          <router-link  target="_blank" to="/singlegroup">导出出团单</router-link>
+                          <router-link  target="_blank" to="/singlegroup" style='color: #3ec3c8;'>导出出团单</router-link>
                         </el-button>
                       </el-dropdown-item>
                     </el-dropdown-menu>
@@ -215,10 +210,10 @@
 					orderno: '',
 					linename: '',
 					creater: '',
-					status: '',
-					source: '',
-          settle: '',
-          refund: '',
+					status: '0',
+					source: '0',
+          settle: '-1',
+          refund: '0',
 					hide: false,
 					token: paramm.getToken(),
 					pageindex: 0,
@@ -362,7 +357,7 @@
           } else {
             paramm.getCode(res.data,_this)
             this.getList()
-            this.confirmnamelist1 = false
+            this.isSettle = false
           }
         })
       },
@@ -388,7 +383,7 @@
           status: this.orderinfo.status,
           source: this.orderinfo.source,
           refund: this.orderinfo.refund,
-          hide: this.orderinfo.hide,
+//          hide: this.orderinfo.hide,
           token: paramm.getToken()
         }).then((res)=>{
           if(res.data.error || res.data.err) {
@@ -396,6 +391,7 @@
           } else {
             paramm.getCode(res.data,_this)
             _this.isLoadd = false;
+            _this.isSettleAll = false;
             _this.getList()
           }
         })
@@ -449,10 +445,10 @@
            orderno: '',
            linename: '',
            creater: '',
-           status: '',
-           source: '',
-           settle: '',
-           refund: '',
+           status: '0',
+           source: '0',
+           settle: '-1',
+           refund: '0',
            hide: false,
            token: paramm.getToken(),
            pageindex: 0,

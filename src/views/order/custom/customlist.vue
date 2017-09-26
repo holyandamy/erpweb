@@ -59,6 +59,7 @@
           </el-table-column>
           <el-table-column  label="操作" width="120">
             <template scope="scope">
+              <el-button type="text" size="small"  @click="setMode('custominfo','info')">查看</el-button>
               <a href="javascript:;" >
                 <el-dropdown  @visible-change="toDown">
                     <span style="font-size: 12px;color: #3ec3c8;">
@@ -66,7 +67,6 @@
                     </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item > <el-button type="text" size="small"  @click="setMode('custominfo','edit')">完善需求</el-button></el-dropdown-item>
-                    <el-dropdown-item > <el-button type="text" size="small"  @click="setMode('custominfo','info')">查看</el-button></el-dropdown-item>
                     <el-dropdown-item > <el-button @click="confirmnamelists(scope.row,2)" type="text" size="small">取消</el-button></el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>

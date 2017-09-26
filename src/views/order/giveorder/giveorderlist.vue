@@ -87,6 +87,7 @@
           </el-table-column>
           <el-table-column  label="操作" width="120">
             <template scope="scope">
+              <el-button type="text" size="small" @click="setMode('giveorderinfo')">查看</el-button>
               <a href="javascript:;" >
                 <el-dropdown  @visible-change="toDown">
                     <span style="font-size: 12px;color: #3ec3c8;">
@@ -94,7 +95,6 @@
                     </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item > <el-button @click="confirmnamelists(scope.row,1)" type="text" size="small">确认订单</el-button></el-dropdown-item>
-                    <el-dropdown-item > <el-button type="text" size="small" @click="setMode('giveorderinfo')">查看</el-button></el-dropdown-item> <!--  @click="handleShow(scope.$index, scope.row)"   -->
                     <el-dropdown-item > <el-button @click="confirmnamelists(scope.row,2)" type="text" size="small">取消</el-button></el-dropdown-item>
                   </el-dropdown-menu> <!--  class="hasid" id="9250c2ef72b911e7aad70242ac120006"   -->
                 </el-dropdown>
