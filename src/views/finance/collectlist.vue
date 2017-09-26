@@ -439,9 +439,7 @@
     directives:{
       display(el,binding) {
         for(let i=0;i<el.children.length;i++){
-          console.log(777,el.children[i].nodeName)
         }
-
       }
     }
   }
