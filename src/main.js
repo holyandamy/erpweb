@@ -12,7 +12,7 @@ import '../static/umeditor/ueditor.all.js'
 import '../static/umeditor/lang/zh-cn/zh-cn.js'
 import '../static/umeditor/ueditor.parse.min.js'
 import Cookies from 'js-cookie';
-import $ from 'jquery' // todo 9.22
+//import $ from 'jquery'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueRouter)

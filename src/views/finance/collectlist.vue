@@ -86,14 +86,14 @@
             <template scope="scope">
               <el-button @click="handleShow(scope.$index, scope.row)" type="text" size="small">查看</el-button>
               <a href="javascript:;" v-if="scope.row.cfmValue !='2' && scope.row.verfValue =='0'">
-                <el-dropdown>  <!-- display:inline-block !important -->
-                    <span style="font-size: 12px;color: #3ec3c8; display:inline" class="hasid">
+                <el-dropdown @visible-change="toDown">
+                    <span el-dropdown-link style="color: #3ec3c8; font-size:12px;">
                       操作<i class="el-icon-caret-bottom el-icon--right"></i>
                     </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item class="hasid" id="9250c2ef72b911e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
-                    <el-dropdown-item class="hasid" id="9250c2ef72b911e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
-                    <el-dropdown-item class="hasid" id="a5ecf87872b911e7aad70242ac120006" v-if="scope.row.cfmValue =='1'&&scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
+                    <el-dropdown-item class="hasid"  id="9250c2ef72b911e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
+                    <el-dropdown-item class="hasid"  id="9250c2ef72b911e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
+                    <el-dropdown-item class="hasid"  id="a5ecf87872b911e7aad70242ac120006" v-if="scope.row.cfmValue =='1'&&scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
                     <!--<el-dropdown-item class="hasid" id="b16981ef72b911e7aad70242ac120006" v-if="scope.row.verfValue ==''"><span @click="updatastatus(scope,4)">反核销</span></el-dropdown-item>-->
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -275,7 +275,7 @@
         pagesize: 10,
         qr: true,
         hx: true,
-        dataid: [],
+        dataid: []
     }
 
     },
@@ -289,6 +289,9 @@
     },
 
     methods: {
+      toDown() {
+        showorhide()
+      },
       //导出excel
       collectexport() {
         let dates = ''
@@ -432,7 +435,15 @@
         return statusMap[status]
       }
     },
+    //自定义指令
+    directives:{
+      display(el,binding) {
+        for(let i=0;i<el.children.length;i++){
+          console.log(777,el.children[i].nodeName)
+        }
 
+      }
+    }
   }
 </script>
 <style scoped lang="scss">
@@ -454,11 +465,14 @@
   .el-table td .cell {
     font-size: 12px;
   }
+  .el-dropdown-menu {
+    width:120px;
+  }
   .el-dropdown-menu li {
     font-size: 12px;
-    a {
-      display: block;
-    }
+    color:#3ec3c8;
+    width:100px;
+    text-align:center;
   }
 
   .pages {
@@ -467,17 +481,11 @@
     text-align: right;
   }
 
-  .el-dropdown {
-
-  }
-  span.hasid {
-    display:none !important;
-  }
   a {
     color: #fff;
   }
   .hasid {
-    display: none !important;
+    display: none;
   }
   #downloadd{
     display: inline-block;
