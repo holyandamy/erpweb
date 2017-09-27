@@ -15,12 +15,12 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="订单编号">
-							<el-input v-model="orderinfo.orderno" placeholder="请输入订单编号"></el-input>
+							<el-input v-model="orderinfo.code" placeholder="请输入订单编号"></el-input>
 						</el-form-item>
           </el-col>
           <el-col :span="6">
 						<el-form-item label="线路名称">
-							<el-input v-model="orderinfo.linename" placeholder="请输入线路名称"></el-input>
+							<el-input v-model="orderinfo.lineName" placeholder="请输入线路名称"></el-input>
 						</el-form-item>
           </el-col>
           <el-col :span="8">
@@ -33,7 +33,7 @@
         <el-row>
           <el-col :span="6">
             <el-form-item label="联系人" label-width="68px">
-              <el-input v-model="orderinfo.creater" placeholder="请输入联系人"></el-input>
+              <el-input v-model="orderinfo.contact" placeholder="请输入联系人"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -87,15 +87,15 @@
           </el-table-column>
           <el-table-column  label="操作" width="120">
             <template scope="scope">
-              <el-button type="text" size="small" @click="setMode('giveorderinfo')">查看</el-button>
+              <el-button type="text" size="small" @click="setMode('giveorderinfo'),setId(scope.row)">查看</el-button>
               <a href="javascript:;" >
                 <el-dropdown  @visible-change="toDown">
                     <span style="font-size: 12px;color: #3ec3c8;">
                       操作<i class="el-icon-caret-bottom el-icon--right"></i>
                     </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item > <el-button @click="confirmnamelists(scope.row,1)" type="text" size="small">确认订单</el-button></el-dropdown-item>
-                    <el-dropdown-item > <el-button @click="confirmnamelists(scope.row,2)" type="text" size="small">取消</el-button></el-dropdown-item>
+                    <el-dropdown-item > <el-button v-if="scope.row.status=='0'" @click="confirmnamelists(scope.row,1)" type="text" size="small">确认订单</el-button></el-dropdown-item>
+                    <el-dropdown-item > <el-button v-if="scope.row.status=='0' || scope.row.status=='1'" @click="confirmnamelists(scope.row,2)" type="text" size="small">取消</el-button></el-dropdown-item>
                   </el-dropdown-menu> <!--  class="hasid" id="9250c2ef72b911e7aad70242ac120006"   -->
                 </el-dropdown>
               </a>
@@ -113,10 +113,10 @@
           </el-pagination>
         </div>
 
-				<el-dialog style='text-align: left;' title="确认订单:" :visible.sync="confirmnamelist" size="tiny">
+				<el-dialog style='text-align: left;' title="确认订单:" :visible.sync="confirmnamelist" size="tiny" :close-on-click-modal="false" :show-close='false'>
           <el-form :model="form">
             <el-form-item label="设置价格：" :label-width="formLabelWidth" style='width: 80%;position: relative;' >
-              <el-input v-model="form.name" auto-complete="off" placeholder="请填写大于0的整数价格!"></el-input><span style='position: absolute;right: -20px;'>元</span>
+              <el-input v-model="form.money" auto-complete="off" placeholder="请填写大于0的整数价格!"></el-input><span style='position: absolute;right: -20px;'>元</span>
             </el-form-item>
             <el-form-item label="用车明细：" :label-width="formLabelWidth">
               <el-input
@@ -128,7 +128,7 @@
             </el-form-item>
           </el-form>
 					<span slot="footer" class="dialog-footer">
-            <el-button @click="confirmnamelist = false">取 消</el-button>
+            <el-button @click="smallSure">取 消</el-button>
             <el-button type="primary" @click="sureOrder">确 定</el-button>
           </span>
 				</el-dialog>
@@ -149,7 +149,7 @@
 
 <script>
 	import axios from 'axios';
-	import { orderlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
+	import { givelist, giveconfirm,givecancel} from '../../../common/js/config';
 	import GiveorderInfo from './giveorderinfo'
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
@@ -164,50 +164,44 @@
         isShowJs: false,
 				confirmnamelist: false,
         cancellist: false,
-        isSettle: false,
-        isSettleAll: false,
 				nameid: '',
-				finid: '',
-        settleid: '',
 				total: 0,
 				currentPage: 1,
 				pagesize: 10,
         date: '',
         orderinfo: {
-					orderno: '',
-					linename: '',
-					creater: '',
-					status: '',
-					source: '',
-          settle: '',
-          refund: '',
-					hide: false,
+          code: '',
+          lineName: '',
+          date: '',
+          contact: '',
+          status: '',
 					token: paramm.getToken(),
 					pageindex: 0,
 					pagesize: 10
 				},
 				orderLists: [],
 				optionsstate: [{
-					value: '0',
+					value: '-1',
 					label: '全部'
 				}, {
-					value: '1',
+					value: '0',
 					label: '待确认'
 				}, {
-					value: '2',
+					value: '1',
 					label: '待支付'
 				}, {
-					value: '3',
+					value: '2',
 					label: '已支付'
 				}, {
-					value: '4',
+					value: '3',
 					label: '已取消'
 				}],
 				setmode: 'orderlistmodel',
 				listid: '',
         formLabelWidth: '100px',
         form: {
-
+          money: '',
+          remark: ''
         }
 
       }
@@ -231,46 +225,63 @@
         type == 1 ? this.confirmnamelist = true : this.cancellist = true
 				this.nameid = list.id
 			},
+      smallSure(){
+        this.confirmnamelist= false
+        this.form.money=''
+        this.form.remark=''
+      },
 			//确认订单
       sureOrder() {
-        return
+        if(isNaN(this.form.money) || parseFloat(this.form.money)<0 || parseFloat(this.form.money)%1 != 0){
+          this.$message({
+            message: '请填写大于0的整数价格!',
+            type: 'warning'
+          });
+          return
+        }
         let _this = this;
 				let para = {
 					token: paramm.getToken(),
-					id: this.nameid
+					id: _this.nameid,
+          money: parseFloat(_this.form.money),
+          remark: _this.form.remark
 				}
-			ordernamelistconfirm(para).then((res) => {
+        giveconfirm(para).then((res) => {
 					if(res.data.error || res.data.err) {
 						paramm.getCode(res.data,_this)
 					} else {
             paramm.getCode(res.data,_this)
-						this.getList()
-						this.confirmnamelist = false
+            _this.getList()
+            _this.confirmnamelist = false
+            _this.form.money=''
+            _this.form.remark=''
 					}
 				})
 			},
       //取消订单
       cancelOrder() {
-        return
         let _this = this;
         let para = {
           token: paramm.getToken(),
-          id: this.finid
+          id: this.nameid
         }
-        orderfin(para).then((res) => {
+        givecancel(para).then((res) => {
           if(res.data.error || res.data.err) {
             paramm.getCode(res.data,_this)
           } else {
             paramm.getCode(res.data,_this)
-            this.getList()
-            this.confirmnamelist1 = false
+            _this.getList()
+            _this.cancellist = false
           }
         })
       },
 
 			setMode(type) {
-				this.setmode = type
+        this.setmode = type
 			},
+      setId(roww) {
+         this.listid = roww.id
+      },
 			getList() {
 				let dates = ''
 				let startday = this.date[0]
@@ -286,8 +297,7 @@
 				let page = this.orderinfo
 				page.pageindex = this.currentPage - 1
 				page.date = dates
-				orderlist(page).then((res) => {
-
+        givelist(page).then((res) => {
 					if(res.data.error == 1){
 						this.$message({
 							message: res.data.message,
@@ -313,16 +323,14 @@
       // 清空查询
       clearGetList () {
         this. orderinfo= {
-           orderno: '',
-           linename: '',
-           creater: '',
-           status: '',
-           source: '',
-           settle: '',
-           refund: '',
-           token: paramm.getToken(),
-           pageindex: 0,
-           pagesize: 10
+          code: '',
+          lineName: '',
+          date: '',
+          contact: '',
+          status: '',
+          token: paramm.getToken(),
+          pageindex: 0,
+          pagesize: 10
         };
         this.date = ''
       }

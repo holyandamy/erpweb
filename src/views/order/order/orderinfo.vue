@@ -378,7 +378,7 @@ import axios from 'axios';
 					callback(new Error('请输入正整数!'));
 				} else {
 					if(newvalue < 0) {
-						callback(new Error('必须为正数！'));
+						callback(new Error('调整金额需大于收款合计和退款合计！'));
 					} else if((newvalue < this.sumFu) || (newvalue < this.sumShou)) {
 						callback(new Error('调整金额需大于收款合计和退款合计！'));
 					} else {

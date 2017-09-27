@@ -102,7 +102,6 @@
 				<div class="page">
 					<el-pagination  @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="search.pagesize" layout="total, prev, pager, next" :total="total">
 					</el-pagination>
-
 				</div>
 			</section>
 		</div>

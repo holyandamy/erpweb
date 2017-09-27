@@ -66,6 +66,13 @@ export const orderfin = params => { return axios.post(`${base}/order/fin`, param
 export const ordersettle = params => { return axios.post(`${base}/order/settle`, params); };//订单 结算
 export const ordersettlebat = params => { return axios.post(`${base}/order/settle/batch`, params); };//订单 批量结算
 
+/*接送订单*/
+export const givelist = params => { return axios.post(`${base}/order/booking/list`, params); };//接送订单列表
+export const givedetail = params => { return axios.post(`${base}/order/booking/detail`, params); };//接送订单详情
+export const givecancel = params => { return axios.post(`${base}/order/booking/cancel`, params); };//接送订单 取消
+export const giveconfirm = params => { return axios.post(`${base}/order/booking/confirm`, params); };//接送订单 确认
+export const givesave = params => { return axios.post(`${base}/order/booking/save`, params); };//接送订单 保存
+
 
 
 //产品中心

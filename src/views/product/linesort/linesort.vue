@@ -10,7 +10,7 @@
             </el-breadcrumb>
           </el-col>
           <el-col :span="12">
-            <el-button class="defaultbutton hasid" @click="showAdd=true" id="a997d5fd735811e788410242ac120009">添加分类</el-button>
+            <el-button class="defaultbutton hasid" @click="showAdd=true" id="a997d5fd735811e788410242ac120009" size="large" type="primary">添加分类</el-button>
           </el-col>
         </el-row>
       </header>
@@ -277,8 +277,8 @@
     margin-bottom: 30px;
     padding-top: 20px;
     .defaultbutton{
-      border-color:#9ad4d6 ;
-      color: #2cb1b6;
+      /*border-color:#9ad4d6 ;*/
+      /*color: #2cb1b6;*/
       float: right;
       margin-top: -10px;
     }
