@@ -18,55 +18,55 @@
         <div class="title">
           <el-row>
             <el-col :span="12">
-              接送订单编号：{{}}
+              接送订单编号：{{backData.code || ''}}
             </el-col>
             <el-col :span="12">
-              线路订单编号：{{}}
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              人数：{{}}
-            </el-col>
-            <el-col :span="12">
-              车型：{{}}
+              线路订单编号：{{backData.lineCode || ''}}
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              联系人：{{}}
+              人数：{{backData.personnum || ''}}
             </el-col>
             <el-col :span="12">
-              手机号：{{}}
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              接送类型：{{}}
-            </el-col>
-            <el-col :span="12">
-              线路名称：{{}}
+              车型：{{backData.carTypeName || ''}}
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              下单时间：{{}}
+              联系人：{{backData.contact || ''}}
             </el-col>
             <el-col :span="12">
-              出发日期：{{}}
+              手机号：{{backData.contactmobile || ''}}
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              订单金额：{{}}
+              接送类型：{{backData.typeName || ''}}
             </el-col>
             <el-col :span="12">
-              状态：{{}}
+              线路名称：{{backData.lineName || ''}}
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              下单时间：{{backData.createtime || ''}}
+            </el-col>
+            <el-col :span="12">
+              出发日期：{{backData.usetime || ''}}
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              订单金额：{{backData.orderpay || ''}}
+            </el-col>
+            <el-col :span="12">
+              状态：{{backData.statusName || ''}}
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
-              接送描述：{{}}
+              接送描述：{{backData.remark || ''}}
             </el-col>
           </el-row>
         </div>
@@ -81,11 +81,13 @@
 	import util from '../../../common/js/util'
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
-	import { orderdetail} from '../../../common/js/config';
+	import { givedetail} from '../../../common/js/config';
 	export default {
 		props: ['listid'],
 		data() {
-			return {}
+			return {
+        backData: {}
+      }
 		},
 		created() {
 			this.getdetail()
@@ -103,14 +105,16 @@
 			},
 			//获取详情
 			getdetail() {
-        return
 			  let _this =this;
 				let para = {
 					id: this.listid,
 					token: paramm.getToken()
 				}
-				orderdetail(para).then((res) => {
-
+        givedetail(para).then((res) => {
+          if(res.data.error || res.data.err) {
+          } else {
+            _this.backData = res.data.obj
+          }
 				})
 			}
 		}

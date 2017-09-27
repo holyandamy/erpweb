@@ -211,7 +211,7 @@
 					linename: '',
 					creater: '',
 					status: '0',
-					source: '0',
+					source: '-1',
           settle: '-1',
           refund: '0',
 					hide: false,
@@ -383,7 +383,7 @@
           status: this.orderinfo.status,
           source: this.orderinfo.source,
           refund: this.orderinfo.refund,
-//          hide: this.orderinfo.hide,
+          hide: this.orderinfo.hide,
           token: paramm.getToken()
         }).then((res)=>{
           if(res.data.error || res.data.err) {
@@ -417,11 +417,8 @@
 				page.date = dates
 				orderlist(page).then((res) => {
 
-					if(res.data.error == 1){
-						this.$message({
-							message: res.data.message,
-							type: 'error'
-						});
+					if(res.data.error || res.data.err){
+
 					}else{
 						this.orderLists = res.data.obj.datas
 						this.total = Number(res.data.obj.total)
@@ -446,7 +443,7 @@
            linename: '',
            creater: '',
            status: '0',
-           source: '0',
+           source: '-1',
            settle: '-1',
            refund: '0',
            hide: false,

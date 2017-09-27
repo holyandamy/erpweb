@@ -48,7 +48,7 @@
                 <el-form   ref="visitorList" :model="visitorList"  :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;">  <!--   -->
                   <div style="width:50%;float: left;overflow:hidden">
                     <el-form-item label="客户类型：" prop="custtype" >
-                      <el-col :span="4">
+                      <el-col :span="4" style='line-height: 45px;'>
                         <el-select  v-model="visitorList.custtype">
                           <el-option label="请选择" :value=0 disabled ></el-option>
                           <el-option label="直客" :value=1 selected></el-option>
@@ -57,12 +57,12 @@
                       </el-col>
                     </el-form-item>
                     <el-form-item label="联系人：" required prop="name">
-                      <el-col :span="4">
+                      <el-col :span="4" style='line-height: 45px;'>
                         <el-input v-model="visitorList.contact" ></el-input>
                       </el-col>
                     </el-form-item>
                     <el-form-item label="公司名称：" prop="company" v-if='visitorList.custtype == 2' >
-                      <el-col :span="4">
+                      <el-col :span="4" style='line-height: 45px;'>
                         <el-input v-model="visitorList.comname" @change='getJidiaoo'></el-input>
                         <div class='phoneInp' v-if='isShowc && companyArr.length>0'>
                           <div class='ptSon' v-for='item in companyArr' @click='checkCson(item)'>{{item.companyname}}</div>
@@ -72,9 +72,9 @@
 
                   </div>
                   <div style="width:40%;float: left;border-left:1px solid rgba(153, 153, 153, 0.17);margin-top: 70px;padding-left: 20px;overflow:hidden">
-                    <el-form-item label="联系人手机：" prop="mobile" >
-                      <el-col :span="4">
-                        <el-input v-model.number="visitorList.mobile"  @change='getJidiao'></el-input>
+                    <el-form-item label="联系人手机：" prop="mobile" label-width='200px;'>
+                      <el-col :span="4" style='line-height: 45px;'>
+                        <el-input v-model.number="visitorList.mobile"  @change='getJidiao' ></el-input>
                         <div class='phoneInp' v-if='isShowp && phoneArr.length>0'>
                           <div class='ptSon' v-for='item in phoneArr' @click='checkPson(item)'>{{item.mobile}}</div>
                         </div>
@@ -82,7 +82,7 @@
                       <br>
                     </el-form-item>
                     <el-form-item label="计调：" prop="adjuster" v-if='visitorList.custtype == 2'>
-                      <el-col :span="4">
+                      <el-col :span="4" style='line-height: 45px;'>
                         <el-select  v-model="adjuster" @change='selJidiao'>
                           <el-option :label="item.realname" :key="item.id" :value='item' v-for='item in jidiaoArr' ></el-option>
                         </el-select>
@@ -91,7 +91,7 @@
                   </div>
                   <div style="width:100%;float: left;overflow:hidden">
                     <el-form-item label="备注：" prop="remark">
-                      <el-col :span="4" style="width: 100%;margin-right: 10px">
+                      <el-col :span="4" style="width: 100%;margin-right: 10px;margin-top: 26px;">
                         <el-input
                           type="textarea"
                           :autosize="{ minRows: 3, maxRows: 5}"

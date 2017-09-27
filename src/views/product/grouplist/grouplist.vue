@@ -10,7 +10,7 @@
             </el-breadcrumb>
           </el-col>
           <el-col :span="4">
-            <el-button style='float: right;  margin-top: -10px;' type="primary"  id="5c18b1d0734611e788410242ac120009" class="hasid" @click="setMode('newGroup','add')" >发团计划</el-button>
+            <el-button style='float: right;  margin-top: -10px;' size="large" type="primary"  id="5c18b1d0734611e788410242ac120009" class="hasid" @click="setMode('newGroup','add')" >发团计划</el-button>
           </el-col>
         </el-row>
       </header>
