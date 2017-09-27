@@ -5,7 +5,7 @@
         <el-button type="primary" @click="setMode('collectedit')" class="hasid" id="5e47a82072b911e7aad70242ac120006">
           收款登记
         </el-button>
-        <a id='downloadd' target='_blank'  :href='plusSrc' @click="collectexport"><el-button >导出excel</el-button></a>
+        <a id='downloadd' target='_blank'  :href='plusSrc' @click="collectexport" download="export.xls"><el-button >导出excel</el-button></a>
       </header>
       <div class="container">
         <el-form :inline="true" id="search" class="demo-form-inline" @submit.prevent="submit">
@@ -50,7 +50,7 @@
           </el-form-item>
         </el-form>
 
-        <el-table :data="tableData" v-loading="listLoading" border style="width: 100%; font-size:12px ;">
+        <el-table :data="tableData" v-loading="listLoading" border  style="width: 100%; font-size:12px ;">
           <el-table-column fixed prop="createtime" label="创建日期" width="100">
           </el-table-column>
           <el-table-column prop="orderno" label="订单编号" width="120">

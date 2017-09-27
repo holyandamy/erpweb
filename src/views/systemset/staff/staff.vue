@@ -166,7 +166,7 @@
       },
       clearGetList() {
 			  this.search = {
-          status:'',
+          status:'-1',
           name:'',
           mobile:''
         }

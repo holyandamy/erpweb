@@ -21,7 +21,7 @@
               <el-input v-model="searchList.name"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item label="游客电话号码"  style="margin-left: 10px">
+          <el-form-item label="游客手机"  style="margin-left: 10px">
             <el-col :span="4">
               <el-input v-model="searchList.mobile"></el-input>
             </el-col>
@@ -41,7 +41,7 @@
           </el-form-item>  <!-- style='margin: 0 40px 0 70px;'  -->
         </el-form>
         <el-table :data="visitorList" style="text-align: left; font-size: 12px;">
-          <el-table-column prop="code" label="游客IDs">
+          <el-table-column prop="code" label="游客ID">
           </el-table-column>
           <el-table-column prop="name" label="游客名字">
           </el-table-column>
