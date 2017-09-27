@@ -174,7 +174,7 @@
 						<!--is-disabled-->
 								<span class="el-input-number__decrease" @click="minuday"><i class="el-icon-minus"></i></span>
 								<span class="el-input-number__increase" @click="addday"><i class="el-icon-plus"></i></span>
-								<div class="el-input"><input v-model="baseForm.days" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
+								<div class="el-input"><input disabled v-model="baseForm.days" autocomplete="off" type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
 
 								</div>
 							</div>
@@ -895,6 +895,7 @@
 					this.baseForm.days -= 1
 					this.baseForm.routes.splice(index-1, 1)
 				}
+        this.routeTit.pop()
 
 			},
 			//天数增加
@@ -911,6 +912,7 @@
 					'hotel': '',
 					'remark': ''
 				})
+        this.routeTit.push('')
 
 			},
 			//早中晚

@@ -770,7 +770,7 @@
             }else {
               this.baseForm.images = this.baseImages
             }
-            if(this.baseForm.routes.length>0){
+            if(this.baseForm.routes.length>0 && this.routeTit.length>0){
               this.baseForm.routes.forEach(function (item,idx) {
                 item.titleimages = _this.routeTit[idx]
               })
@@ -807,7 +807,7 @@
 									this.$message({
 									showClose: true,
 									message: "行程标题不能为空！",
-									type: 'error'
+									type: 'warning'
 									});
 									return false
 								}
@@ -828,8 +828,8 @@
 							para.edittype = 1
 						}
 
+            console.log(11111111, para);
             linesave(para).then((res) => {
-
 							if(res.data.error || res.data.err) {
 								paramm.getCode(res.data,_this )
 							} else {
@@ -863,7 +863,8 @@
 					this.baseForm.days -= 1
 					this.baseForm.routes.splice(index-1, 1)
 				}
-
+        // 模板方式
+        if(this.baseForm.id) this.routeTit.pop()
 			},
 			//天数增加
 			addday() {
@@ -872,7 +873,6 @@
 				this.baseForm.routes.push({
 					'number': this.deafultnumber++,
 					'title': '',
-					'imglist': [],
 					'titleimages': '',
 					'isbreakfast': false,
 					'islunch': false,
@@ -881,8 +881,10 @@
 					'hotel': '',
 					'remark': ''
 				})
+        // 模板方式
+        if(this.baseForm.id) this.routeTit.push('')
 
-			},
+      },
       //获取国家列表
       getcountry(pro) {
         country(pro).then((res) => {
@@ -1018,88 +1020,6 @@
         })
       },
 
-
-
-			//获取省级列表  todo
-		/*	getprovince() {
-				let count = "fb0828b148bc48afbab8ef03c55d153b"
-				let para = {
-					id: count,
-					token: paramm.getToken()
-				}
-				province(para).then((res) => {
-					this.province = res.data.obj
-
-				})
-			},
-			//获取市列表
-			getcity(pro) {
-				city(pro).then((res) => {
-					this.city = res.data.obj
-
-
-			})
-			},
-			//获取区列表
-			getdistrict(city) {
-				district(city).then((res) => {
-					this.district = res.data.obj
-
-				})
-			},
-			//选择去程城市
-			changecityfrom(val) {
-
-			  if(val === 'pro'){
-
-		          let pro = {
-		            id: this.baseForm.fromprovinceid,
-		            token: paramm.getToken()
-		          }
-		          this.getcity(pro)
-		         if(!this.istemplate){
-
-		         	 this.baseForm.fromcityid = ''
-		          }
-
-		        }else{
-
-		          let city = {
-		            id: this.baseForm.fromcityid,
-		            token: paramm.getToken()
-		          }
-		          this.getdistrict(city)
-		          if(!this.istemplate){
-		          	this.baseForm.fromdistrictid = ''
-		          }
-
-		        }
-
-			},
-			//选择返程城市
-		      changecityback(val) {
-		        if(val === 'pro'){
-		          let pro = {
-		            id: this.baseForm.toprovinceid,
-		            token: paramm.getToken()
-		          }
-		          this.getcity(pro)
-		          if(!this.istemplate){
-		          this.baseForm.tocityid = ''
-					}
-		        }else{
-		          let city = {
-		            id: this.baseForm.tocityid,
-		            token: paramm.getToken()
-		          }
-		          this.getdistrict(city)
-		          if(!this.istemplate){
-		          	this.baseForm.todistrictid = ''
-		          }
-
-		        }
-
-		      },*/
 			//插入交通工具
 			inserttype(str,index) {
 				let listss = document.getElementsByClassName("insertinput")[index].childNodes[2]
