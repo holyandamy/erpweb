@@ -366,7 +366,7 @@
 <script>
   import {address} from '../../../common/js/address'
   import axios from 'axios';
-  import {token,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist,groupupdate,groupdetail,groupDel} from '../../../common/js/config';
+  import {token,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist,groupupdate,groupdetail,groupDel,groupexists} from '../../../common/js/config';
   import ElDialog from "../../../../node_modules/element-ui/packages/dialog/src/component";
   import paramm from '../../../common/js/getParam'
   export default {
@@ -759,9 +759,16 @@
       },
       // 弹出框确定
       checkRot () {
-        this.lineFlag = false;
-        this.routeName = this.checkItem.name;
-        this.lineid = this.checkItem.id;
+        let _this = this;
+        groupexists({token:paramm.getToken(),id:this.checkItem.id}).then((res)=>{
+          if(res.data.error || res.data.err) {
+            paramm.getCode(res.data, _this)
+          }else {
+            _this.lineFlag = false;
+            _this.routeName = _this.checkItem.name;
+            _this.lineid = _this.checkItem.id;
+          }
+        })
       },
       getcategoryall(){
         this.lineFlag = true;
