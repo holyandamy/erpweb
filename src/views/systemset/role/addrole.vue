@@ -15,8 +15,8 @@
       <div class="role-name"><label><span style="color: red">*</span>角色名称</label>
         <el-input v-model="roleName" class="role-name-input" placeholder="请输入内容"></el-input>
       </div>
-      <div class="bigItem" v-for="value in roleMap.childs">
 
+      <div class="bigItem" v-for="value in roleMap.childs">
         <div class="bigTitle"><el-checkbox v-model="value.status" @change="clickChangeChildState(value)" >{{value.authname}}</el-checkbox></div>
         <div class="add-role-item " v-for="sValue in value.childs">
           <div class="left"><el-checkbox :disabled="!value.status"  v-model="sValue.status" @change="clickChangeChildState(sValue)">{{sValue.authname}}</el-checkbox></div>

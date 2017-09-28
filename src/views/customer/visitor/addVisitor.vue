@@ -286,7 +286,6 @@
             this.visitorList.countryid = '100001'
             //成功时的回调
             //市的展示
-            console.log('cityid',this.visitorList.cityid);
             let province = {
               id: this.visitorList.provinceid,
               token: paramm.getToken()
@@ -332,14 +331,6 @@
                 return false
               }*/
               custupdate(newPostDate).then((backData) => {
-                console.log(newPostDate)
-                /*if(newPostDate.cityid === '' || newPostDate.provinceid === '') {
-                  this.$message({
-                    message: '所在城市不能为空',
-                    type: 'warning'
-                  });
-                  return false
-                }*/
                 if (backData.data.error != 0 || backData.data.err) {
                   paramm.getCode(backData.data, _this)
                 }

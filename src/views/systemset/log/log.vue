@@ -13,9 +13,9 @@
 				</el-row>
 			</header>
 			<el-form :inline="true" :model="formInline" class="demo-form-inline hasid" id="54bfe60304f84742bd37e2d93c3924da" style="float:left;text-align:left;padding-left:30px">
-				<el-form-item label="操作模块">
+				<!--<el-form-item label="操作模块">
 					<el-input v-model="formInline.moudle" placeholder="操作模块"></el-input>
-				</el-form-item>
+				</el-form-item>  操作模块去掉（9.28） -->
 				<el-form-item label="操作时间">
 					<el-date-picker v-model="formInline.date" type="daterange" placeholder="选择日期范围">
 					</el-date-picker>
