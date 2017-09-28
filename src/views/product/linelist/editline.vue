@@ -894,15 +894,18 @@
 				} else {
 					this.baseForm.days -= 1
 					this.baseForm.routes.splice(index-1, 1)
+          this.routeTit.pop()
 				}
-        this.routeTit.pop()
+
 
 			},
 			//天数增加
 			addday() {
+        let _this = this;
 				this.baseForm.days += 1
 				this.baseForm.routes.push({
-					'number': this.deafultnumber++,
+//					'number': this.deafultnumber++,
+					'number': _this.baseForm.days,
 					'title': '',
 					'titleimages': '',
 					'isbreakfast': false,

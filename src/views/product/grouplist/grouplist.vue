@@ -102,8 +102,8 @@
 									<span class="el-dropdown-link" style='color: #3ec3c8;'>
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item> <el-button v-if="scope.row.approveName=='待审批'" type="text" size="small" @click='setAppId(scope.row.id)'>审核</el-button></el-dropdown-item>
+                  <el-dropdown-menu slot="dropdown"  style='text-align: center;font-size: 20px;font-weight: bold;'>
+                    <el-dropdown-item> <el-button v-if="scope.row.approveName=='待审批'" type="text" size="small"  @click='setAppId(scope.row.id)' >审核</el-button></el-dropdown-item>
                     <el-dropdown-item> <el-button v-if="scope.row.isorder && scope.row.status =='待发团'&& (scope.row.approveName =='审批通过' || scope.row.approveName =='无需审批')" class="hasid" id="521410f9734611e788410242ac120009" @click="setMode('groupinfo'),editorFn(scope.row,'groupinfo')" type="text" size="small" >下单</el-button></el-dropdown-item>
                     <el-dropdown-item> <el-button class="hasid" id="6f6276e6734611e788410242ac120009" @click="setMode('newGroup','edit'),editorFn(scope.row,'newGroup')" type="text" size="small">编辑</el-button>  <!-- editorFn(scope.row)  --></el-dropdown-item>
                     <el-dropdown-item> <el-button  @click="setMode('groupnamelist'),editorFn(scope.row,'groupnamelist')" type="text" size="small">出团名单</el-button></el-dropdown-item>
@@ -126,7 +126,7 @@
         </div>
       </section>
       <el-dialog title="" :visible.sync="dialogFormVisible" size='tiny' :close-on-click-modal=false>
-        <el-form :model="form">
+        <el-form :model="form" :rules="rules">
           <el-form-item label="线路审核：" :label-width="formLabelWidth" style='text-align: left;'>
             <el-radio class="radio" v-model="radio" label="1">审核通过</el-radio>
             <el-radio class="radio" v-model="radio" label="2">拒绝</el-radio>
@@ -178,6 +178,13 @@
     },
     data() {
       return {
+        rules: {
+          remark: [
+//            { required: true, message: '请输入活动名称', trigger: 'blur' },
+            {min: 0, max: 120, message: '不能超过120字!', trigger: 'blur' }
+          ]
+
+        },
         tdidd: '',
         date: '',
         searchList:{

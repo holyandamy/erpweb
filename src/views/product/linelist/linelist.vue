@@ -133,38 +133,12 @@
 		<EditInfo v-else-if="modeType == 'editline'" @getlinelist="getlinelist" :lineid = 'lineid'  :scope = "scope"  @setMode="setMode"></EditInfo>
 		<AddIine v-else="modeType == 'addline'" @getlinelist="getlinelist"  @setMode="setMode"></AddIine>
 
-		<!--<el-dialog title="线路审核" size="tiny" :visible.sync="examinevisiable">
-			<el-form label-width="80px" :model="examineform" style="text-align: left;">
-				<el-form-item label="状态" prop="approve">
-					<el-radio-group v-model="examineform.approve">
-						<el-radio label="true">审核通过</el-radio>
-						<el-radio label="false">拒绝</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="备注" prop="resource">
-					<el-row>
-						<el-col :span="20">
-							  <el-input type="textarea" v-model="examineform.remark"></el-input>
-							 </el-col>
-					</el-row>
-				</el-form-item>
-
-			</el-form>
-
-			<span slot="footer" class="dialog-footer">
-    <el-button @click="examinevisiable = false">取 消</el-button>
-    <el-button type="primary" @click="examineinfo">确 定</el-button>
-  </span>
-		</el-dialog>-->
-
-
 		<el-dialog title="线路置顶" size="lastiny" :visible.sync="topvisiable">
-
 			<span>您确定要置顶该线路吗？</span>
 			<span slot="footer" class="dialog-footer">
-    <el-button @click="topvisiable = false">取 消</el-button>
-    <el-button type="primary" @click="comfirmtop">确 定</el-button>
-  </span>
+       <el-button @click="topvisiable = false">取 消</el-button>
+       <el-button type="primary" @click="comfirmtop">确 定</el-button>
+      </span>
 		</el-dialog>
 	</div>
 

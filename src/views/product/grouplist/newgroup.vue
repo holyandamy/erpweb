@@ -347,8 +347,11 @@
         <el-form-item>
           <el-button type="primary" @click="queryLine()">查询</el-button>
         </el-form-item>
-        <el-form-item label="">
-          <el-radio-group v-model="checkItem" style='text-align: left;padding: 0 50px;' v-if='lineList.length>0'>  <!--  v-if='lineList.length>0'  -->
+        <el-form-item label="" >
+          <el-radio-group v-model="checkItem" style='width: 100%;text-align: left;padding: 0 50px;' v-if='lineList.length>0 && lineList.length!=2'>  <!--  v-if='lineList.length>0'  -->
+            <el-radio style='width: 50%;margin: 0;' :label="item" :key="item.name" v-for="item in lineList">{{item.name.length>20?item.name.substring(0,20)+'...':item.name}}</el-radio>
+          </el-radio-group>
+          <el-radio-group v-model="checkItem" style='width: 100%;padding-right: 150px;' v-if='lineList.length==2'>  <!--  v-if='lineList.length>0'  -->
             <el-radio style='width: 50%;margin: 0;' :label="item" :key="item.name" v-for="item in lineList">{{item.name.length>20?item.name.substring(0,20)+'...':item.name}}</el-radio>
           </el-radio-group>
           <div v-if='showNoLine && lineList.length == 0'>
@@ -562,9 +565,11 @@
           })
           res.data.obj.details.forEach(function (item,idx) {
             _this.surpluss = item.surplus;
-            _this.dayss = item.deadline;
+//            _this.dayss = item.deadline;
             _this.getTimeArr.push(item.endtime);
           })
+          _this.dayss = res.data.obj.days;
+
         })
       },
       getPingtai () {
@@ -651,6 +656,8 @@
               paramm.getCode(res.data,_this)
               _this.checkArr.splice(idx, 1)
               _this.startTimeArr.splice(idx, 1)
+
+              _this.getTimeArr.splice(idx, 1)
               _this.TemStArr = []
             }
           })
@@ -727,6 +734,7 @@
             sit: 0,
             isenable: true
           })
+        console.log(444,'this.startTimeArr', this.startTimeArr);
       },
       //获取线路列表
       queryLine(){
@@ -864,12 +872,14 @@
         this.pingtai.forEach(function (item,idx) {
           platforms.push({platform: item.platform, isenable: false,id: _this.platformId[idx]})
         })
+
         // 结束时间
         if(_this.operationType.type == 'add'){
           _this.startTimeArr.forEach(function (item) {
             _this.TemStArr.push(_this.getDateEnd(item, _this.checkItem.days,true))
           })
         }
+
         if(_this.operationType.type == 'edit'){
           _this.startTimeArr.forEach(function (item) {
             _this.TemStArr.push(_this.getDateEnd(item, _this.dayss,true))
