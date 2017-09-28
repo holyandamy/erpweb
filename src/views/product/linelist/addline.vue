@@ -358,9 +358,9 @@
 				</el-form>
 
 				<span slot="footer" class="dialog-footer">
-    <el-button @click="templatevisiable = false">取 消</el-button>
-    <el-button type="primary" @click="confirmtemplate">确 定</el-button>
-  </span>
+         <el-button @click="templatevisiable = false">取 消</el-button>
+         <el-button type="primary" @click="confirmtemplate">确 定</el-button>
+        </span>
 			</el-dialog>
 		</section>
 	</div>
@@ -378,7 +378,7 @@
 			UE,
 			ImgLoad
 		},
-		props: ['scope'],
+//		props: ['scope'],
 		data() {
 			//收客类型
 			var isadult = (rule, value, callback) => {
@@ -871,7 +871,8 @@
 				this.baseFormrules
 				this.baseForm.days += 1
 				this.baseForm.routes.push({
-					'number': this.deafultnumber++,
+//					'number': this.deafultnumber++,
+					'number': this.baseForm.days,
 					'title': '',
 					'titleimages': '',
 					'isbreakfast': false,
@@ -928,9 +929,11 @@
         }
         this.getprovince(pro)
         if(this.flag){
+          console.log(111);
           this.baseForm.fromcityid = ''
           this.baseForm.fromdistrictid = ''
         }else {
+          console.log(222);
           this.flag=true
         }
       },
@@ -942,8 +945,10 @@
         }
         this.getcity(pro)
         if(this.flag1){
+          console.log(33);
           this.baseForm.fromdistrictid = ''
         }else {
+          console.log(44);
           this.flag1=true
         }
       },
@@ -1040,6 +1045,12 @@
 			},
 			//确认选择模板
 			confirmtemplate() {
+        this.flagLine= false;
+        this.flag= false;
+        this.flag1= false;
+        this.flagTo= false;
+        this.flagTo1= false;
+
 			  let _this =this;
 				this.templatevisiable = false
 				let para = {
@@ -1054,7 +1065,7 @@
               _this.routeTit.push(item.titleimages)
             })
           }
-          this.scope = res.data.obj
+//          this.scope = res.data.obj
 					this.istemplate = true
 					this.baseForm.checkpeople = []
 					this.baseForm.checkpeople.push(this.baseForm.isadult,this.baseForm.ischild,this.baseForm.isbaby)

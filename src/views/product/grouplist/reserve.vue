@@ -30,7 +30,7 @@
             </el-col>
             <div style="clear: both;"></div>
             <p>
-              <span>集合通知：</span>{{detail.notify}} <br>
+              <span>集合通知：</span>{{detailOut.notify}} <br>
               <span>操作人：</span>
             </p>
           </el-row>
@@ -90,8 +90,8 @@
                     </el-form-item>
                   </div>
                   <div style="width:100%;float: left;overflow:hidden">
-                    <el-form-item label="备注：" prop="remark">
-                      <el-col :span="4" style="width: 100%;margin-right: 10px;margin-top: 26px;">
+                    <el-form-item label="备注：" prop="remark" style="margin-top: 26px;">
+                      <el-col :span="4" style="width: 100%;margin-right: 10px;">
                         <el-input
                           type="textarea"
                           :autosize="{ minRows: 3, maxRows: 5}"

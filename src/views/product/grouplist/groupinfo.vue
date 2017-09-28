@@ -43,7 +43,7 @@
               </el-col>
               <div style="clear: both;"></div>
               <p>
-                <span>集合通知：</span>{{detail.notify}}
+                <span>集合通知：</span>{{detailOut.notify}}
               </p>
             </el-row>
             <el-table :data="groupList"
@@ -105,10 +105,9 @@
                   <!--去程交通：1飞机，2动车，3火车，4高铁，5大巴，6轮船-->
                 </ul>
               </el-col>
-              <p>
-                <span style="float: left;">线路说明：</span>
-              <pre><div class="xc" style="float: left; line-height: 26px;">{{detail.remark}}</div></pre>
-              </p>
+              <el-col :span="24">
+                <span style="float: left;">线路说明：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><div class="xc" style="float: left; line-height: 55px;">{{detail.remark}}</div>
+              </el-col>
               <div style="clear: both;"></div>
               <p>
                 <span>集合地点：</span>{{detail.station}}
