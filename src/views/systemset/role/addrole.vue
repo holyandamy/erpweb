@@ -13,7 +13,7 @@
     </header>
     <section class="section">
       <div class="role-name"><label><span style="color: red">*</span>角色名称</label>
-        <el-input v-model="roleName" class="role-name-input" placeholder="请输入内容" ></el-input>
+        <el-input v-model="roleName" class="role-name-input" placeholder="请输入内容"></el-input>
       </div>
       <div class="bigItem" v-for="value in roleMap.childs">
 
@@ -51,11 +51,10 @@
 
       <div class="remark">
         <label class=" remark-lable">备注  </label>
-
         <el-input
           type="textarea"
           :rows="3"
-          placeholder="请输入内容"
+          placeholder="请输入内容（120字以内)"
           v-model="remarkInfo">
         </el-input>
       </div>
@@ -207,7 +206,20 @@
           this.$message.error('请输入角色名！');
           return
         }
-
+        if(this.roleName.length > 15) {
+          this.$message({
+            message:'角色名称在15字以内',
+            type:'warning'
+          })
+          return false
+        }
+        if(this.remarkInfo.length > 120) {
+          this.$message({
+            message:'备注在120字以内',
+            type:'warning'
+          })
+          return false
+        }
         let newAuths=this.getData(this.roleMap).split(',')
         newAuths.pop();
         if( this.$parent.operationType.type!='edit'){

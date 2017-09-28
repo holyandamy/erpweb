@@ -5,7 +5,7 @@
         <el-button type="primary" @click="setMode('collectedit')" class="hasid" id="fd05293f72b911e7aad70242ac120006">
           付款登记
         </el-button>
-        <a target='_blank' :href="plusSrc" @click="payexport"><el-button>导出excel</el-button></a>
+        <a target='_blank' :href="plusSrc" @click="payexport" download="export.xls"><el-button>导出excel</el-button></a>
       </header>
       <div class="container">
         <el-form :inline="true" id="search" class="demo-form-inline" @submit.prevent="submit">

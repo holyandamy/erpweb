@@ -286,7 +286,7 @@
             this.visitorList.countryid = '100001'
             //成功时的回调
             //市的展示
-            console.log(this.visitorList.provinceid);
+            console.log('cityid',this.visitorList.cityid);
             let province = {
               id: this.visitorList.provinceid,
               token: paramm.getToken()
