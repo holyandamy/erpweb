@@ -738,7 +738,9 @@
 			},
 			//普通方式录入
 			basetype(){
-				this.baseForm.routes[0].content = ""
+        console.log(555, this.oldday);
+
+        this.baseForm.routes[0].content = ""
 				for(let i = 0 ; i <this.baseForm.routes.length;i++){
 					this.baseForm.days = i+1
 				}
@@ -746,7 +748,8 @@
 			},
 			//自定义录入
 			selftype(){
-				this.baseForm.days = this.oldday
+        console.log(6666, this.oldday);
+        this.baseForm.days = this.oldday
 			},
 			//重置表单
 			resetForm(formName) {

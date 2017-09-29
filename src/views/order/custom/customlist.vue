@@ -43,31 +43,31 @@
             width="100"
             label="序号">
           </el-table-column>
-          <el-table-column prop="platformname" label="姓名">
+          <el-table-column prop="name" label="姓名">
           </el-table-column>
-          <el-table-column prop="platformname" label="出发时间">
+          <el-table-column prop="starttime" label="出发时间">
           </el-table-column>
-          <el-table-column prop="platformname" label="目的地">
+          <el-table-column prop="dest" label="目的地">
           </el-table-column>
-          <el-table-column prop="platformname" label="人数">
+          <el-table-column prop="personnum" label="人数">
           </el-table-column>
-          <el-table-column prop="platformname" label="联系电话">
+          <el-table-column prop="mobile" label="联系电话">
           </el-table-column>
-          <el-table-column prop="platformname" label="电子邮箱">
+          <el-table-column prop="email" label="电子邮箱">
           </el-table-column>
-          <el-table-column prop="platformname" label="状态">
+          <el-table-column prop="statusName" label="状态">
           </el-table-column>
           <el-table-column  label="操作" width="120">
             <template scope="scope">
-              <el-button type="text" size="small"  @click="setMode('custominfo','info')">查看</el-button>
+              <el-button type="text" size="small"  @click="setMode('custominfo','info'),passinfo(scope.row)">查看</el-button>
               <a href="javascript:;" >
                 <el-dropdown  @visible-change="toDown">
                     <span style="font-size: 12px;color: #3ec3c8;">
                       操作<i class="el-icon-caret-bottom el-icon--right"></i>
                     </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item > <el-button type="text" size="small"  @click="setMode('custominfo','edit')">完善需求</el-button></el-dropdown-item>
-                    <el-dropdown-item > <el-button @click="confirmnamelists(scope.row,2)" type="text" size="small">取消</el-button></el-dropdown-item>
+                    <el-dropdown-item > <el-button v-if="scope.row.status==0" type="text" size="small"  @click="setMode('custominfo','edit'),passinfo(scope.row)">完善需求</el-button></el-dropdown-item>
+                    <el-dropdown-item > <el-button v-if="scope.row.status==0 || scope.row.status==1"  @click="confirmnamelists(scope.row)" type="text" size="small">取消</el-button></el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </a>
@@ -79,7 +79,7 @@
           <el-pagination
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage"
-            :page-size="pagesize"
+            :page-size="pageSize"
             layout="total, prev, pager, next"
             :total="total">
           </el-pagination>
@@ -102,7 +102,7 @@
 
 <script>
   import axios from 'axios';
-  import { orderlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
+  import { customlist,customcancel} from '../../../common/js/config';
   import Custominfo from './custominfo'
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
@@ -124,33 +124,26 @@
         settleid: '',
         total: 0,
         currentPage: 1,
-        pagesize: 10,
+        pageSize: 10,
         date: '',
         orderinfo: {
-          orderno: '',
-          linename: '',
-          creater: '',
           status: '',
-          source: '',
-          settle: '',
-          refund: '',
-          hide: false,
           token: paramm.getToken(),
-          pageindex: 0,
-          pagesize: 10
+          pageIndex: 0,
+          pageSize: 10
         },
         orderLists: [],
         optionsstate: [{
-          value: '0',
+          value: '-1',
           label: '全部'
         }, {
-          value: '1',
+          value: '0',
           label: '待确认'
         }, {
-          value: '2',
+          value: '1',
           label: '已确认'
         }, {
-          value: '3',
+          value: '2',
           label: '已取消'
         }],
         setmode: 'orderlistmodel',
@@ -177,25 +170,24 @@
         showorhide()
       },
       //点击显示弹窗
-      confirmnamelists(list,type) {
-        type == 1 ? this.confirmnamelist = true : this.cancellist = true
+      confirmnamelists(list) {
+        this.cancellist = true
         this.nameid = list.id
       },
       //取消订单
       cancelOrder() {
-        return
         let _this = this;
         let para = {
           token: paramm.getToken(),
-          id: this.finid
+          id: this.nameid
         }
-        orderfin(para).then((res) => {
+        customcancel(para).then((res) => {
           if(res.data.error || res.data.err) {
             paramm.getCode(res.data,_this)
           } else {
             paramm.getCode(res.data,_this)
             this.getList()
-            this.confirmnamelist1 = false
+            this.cancellist = false
           }
         })
       },
@@ -205,6 +197,7 @@
         this.typpe = typpe
       },
       getList() {
+        let _this= this;
         let dates = ''
         let startday = this.date[0]
         let endday = this.date[1]
@@ -217,15 +210,11 @@
         }
 
         let page = this.orderinfo
-        page.pageindex = this.currentPage - 1
+        page.pageIndex = this.currentPage - 1
         page.date = dates
-        orderlist(page).then((res) => {
-
-          if(res.data.error == 1){
-            this.$message({
-              message: res.data.message,
-              type: 'error'
-            });
+        customlist(page).then((res) => {
+          if(res.data.error || res.data.err){
+            paramm.getCode(res.data,_this)
           }else{
             this.orderLists = res.data.obj.datas
             this.total = Number(res.data.obj.total)
@@ -246,16 +235,10 @@
       // 清空查询
       clearGetList () {
         this. orderinfo= {
-          orderno: '',
-          linename: '',
-          creater: '',
           status: '',
-          source: '',
-          settle: '',
-          refund: '',
           token: paramm.getToken(),
-          pageindex: 0,
-          pagesize: 10
+          pageIndex: 0,
+          pageSize: 10
         };
         this.date = ''
       }

@@ -18,55 +18,55 @@
          <div class="title">
            <el-row>
              <el-col :span="12">
-               姓名：{{}}
+               姓名：{{detail.name}}
              </el-col>
              <el-col :span="12">
-               电话号码：{{}}
-             </el-col>
-           </el-row>
-           <el-row>
-             <el-col :span="12">
-               人数：{{}}
-             </el-col>
-             <el-col :span="12">
-               目的地：{{}}
+               电话号码：{{detail.mobile}}
              </el-col>
            </el-row>
            <el-row>
              <el-col :span="12">
-               出发时间：{{}}
+               人数：{{detail.personnum}}
              </el-col>
              <el-col :span="12">
-               电子邮箱：{{}}
+               目的地：{{detail.dest}}
+             </el-col>
+           </el-row>
+           <el-row>
+             <el-col :span="12">
+               出发时间：{{detail.starttime}}
+             </el-col>
+             <el-col :span="12">
+               电子邮箱：{{detail.email}}
              </el-col>
            </el-row>
          </div>
-        <el-form ref="formNeed" :model="formNeed" label-width="100px" label-position='left' class='forn-ipt'>
+        <el-form ref="detail" :model="detail" label-width="100px" label-position='left' class='forn-ipt'>
           <el-row>
             <el-col :span="12">
               <el-form-item label="行程需求：">
-                <el-input v-model="formNeed.name" :disabled="typpe=='info'"></el-input>
+                <el-input v-model="detail.route" :disabled="typpe=='info'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="交通需求：">
-                <el-input v-model="formNeed.sex" :disabled="typpe=='info'"></el-input>
+                <el-input v-model="detail.traffic" :disabled="typpe=='info'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="酒店需求：">
-                <el-input v-model="formNeed.name" :disabled="typpe=='info'"></el-input>
+                <el-input v-model="detail.hotel" :disabled="typpe=='info'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="接送需求：">
-                <el-input v-model="formNeed.name" :disabled="typpe=='info'"></el-input>
+                <el-input v-model="detail.booking" :disabled="typpe=='info'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -74,28 +74,28 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="景点需求：">
-                <el-input v-model="formNeed.name" :disabled="typpe=='info'"></el-input>
+                <el-input v-model="detail.spot" :disabled="typpe=='info'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="签证需求：">
-                <el-input v-model="formNeed.name" :disabled="typpe=='info'"></el-input>
+                <el-input v-model="detail.visa" :disabled="typpe=='info'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="保险需求：">
-                <el-input v-model="formNeed.name" :disabled="typpe=='info'"></el-input>
+                <el-input v-model="detail.insurance" :disabled="typpe=='info'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="导游需求：">
-                <el-input v-model="formNeed.name" :disabled="typpe=='info'"></el-input>
+                <el-input v-model="detail.tour" :disabled="typpe=='info'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -107,7 +107,7 @@
                   type="textarea"
                   :rows="5"
 
-                  v-model="formNeed.remark">
+                  v-model="detail.others">
                 </el-input> <!-- placeholder="请填写备注"   -->
               </el-form-item>
             </el-col>
@@ -135,13 +135,13 @@
 	import util from '../../../common/js/util'
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
-	import { orderdetail } from '../../../common/js/config';
+	import { customdetail,customconfirm,customupdate,    orderdetail } from '../../../common/js/config';
 	export default {
 		props: ['typpe','listid'],
 		data() {
 		  return {
         confirmnamelist: false,
-        formNeed: {
+        detail: {
           name: ''
         }
       }
@@ -158,20 +158,27 @@
       //获取详情
       getdetail() {
         console.log(1111, this.typpe);
-        return
-
         let _this =this;
         let para = {
           id: this.listid,
           token: paramm.getToken()
         }
-        orderdetail(para).then((res) => {
+        customdetail(para).then((res) => {
           this.detail = res.data.obj
 
         })
       },
       confirmvisitor(){
-
+        let _this= this;
+        customconfirm({id:this.detail.id,token:paramm.getToken()}).then((res) => {
+          if(res.data.error || res.data.err) {
+            paramm.getCode(res.data,_this)
+          } else {
+            paramm.getCode(res.data,_this)
+            _this.getdetail()
+            _this.confirmnamelist = false
+          }
+        })
       },
 			//返回列表
 			handleHide: function() {
@@ -206,14 +213,21 @@
 			},
 			//保存
 			save() {
-        return
-
 				let _this = this
 				let para = {
 					token: paramm.getToken(),
-					id: this.detail.id
+          route: this.detail.route,
+          traffic: this.detail.traffic,
+          hotel: this.detail.hotel,
+          booking: this.detail.booking,
+          spot: this.detail.spot,
+          visa: this.detail.visa,
+          insurance: this.detail.insurance,
+          tour: this.detail.tour,
+          others: this.detail.others,
+          id: this.detail.id
 				}
-				ordercancel(para).then((res) => {
+        customupdate(para).then((res) => {
 					if(res.data.error == 1 || res.data.err) {
 						paramm.getCode(res.data, _this)
 					} else {

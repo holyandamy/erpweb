@@ -61,7 +61,7 @@
                         <el-input v-model="visitorList.contact" ></el-input>
                       </el-col>
                     </el-form-item>
-                    <el-form-item label="公司名称：" prop="company" v-if='visitorList.custtype == 2' >
+                    <el-form-item label="公司名称：" prop="company" v-if='visitorList.custtype == 2' required>
                       <el-col :span="4" style='line-height: 45px;'>
                         <el-input v-model="visitorList.comname" @change='getJidiaoo'></el-input>
                         <div class='phoneInp' v-if='isShowc && companyArr.length>0'>
@@ -344,6 +344,13 @@
           });
           return
         }
+        if(this.visitorList.custtype == 2&&this.visitorList.comname == ''){
+          _this.$message({
+            message: '公司名称未填写',
+            type: 'warning'
+          });
+          return
+        }
         if(this.visitorList.remark.length > 120){
           _this.$message({
             message: '备注不能超过120字',
@@ -528,6 +535,11 @@
         this.babyArr.forEach(function (item) {
           _this.checkArr.push(item)
         })
+        // 算总价格
+        this.adultMoney = (this.adultArr.length * this.detailOut.sltaduilt).toFixed(2) || 0;
+        this.childMoney = (this.childArr.length * this.detailOut.sltchild).toFixed(2) || 0;
+        this.babyMoney = (this.babyArr.length * this.detailOut.sltbaby).toFixed(2) || 0;
+        this.allMoney = (parseFloat(this.adultMoney) + parseFloat(this.childMoney) + parseFloat(this.babyMoney) + this.count * this.detailOut.sltroom).toFixed(2)
       },
       //删除游客
       deletepeople(typee,idx) {
@@ -539,6 +551,11 @@
           this.babyArr.splice(idx-(this.adultArr.length+this.childArr.length), 1)
         }
         this.checkArr.splice(idx, 1)
+        // 算总价格
+        this.adultMoney = (this.adultArr.length * this.detailOut.sltaduilt).toFixed(2) || 0;
+        this.childMoney = (this.childArr.length * this.detailOut.sltchild).toFixed(2) || 0;
+        this.babyMoney = (this.babyArr.length * this.detailOut.sltbaby).toFixed(2) || 0;
+        this.allMoney = (parseFloat(this.adultMoney) + parseFloat(this.childMoney) + parseFloat(this.babyMoney) + this.count * this.detailOut.sltroom).toFixed(2)
       },
       // 获取详情
       getlineinfo(){

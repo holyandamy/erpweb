@@ -599,7 +599,7 @@
           this.baseImages = res.data.obj.images
           if(res.data.obj.routes.length>0){
             res.data.obj.routes.forEach(function (item) {
-              _this.routeTit.push(item.titleimages)
+              typeof (item.titleimages) =='string'?_this.routeTit.push(item.titleimages):_this.routeTit.push("")
             })
           }
           res.data.obj.trafficgo == 0 ? this.baseForm.trafficgo = "" : this.baseForm.trafficgo = res.data.obj.trafficgo
@@ -622,11 +622,13 @@
 					this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0){
 						this.editor = false
-
+            this.menucheck1 = true
+            this.menucheck2 = false
 					}else{
 						this.editor = true
 						this.editorhtml = res.data.obj.routes[0].content
-
+            this.menucheck1 = false
+            this.menucheck2 = true
 					}
 
 //				if(this.paras!=''){
@@ -822,7 +824,7 @@
 							para.edittype = 0
 							for(let i = 0 ; i<para.routes.length ;i++){
 
-								if(para.routes[i].title == ""){
+								if(para.routes[i].title == "" || typeof(para.routes[i].title)=="object"){
 									this.$message({
 									showClose: true,
 									message: "行程标题不能为空！",
@@ -830,7 +832,7 @@
 									});
 									return false
 								}
-                if(para.routes[i].content == ""){
+                if(para.routes[i].content == ""|| typeof(para.routes[i].title)=="object"){
                   this.$message({
                     showClose: true,
                     message: "行程不能为空！",
@@ -930,15 +932,29 @@
 			},
 			//普通方式录入
 			basetype(){
-				this.baseForm.routes[0].content = ""
-				for(let i = 0 ; i <this.baseForm.routes.length;i++){
-					this.baseForm.days = i+1
-				}
-
+//				this.baseForm.routes[0].content = ""
+//				for(let i = 0 ; i <this.baseForm.routes.length;i++){
+//					this.baseForm.days = i+1
+//				}
+        this.baseForm.days=1
+        this.baseForm.routes.forEach(function (item) {
+          item.content = ''
+          item.hotel = ''
+          item.remark = ''
+          item.number = 1
+        })
 			},
 			//自定义录入
 			selftype(){
-				this.baseForm.days = this.oldday
+        let _this =this;
+        this.baseForm.days = this.oldday
+        this.baseForm.routes.forEach(function (item,idx) {
+          item.content = ''
+          item.hotel = ''
+          item.remark = ''
+          item.title = ''
+          if(idx>1) _this.baseForm.routes.splice(1)
+        })
 			},
       //获取国家列表
       getcountry(pro) {
