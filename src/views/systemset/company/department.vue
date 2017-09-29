@@ -197,6 +197,20 @@
 			add() {
 			  let _this = this;
 				let para = this.adddatas
+        if(this.adddatas.name.trim() === '') {
+				  this.$message({
+            message:'部门名称不能为空',
+            type:'warning'
+          })
+          return false
+        }
+        if(this.adddatas.name.length > 50) {
+          this.$message({
+            message:'内容不能超过50个字',
+            type:'warning'
+          })
+          return false
+        }
 				adddep(para).then((res) => {
           if(res.data.error!=0 || res.data.err){
             paramm.getCode(res.data, _this)
@@ -234,7 +248,22 @@
 			addsubordinate() {
 			  let _this = this;
 				let para = this.subordinates
+        if(this.subordinates.name.trim() === ''){
+				  this.$message({
+            message:'下级名称不能为空',
+            type:'warning'
+          })
+          return false
+        }
+        if(this.subordinates.name.length > 50) {
+          this.$message({
+            message:'内容不能超过50个字',
+            type:'warning'
+          })
+          return false
+        }
 				adddep(para).then((res) => {
+				  console.log(777,para)
           if(res.data.error!=0 || res.data.err){
             paramm.getCode(res.data, _this)
           }
@@ -279,6 +308,20 @@
 			editpartmentconfirm() {
 			  let _this = this;
 				let para = this.editpartmentmodel
+        if(this.editpartmentmodel.name.trim() === '') {
+				  this.$message({
+            message:'编辑内容不能为空',
+            type:'warning'
+          })
+          return false
+        }
+        if(this.editpartmentmodel.name.length > 50) {
+          this.$message({
+            message:'内容不能超过50个字',
+            type:'warning'
+          })
+          return false
+        }
 				editdep(para).then((res) => {
           if(res.data.error == 1 || res.data.err){
             paramm.getCode(res.data,_this)
