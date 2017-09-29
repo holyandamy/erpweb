@@ -42,7 +42,7 @@
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-col :span="10">
-            <el-input type="textarea" v-model="collectForm.remark"></el-input>
+            <el-input type="textarea" v-model="collectForm.remark" placeholder="请输入内容（120字以内）"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="付款明细" prop="detail">
@@ -324,6 +324,21 @@
             console.log(1111, this.collectForm)
             for(let i =0;i<this.collectForm.detail.length;i++){
               para.detail[i].linetime = (!para.detail[i].linetime || para.detail[i].linetime == '') ? '' : util.formatDate.format(new Date(para.detail[i].linetime), 'yyyy-MM-dd');
+            }
+            //对付款单位和备注进行字数
+            if(this.collectForm.companyname.length > 50 ){
+              this.$message({
+                message:'收款单位名称在50字以内',
+                type:'warning'
+              })
+              return false
+            }
+            if(this.collectForm.remark.length > 120) {
+              this.$message({
+                message:'备注在120字以内',
+                type:'warning'
+              })
+              return false
             }
             paysave(para).then((res) => {
               if(res.data.error!=0 || res.data.err){
