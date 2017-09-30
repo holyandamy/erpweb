@@ -38,9 +38,9 @@
         </el-pagination>
 
       </div>
-      <!--编辑-->
+      <!--编辑--> <!--对开户行 开户名 账号进行限制-->
       <el-dialog title="编辑" size="tiny" v-model="showFormVisible" :close-on-click-modal="false">
-        <el-form :model="editbank" label-width="80px" ref="editbank" style="text-align: left;">
+        <el-form :model="editbank" :rules="editbankrules" label-width="80px" ref="editbank" style="text-align: left;">
           <el-form-item label="开户行" prop="bankName">
             <el-input v-model="editbank.bankName"></el-input>
           </el-form-item>
@@ -180,6 +180,45 @@
             trigger: 'change'
           }]
 
+        },
+        editbankrules:{
+          bankName: [{
+            required: true,
+            message: '请输入开户行',
+            trigger: 'blur'
+          },
+            {
+              min: 3,
+              max: 20,
+              message: '长度在 3 到20 个字符',
+              trigger: 'blur'
+            }
+          ],
+          name: [{
+            validator:checkusername,
+            required: true,
+            //message: '请填写开户名',
+            trigger: 'blur'
+          },
+            {
+              min: 2,
+              max: 20,
+              message: '长度在 2 到20 个字符',
+              trigger: 'blur'
+            }
+          ],
+          account: [{
+            required: true,
+            message: '请填写账号',
+            trigger: 'blur'
+          },
+            {
+              min: 3,
+              max: 19,
+              message: '长度在 3 到19 个字符',
+              trigger: 'blur'
+            }
+          ],
         }
       }
     },
