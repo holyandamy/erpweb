@@ -53,7 +53,6 @@
 
         </el-form>
         <div slot="footer" class="dialog-footer">
-
           <el-button type="primary" @click="saveedit('editbank')">保存</el-button>
           <el-button @click.native="showFormVisible = false">取消</el-button>
         </div>

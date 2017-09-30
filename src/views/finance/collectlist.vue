@@ -50,8 +50,8 @@
           </el-form-item>
         </el-form>
 
-        <el-table :data="tableData" v-loading="listLoading" border  style="width: 100%; font-size:12px ;">
-          <el-table-column fixed prop="createtime" label="创建日期" width="100">
+        <el-table :data="tableData" v-loading="listLoading" border  style="width:100%; font-size:12px ;" >
+          <el-table-column fixed="left" prop="createtime" label="创建日期" width="100">
           </el-table-column>
           <el-table-column prop="orderno" label="订单编号" width="120">
           </el-table-column>
@@ -79,10 +79,9 @@
               <span v-if="scope.row.verification != '未核销'">{{scope.row.verification}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="operator" label="经办人" width="100">
+          <el-table-column prop="operator" label="经办人" width="120">
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="120">
-
             <template scope="scope">
               <el-button @click="handleShow(scope.$index, scope.row)" type="text" size="small">查看</el-button>
               <a href="javascript:;" v-if="scope.row.cfmValue !='2' && scope.row.verfValue =='0'">
@@ -464,7 +463,7 @@
     font-size: 12px;
   }
   .el-dropdown-menu {
-    width:120px;
+    width:100px;
   }
   .el-dropdown-menu li {
     font-size: 12px;
