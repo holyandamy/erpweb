@@ -182,9 +182,6 @@
 							</div>
 							</el-form-item>
 					<div style="clear: both;"></div>
-
-
-
 				</div>
 				<div class="baseinfo" v-if="editor">
 					<div class="editor-container">
@@ -255,7 +252,7 @@
 								<el-col :span="14">
                   <el-form-item label="图片：" prop="">
                     <ul v-if='routeTit.length>0' style='float:left;'>
-                      <li style='float: left;' v-for="imgSrc in routeTit[index].split(',')">
+                      <li style='float: left;'  v-for="imgSrc in routeTit[index].split(',')">
                         <img style='width: 148px;height: 148px;margin: 0 10px;' :src='imgSrc' alt="">
                       </li>
                     </ul>
@@ -546,7 +543,8 @@
         flag: false,
         flag1: false,
         flagTo: false,
-        flagTo1: false
+        flagTo1: false,
+        temText: ''
 
 			}
 		},
@@ -596,7 +594,7 @@
           this.baseImages = res.data.obj.images
           if(res.data.obj.routes.length>0){
             res.data.obj.routes.forEach(function (item) {
-              _this.routeTit.push(item.titleimages)
+              typeof (item.titleimages) =='string'?_this.routeTit.push(item.titleimages):_this.routeTit.push("")
             })
           }
           res.data.obj.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
@@ -618,11 +616,16 @@
 					this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0){
 						this.editor = false
-					}else{
+						this.menucheck1 = true
+						this.menucheck2 = false
+          }else{
 						this.editor = true
 						this.editorhtml = res.data.obj.routes[0].content
+            this.menucheck1 = false
+            this.menucheck2 = true
+            this.temText = res.data.obj.routes[0].content
 					}
-
+          console.log(11111, this.editorhtml);
 
 				})
 
@@ -777,8 +780,8 @@
 							//基本录入
 							para.routes = this.baseForm.routes
 							para.edittype = 0
-							for(let i = 0 ; i<para.routes.length ;i++){
-								if(para.routes[i].title == ""){
+              for(let i = 0 ; i<para.routes.length ;i++){
+								if(para.routes[i].title == "" || typeof(para.routes[i].title)=="object"){
 									this.$message({
 									showClose: true,
 									message: "行程标题不能为空！",
@@ -786,7 +789,7 @@
 									});
 									return false
 								}
-                if(para.routes[i].content == ""){
+                if(para.routes[i].content == ""|| typeof(para.routes[i].title)=="object"){
                   this.$message({
                     showClose: true,
                     message: "行程不能为空！",
@@ -802,6 +805,7 @@
               para.routes[0].content = html
 							para.edittype = 1
 						}
+
 						templatupdate(para).then((res) => {
 
 							if(res.data.error == 1) {
@@ -878,15 +882,39 @@
 			},
 			//普通方式录入
 			basetype(){
-				this.baseForm.routes[0].content = ""
-				for(let i = 0 ; i <this.baseForm.routes.length;i++){
-					this.baseForm.days = i+1
-				}
-			},
+//        console.log(111);
+//        this.baseForm.routes[0].content = ""
+//				for(let i = 0 ; i <this.baseForm.routes.length;i++){
+//					this.baseForm.days = i+1
+//				}
+//        console.log(8888,this.baseForm.days);
+//        this.baseForm.days -= 1
+//        console.log(222,this.routeTit);
+        this.baseForm.days=1
+//        for (var i=0;i<parseFloat(this.oldday);i++){
+//          console.log(i,this.oldday);
+//          this.addday()
+//        }
+        this.baseForm.routes.forEach(function (item) {
+          item.content = ''
+          item.hotel = ''
+          item.remark = ''
+          item.number = 1
+        })
+      },
 			//自定义录入
 			selftype(){
-				this.baseForm.days = this.oldday
-			},
+        let _this =this;
+        this.baseForm.days = this.oldday
+        this.baseForm.routes.forEach(function (item,idx) {
+          item.content = ''
+          item.hotel = ''
+          item.remark = ''
+          item.title = ''
+          if(idx>1) _this.baseForm.routes.splice(1)
+        })
+
+      },
 			//获取省级列表
 			getprovince() {
 				let count = "fb0828b148bc48afbab8ef03c55d153b"

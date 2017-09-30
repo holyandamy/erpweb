@@ -100,7 +100,7 @@
                 <ul style="padding-left: 30px;">
                   <li><span>出港地：</span>{{detail.depart}}</li>
                   <li><span>目的地：</span>{{detail.dest}}</li>
-                  <li><span>交通工具：</span>去：{{{1:'飞机',2:'动车',3:'火车',4:'高铁',5:'大巴',6:'轮船'}[detail.trafficgo]}} | 返：{{{1:'飞机',2:'动车',3:'火车',4:'高铁',5:'大巴',6:'轮船'}[detail.trafficreturn]}}</li>
+                  <li><span>交通工具：</span>去：{{{'0':'---',1:'飞机',2:'动车',3:'火车',4:'高铁',5:'大巴',6:'轮船'}[detail.trafficgo]}} | 返：{{{'0':'---',1:'飞机',2:'动车',3:'火车',4:'高铁',5:'大巴',6:'轮船'}[detail.trafficreturn]}}</li>
 
                   <!--去程交通：1飞机，2动车，3火车，4高铁，5大巴，6轮船-->
                 </ul>
@@ -154,7 +154,7 @@
               </div>
             </li>
             <li>
-              <span>行程</span>
+              <span>行程{{detail.edittype}}</span>
               <div class="xc">
                 <pre>{{route.content}}</pre>
               </div>
@@ -302,19 +302,12 @@
             if(item.isenable) _this.checkList.push(idx)
           })
 
-          for (let i = 0; i < this.detail.routes.length; i++) {
-            let arr = []
-            if(res.data.obj.routes[i].titleimages) arr = res.data.obj.routes[i].titleimages.split(',')
-            this.detail.routes[i].titleimages = arr
-          }
-
           if (this.detail.edittype == 0) {
             this.edittype = true
           } else {
             this.edittype = false
             let str = this.detail.routes[0].content
             this.detail.routes[0].content = str
-
           }
           this.loglist = res.data.obj.logs
           let categorytype = res.data.obj.categorytype
@@ -373,6 +366,13 @@
             case 6:
               this.detail.detail = "轮船";
               break;
+          }
+          for (var i = 0; i < this.detail.routes.length; i++) {
+            let arr = []
+            if(res.data.obj.routes[i].titleimages) {
+              arr = res.data.obj.routes[i].titleimages.split(',')
+            }
+            this.detail.routes[i].titleimages = arr
           }
         })
       },

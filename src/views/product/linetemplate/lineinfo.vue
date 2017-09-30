@@ -67,15 +67,15 @@
 
 			</div>
 			<h2 class="d_jump">行程 <span>天数：{{detail.days}}天</span></h2>
-			<div class="daylist" v-for="route in detail.routes" v-if="edittype">
-				<div class="day">
+			<div class="daylist" v-for="route in detail.routes" v-if="detail.edittype==0">
+				<div class="day"  >
 					第<span>{{route.number}}</span>天
 				</div>
-				<div class="title">
+				<div class="title" >
 					{{route.title}}
 				</div>
 				<ul>
-					<li>
+					<li >
 						<span>三餐：</span>
 						<div class="xc">
 
@@ -84,7 +84,7 @@
 								<el-checkbox label="晚"  disabled v-model="route.isdinner"></el-checkbox>
 							</div>
 					</li>
-					<li>
+					<li >
 						<span>住宿：</span>
 						<div class="xc">
 							{{route.hotel}}
@@ -93,14 +93,13 @@
 					<li>
 						<span>行程：</span>
 						<div class="xc">
-						<pre>{{route.content}}</pre></div>
+						<pre >{{route.content}}</pre></div>
 					</li>
 					<li>
 						<span>备注：</span>
 						<div class="xc">
 							{{route.remark}}
 						</div>
-
 					</li>
 					<li>
 						<span>图片：</span>
@@ -109,15 +108,17 @@
 							<img v-for="img in route.titleimages" style='width: 168px;height: 168px;margin: 0 10px;' :src="img"/>
 							</div>
 						</div>
-
 					</li>
 				</ul>
 			</div>
-			<div class="content" v-else>
 
-				<span v-html="detail.routes[0].content">
-				  {{detail.routes[0].content}}
-				</span>
+			<div class="content" v-if="detail.edittype==1">
+				<!--<span >-->
+				  <!--{{detail.routes[0].content}}-->
+				<!--</span>-->
+        <div v-html="detail.routes[0].content">
+
+        </div>
 			</div>
 			<h2 class="d_jump">预定须知</h2>
 			<div class="bgfff">
@@ -155,7 +156,6 @@
 				menus: ['基本信息', '行程', '预定须知'],
 				active:0,
 				detail:{},
-				edittype:true,
 				toplist:[]
 			}
 		},
@@ -176,14 +176,7 @@
             res.data.obj.routes[i].titleimages==''?arr=[]: arr = res.data.obj.routes[i].titleimages.split(',')
 						this.detail.routes[i].titleimages = arr
           }
-					if(this.detail.edittype == 0 ){
-						this.edittype = true
-					}else{
-						this.edittype = false
-					let str = this.detail.routes[0].content
-					this.detail.routes[0].content = str
 
-					}
 					let categorytype =  res.data.obj.categorytype
 					switch (categorytype){
 						case 0:

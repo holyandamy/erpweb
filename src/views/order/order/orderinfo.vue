@@ -220,30 +220,30 @@
 						<tr v-for="(namelist,index) in detail.namelist">
 							<td>{{index+1}}</td>
 							<td>
-								<el-input v-model="namelist.name" placeholder="姓名"></el-input>
+								<el-input v-model="namelist.name" placeholder="姓名" :disabled="namelist.isrefund"></el-input>
 							</td>
 							<td>{{namelist.type}}</td>
 							<td>
-								<el-select v-model="namelist.certtype" placeholder="请选择">
+								<el-select v-model="namelist.certtype" placeholder="请选择" :disabled="namelist.isrefund">
 									<el-option v-for="item in certtypes" :key="item.value" :label="item.label" :value="item.value">
 									</el-option>
 								</el-select>
 							</td>
 							<td>
-								<el-input v-model="namelist.cert" placeholder="证件号"></el-input>
+								<el-input v-model="namelist.cert" placeholder="证件号" :disabled="namelist.isrefund"></el-input>
 							</td>
 							<td>
-								<el-input v-model="namelist.mobile" placeholder="手机号"></el-input>
+								<el-input v-model="namelist.mobile" placeholder="手机号" :disabled="namelist.isrefund"></el-input>
 							</td>
 							<td>
-								<el-checkbox v-model="namelist.room" @change="addroom">单房差</el-checkbox>
+								<el-checkbox v-model="namelist.room" @change="addroom" :disabled="namelist.isrefund">单房差</el-checkbox>
 							</td>
 							<td>
-								<el-input v-model="namelist.remark" placeholder="备注"></el-input>
+								<el-input v-model="namelist.remark" placeholder="备注" :disabled="namelist.isrefund"></el-input>
 							</td>
 							<td>
-								<el-button type="text" v-if="detail.status==1" @click="deletepeople(index)">删除</el-button>
-								<el-button type="text" v-if="namelist.name&&(detail.status==2||detail.status==3)"  @click="refund(namelist)">申请退团</el-button>
+								<el-button type="text" v-if="detail.status==1 && detail.namelist.length>1" @click="deletepeople(index,namelist.type)">删除</el-button>
+								<el-button type="text" v-if="namelist.name&&(detail.status==2||detail.status==3)" :disabled="namelist.isrefund"  @click="refund(namelist)">{{namelist.isrefund?'已申请退团':'申请退团'}}</el-button>
 							</td>
 						</tr>
 						<tr>
@@ -273,7 +273,7 @@
 				</el-table-column>
 			</el-table>
 			<div class="button">
-        <el-button type="primary" size="large" @click="save">提交</el-button>
+        <el-button type="primary" size="large" @click="save" v-if="detail.status==1||detail.status==2||detail.status==3">提交</el-button>
 				<!--<el-button type="primary" v-if="!detail.isconfirm && detail.iscancel" size="large" class="hasid" id="91102d1d735d11e788410242ac120009" @click="cancelorder">取消订单</el-button>-->
 				<el-button type="primary" v-if="detail.status==1||detail.status==2||detail.status==3" size="large" class="hasid" id="91102d1d735d11e788410242ac120009" @click="cancelorder">{{{1:'取消订单',2:'退团',3:'退团'}[detail.status]}}</el-button>
 				<el-button size="large" @click="handleHide">返回</el-button>
@@ -374,7 +374,7 @@ import axios from 'axios';
 		data() {
 			var price = (rule, value, callback) => {
 				let newvalue = Number(value)
-				if(!Number.isInteger(newvalue)) {
+        if(!Number.isInteger(newvalue)) {
 					callback(new Error('请输入正整数!'));
 				} else {
 					if(newvalue < 0) {
@@ -542,7 +542,7 @@ import axios from 'axios';
 //        return false;
 //      },
 			refund(info){
-
+          let _this =this;
 				 this.$confirm('退团申请后该游客信息不可编辑，并且需在订单中添加退款明细', '退团申请', {
 		          confirmButtonText: '确定',
 		          cancelButtonText: '取消',
@@ -555,16 +555,11 @@ import axios from 'axios';
 		        	}
 		        	orderrefund(para).then((res) =>{
 		        		console.log(para,res)
-		        		if(res.data.error == 1){
-		        			 this.$message({
-			            type: 'error',
-			            message: res.data.message
-			          });
+		        		if(res.data.error || res.data.err){
+		        			paramm.getCode(res.data,_this)
 		        		}else{
-		        			 this.$message({
-			            type: 'success',
-			            message: '删除成功!'
-			          });
+                  paramm.getCode(res.data,_this)
+                  _this.getdetail()
 		        		}
 		        	})
 
@@ -729,9 +724,24 @@ import axios from 'axios';
 
 			},
 			//删除游客
-			deletepeople(index) {
+			deletepeople(index,typpe) {
+        if(typpe == '成人'){
+
+        }
 				this.detail.namelist.splice(index, 1)
-			},
+        switch (typpe){
+          case '成人':
+            this.detail.totaladult -= 1;
+            break;
+          case '儿童':
+            this.detail.totalchild -= 1;
+            break;
+          case '婴儿':
+            this.detail.totalbaby -= 1;
+            break;
+        }
+        this.addroom()
+      },
 			//获取详情
 			getdetail() {
 			  let _this =this;
@@ -764,13 +774,13 @@ import axios from 'axios';
 					for(let i = 0; i < type.length; i++) {
 						if(type[i].type == 1) {
 							type[i].type = "成人"
-							adultAll.push(type[i])
+							if(!type[i].isrefund) adultAll.push(type[i])
 						} else if(type[i].type == 2) {
 							type[i].type = "儿童"
-							childAll.push(type[i])
+              if(!type[i].isrefund) childAll.push(type[i])
 						} else if(type[i].type == 3) {
 							type[i].type = "婴儿"
-							babyAll.push(type[i])
+              if(!type[i].isrefund) babyAll.push(type[i])
 
 						}
 						if(type[i].room == true) {
@@ -1048,14 +1058,11 @@ import axios from 'axios';
 					id: this.detail.id
 				}
 				ordercancel(para).then((res) => {
-					if(res.data.error == 1 || res.data.err) {
+					if(res.data.error || res.data.err) {
 						paramm.getCode(res.data, _this)
 					} else {
-						_this.$message({
-							message: '取消成功！',
-							type: 'success'
-						});
-						this.handleHide()
+            paramm.getCode(res.data, _this)
+            _this.handleHide()
 					}
 				})
 			},

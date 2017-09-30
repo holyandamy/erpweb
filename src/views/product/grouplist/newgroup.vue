@@ -21,11 +21,11 @@
                 <el-button @click="getcategoryall()">选择</el-button>
                 <span class='routeName' style='padding-left: 10px;' v-text='routeName'>222</span>
               </el-form-item>
-              <el-form-item label="取消政策：" >
-                订单确认后 &nbsp;&nbsp;&nbsp;
-                <el-input v-model="cancell"  style='width: 8%;'> </el-input>
-                小时内未完成订单金额收款，则订单取消，释放对应库存。不填则永久不取消。
-              </el-form-item>
+              <!--<el-form-item label="取消政策：" >-->
+                <!--订单确认后 &nbsp;&nbsp;&nbsp;-->
+                <!--<el-input v-model="cancell"  style='width: 8%;'> </el-input>-->
+                <!--小时内未完成订单金额收款，则订单取消，释放对应库存。不填则永久不取消。-->
+              <!--</el-form-item>-->
               <el-form-item label="集合通知：" prop="notify">
                 <el-col :span="4" style="width: 100%;margin-right: 10px">
                   <el-input
@@ -508,7 +508,7 @@
 //          {checked: '',time: ''}
         ],
         notify: '',
-        cancell: '',
+        cancell: 0,
         cancellId: '',
         routeName: '',
         checkItem: '',
@@ -551,7 +551,7 @@
           _this.idd = res.data.obj.id
           _this.lineid = res.data.obj.lineid
           _this.groupList.notify = res.data.obj.notify
-          _this.cancell = res.data.obj.rules[0].releasetime/60
+          _this.cancell = 0
           _this.cancellId = res.data.obj.rules[0].id
           let _thiss = _this
           res.data.obj.platforms.forEach(function (item) {
@@ -768,15 +768,19 @@
       // 弹出框确定
       checkRot () {
         let _this = this;
-        groupexists({token:paramm.getToken(),id:this.checkItem.id}).then((res)=>{
-          if(res.data.error || res.data.err) {
-            paramm.getCode(res.data, _this)
-          }else {
-            _this.lineFlag = false;
-            _this.routeName = _this.checkItem.name;
-            _this.lineid = _this.checkItem.id;
-          }
-        })
+        // 去掉的限制
+//        groupexists({token:paramm.getToken(),id:this.checkItem.id}).then((res)=>{
+//          if(res.data.error || res.data.err) {
+//            paramm.getCode(res.data, _this)
+//          }else {
+//            _this.lineFlag = false;
+//            _this.routeName = _this.checkItem.name;
+//            _this.lineid = _this.checkItem.id;
+//          }
+//        })
+        _this.lineFlag = false;
+        _this.routeName = _this.checkItem.name;
+        _this.lineid = _this.checkItem.id;
       },
       getcategoryall(){
         this.lineFlag = true;
@@ -806,15 +810,15 @@
           return;
         }
         // 取消政策
-        if(this.cancell) {
-          if(isNaN(this.cancell) || parseFloat(this.cancell)<0){
-            _this.$message({
-              message: '取消政策时间为大于等于0的数字',
-              type: 'warning'
-            });
-            return;
-          }
-        }
+//        if(this.cancell) {
+//          if(isNaN(this.cancell) || parseFloat(this.cancell)<=0 || parseFloat(this.cancell)%0.5 != 0){
+//            _this.$message({
+//              message: '取消政策时间为大于0且为0.5倍数的数字',
+//              type: 'warning'
+//            });
+//            return;
+//          }
+//        }
         // 集合通知
         if(this.groupList.notify.toString().length >120) {
           this.$message({
@@ -895,7 +899,7 @@
             token: paramm.getToken(),
             lineid: _this.lineid,
             notify: _this.groupList.notify || '',
-            rules: [{releasetime:_this.cancell*60,type:1}] || [],
+            rules: [{releasetime:0,type:1}] || [],
             platforms: platforms,
             details: _this.checkArr
           }).then(res =>{
@@ -928,7 +932,7 @@
             token: paramm.getToken(),
             lineid: _this.lineid,
             notify: _this.groupList.notify || '',
-            rules: [{releasetime:_this.cancell*60,type:1,id:_this.cancellId}] || [],
+            rules: [{releasetime:0,type:1,id:_this.cancellId}] || [],
             platforms: platforms,
             details: _this.checkArr,
             id: _this.idd

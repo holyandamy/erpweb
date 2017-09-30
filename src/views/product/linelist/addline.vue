@@ -168,10 +168,10 @@
 				<h2 class="d_jump">编辑行程</h2>
 
 				<div class="tablemenu">
-					<el-button style="float: left;" @click="editor = false; menucheck1=true; menucheck2=false">普通方式录入<i :class="[{'el-icon-check': menucheck1},'el-icon--right']"></i></el-button>
-					<el-button style="float: left;" @click="editor = true; menucheck1=false; menucheck2=true,selfedit = true">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
+					<el-button style="float: left;" @click="editor = false; menucheck1=true; menucheck2=false; basetype()">普通方式录入<i :class="[{'el-icon-check': menucheck1},'el-icon--right']"></i></el-button>
+					<el-button style="float: left;" @click="editor = true; menucheck1=false; menucheck2=true; selftype();selfedit = true">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
 					<el-form-item label="行程天数" style="float: left; margin-bottom: 0;">
-						<el-input v-model="baseForm.days" v-if="editor" :readonly='true' disabled></el-input>
+						<el-input v-model="baseForm.days" v-if="editor" ></el-input>
 						<div class="el-input-number" v-else>
 							<!--is-disabled-->
 							<span class="el-input-number__decrease" @click="minuday"><i class="el-icon-minus"></i></span>
@@ -185,9 +185,10 @@
 				</div>
 				<div class="baseinfo" v-show="editor">
 					<div class="editor-container">
-						<UE :defaultMsg='defaultMsg' :config='config' ref="ue"></UE>
+						<UE  v-model="customtext" :defaultMsg='editorhtml' :config='config' ref="ue" ></UE>
 					</div>
 				</div>
+
 				<div class="base" v-show="!editor" ref="baseday" id="baseday">
 					<ul>
 						<li class="daylist" v-for="(route,index) in baseForm.routes">
@@ -512,7 +513,8 @@
 				menucheck1: true,
 				menucheck2: false,
 				num1: 1, //天数选择
-				defaultMsg: '1111',
+        defaultMsg: this.editorhtml,
+        editorhtml: '',
 				editor: false,
 				config: {
 					initialFrameWidth: null,
@@ -612,7 +614,8 @@
 				checktop: true,
         urlAdd: '',
         baseImages: '',
-        routeTit: []
+        routeTit: [],
+        oldday:''
       }
 		},
 		created(){
@@ -886,6 +889,30 @@
         if(this.baseForm.id) this.routeTit.push('')
 
       },
+      //普通方式录入
+      basetype(){
+        this.baseForm.days=1
+        this.baseForm.routes.forEach(function (item) {
+          item.content = ''
+          item.hotel = ''
+          item.remark = ''
+          item.number = 1
+        })
+      },
+      //自定义录入
+      selftype(){
+        let _this =this;
+        this.baseForm.days = this.oldday
+        this.baseForm.routes.forEach(function (item,idx) {
+//          item.content = ''
+          item.hotel = ''
+          item.remark = ''
+          item.title = ''
+          if(idx>1) _this.baseForm.routes.splice(1)
+        })
+        console.log(3333,this.baseForm.routes);
+
+      },
       //获取国家列表
       getcountry(pro) {
         country(pro).then((res) => {
@@ -929,11 +956,9 @@
         }
         this.getprovince(pro)
         if(this.flag){
-          console.log(111);
           this.baseForm.fromcityid = ''
           this.baseForm.fromdistrictid = ''
         }else {
-          console.log(222);
           this.flag=true
         }
       },
@@ -945,10 +970,8 @@
         }
         this.getcity(pro)
         if(this.flag1){
-          console.log(33);
           this.baseForm.fromdistrictid = ''
         }else {
-          console.log(44);
           this.flag1=true
         }
       },
@@ -1062,12 +1085,14 @@
 					this.baseImages = res.data.obj.images
           if(res.data.obj.routes.length>0){
             res.data.obj.routes.forEach(function (item) {
-              _this.routeTit.push(item.titleimages)
+              typeof (item.titleimages) =='string'?_this.routeTit.push(item.titleimages):_this.routeTit.push("")
             })
           }
 //          this.scope = res.data.obj
-					this.istemplate = true
-					this.baseForm.checkpeople = []
+          this.baseForm.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
+          res.data.obj.trafficgo == 0 ? this.baseForm.trafficgo = "" : this.baseForm.trafficgo = res.data.obj.trafficgo
+          res.data.obj.trafficreturn == 0 ? this.baseForm.trafficreturn = "" : this.baseForm.trafficreturn = res.data.obj.trafficreturn
+          this.baseForm.checkpeople = []
 					this.baseForm.checkpeople.push(this.baseForm.isadult,this.baseForm.ischild,this.baseForm.isbaby)
 
 					if(this.baseForm.checkpeople[0]){
@@ -1080,17 +1105,25 @@
 						this.baseForm.checkpeople[2] = "婴儿"
 					}
 
-					this.baseForm.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
 
+          this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0) {
-						//普通输入
+            console.log(4444);
+            //普通输入
 						this.editor = false
-
+            this.menucheck1 = true
+            this.menucheck2 = false
 					} else {
-						//自定义输入
+            console.log(5555);
+
+            //自定义输入
 						this.editor = true
-						this.defaultMsg = this.baseForm.routes[0].content
-				}
+						this.editorhtml = this.baseForm.routes[0].content
+            this.menucheck1 = false
+            this.menucheck2 = true
+            this.temText = res.data.obj.routes[0].content
+            this.istemplate = true
+          }
 
 				})
 

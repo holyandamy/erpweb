@@ -73,6 +73,12 @@ export const givedetail = params => { return axios.post(`${base}/order/booking/d
 export const givecancel = params => { return axios.post(`${base}/order/booking/cancel`, params); };//接送订单 取消
 export const giveconfirm = params => { return axios.post(`${base}/order/booking/confirm`, params); };//接送订单 确认
 export const givesave = params => { return axios.post(`${base}/order/booking/save`, params); };//接送订单 保存
+/*定制需求*/
+export const customlist = params => { return axios.post(`${base}/order/custom/list`, params); };//定制需求列表
+export const customdetail = params => { return axios.post(`${base}/order/custom/detail`, params); };//定制需求详情
+export const customcancel = params => { return axios.post(`${base}/order/custom/cancel`, params); };//取消定制需求
+export const customconfirm = params => { return axios.post(`${base}/order/custom/confirm`, params); };//确认定制需求
+export const customupdate = params => { return axios.post(`${base}/order/custom/update`, params); };//确认定制需求
 
 
 

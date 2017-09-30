@@ -41,7 +41,7 @@
 							<ul style="padding-left: 30px;">
 								<li><span>出港地：</span>{{detail.depart}}</li>
 								<li><span>目的地：</span>{{detail.dest}}</li>
-								<li><span>交通工具：</span>去：{{detail.trafficgo}} | 返：{{detail.trafficreturn}}</li>
+                <li><span>交通工具：</span>去：{{{'0':'---','1':'飞机','2':'动车','3':'火车','4':'高铁','5':'大巴','6':'轮船'}[detail.trafficgo]}} | 返：{{{'0':'---','1':'飞机','2':'动车','3':'火车','4':'高铁','5':'大巴','6':'轮船'}[detail.trafficreturn]}}</li>
 
 								<!--去程交通：1飞机，2动车，3火车，4高铁，5大巴，6轮船-->
 							</ul>
@@ -233,48 +233,6 @@
 							break;
 						case 3:
 							this.detail.categorytype = "周边游";
-							break;
-					}
-					let day = res.data.obj.trafficgo
-					switch(day) {
-						case 1:
-							this.detail.trafficgo = "飞机";
-							break;
-						case 2:
-							this.detail.trafficgo = "动车";
-							break;
-						case 3:
-							this.detail.trafficgo = "火车";
-							break;
-						case 4:
-							this.detail.trafficgo = "高铁";
-							break;
-						case 5:
-							this.detail.trafficgo = "大巴";
-							break;
-						case 6:
-							this.detail.trafficgo = "轮船";
-							break;
-					}
-					let trafficback = res.data.obj.trafficreturn
-					switch(trafficback) {
-						case 1:
-							this.detail.trafficreturn = "飞机";
-							break;
-						case 2:
-							this.detail.trafficreturn = "动车";
-							break;
-						case 3:
-							this.detail.trafficreturn = "火车";
-							break;
-						case 4:
-							this.detail.trafficreturn = "高铁";
-							break;
-						case 5:
-							this.detail.trafficreturn = "大巴";
-							break;
-						case 6:
-							this.detail.trafficreturn = "轮船";
 							break;
 					}
 

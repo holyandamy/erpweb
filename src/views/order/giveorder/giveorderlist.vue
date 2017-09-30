@@ -57,38 +57,38 @@
           <el-table-column prop="typeName" label="订单编号/线路订单编号" width="180">
             <template scope="scope" >
                 {{scope.row.code}} / <br>
-                {{scope.row.code}}
+                {{scope.row.lineCode}}
             </template>
           </el-table-column>
-          <el-table-column prop="linename" label="线路名称">
+          <el-table-column prop="lineName" label="线路名称">
           </el-table-column>
-          <el-table-column prop="starttime" label="用车时间">
+          <el-table-column prop="usetime" label="用车时间">
           </el-table-column>
-          <el-table-column prop="starttime" label="下单时间">
+          <el-table-column prop="createtime" label="下单时间">
           </el-table-column>
-          <el-table-column prop="totaladult" label="人数">
+          <el-table-column prop="personnum" label="人数">
           </el-table-column>
           <el-table-column prop="typeName" label="客户信息" width="120">
             <template scope="scope">
-              {{scope.row.creater}} <br>
+              {{scope.row.contact}} <br>
               {{scope.row.contactmobile}}
             </template>
           </el-table-column>
-          <el-table-column prop="orderfee" label="订单金额">
+          <el-table-column prop="orderpay" label="订单金额">
           </el-table-column>
 
-          <el-table-column prop="contact" label="接送地址">
+          <el-table-column prop="dest" label="接送地址">
           </el-table-column>
-          <el-table-column prop="contact" label="车型">
+          <el-table-column prop="carTypeName" label="车型">
           </el-table-column>
-          <el-table-column prop="contact" label="接送类型">
+          <el-table-column prop="typeName" label="接送类型">
           </el-table-column>
           <el-table-column prop="statusName" label="状态">
           </el-table-column>
           <el-table-column  label="操作" width="120">
             <template scope="scope">
               <el-button type="text" size="small" @click="setMode('giveorderinfo'),setId(scope.row)">查看</el-button>
-              <a href="javascript:;" >
+              <a href="javascript:;"  v-if="(scope.row.status=='0')|| scope.row.status=='1'">
                 <el-dropdown  @visible-change="toDown">
                     <span style="font-size: 12px;color: #3ec3c8;">
                       操作<i class="el-icon-caret-bottom el-icon--right"></i>
@@ -174,7 +174,7 @@
           lineName: '',
           date: '',
           contact: '',
-          status: '',
+          status: '-1',
 					token: paramm.getToken(),
 					pageindex: 0,
 					pagesize: 10
@@ -327,7 +327,7 @@
           lineName: '',
           date: '',
           contact: '',
-          status: '',
+          status: '-1',
           token: paramm.getToken(),
           pageindex: 0,
           pagesize: 10
