@@ -208,7 +208,7 @@
                 </tr>
 
                 <tr>
-                  <td colspan="5"><span class='moneyy'>成人：￥{{adultMoney}}元</span>  <span class='moneyy'>儿童：￥{{childMoney}}元</span> <span>婴儿：￥{{babyMoney}}元</span></td>
+                  <td colspan="5"><span class="moneyy">成人：￥{{adultMoney}}元</span>  <span class='moneyy'>儿童：￥{{childMoney}}元</span> <span>婴儿：￥{{babyMoney}}元</span></td>
                   <td colspan="4" style="text-align: right; padding-right: 20px;">合计：￥{{allMoney}}元</td>
                 </tr>
                 </tbody>

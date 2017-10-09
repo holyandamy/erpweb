@@ -40,25 +40,25 @@
             width="100"
             label="序号">
           </el-table-column>
-          <el-table-column prop="platformname" label="线路名称">
+          <el-table-column prop="lineName" label="线路名称">
           </el-table-column>
-          <el-table-column prop="status" label="团数">
+          <el-table-column prop="teamNum" label="团数">
           </el-table-column>
-          <el-table-column prop="status" label="游客数">
+          <el-table-column prop="custNum" label="游客数">
           </el-table-column>
-          <el-table-column prop="status" label="订单数量">
+          <el-table-column prop="orderNum" label="订单数量">
           </el-table-column>
-          <el-table-column prop="status" label="订单总额">
+          <el-table-column prop="orderTotal" label="订单总额">
           </el-table-column>
-          <el-table-column prop="status" label="订单成本">
+          <el-table-column prop="costTotal" label="订单成本">
           </el-table-column>
-          <el-table-column prop="status" label="应收总额">
+          <el-table-column prop="receivable" label="应收总额">
           </el-table-column>
-          <el-table-column prop="status" label="人均流水">
+          <el-table-column prop="avgPerson" label="人均流水">
           </el-table-column>
-          <el-table-column prop="status" label="利润合计">
+          <el-table-column prop="profit" label="利润合计">
           </el-table-column>
-          <el-table-column prop="status" label="人均利润">
+          <el-table-column prop="avgProfit" label="人均利润">
           </el-table-column>
         </el-table>
 
@@ -88,7 +88,7 @@
 
 <script>
   import axios from 'axios';
-  import { orderlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
+  import { reportlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   import util from '../../../common/js/util'
@@ -109,14 +109,7 @@
         pagesize: 10,
         date: '',
         orderinfo: {
-          orderno: '',
-          linename: '',
-          creater: '',
-          status: '',
-          source: '',
-          settle: '',
-          refund: '',
-          hide: false,
+          lineName: '',
           token: paramm.getToken(),
           pageindex: 0,
           pagesize: 10
@@ -201,7 +194,7 @@
         let page = this.orderinfo
         page.pageindex = this.currentPage - 1
         page.date = dates
-        orderlist(page).then((res) => {
+        reportlist(page).then((res) => {
 
           if(res.data.error == 1){
             this.$message({
@@ -228,13 +221,7 @@
       // 清空查询
       clearGetList () {
         this. orderinfo= {
-          orderno: '',
-          linename: '',
-          creater: '',
-          status: '',
-          source: '',
-          settle: '',
-          refund: '',
+          lineName: '',
           token: paramm.getToken(),
           pageindex: 0,
           pagesize: 10

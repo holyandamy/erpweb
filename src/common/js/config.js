@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-let base = 'http://api.erp.we2tu.com/api';
+// let base = 'http://api.erp.we2tu.com/api';
+let base = '172.17.9.7:3000/api';
 export let bases ='http://api.erp.we2tu.com/'
 export let token = ""
 if(sessionStorage.getItem('token')){
@@ -79,7 +80,8 @@ export const customdetail = params => { return axios.post(`${base}/order/custom/
 export const customcancel = params => { return axios.post(`${base}/order/custom/cancel`, params); };//取消定制需求
 export const customconfirm = params => { return axios.post(`${base}/order/custom/confirm`, params); };//确认定制需求
 export const customupdate = params => { return axios.post(`${base}/order/custom/update`, params); };//确认定制需求
-
+/*线路营收报表*/
+export const reportlist = params => { return axios.post(`${base}/report/receivable/line`, params); };//线路营收列表
 
 
 //产品中心

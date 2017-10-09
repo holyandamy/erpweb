@@ -170,7 +170,7 @@
       },
       confirmvisitor(){
         let _this= this;
-        customconfirm({id:this.detail.id,token:paramm.getToken()}).then((res) => {
+        customconfirm({id:_this.detail.id,token:paramm.getToken()}).then((res) => {
           if(res.data.error || res.data.err) {
             paramm.getCode(res.data,_this)
           } else {
@@ -232,7 +232,7 @@
 						paramm.getCode(res.data, _this)
 					} else {
 						_this.$message({
-							message: '取消成功！',
+							message: '成功！',
 							type: 'success'
 						});
 						this.handleHide()
