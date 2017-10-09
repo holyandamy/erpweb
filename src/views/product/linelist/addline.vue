@@ -47,9 +47,17 @@
 							</el-form-item>
 							<el-form-item label="出行方式：" prop="type" label-width="120px">
 								<el-radio-group v-model="baseForm.type">
-									<el-radio label="2">自由行</el-radio>
-									<el-radio label="1">跟团游</el-radio>
-                  <el-radio label="3">品质游</el-radio>
+                  <el-radio label="1">跟团游</el-radio>
+                  <el-radio label="2">自由行</el-radio>
+                  <el-radio label="3">购物之旅</el-radio>
+                  <el-radio label="4">浪漫海岛</el-radio>
+                  <el-radio label="5">奢华酒店</el-radio>
+                  <el-radio label="6">文化艺术</el-radio>
+                  <el-radio label="7">运动赛事</el-radio>
+                  <el-radio label="8">自然风光</el-radio>
+                  <el-radio label="9">亲子家庭</el-radio>
+                  <el-radio label="10">蜜月之旅</el-radio>
+                  <el-radio label="11">商务考察</el-radio>
                 </el-radio-group>
 							</el-form-item>
 							<el-form-item label="收客类型：" prop="checkpeople" label-width="120px" required>

@@ -82,6 +82,7 @@ export const customconfirm = params => { return axios.post(`${base}/order/custom
 export const customupdate = params => { return axios.post(`${base}/order/custom/update`, params); };//确认定制需求
 /*线路营收报表*/
 export const reportlist = params => { return axios.post(`${base}/report/receivable/line`, params); };//线路营收列表
+export const adjusterlist = params => { return axios.post(`${base}/report/receivable/adjuster`, params); };//计调营收列表
 
 
 //产品中心

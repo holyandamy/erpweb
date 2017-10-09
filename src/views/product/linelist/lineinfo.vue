@@ -27,8 +27,8 @@
 						<el-col :span="12">
 							<ul>
 								<li><span>线路分类：</span> {{detail.categorytype}} -- {{detail.categoryName}}</li>
-								<li><span>出行方式：</span>{{{1:'跟团游',2:'自由行',3:'品质游'}[detail.type]}}</li>
-								<!--出行方式:1跟团游，2自由行-->
+                <li><span>出行方式：</span>{{{1:'跟团游',2:'自由行',3:'购物之旅',4:'浪漫海岛',5:'奢华酒店',6:'文化艺术',7:'运动赛事',8:'自然风光',9:'亲子家庭',10:'蜜月之旅',11:'商务考察'}[detail.type]}}</li>
+                <!--出行方式:1跟团游，2自由行-->
 								<li><span>收客类型：</span>
 									<el-checkbox label="成人" prop="isadult" disabled v-model="detail.isadult"></el-checkbox>
 									<el-checkbox label="儿童" prop="ischild" disabled v-model="detail.ischild"></el-checkbox>

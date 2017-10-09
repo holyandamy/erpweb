@@ -15,12 +15,12 @@
         <el-row>
           <el-col :span="6">
             <el-form-item label="线路名称">
-              <el-input v-model="orderinfo.linename" placeholder="请输入线路名称"></el-input>
+              <el-input v-model="orderinfo.lineName" placeholder="请输入线路名称"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="发团日期">
-              <el-date-picker v-model="date" type="daterange" placeholder="申请时间范围">
+              <el-date-picker v-model="date" type="daterange" placeholder="发团时间范围">
               </el-date-picker>
             </el-form-item>
           </el-col>
