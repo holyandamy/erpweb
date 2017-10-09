@@ -46,6 +46,7 @@
 								<el-radio-group v-model="baseForm.type">
 									<el-radio label="2">自由行</el-radio>
 									<el-radio label="1">跟团游</el-radio>
+									<el-radio label="3">品质游</el-radio>
 								</el-radio-group>
 							</el-form-item>
 							<el-form-item label="收客类型：" prop="checkpeople" label-width="120px" required>

@@ -27,7 +27,7 @@
 						<el-col :span="12">
 							<ul>
 								<li><span>线路分类：</span> {{detail.categorytype}} -- {{detail.categoryName}}</li>
-								<li><span>出行方式：</span>{{detail.type == 1?'跟团游':'自由行'}}</li>
+								<li><span>出行方式：</span>{{{1:'跟团游',2:'自由行',3:'品质游'}[detail.type]}}</li>
 								<!--出行方式:1跟团游，2自由行-->
 								<li><span>收客类型：</span>
 									<el-checkbox label="成人" prop="isadult" disabled v-model="detail.isadult"></el-checkbox>
