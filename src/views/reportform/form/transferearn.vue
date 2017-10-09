@@ -6,7 +6,7 @@
           <el-col :span="12">
             <el-breadcrumb separator="/">
               <el-breadcrumb-item>报表管理</el-breadcrumb-item>
-              <el-breadcrumb-item>线路营收报表</el-breadcrumb-item>
+              <el-breadcrumb-item>计调营收报表</el-breadcrumb-item>
             </el-breadcrumb>
           </el-col>
         </el-row>
@@ -14,13 +14,13 @@
       <el-form :inline="true" :model="orderinfo"  style="text-align: left; padding-left: 30px;">
         <el-row>
           <el-col :span="6">
-            <el-form-item label="线路名称">
-              <el-input v-model="orderinfo.linename" placeholder="请输入线路名称"></el-input>
+            <el-form-item label="负责人">
+              <el-input v-model="orderinfo.name" placeholder="请输入负责人"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="发团日期">
-              <el-date-picker v-model="date" type="daterange" placeholder="申请时间范围">
+              <el-date-picker v-model="date" type="daterange" placeholder="发团时间范围">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -88,7 +88,7 @@
 
 <script>
   import axios from 'axios';
-  import { orderlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
+  import { adjusterlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   import util from '../../../common/js/util'
@@ -109,14 +109,7 @@
         pagesize: 10,
         date: '',
         orderinfo: {
-          orderno: '',
-          linename: '',
-          creater: '',
-          status: '',
-          source: '',
-          settle: '',
-          refund: '',
-          hide: false,
+          name: '',
           token: paramm.getToken(),
           pageindex: 0,
           pagesize: 10
@@ -201,7 +194,7 @@
         let page = this.orderinfo
         page.pageindex = this.currentPage - 1
         page.date = dates
-        orderlist(page).then((res) => {
+        adjusterlist(page).then((res) => {
 
           if(res.data.error == 1){
             this.$message({
@@ -228,13 +221,7 @@
       // 清空查询
       clearGetList () {
         this. orderinfo= {
-          orderno: '',
-          linename: '',
-          creater: '',
-          status: '',
-          source: '',
-          settle: '',
-          refund: '',
+          name: '',
           token: paramm.getToken(),
           pageindex: 0,
           pagesize: 10
