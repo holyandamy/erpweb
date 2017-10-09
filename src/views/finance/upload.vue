@@ -1,7 +1,6 @@
 <template>
   <el-form-item label="上传图片">
     <el-upload action="http://v0.api.upyun.com/xtimg"
-               :headers="obj"
                list-type="picture-card"
                :on-preview="handlePictureCardPreview"
                :file-list="imglist"
@@ -32,10 +31,7 @@
         dialogImageUrl: '',
         dialogVisible: false,
         imglist: [],
-        imagelist:'',
-        obj:{
-          "Authorization":"Basic"
-        }
+        imagelist:''
       }
     },
     methods: {
@@ -46,34 +42,32 @@
         return files.file
       },
       uploadsuccess(response, file, fileList) {
-        if(fileList.length > 10) {
-          this.imglist.splice(1,1)
-          this.$message({
-            message:'最多只能上传十张图片',
-            type:'warning'
-          })
-        }else{
           this.imglist = fileList
           let list = []
+          const isLt1M = file.size / 1024 / 1024 < 1;
           for(let i = 0 ; i <this.imglist.length;i++){
-            //限制图片的数量
-            /*if(this.imglist.length > 10){
-              break;
-            }*/
+            if(fileList.length > 10) {
+              this.$message({
+                message:'最多只能上传十张图片',
+                type:'warning'
+              })
+              this.imglist.pop()
+            }
+            if (!isLt1M) {
+              this.$message.error('上传图片大小不能超过 1MB!');
+              this.imglist.pop()
+            }
             list.push(this.imglist[i].raw.url)
             this.imagelist = list.join(',')
             this.$emit("imagelistchange",this.imagelist)
           }
-        }
       },
       handleRemove(file, fileList) {
-        let index
-        for(let i = 0; i < this.imglist.length; i++) {
-          index = i
-        }
-        this.imglist.splice(index, 1)
+        this.imglist = fileList
         let list = []
+        let index
         for(let i = 0 ; i <this.imglist.length;i++){
+          index = i
           list.push(this.imglist[i].raw.url)
           this.imagelist = list.join(',')
           this.$emit("imagelistchange",this.imagelist)
@@ -85,19 +79,12 @@
       },
       //限制图片的大小和数量
       beforeAvatarUpload(file) {
-        this.count++
-        const isLt1M = file.size / 1024 / 1024 < 1;
         const isJPG = file.type === 'image/jpeg';
         const isPNG = file.type === 'image/png';
         const isBMP = file.type === 'image/bmp';
-        if(!isBMP && !isPNG && !isJPG){
+        if(!isJPG && !isPNG && !isBMP){
           this.$message.error('只能上传jpg,png,bmp格式的图片');
-          return false
         }
-        if (!isLt1M) {
-          this.$message.error('上传头像图片大小不能超过 1MB!');
-        }
-        return isLt1M;
       }
     }
   }
