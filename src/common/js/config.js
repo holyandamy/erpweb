@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-// let base = 'http://api.erp.we2tu.com/api';
-let base = '172.17.9.7:3000/erp';
+let base = 'http://api.erp.we2tu.com/api';
+// let base = '172.17.9.7:3000/erp';
 export let bases ='http://api.erp.we2tu.com/'
 export let token = ""
 if(sessionStorage.getItem('token')){
