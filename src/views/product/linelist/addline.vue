@@ -544,7 +544,7 @@
 					categorytype: '',
 					name: '',
 					teamno: '',
-					type: "2",
+					type: "",
 					isadult: false,
 					ischild: false,
 					isbaby: false,
@@ -1098,7 +1098,7 @@
             })
           }
 //          this.scope = res.data.obj
-          this.baseForm.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
+          this.baseForm.type =this.baseForm.type.toString()
           res.data.obj.trafficgo == 0 ? this.baseForm.trafficgo = "" : this.baseForm.trafficgo = res.data.obj.trafficgo
           res.data.obj.trafficreturn == 0 ? this.baseForm.trafficreturn = "" : this.baseForm.trafficreturn = res.data.obj.trafficreturn
           this.baseForm.checkpeople = []

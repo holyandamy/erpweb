@@ -127,7 +127,7 @@
         pageSize: 10,
         date: '',
         orderinfo: {
-          status: '',
+          status: '-1',
           token: paramm.getToken(),
           pageIndex: 0,
           pageSize: 10

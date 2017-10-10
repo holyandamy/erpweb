@@ -28,39 +28,52 @@
             <el-form-item>
               <el-button type="primary" @click="onSubmit">查询</el-button>  <!--  class="hasid" id="bc6051cd735911e788410242ac120009"     -->
               <el-button  type="primary" @click="clearGetList">清空查询</el-button>
-              <el-button  type="primary" >导出Excel</el-button>
+              <a id='downloadd' target='_blank'  :href='plusSrc' @click="collectexport" download="export.xls"><el-button >导出Excel</el-button></a>
+
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <section style="padding: 0 30px;">
-        <el-table :data="orderLists" border style="text-align: left; font-size: 12px;" show-summary>
+        <el-table :data="orderLists" border style="text-align: left; font-size: 12px;">
           <el-table-column
             type="index"
-            width="100"
+            width="105"
             label="序号">
           </el-table-column>
-          <el-table-column prop="lineName" label="线路名称">
+          <el-table-column prop="lineName" label="线路名称" >
           </el-table-column>
-          <el-table-column prop="teamNum" label="团数">
+          <el-table-column prop="teamNum" label="团数" width='105'>
           </el-table-column>
-          <el-table-column prop="custNum" label="游客数">
+          <el-table-column prop="custNum" label="游客数" width='105'>
           </el-table-column>
-          <el-table-column prop="orderNum" label="订单数量">
+          <el-table-column prop="orderNum" label="订单数量" width='105'>
           </el-table-column>
-          <el-table-column prop="orderTotal" label="订单总额">
+          <el-table-column prop="orderTotal" label="订单总额" width='105'>
           </el-table-column>
-          <el-table-column prop="costTotal" label="订单成本">
+          <el-table-column prop="costTotal" label="订单成本" width='105'>
           </el-table-column>
-          <el-table-column prop="receivable" label="应收总额">
+          <el-table-column prop="receivable" label="应收总额" width='105'>
           </el-table-column>
-          <el-table-column prop="avgPerson" label="人均流水">
+          <el-table-column prop="avgPerson" label="人均流水" width='105'>
           </el-table-column>
-          <el-table-column prop="profit" label="利润合计">
+          <el-table-column prop="profit" label="利润合计" width='105'>
           </el-table-column>
-          <el-table-column prop="avgProfit" label="人均利润">
+          <el-table-column prop="avgProfit" label="人均利润" width='105'>
           </el-table-column>
         </el-table>
+        <div id='totalAll'>
+          <span  style='float: left;'>合计</span>
+          <span>{{orderListsSum.avgProfit}}</span>
+          <span>{{orderListsSum.profit}}</span>
+          <span>{{orderListsSum.avgPerson}}</span>
+          <span>{{orderListsSum.receivable}}</span>
+          <span>{{orderListsSum.costTotal}}</span>
+          <span>{{orderListsSum.orderTotal}}</span>
+          <span>{{orderListsSum.orderNum}}</span>
+          <span>{{orderListsSum.custNum}}</span>
+          <span  style='border-left:1px solid #dee5ec;'>{{orderListsSum.teamNum}}</span>
+        </div>
 
         <div class="page">
           <el-pagination
@@ -88,13 +101,15 @@
 
 <script>
   import axios from 'axios';
-  import { reportlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
+  import { reportlist } from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   import util from '../../../common/js/util'
   export default {
     data() {
       return {
+        baseUrll: 'http://api.erp.we2tu.com/api/report/receivable/line/export',
+        plusSrc: '',
         isLoadd: false,
         isShowJs: false,
         confirmnamelist: false,
@@ -106,15 +121,16 @@
         settleid: '',
         total: 0,
         currentPage: 1,
-        pagesize: 10,
+        pagesize: 50,
         date: '',
         orderinfo: {
           lineName: '',
           token: paramm.getToken(),
-          pageindex: 0,
-          pagesize: 10
+          pageIndex: 0,
+          pageSize: 50
         },
         orderLists: [],
+        orderListsSum: [],
         optionsstate: [{
           value: '0',
           label: '全部'
@@ -147,6 +163,24 @@
 //      })
 //    },
     methods: {
+      //导出excel
+      collectexport() {
+        let dates = ''
+        let startday = this.date[0]
+        let endday = this.date[1]
+        startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
+        endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
+        if(startday == '' && endday == '') {
+          dates = startday + endday
+        } else {
+          dates = startday + '|' + endday
+        }
+        this.plusSrc = this.baseUrll + '?'
+          + 'token=' + paramm.getToken() +'&'
+          + 'date=' + dates +'&'
+          + 'lineName=' + this.orderinfo.lineName;
+        console.log(9999, this.plusSrc);
+      },
       // 鼠标移入下拉显示按钮
       toDown(){
         showorhide()
@@ -192,7 +226,7 @@
         }
 
         let page = this.orderinfo
-        page.pageindex = this.currentPage - 1
+        page.pageIndex = this.currentPage - 1
         page.date = dates
         reportlist(page).then((res) => {
 
@@ -203,6 +237,7 @@
             });
           }else{
             this.orderLists = res.data.obj.datas
+            this.orderListsSum = res.data.obj.totalVo
             this.total = Number(res.data.obj.total)
           }
 
@@ -223,8 +258,8 @@
         this. orderinfo= {
           lineName: '',
           token: paramm.getToken(),
-          pageindex: 0,
-          pagesize: 10
+          pageIndex: 0,
+          pageSize: 50
         };
         this.date = ''
       }
@@ -379,5 +414,25 @@
   }
   .hasid {
     display: none;
+  }
+  #totalAll{
+    font-size:12px;
+    width: 100%;
+    border-bottom:1px solid #dee5ec;
+    border-left:1px solid #dee5ec;
+    border-right:1px solid #dee5ec;
+    background-color: #fff;
+    overflow: hidden;
+    span{
+      height: 45px;
+      line-height:45px;
+      width: 104.5px;
+      border-right:1px solid #dee5ec;
+      display: inline-block;
+      float: right;
+    }
+  }
+  #downloadd{
+    display: inline-block;
   }
 </style>
