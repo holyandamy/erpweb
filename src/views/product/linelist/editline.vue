@@ -627,7 +627,7 @@
 					if(this.baseForm.checkpeople[2]){
 						this.baseForm.checkpeople[2] = "婴儿"
 					}
-					res.data.obj.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
+					 this.baseForm.type=res.data.obj.type.toString()
 					this.oldday = res.data.obj.days
 					if(res.data.obj.edittype == 0){
 						this.editor = false

@@ -6,7 +6,7 @@
           <el-col :span="12">
             <el-breadcrumb separator="/">
               <el-breadcrumb-item>报表管理</el-breadcrumb-item>
-              <el-breadcrumb-item>线路营收报表</el-breadcrumb-item>
+              <el-breadcrumb-item>月付款统计</el-breadcrumb-item>
             </el-breadcrumb>
           </el-col>
         </el-row>
@@ -14,13 +14,13 @@
       <el-form :inline="true" :model="orderinfo"  style="text-align: left; padding-left: 30px;">
         <el-row>
           <el-col :span="6">
-            <el-form-item label="线路名称">
-              <el-input v-model="orderinfo.linename" placeholder="请输入线路名称"></el-input>
+            <el-form-item label="客户名称">
+              <el-input v-model="orderinfo.name" placeholder="请输入客户名称"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="发团日期">
-              <el-date-picker v-model="date" type="daterange" placeholder="申请时间范围">
+            <el-form-item label="时间">
+              <el-date-picker v-model="date" type="month" placeholder="请选择时间">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -28,40 +28,37 @@
             <el-form-item>
               <el-button type="primary" @click="onSubmit">查询</el-button>  <!--  class="hasid" id="bc6051cd735911e788410242ac120009"     -->
               <el-button  type="primary" @click="clearGetList">清空查询</el-button>
-              <el-button  type="primary" >导出Excel</el-button>
+              <a id='downloadd' target='_blank'  :href='plusSrc' @click="collectexport" download="export.xls"><el-button >导出Excel</el-button></a>
+
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <section style="padding: 0 30px;">
-        <el-table :data="orderLists" border style="text-align: left; font-size: 12px;" show-summary>
+        <el-table :data="orderLists" border style="text-align: left; font-size: 12px;" >
           <el-table-column
             type="index"
-            width="100"
+            width="200"
             label="序号">
           </el-table-column>
-          <el-table-column prop="platformname" label="线路名称">
+          <el-table-column prop="name" label="客户名称">
           </el-table-column>
-          <el-table-column prop="status" label="团数">
+          <el-table-column prop="orderCollects" label="订单预付款" width='200'>
           </el-table-column>
-          <el-table-column prop="status" label="游客数">
+          <el-table-column prop="collects" label="预付款" width='200'>
           </el-table-column>
-          <el-table-column prop="status" label="订单数量">
+          <el-table-column prop="refund" label="预收款退款" width='200'>
           </el-table-column>
-          <el-table-column prop="status" label="订单总额">
-          </el-table-column>
-          <el-table-column prop="status" label="订单成本">
-          </el-table-column>
-          <el-table-column prop="status" label="应收总额">
-          </el-table-column>
-          <el-table-column prop="status" label="人均流水">
-          </el-table-column>
-          <el-table-column prop="status" label="利润合计">
-          </el-table-column>
-          <el-table-column prop="status" label="人均利润">
+          <el-table-column prop="allTotal" label="合计" width='200'>
           </el-table-column>
         </el-table>
-
+        <div id='totalAll'>
+          <span  style='float: left;'>合计</span>
+          <span>{{orderListsSum.allTotal}}</span>
+          <span>{{orderListsSum.refund}}</span>
+          <span>{{orderListsSum.collects}}</span>
+          <span  style='border-left:1px solid #dee5ec;'>{{orderListsSum.orderCollects}}</span>
+        </div>
         <div class="page">
           <el-pagination
             @current-change="handleCurrentChange"
@@ -88,13 +85,15 @@
 
 <script>
   import axios from 'axios';
-  import { orderlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
+  import { paylist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   import util from '../../../common/js/util'
   export default {
     data() {
       return {
+        baseUrll: 'http://api.erp.we2tu.com/api/report/finance/collect/export',
+        plusSrc: '',
         isLoadd: false,
         isShowJs: false,
         confirmnamelist: false,
@@ -106,22 +105,16 @@
         settleid: '',
         total: 0,
         currentPage: 1,
-        pagesize: 10,
+        pagesize: 50,
         date: '',
         orderinfo: {
-          orderno: '',
-          linename: '',
-          creater: '',
-          status: '',
-          source: '',
-          settle: '',
-          refund: '',
-          hide: false,
+          name: '',
           token: paramm.getToken(),
           pageindex: 0,
-          pagesize: 10
+          pagesize: 50
         },
         orderLists: [],
+        orderListsSum: [],
         optionsstate: [{
           value: '0',
           label: '全部'
@@ -154,6 +147,19 @@
 //      })
 //    },
     methods: {
+      //导出excel
+      collectexport() {
+        let dates = ''
+        if(this.date) {
+          dates = util.formatDate.format(new Date(this.date), 'yyyy-MM')
+        }else{
+          dates = ''
+        }
+        this.plusSrc = this.baseUrll + '?'
+          + 'token=' + paramm.getToken() +'&'
+          + 'date=' + dates +'&'
+          + 'name=' + this.orderinfo.name;
+      },
       // 鼠标移入下拉显示按钮
       toDown(){
         showorhide()
@@ -187,21 +193,15 @@
         this.typpe = typpe
       },
       getList() {
-        let dates = ''
-        let startday = this.date[0]
-        let endday = this.date[1]
-        startday = (!startday || startday == '') ? '' : util.formatDate.format(new Date(startday), 'yyyy-MM-dd');
-        endday = (!endday || endday == '') ? '' : util.formatDate.format(new Date(endday), 'yyyy-MM-dd');
-        if(startday == '' && endday == '') {
-          dates = startday + endday
-        } else {
-          dates = startday + '|' + endday
-        }
-
+        console.log(666,this.date);
         let page = this.orderinfo
         page.pageindex = this.currentPage - 1
-        page.date = dates
-        orderlist(page).then((res) => {
+        if(this.date) {
+          page.date = util.formatDate.format(new Date(this.date), 'yyyy-MM')
+        }else{
+          page.date = ''
+        }
+        paylist(page).then((res) => {
 
           if(res.data.error == 1){
             this.$message({
@@ -210,6 +210,7 @@
             });
           }else{
             this.orderLists = res.data.obj.datas
+            this.orderListsSum = res.data.obj.totalVo
             this.total = Number(res.data.obj.total)
           }
 
@@ -228,16 +229,10 @@
       // 清空查询
       clearGetList () {
         this. orderinfo= {
-          orderno: '',
-          linename: '',
-          creater: '',
-          status: '',
-          source: '',
-          settle: '',
-          refund: '',
+          name: '',
           token: paramm.getToken(),
           pageindex: 0,
-          pagesize: 10
+          pagesize: 50
         };
         this.date = ''
       }
@@ -392,5 +387,25 @@
   }
   .hasid {
     display: none;
+  }
+  #totalAll{
+    font-size:12px;
+    width: 100%;
+    border-bottom:1px solid #dee5ec;
+    border-left:1px solid #dee5ec;
+    border-right:1px solid #dee5ec;
+    background-color: #fff;
+    overflow: hidden;
+    span{
+      height: 45px;
+      line-height:45px;
+      width: 199.5px;
+      border-right:1px solid #dee5ec;
+      display: inline-block;
+      float: right;
+    }
+  }
+  #downloadd{
+    display: inline-block;
   }
 </style>

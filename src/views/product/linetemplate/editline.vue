@@ -606,8 +606,8 @@
               typeof (item.titleimages) =='string'?_this.routeTit.push(item.titleimages):_this.routeTit.push("")
             })
           }
-          res.data.obj.type == 1 ? this.baseForm.type = "1" : this.baseForm.type = "2"
-					res.data.obj.trafficgo == 0 ? this.baseForm.trafficgo = "" : this.baseForm.trafficgo = res.data.obj.trafficgo
+          this.baseForm.type =res.data.obj.type.toString()
+            res.data.obj.trafficgo == 0 ? this.baseForm.trafficgo = "" : this.baseForm.trafficgo = res.data.obj.trafficgo
 					res.data.obj.trafficreturn == 0 ? this.baseForm.trafficreturn = "" : this.baseForm.trafficreturn = res.data.obj.trafficreturn
 					this.baseForm.checkpeople = []
 					this.baseForm.checkpeople.push(this.baseForm.isadult,this.baseForm.ischild,this.baseForm.isbaby)
