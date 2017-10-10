@@ -3386,7 +3386,7 @@
 .el-menu--dark {
     background-color: #353f4d;
 }
-.el-menu--dark .el-menu-item, .el-menu--dark .city: '普陀区' {
+.el-menu--dark .el-menu-item, .el-menu--dark .city:"普陀区" {
     color: rgb(191, 214, 217);
 }
 .el-menu--dark .el-menu-item:hover, .el-menu--dark .el-submenu__title:hover {
@@ -3759,7 +3759,7 @@
     border-radius: 4px;
     padding: 0 10px;
     width: 1px;
-    white-space: nowrap;
+
 }
 .el-input-group__append .el-select, .el-input-group__append .el-button, .el-input-group__prepend .el-select, .el-input-group__prepend .el-button {
     display: block;
@@ -16395,8 +16395,8 @@
         align-items: center;
 }
 .el-row--flex.is-justify-space-around {
-    -ms-flex-pack: distribute;
-        justify-content: space-around;
+    /*-ms-flex-pack: distribute;*/
+        /*justify-content: space-around;*/
 }
 .el-row--flex.is-justify-space-between {
     -ms-flex-pack: justify;
@@ -21530,7 +21530,7 @@
     position: absolute;
 }
 .el-color-svpanel__cursor > div {
-    cursor: head;
+    /*cursor: head;*/
     width: 4px;
     height: 4px;
     box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0,0,0,0.3), 0 0 1px 2px rgba(0,0,0,0.4);
