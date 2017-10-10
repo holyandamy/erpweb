@@ -169,7 +169,8 @@
                     <tr class="el-table__row">
                       <td class="el-table_1_column_123 el-table-column--selection">
                         <el-checkbox v-model="allChecked" @change='allCheck' v-if="operationType.type == 'add'">全选</el-checkbox>
-                        <div class="cell el-tooltip" v-if="operationType.type == 'edit'">---</div>
+                        <!--<div class="cell el-tooltip" v-if="operationType.type == 'edit'">-&#45;&#45;</div>-->
+                        <el-checkbox v-model="checkedAll" @change="checkAll" v-if="operationType.type == 'edit'">全选</el-checkbox>
                       </td>
                       <td >
                         <!--<div class="cell">删除</div>-->
@@ -238,7 +239,8 @@
                         <!--{{item.checked}}-->
                         <el-checkbox v-model="item.checked" @change='sigCheck'></el-checkbox>
                       </td>
-                      <td  >
+
+                      <td>
                         <div class="cell" style='cursor: pointer;' @click='sigDel(item,idx)'>删除</div>
                       </td>
                       <td width='800'>
@@ -333,14 +335,16 @@
     </section>
 
     <!--弹出框-->
-    <el-dialog title="选择线路" :visible.sync="lineFlag" size="" >
+    <el-dialog title="选择线路" :visible.sync="lineFlag" size="small">
       <el-form :inline="true"  :model="search" class="demo-form-inline" ref="search" >
+
         <el-form-item label="线路分类">
           <el-select v-model="search.categoryid" placeholder="请选择" :label-width="labelWidth">
             <el-option v-for="(linesort,index) in linesorts" :key="linesort.value" :label="linesort.name" :value="linesort.id">
             </el-option>
           </el-select>
         </el-form-item>
+
         <el-form-item label="线路名称">
           <el-input v-model="search.linename"></el-input>
         </el-form-item>
@@ -348,12 +352,12 @@
           <el-button type="primary" @click="queryLine()">查询</el-button>
         </el-form-item>
         <el-form-item label="" >
-          <el-radio-group v-model="checkItem" style='width: 100%;text-align: left;padding: 0 50px;' v-if='lineList.length>0 && lineList.length!=2'>  <!--  v-if='lineList.length>0'  -->
-            <el-radio style='width: 50%;margin: 0;' :label="item" :key="item.name" v-for="item in lineList">{{item.name.length>20?item.name.substring(0,20)+'...':item.name}}</el-radio>
-          </el-radio-group>
-          <el-radio-group v-model="checkItem" style='width: 100%;padding-right: 150px;' v-if='lineList.length==2'>  <!--  v-if='lineList.length>0'  -->
-            <el-radio style='width: 50%;margin: 0;' :label="item" :key="item.name" v-for="item in lineList">{{item.name.length>20?item.name.substring(0,20)+'...':item.name}}</el-radio>
-          </el-radio-group>
+                <el-radio-group v-model="checkItem" style='width: 100%;text-align: left;padding: 0 50px;' v-if='lineList.length>0 && lineList.length!=2'>  <!--  v-if='lineList.length>0'  -->
+                  <el-radio style='width: 50%;margin: 0;' :label="item" :key="item.name" v-for="item in lineList">{{item.name.length>20?item.name.substring(0,20)+'...':item.name}} <span style="margin-left:7px;color:green">{{item.days}}天</span></el-radio>
+                </el-radio-group>
+                <el-radio-group v-model="checkItem" style='width: 100%;padding-right: 150px;' v-if='lineList.length==2'>  <!--  v-if='lineList.length>0'  -->
+                  <el-radio style='width: 50%;margin: 0;' :label="item" :key="item.name" v-for="item in lineList">{{item.name.length>20?item.name.substring(0,20)+'...':item.name}}</el-radio>
+                </el-radio-group>
           <div v-if='showNoLine && lineList.length == 0'>
             该分类下没有线路,请前往线路列表中添加!
           </div>
@@ -470,6 +474,8 @@
         radio: '',
         checked: '',
         allChecked: '',
+        //全选
+        checkedAll:'',
         allplan: '',
         plan: '',
         allisorder: true,
@@ -686,6 +692,23 @@
           })
         }
       },
+      //编辑功能中的全选
+      checkAll(){
+        if(this.checkedAll){
+          console.log(111);
+          this.checkArr.forEach(function (item, index) {
+            console.log(33,item);
+
+            item.checked = true
+          })
+        }else{
+          console.log(222);
+
+          this.checkArr.forEach(function (item, index) {
+            item.checked = false
+          })
+        }
+      },
       // 选择日期添加一行
       addTr () {
         let _this = this;
@@ -782,6 +805,7 @@
         _this.routeName = _this.checkItem.name;
         _this.lineid = _this.checkItem.id;
       },
+      //弹出框出现，调用这个方法，第一次点击下拉框，下拉框样式有问题，第二次点击正常
       getcategoryall(){
         this.lineFlag = true;
         let para= {token:paramm.getToken()}
