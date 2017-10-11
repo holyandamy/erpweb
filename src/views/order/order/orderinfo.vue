@@ -385,7 +385,7 @@ import axios from 'axios';
         if(!Number.isInteger(newvalue)) {
 					callback(new Error('请输入正整数!'));
 				} else {
-					if(newvalue < this.sumShou||newvalue==this.sumSho) {
+					if(newvalue < this.sumShou||newvalue==this.sumShou) {
 						callback(new Error('调整金额需大于收款合计和退款合计！'));
 						this.editpriceform.money ="";
 					}

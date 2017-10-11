@@ -181,7 +181,9 @@
 
 <script>
 	import axios from 'axios';
-	import { orderlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
+	import Cookies from 'js-cookie';
+	import { orderlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat,tokenlogin} from '../../../common/js/config';
+	import md5 from 'js-md5';
 	import OrderInfo from './orderinfo'
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
@@ -282,18 +284,29 @@
 		},
 
 		mounted() {
-			showorhide()
+			showorhide();
+      this.handleRole()
 		},
    updated: function() {
+		  // this.handleRole();
      this.$nextTick(function() {
        showorhide()
-     })
-   },
+		 });
+	 },
+	 created:function(){
+		//  this.handleRole()
+	 },
 		methods: {
       // 鼠标移入下拉显示按钮
       toDown(){
         showorhide()
-      },
+			},
+			//查询按钮显示影藏处理角色权限
+			handleRole(){
+			tokenlogin({token: paramm.getToken()}).then(function(res){
+				console.log(res.data.obj.auths)
+			})
+			},
       //点击显示弹窗
 			confirmnamelists(list) {
 				this.confirmnamelist = true
