@@ -3,8 +3,8 @@ services:
   erpweb:
     image: git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
     environment:
-      - "NODE_ENV=development"
-      - "PROJECTNAME=erpweb"
+      - "NODE_ENV=test"
+      - "PROJECTNAME=webwrapper"
       - "TZ=Asia/Shanghai"
     ports: 
       - 3500:3000
