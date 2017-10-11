@@ -6,6 +6,8 @@ variables:
     PROJECT_NAME: erpweb
 
 build_test_docker:
+  variables:
+      GIT_SUBMODULE_STRATEGY: recursive
   stage: build
   image: docker:latest
   script:
