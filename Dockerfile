@@ -26,4 +26,4 @@ RUN rm -rf /usr/src/temp
 WORKDIR /usr/src/app/
 
 ENTRYPOINT ["/bin/sh","start.sh"] 
-EXPOSE 3009
+EXPOSE 3000
