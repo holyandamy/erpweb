@@ -1,4 +1,4 @@
 [submodule "webwrapper"]
 	path = webwrapper
-	url = git@git.we2tu.com:erp/webwrapper.git
+	url = ../webwrapper.git
 	branch = dev
