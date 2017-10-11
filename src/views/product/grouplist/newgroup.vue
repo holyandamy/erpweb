@@ -694,20 +694,19 @@
       },
       //编辑功能中的全选
       checkAll(){
-        if(this.checkedAll){
-          console.log(111);
-          this.checkArr.forEach(function (item, index) {
-            console.log(33,item);
-
-            item.checked = true
+        let _this = this
+        /*if(this.checkedAll){
+          this.nextTick({
+              _this.checkArr.forEach((item) => {
+                item.checked = true
+              })
           })
-        }else{
-          console.log(222);
 
+        }else{
           this.checkArr.forEach(function (item, index) {
             item.checked = false
           })
-        }
+        }*/
       },
       // 选择日期添加一行
       addTr () {

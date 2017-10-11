@@ -104,12 +104,13 @@
 						      </span>
                   <el-dropdown-menu slot="dropdown"  style='text-align: center;font-size: 20px;font-weight: bold;'>
                     <el-dropdown-item> <el-button v-if="scope.row.approveName=='待审批'" type="text" size="small"  @click='setAppId(scope.row.id)' >审核</el-button></el-dropdown-item>
-                    <el-dropdown-item> <el-button v-if="scope.row.isorder && scope.row.status =='待发团'&& (scope.row.approveName =='审批通过' || scope.row.approveName =='无需审批')" class="hasid" id="521410f9734611e788410242ac120009" @click="setMode('groupinfo'),editorFn(scope.row,'groupinfo')" type="text" size="small" >下单</el-button></el-dropdown-item>
+                    <el-dropdown-item> <el-button v-if="scope.row.isorder && scope.row.status =='待发团'&& (scope.row.approveName =='审批通过' || scope.row.approveName =='无需审批') " class="hasid" id="521410f9734611e788410242ac120009" @click="setMode('groupinfo'),editorFn(scope.row,'groupinfo')" type="text" size="small" >下单</el-button></el-dropdown-item>
                     <el-dropdown-item> <el-button class="hasid" id="6f6276e6734611e788410242ac120009" @click="setMode('newGroup','edit'),editorFn(scope.row,'newGroup')" type="text" size="small">编辑</el-button>  <!-- editorFn(scope.row)  --></el-dropdown-item>
                     <el-dropdown-item> <el-button  @click="setMode('groupnamelist'),editorFn(scope.row,'groupnamelist')" type="text" size="small">出团名单</el-button></el-dropdown-item>
                     <el-dropdown-item> <el-button v-if="new Date(scope.row.starttime.replace(/-/g,'/')).getTime() > new Date().getTime()" class="hasid" id="8929e4a7734611e788410242ac120009" type="text" size="small" @click="deleteRow(scope.$index, scope.row)">{{{false:'启用',true:'封团'}[scope.row.isenable]}}</el-button></el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
+                <!--出发日期-截止日期 > 当前日期  下单就显示  否则不显示-->
               </a>
             </template>
           </el-table-column>
@@ -337,6 +338,9 @@
             return
           }else {
             _this.lineList = res.data.obj.datas
+            _this.lineList.forEach((item) => {
+              item.days = item.days + 1
+            })
             _this.total = Number(res.data.obj.total)
           }
         })

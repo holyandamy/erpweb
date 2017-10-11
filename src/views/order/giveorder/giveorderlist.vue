@@ -176,8 +176,8 @@
           contact: '',
           status: '-1',
 					token: paramm.getToken(),
-					pageindex: 0,
-					pagesize: 10
+          pageIndex: 0,
+          pageSize: 10
 				},
 				orderLists: [],
 				optionsstate: [{
@@ -295,7 +295,7 @@
 				}
 
 				let page = this.orderinfo
-				page.pageindex = this.currentPage - 1
+				page.pageIndex = this.currentPage - 1
 				page.date = dates
         givelist(page).then((res) => {
 					if(res.data.error == 1){
@@ -329,8 +329,8 @@
           contact: '',
           status: '-1',
           token: paramm.getToken(),
-          pageindex: 0,
-          pagesize: 10
+          pageIndex	: 0,
+          pageSize: 10
         };
         this.date = ''
       }

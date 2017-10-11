@@ -584,7 +584,9 @@
         if(this.visitorList.custtype == 2 && this.visitorList.comname.toString().length>4){
           reserveNum({token: paramm.getToken(),mobile: this.visitorList.mobile.toString() || '', companyname: this.visitorList.comname.toString() || ''}).then(function (res) {
             _this.companyArr = res.data.obj
+            console.log(777,_this.companyArr)
             _this.jidiaoArr = _this.companyArr
+            _this.companyArr = _this.companyArr.slice(0,1)
           })
         }
       },
