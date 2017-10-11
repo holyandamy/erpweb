@@ -11,10 +11,6 @@ build_test_docker:
   stage: build
   image: docker:latest
   script:
-    - git submodule init
-    - git submodule update 
-    - git submodule foreach git checkout master 
-    - git submodule foreach git pull
     - docker build -f Dockerfile -t $PROJECT_NAME .
     - docker tag $PROJECT_NAME git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
     - docker push git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
