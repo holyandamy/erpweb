@@ -19,7 +19,7 @@ WORKDIR /usr/src/temp/
 RUN yarn
 RUN yarn run build
 
-RUN cp /usr/src/temp/webwrapper/* /usr/src/app
+RUN cp -r /usr/src/temp/webwrapper/ /usr/src/app
 RUN rm -rf /usr/src/app/public/*
 RUN cp -r /usr/src/temp/dist/ /usr/src/app/public/
 RUN rm -rf /usr/src/temp
