@@ -158,7 +158,7 @@
 							<el-form-item label="集合地点：" prop="station" label-width="120px">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-              <el-form-item label="图片：">
+              <el-form-item label="图片：" required>
                 <ul v-if='baseImages' >
                   <li style='float:left;'  v-for="imgSrc0 in baseImages.split(',')">
                     <img style='width: 148px;height: 148px;margin: 0 10px;' :src='imgSrc0' alt="">
@@ -166,7 +166,9 @@
                 </ul>
                 <ImgLoad @geturl="geturl"  :checktop="checktop"></ImgLoad>   <!--  :scope="scope"  -->
               </el-form-item>
-
+              <el-form-item label="" style='color:red;'>
+                建议图片格式：jpg、png，图片大小在一M以内，宽高为：300*180，比例为5:3
+              </el-form-item>
 					</el-col>
 					</el-row>
 				</div>
@@ -790,6 +792,13 @@
         if(this.baseForm.toprovinceid == '' || this.baseForm.tocityid == '' ||this.baseForm.todistrictid == ''){
           this.$message({
             message: '请选择目的地',
+            type: 'warning'
+          });
+          return
+        }
+        if(this.baseForm.images == ''){
+          this.$message({
+            message: '请上传图片',
             type: 'warning'
           });
           return
