@@ -7,7 +7,7 @@ services:
       - "PROJECTNAME=erpweb"
       - "TZ=Asia/Shanghai"
     ports: 
-      - 3500:8080
+      - 3500:3000
     logging:
       driver: syslog
       options:

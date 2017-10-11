@@ -17,12 +17,12 @@ build_test_docker:
   only:
     - dev
 
-deploy_test_docker:
-  stage: deploy
-  image: docker:latest
-  script: 
-    - docker stack deploy -c deploy/deploy.test.yml $PROJECT_NAME
-  tags:
-    - docker
-  only:
-    - dev
+# deploy_test_docker:
+#   stage: deploy
+#   image: docker:latest
+#   script: 
+#     - docker stack deploy -c deploy/deploy.test.yml $PROJECT_NAME
+#   tags:
+#     - docker
+#   only:
+#     - dev
