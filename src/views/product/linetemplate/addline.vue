@@ -557,8 +557,6 @@
 			},
       getRouteImages(url,idx) {
         let _this =this;
-        console.log(11, url);
-        console.log(22, idx);
         this.baseForm.routes.forEach(function (item,index) {
             if(idx ==index){
               item.titleimages= url
