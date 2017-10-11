@@ -9,7 +9,7 @@
  * 当升级编辑器时，可直接使用旧版配置文件替换新版配置文件,不用担心旧版配置文件中因缺少新功能所需的参数而导致脚本报错。
  **************************提示********************************/
 //import {bases} from '../../common/js/config.js'
-import {bases} from '../../src/common/js/config.js'
+import {serverBase} from '../../src/common/js/config.js'
 
 (function () {
 
@@ -26,16 +26,17 @@ import {bases} from '../../src/common/js/config.js'
     /**
      * 配置项主体。注意，此处所有涉及到路径的配置别遗漏URL变量。
      */
-  
+
     window.UEDITOR_CONFIG = {
 
         //为编辑器实例添加一个路径，这个不能被注释
         UEDITOR_HOME_URL: URL
 
         // 服务器统一请求接口路径
-        , serverUrl:  "http://api.erp.we2tu.com/ueditor"
-        
-      
+        // , serverUrl:  "http://api.erp.we2tu.com/ueditor"
+        , serverUrl:  serverBase
+
+
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的重新定义
         , toolbars: [[

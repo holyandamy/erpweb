@@ -137,9 +137,10 @@
         <el-col style='text-align: left;padding: 20px 0;font-weight: bold;'>退款合计：￥{{sumFu}}元</el-col>
       </el-row>
 			<h2>
+				
 					<el-row>
-						<el-col :span="12">游客信息</el-col>
-						<el-col :span="12">
+						<el-col :span="15">游客信息</el-col>
+						<el-col :span="9">
               <!--<el-upload-->
                 <!--class="upload-demo"-->
                 <!--action="http://api.erp.we2tu.com/api/order/namelist/import"-->
@@ -151,9 +152,16 @@
 
 							<el-button><a :href="downUrl" class='downModel' @click='downVisList'>导出游客名单</a></el-button>
 							<el-button><a href="http://img.etu6.org/erp/namelist_template.xls" class='downModel' >下载名单模版</a></el-button>
-							<el-button class='containerFather'><input type="file"  id="file1" class='uploadSon'  ><a class='downModel uploadTxt' >导入游客名单</a></el-button>
-						</el-col>  <!-- @change='getFilename'  -->
+								<el-upload
+									ref="upload"
+									:on-success="getFilename"
+									action="http://api.erp.we2tu.com/api/order/namelist/import"
+									:auto-upload="false">					
+									<el-button>导入游客名单</el-button>
+								</el-upload>
+						</el-col> 
 					</el-row>
+
 			</h2>
 			<div class="bg_white padding-20-50">
 				<el-row>
@@ -368,7 +376,7 @@ import axios from 'axios';
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
 //  import $ from 'jquery'
-	import { orderdetail, banlist, collectsave, orderupdate, orderpay, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave, orderrefund } from '../../../common/js/config';
+	import { orderdetail, banlist, collectsave, orderupdate, orderpay, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave, orderrefund,ordernamelistimport} from '../../../common/js/config';
 	export default {
 		props: ['listid'],
 		data() {
@@ -377,11 +385,15 @@ import axios from 'axios';
         if(!Number.isInteger(newvalue)) {
 					callback(new Error('请输入正整数!'));
 				} else {
-					if(newvalue < 0) {
+					if(newvalue < this.sumShou||newvalue==this.sumSho) {
 						callback(new Error('调整金额需大于收款合计和退款合计！'));
-					} else if((newvalue < this.sumFu) || (newvalue < this.sumShou)) {
+						this.editpriceform.money ="";
+					}
+					 else if((newvalue < this.sumFu) || (newvalue == this.sumFu)) {
 						callback(new Error('调整金额需大于收款合计和退款合计！'));
-					} else {
+					  this.editpriceform.money ="";
+					} 
+					else {
 						callback()
 					}
 				}
@@ -494,8 +506,8 @@ import axios from 'axios';
 				oldtotal: 0,
 				roomlength: '',
 				roomprice: 0,
-        sumShou: 0,
-        sumFu: 0
+        sumShou: 1,
+        sumFu: 3
 			}
 		},
 		created() {
@@ -541,6 +553,7 @@ import axios from 'axios';
 //        )
 //        return false;
 //      },
+      
 			refund(info){
           let _this =this;
 				 this.$confirm('退团申请后该游客信息不可编辑，并且需在订单中添加退款明细', '退团申请', {
@@ -749,7 +762,7 @@ import axios from 'axios';
 					id: this.listid,
 					token: paramm.getToken()
 				}
-        _this.sumFu =  _this.sumShou = 0;
+        // _this.sumFu =  _this.sumShou = 0;
 				orderdetail(para).then((res) => {
 					this.detail = res.data.obj
           if(this.detail.collections.length>0){
@@ -1124,7 +1137,7 @@ import axios from 'axios';
 //          formData.append(k, dt[k])
 //        }
         return new Promise((resolve, reject) => {
-          Vue.http.post('http://api.erp.we2tu.com/api/order/namelist/import', formData, {
+          Vue.post('http://api.erp.we2tu.com/api/order/namelist/import', formData, {
             headers: {
               'Content-Type': 'multipart/form-data; charset=UTF-8'
             },
@@ -1139,26 +1152,23 @@ import axios from 'axios';
         })
       },
       //导入游客名单
-      getFilename(e){
-//        this.ajaxFileUpload()
-        axios.http.post('http://api.erp.we2tu.com/api/order/namelist/import', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data; charset=UTF-8'
-          },
-          emulateJSON: true
-        }).then(function (response) {
-//            if(response.body.Response.ErrCode == 'isv.invalid-parameter:login_token') {
-//              failToken()
-//              return
-//            }
-          resolve(response.body.Response)
-        })
+      getFilename(res,file){
+				console.log(11111222);
+        // axios.post('http://api.erp.we2tu.com/api/order/namelist/import', {token:this.editpriceform.token}, {
+        //   headers: {
+        //     'Content-Type': 'multipart/form-data; charset=UTF-8'
+        //   },
+        //   emulateJSON: true
+        // }).then(function (response) {
+        //   console.log(response.body);
+        //   resolve(response.body.Response)
+        // })
 
 
-        return
-        console.log(111, e);
-        let files = e.target.files;
-        this.fileUp(files[0], 0,files[0].name)
+        // return
+        // console.log(111, e);
+        // let files = e.target.files;
+        // this.fileUp(files[0], 0,files[0].name)
       },
       fileUp(file,i,name){
         let _this =this;

@@ -274,7 +274,7 @@
 							<el-row>
 								<el-col :span="14">
                   <el-form-item label="图片：" prop="">
-                    <ImgLoad :route="route"></ImgLoad>
+                    <ImgLoad :route="route"  @getRouteImages ='getRouteImages' :idx="index"></ImgLoad>
                   </el-form-item>
 
 								</el-col>
@@ -555,6 +555,14 @@
 			geturl(url) {
 				this.baseForm.images = url
 			},
+      getRouteImages(url,idx) {
+        let _this =this;
+        this.baseForm.routes.forEach(function (item,index) {
+            if(idx ==index){
+              item.titleimages= url
+            }
+        })
+      },
 			jump(index) {
 				this.active = index
 
@@ -721,8 +729,7 @@
 							para.routes[0].content = html
 							para.edittype = 1
 						}
-
-						templatsave(para).then((res) => {
+            templatsave(para).then((res) => {
 							if(res.data.error == 1) {
 								this.$message({
 									showClose: true,

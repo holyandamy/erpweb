@@ -21,7 +21,7 @@
 					<el-row>
 						<span>
 						线路分类：
-					</span>
+					  </span>
 						<el-col :span="20">
 							<ul>
 								<li @click="changecondition('-1')" :class="{checked:ischecked == -1}">全部</li>
@@ -222,12 +222,12 @@
 				})
 			},
 			changedest(index,destination) {
-				if(index == -1){
+        if(index == -1){
 					this.checkeddest = -1
 					this.search.toid = ''
 				}else{
 					this.checkeddest = index
-					this.search.toid = destination.id
+					this.search.toid = destination.todistrictid
 				}
 
 			},
