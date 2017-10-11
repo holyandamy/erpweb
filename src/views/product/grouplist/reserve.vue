@@ -1,7 +1,15 @@
 <template>
   <div>
     <header>
-      <h3 style='text-align: left;font-weight: bold;'>下单 >> {{{1:'占位',2:'预定'}[operationType.type]}}</h3>
+      <el-row>
+        <el-col :span="12">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item>发团列表</el-breadcrumb-item>
+            <el-breadcrumb-item><span @click="handleHide()">下单</span></el-breadcrumb-item>
+            <el-breadcrumb-item>{{{1:'占位',2:'预定'}[operationType.type]}}</el-breadcrumb-item>
+          </el-breadcrumb>
+        </el-col>
+      </el-row>
     </header>
     <section>
       <h2 class="d_jump"  @click="handleHide()"></h2>
@@ -232,7 +240,7 @@
 </template>
 
 <script>
-  import {token,orderdet, reserveNum,orderSave} from '../../../common/js/config';
+  import {orderdet, reserveNum,orderSave} from '../../../common/js/config';
   import paramm from '../../../common/js/getParam'
   export default {
     props:['categoryId','operationType'],

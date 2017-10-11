@@ -168,7 +168,7 @@
   import axios from 'axios';
   import md5 from 'js-md5';
   import util from '../../../common/js/util'
-  import { usersave, getdeplist, rolelist,token} from '../../../common/js/config';
+  import { usersave, getdeplist, rolelist} from '../../../common/js/config';
   export default {
     data() {
       //验证员工编号

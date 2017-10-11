@@ -126,7 +126,7 @@
 <script>
   import {address} from '../../../common/js/address'
   import axios from 'axios';
-  import {token,custsave,custupdate,custdetail, province, city, district } from '../../../common/js/config';
+  import {custsave,custupdate,custdetail, province, city, district } from '../../../common/js/config';
   import paramm from '../../../common/js/getParam'
   export default {
     data() {

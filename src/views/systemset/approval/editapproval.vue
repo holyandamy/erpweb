@@ -89,7 +89,7 @@
 <script>
   import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
-	import {approveupdate, userenablelist,token} from '../../../common/js/config';
+	import {approveupdate, userenablelist} from '../../../common/js/config';
 	export default {
 		props: ['edit'],
 		data() {

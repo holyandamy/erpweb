@@ -85,7 +85,7 @@
 <script>
   import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
-	import { addapprove, userenablelist,token } from '../../../common/js/config';
+	import { addapprove, userenablelist } from '../../../common/js/config';
 	export default {
 		props: ['banklist'],
 		data() {

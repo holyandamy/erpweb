@@ -83,7 +83,7 @@
 <script>
   import AddVisitor from './addVisitor'
   import axios from 'axios';
-  import {token,custlist,custdel} from '../../../common/js/config';
+  import {custlist,custdel} from '../../../common/js/config';
  import {showorhide} from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   export default {

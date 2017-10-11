@@ -72,7 +72,7 @@
 
   import paramm from '../../../common/js/getParam'
   import axios from 'axios';
-  import {token,roledetail,authlist,rolesave,roleupdate} from '../../../common/js/config';
+  import {roledetail,authlist,rolesave,roleupdate} from '../../../common/js/config';
   export default {
 
     data() {

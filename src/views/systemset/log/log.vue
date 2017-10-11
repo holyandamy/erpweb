@@ -63,7 +63,7 @@
 	import axios from 'axios';
 	import util from '../../../common/js/util'
 	import { showorhide } from '../../../common/js/showorhid'
-	import {loglist,getdeplist,rolelist,token} from '../../../common/js/config';
+	import {loglist,getdeplist,rolelist} from '../../../common/js/config';
 	export default {
 		data() {
 			return {

@@ -69,7 +69,7 @@
   </div>
 </template>
 <script>
-  import {token,ordernameslist} from '../../../common/js/config'
+  import {ordernameslist} from '../../../common/js/config'
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   export default {

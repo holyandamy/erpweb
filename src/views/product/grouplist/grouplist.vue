@@ -137,6 +137,7 @@
               type="textarea"
               :rows="3"
               placeholder="不超过120字!"
+              @input="titleMessage"
               v-model="form.remark">
             </el-input>
           </el-form-item>
@@ -165,7 +166,7 @@
   import Groupnamelist from './groupnamelist'
   import util from '../../../common/js/util'
   import axios from 'axios'
-  import {token,grouplist,linecategorydelete,groupStop,groupApprove} from '../../../common/js/config'
+  import {grouplist,linecategorydelete,groupStop,groupApprove} from '../../../common/js/config'
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   export default {
@@ -242,6 +243,14 @@
         this.dialogFormVisible = true;
         this.approveId = id
       },
+      titleMessage(){
+        if(this.form.remark.length > 120){
+          this.$message({
+            message:'输入的内容超过120字',
+            type:'warning'
+          })
+        }
+      },
       examineSure () {
         if(this.form.remark.length>120) {
           this.$message({
@@ -305,7 +314,7 @@
       },
       editorFn(rows,typee){
         this.editcategory.id=rows.id;
-        this.tdidd=rows.teamid;
+        this.tdidd=rows.id;
         console.log(789, this.tdidd);
         if(typee == 'newGroup') {
           this.editcategory.id=rows.teamid;
@@ -339,7 +348,13 @@
           }else {
             _this.lineList = res.data.obj.datas
             _this.lineList.forEach((item) => {
-              item.days = item.days + 1
+              //console.log(77777,item.endtime)
+              let time = new Date(item.endtime.replace(/-/g,'/')).getTime() - 86400000
+              time = new Date(time)
+              let year = time.getFullYear() + ''
+              let month = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1) : (time.getMonth() + 1) + ''
+              let day = time.getDate() < 10 ? '0' + time.getDate() : time.getDate() + ''
+              item.endtime = year + '-' + month + '-' + day
             })
             _this.total = Number(res.data.obj.total)
           }

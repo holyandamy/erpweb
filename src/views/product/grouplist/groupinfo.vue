@@ -169,8 +169,8 @@
             <li>
               <span>图片</span>
               <div class="xc">
-                <div v-if='route.titleimages' v-for="img in route.titleimages">  <!--  .split(',')  -->
-                  <img style='width: 168px;height: 168px;margin: 0 10px;' :src="img"/>
+                <div v-if='route.titleimages' v-for="item in detail.routes">  <!--  .split(',')  -->
+                  <img style='width: 168px;height: 168px;margin: 0 10px;' :src="item.titleimages"/>
                 </div>
                 <div v-if='!route.titleimages'>
                   ---

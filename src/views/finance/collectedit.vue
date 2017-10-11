@@ -115,7 +115,7 @@
   import paramm from '../../common/js/getParam'
   import axios from 'axios';
   import util from '../../common/js/util'
-  import { collectsave, banlist,token,orderlist } from '../../common/js/config';
+  import { collectsave, banlist ,orderlist } from '../../common/js/config';
   import ImgUpload from './upload'
   import {showorhide} from '../../common/js/showorhid'
   export default {
