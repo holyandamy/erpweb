@@ -202,7 +202,8 @@
 </template>
 
 <script>
-	import { orderexportdetail,token } from '../../../common/js/config';
+	import { orderexportdetail } from '../../../common/js/config';
+	import paramm from '../../../common/js/getParam'
 	export default{
 		data(){
 			return {
@@ -231,7 +232,7 @@
 			getdetail(){
 				console.log(111)
 				let para = {
-					token:token,
+					token:paramm.getToken(),
 					id:this.id
 				}
 				orderexportdetail(para).then((res) =>{

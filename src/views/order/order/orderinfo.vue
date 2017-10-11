@@ -71,7 +71,7 @@
 							已收金额：{{detail.collection}}元
 						</el-col>
 						<el-col :span="12" class="pl-20">
-							联系方式：{{detail.contactmobile}}
+							联系方式：{{detail.contact }}&nbsp;&nbsp;&nbsp;{{detail.contactmobile}}
 						</el-col>
 					</el-row>
 				</div>
@@ -151,7 +151,7 @@
               <!--</el-upload>-->
 
 							<el-button><a :href="downUrl" class='downModel' @click='downVisList'>导出游客名单</a></el-button>
-							<el-button><a href="http://img.etu6.org/erp/namelist_template.xls" class='downModel' >下载名单模版</a></el-button>
+							<el-button><a :href="downloadUrl" class='downModel' >下载名单模版</a></el-button>
 								<el-upload
 									ref="upload"
 									:on-success="getFilename"
@@ -376,7 +376,7 @@ import axios from 'axios';
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
 //  import $ from 'jquery'
-	import { orderdetail, banlist, collectsave, orderupdate, orderpay, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave, orderrefund,ordernamelistimport} from '../../../common/js/config';
+	import {downloadUrl, orderdetail, banlist, collectsave, orderupdate, orderpay, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave, orderrefund,ordernamelistimport} from '../../../common/js/config';
 	export default {
 		props: ['listid'],
 		data() {
@@ -385,11 +385,11 @@ import axios from 'axios';
         if(!Number.isInteger(newvalue)) {
 					callback(new Error('请输入正整数!'));
 				} else {
-					if(newvalue < this.sumShou||newvalue==this.sumShou) {
+					if(newvalue < this.sumShou) {
 						callback(new Error('调整金额需大于收款合计和退款合计！'));
 						this.editpriceform.money ="";
 					}
-					 else if((newvalue < this.sumFu) || (newvalue == this.sumFu)) {
+					 else if(newvalue < this.sumFu) {
 						callback(new Error('调整金额需大于收款合计和退款合计！'));
 					  this.editpriceform.money ="";
 					} 
@@ -409,6 +409,7 @@ import axios from 'axios';
           status: 'finished'
         }],
         downUrl: '',
+        downloadUrl: '',
         baseUrl: 'http://api.erp.we2tu.com/api/order/namelist/export?',
 				pricerules: {
 					money: [{
@@ -506,8 +507,8 @@ import axios from 'axios';
 				oldtotal: 0,
 				roomlength: '',
 				roomprice: 0,
-        sumShou: 1,
-        sumFu: 3
+        sumShou: 0,
+        sumFu: 0
 			}
 		},
 		created() {
@@ -556,7 +557,7 @@ import axios from 'axios';
       
 			refund(info){
           let _this =this;
-				 this.$confirm('退团申请后该游客信息不可编辑，并且需在订单中添加退款明细', '退团申请', {
+				 this.$confirm('退团申请后该游客信息不可编辑', '退团申请', {
 		          confirmButtonText: '确定',
 		          cancelButtonText: '取消',
 		          type: 'warning'
@@ -762,8 +763,9 @@ import axios from 'axios';
 					id: this.listid,
 					token: paramm.getToken()
 				}
-        // _this.sumFu =  _this.sumShou = 0;
+         _this.sumFu =  _this.sumShou = 0;
 				orderdetail(para).then((res) => {
+					this.downloadUrl = downloadUrl
 					this.detail = res.data.obj
           if(this.detail.collections.length>0){
             this.detail.collections.forEach(function (item) {

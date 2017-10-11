@@ -36,7 +36,11 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test')]
+        include: [
+          resolve('src'),
+          resolve('test'),
+          resolve('node_modules/_element-ui@1.4.6@element-ui/src'),
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -55,9 +59,9 @@ module.exports = {
         }
       },
       {
-      test: /\.scss$/,
-      loaders: ["style", "css", "sass"]
-    }
+        test: /\.scss$/,
+        loaders: ["style", "css", "sass"]
+      }
     ]
   },
   plugins: [  // todo 9.22

@@ -965,7 +965,6 @@
     .el-input-number__decrease {
       line-height: 29px;
       width: 30px;
-      top: 13px;
     }
     .el-input {
       input {

@@ -64,7 +64,7 @@
       },
         handleRemove(file, fileList) {
         console.log('okc:',file,fileList)
-        /*this.imglist = fileList
+        this.imglist = fileList
         let list = []
         let index
         for(let i = 0 ; i <this.imglist.length;i++){
@@ -72,7 +72,7 @@
           list.push(this.imglist[i].raw.url)
           this.imagelist = list.join(',')
           this.$emit("imagelistchange",this.imagelist)
-        }*/
+        }
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;

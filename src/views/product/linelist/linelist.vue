@@ -257,7 +257,11 @@
 			},
 			//筛选线路分类
 			changecondition(index,list) {
-				this.ischecked = index
+        console.log(888, index);
+        console.log(99, this.ischecked);
+        this.ischecked = index
+
+        this.$router.push({path: '/linelist'})
 
 				let listid = '0'
 				if(index == '-1'){
@@ -267,7 +271,9 @@
 					this.search.categoryid = ''
 
 				}else{
-					listid = list.id
+          this.ischecked = index
+
+          listid = list.id
 					this.search.categoryid = list.id
 				}
 			let para = {token:paramm.getToken(),categoryid:listid}
@@ -314,7 +320,7 @@
 					this.search.toid = ''
 				}else{
 					this.checkeddest = index
-					this.search.toid = destination.id
+					this.search.toid = destination.todistrictid
 				}
 
 			},

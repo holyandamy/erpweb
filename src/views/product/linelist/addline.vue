@@ -634,10 +634,25 @@
 		methods: {
 			geturl(url) {
         this.urlAdd= url
+        if(!this.baseForm.id) {
+          this.baseForm.images = url
+          this.urlAdd= ''
+
+        }
       },
       getRouteImages(url,idx) {
         let _this =this;
+        if(!this.baseForm.id) {
+          console.log(11);
+          this.baseForm.routes.forEach(function (item,index) {
+            if(idx ==index){
+              item.titleimages= url
+            }
+          })
+        }
         if(this.routeTit.length>0){
+          console.log(22);
+
           this.routeTit.forEach(function (item,index) {
             if(index == idx){
               if(item){
@@ -779,7 +794,8 @@
 					if(valid) {
             if(this.baseForm.images && this.urlAdd) {
               this.baseForm.images = this.baseImages+ ',' + this.urlAdd
-            }else {
+            }
+            if(this.baseImages) {
               this.baseForm.images = this.baseImages
             }
             if(this.baseForm.routes.length>0 && this.routeTit.length>0){
@@ -839,8 +855,6 @@
 							para.routes[0].content = html
 							para.edittype = 1
 						}
-
-            console.log(11111111, para);
             linesave(para).then((res) => {
 							if(res.data.error || res.data.err) {
 								paramm.getCode(res.data,_this )
@@ -919,8 +933,6 @@
           item.title = ''
           if(idx>1) _this.baseForm.routes.splice(1)
         })
-        console.log(3333,this.baseForm.routes);
-
       },
       //获取国家列表
       getcountry(pro) {

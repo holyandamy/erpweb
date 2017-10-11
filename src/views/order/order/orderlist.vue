@@ -285,13 +285,14 @@
 
 		mounted() {
 			showorhide();
-      this.handleRole()
+      this.handleRole();
 		},
    updated: function() {
-		  // this.handleRole();
+		  
      this.$nextTick(function() {
        showorhide()
 		 });
+		 this.handleRole();
 	 },
 	 created:function(){
 		//  this.handleRole()
@@ -301,10 +302,19 @@
       toDown(){
         showorhide()
 			},
-			//查询按钮显示影藏处理角色权限
+			//查询按钮显示影藏处理角色权限？
 			handleRole(){
 			tokenlogin({token: paramm.getToken()}).then(function(res){
-				console.log(res.data.obj.auths)
+				console.log(res.data.obj.auths);
+				let totalId=res.data.obj.auths;
+				let list = document.getElementsByClassName('hasid');
+				for(let i = 0; i < list.length; i++) {
+					for(let k = 0; k < totalId.length; k++) {
+						if(totalId[k].indexOf(list[i].id) >= 0){
+							list[i].setAttribute('style', 'display: inline-block !important');
+						}
+					}
+		    }
 			})
 			},
       //点击显示弹窗
