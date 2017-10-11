@@ -83,6 +83,8 @@ export const customupdate = params => { return axios.post(`${base}/order/custom/
 /*线路营收报表*/
 export const reportlist = params => { return axios.post(`${base}/report/receivable/line`, params); };//线路营收列表
 export const adjusterlist = params => { return axios.post(`${base}/report/receivable/adjuster`, params); };//计调营收列表
+export const collectlist = params => { return axios.post(`${base}/report/finance/collect`, params); };//月收款统计报表列表
+export const paylist = params => { return axios.post(`${base}/report/finance/pay`, params); };//月付款统计报表列表
 
 
 //产品中心

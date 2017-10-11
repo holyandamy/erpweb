@@ -284,11 +284,11 @@
 		mounted() {
 			showorhide()
 		},
-//    updated: function() {
-//      this.$nextTick(function() {
-//        showorhide()
-//      })
-//    },
+   updated: function() {
+     this.$nextTick(function() {
+       showorhide()
+     })
+   },
 		methods: {
       // 鼠标移入下拉显示按钮
       toDown(){
