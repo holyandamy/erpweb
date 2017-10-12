@@ -88,9 +88,9 @@ export default {
 	 mounted(){
 		  this.handleRole();
 	 },
-   updated(){
-		 this.handleRole();
-	 },
+  //  updated(){
+	// 	 this.handleRole();
+	//  },
     methods: {
 			//根据角色权限设置对应的区域显示影藏
 			handleRole(){
