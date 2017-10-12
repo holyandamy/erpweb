@@ -182,7 +182,7 @@
   import paramm from '../../../common/js/getParam'
   import axios from 'axios';
   import util from '../../../common/js/util'
-  import { editusersave, getdeplist, rolelist,userdetail,userpwd,token } from '../../../common/js/config'
+  import { editusersave, getdeplist, rolelist,userdetail,userpwd } from '../../../common/js/config'
 
   import md5 from 'js-md5';
   export default {

@@ -93,7 +93,7 @@
 
 <script>
   import paramm from '../../../common/js/getParam'
-  import { getbanklist, addbank, updatebank, updatestatus, token } from '../../../common/js/config';
+  import { getbanklist, addbank, updatebank, updatestatus } from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
   export default {
     data() {

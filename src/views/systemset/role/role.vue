@@ -69,7 +69,7 @@
 	import { showorhide } from '../../../common/js/showorhid'
   import axios from 'axios';
   import AddRole from './addrole';
-  import {token,rolelist,roledel, roledetail} from '../../../common/js/config';
+  import {rolelist,roledel, roledetail} from '../../../common/js/config';
   export default {
     components: {
       AddRole, // add role

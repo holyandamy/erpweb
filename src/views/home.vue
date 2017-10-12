@@ -26,10 +26,13 @@
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo"
 					 unique-opened  v-show="!collapsed"  theme="dark">
 					<template v-for="(item,index) in menu" v-if="!item.hidden">
-						<el-submenu :index="index+''" v-if="!item.leaf">
+						<el-submenu :index="index+''" v-if="!item.leaf"    class="parentMenu">
 
 							<template slot="title"></i>{{item.authname}}</template>
-							<el-menu-item v-for="child in item.childs" :index="child.path" style='min-width: 0 !important;' @click="showhome=false,$router.push(child.path)" :key="child.path" v-if="!child.hidden">{{child.authname}}</el-menu-item>
+							<!-- 显示子菜单 -->
+							<el-menu-item v-for="child in item.childs" :index="child.path" style='min-width: 0 !important;' @click="showhome=false,$router.push(child.path)" :key="child.path"
+							 v-if="!child.hidden"  :id="child.id"  >{{child.authname}}</el-menu-item>
+
 						</el-submenu>
 						<el-menu-item v-if="item.leaf&&item.childs.length>0" :index="item.childs[0].path">{{item.childs[0].authname}}</el-menu-item>
 					</template>
@@ -64,7 +67,8 @@
 
 <script>
 import Cookies from 'js-cookie';
-import {tokenlogin} from '../common/js/config'
+import {tokenlogin} from '../common/js/config';
+import paramm from '../common/js/getParam.js';
 export default {
     data() {
       return {
@@ -80,8 +84,28 @@ export default {
     },
    created(){
 		this.getuserinfo()
-},
+	 },
+	 mounted(){
+		  this.handleRole();
+	 },
+   updated(){
+		 this.handleRole();
+	 },
     methods: {
+			//根据角色权限设置对应的区域显示影藏
+			handleRole(){
+				let _this=this;
+				var items=document.getElementsByClassName("parentMenu");
+				for(let i=0;i<items.length;i++){
+	  
+					items[i].addEventListener("click",function(){
+						tokenlogin({token:paramm.getToken()}).then(function(res){
+								// this.userinfo =res.data.obj.username
+				        _this.menu = res.data.obj.menu
+						})
+					})
+				}
+			},
     	getuserinfo(){
 //			let name = localStorage.getItem('info')
 			let token = Cookies.get('token')
