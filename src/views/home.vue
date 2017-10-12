@@ -97,7 +97,7 @@ export default {
 				let _this=this;
 				var items=document.getElementsByClassName("parentMenu");
 				for(let i=0;i<items.length;i++){
-	  
+
 					items[i].addEventListener("click",function(){
 						tokenlogin({token:paramm.getToken()}).then(function(res){
 								// this.userinfo =res.data.obj.username
