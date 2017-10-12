@@ -1,10 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-<<<<<<< HEAD
-const host = 'http://api.erp.we2tu.com'
-=======
-const host = ''
->>>>>>> 2e7f218a0d7b6d30e93be4027169c69218614ad0
+const host = 'http://api.erp.we2tu.com' // 接口请求地址
+export const noteUrl = 'http://img.etu6.org/erp/xt-erp-info.pdf' // 操作手册请求地址
+export const downloadUrl = 'http://img.etu6.org/erp/namelist_template.xls' // 下载名单模版地址
 let base = `${host}/api`;
 export let serverBase = `${host}/ueditor`;
 
