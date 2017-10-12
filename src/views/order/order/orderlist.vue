@@ -295,7 +295,7 @@
 		 this.handleRole();
 	 },
 	 created:function(){
-		//  this.handleRole()
+		 this.handleRole()
 	 },
 		methods: {
       // 鼠标移入下拉显示按钮
