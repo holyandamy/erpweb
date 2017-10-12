@@ -37,7 +37,7 @@
 				</ul>
 			</div>
 			<h2>
-				操作日志
+				操作日志    <a target='_blank' :href='noteUrl' style='margin-left: 50px;'><img style='width: 50px;height: 50px;vertical-align: middle;' src="../assets/images/shuoming.png" alt="">操作说明</a>
 			</h2>
 		</div>
 		<div class="padding30">
@@ -64,7 +64,7 @@
 
 <script>
 	import Cookies from 'js-cookie';
-	import { dashboard, loglist, token, tokenlogin } from '../common/js/config';
+	import { dashboard, loglist, tokenlogin,noteUrl } from '../common/js/config';
 	import paramm from '../common/js/getParam.js'
 	export default {
 		data() {
@@ -76,6 +76,7 @@
 				currentPage: 1,
 				userinfo: '',
 				userinfos: {},
+        noteUrl: '',
         tokenn: ''
 			}
 		},
@@ -87,8 +88,8 @@
 		},
 		methods: {
 		getinfo() {
-				
-        dashboard({token: paramm.getToken()}).then((res) => {
+      this.noteUrl=noteUrl
+      dashboard({token: paramm.getToken()}).then((res) => {
 					this.lists = res.data.obj
 				})
 			},

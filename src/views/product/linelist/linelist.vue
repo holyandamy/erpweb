@@ -11,8 +11,7 @@
 						</el-breadcrumb>
 					</el-col>
 					<el-col :span="12">
-
-						<el-button class="defaultbutton hasid" id="42a741aa734711e788410242ac120009" @click="setMode('addline')" size="large" type="primary" style="color: #fff;">发布线路</el-button>
+						<el-button class="defaultbutton hasid" id="42a741aa734711e788410242ac120009" @click="setMode('addline')" size="large" type="primary"  style="color: #fff;background-color: #2cb1b6 !important;">发布线路</el-button>
 					</el-col>
 				</el-row>
 			</header>
@@ -63,11 +62,11 @@
 
 								</el-select>
 							</el-form-item>
-							<el-form-item>
-								<el-button type="primary" class="hasid" id="398e1080734711e788410242ac120009"  @click="getlinelist">查询</el-button>
+							<el-form-item >
+								<el-button type="primary" class="hasid" id="398e1080734711e788410242ac120009"  style='background-color: #2cb1b6 !important;' @click="getlinelist">查询</el-button>
 							</el-form-item>
-              <el-form-item   style="margin-left: 0px">
-                <el-button  type="primary" @click="clearGetList">清空查询</el-button>
+              <el-form-item   style="margin-left: 0px;color: #2cb1b6;">
+                <el-button   type="primary" @click="clearGetList">清空查询</el-button>
               </el-form-item>
 						</el-form>
 					</el-row>
@@ -98,20 +97,20 @@
 					</el-table-column>
 					<!--<el-table-column prop="approve" label="审批状态" width="110">
 					</el-table-column>-->
-					<el-table-column fixed="right" label="操作" width="110">
+					<el-table-column fixed="right" label="操作" width="110" >
 						<template scope="scope">
-							<el-button @click="setMode('lineinfo'),lineinfo(scope)"  type="text" size="small">查看</el-button>
+							<el-button @click="setMode('lineinfo'),lineinfo(scope)"  type="text" size="small " style='color: #2cb1b6;'>查看</el-button>
 							<a href="javascript:;" class="operation">
 								<el-dropdown @visible-change="toDown">
-									<span class="el-dropdown-link">
+									<span class="el-dropdown-link" >
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
 									<el-dropdown-menu slot="dropdown">
-										<el-dropdown-item class="hasid"  id="4dcba294734711e788410242ac120009"> <el-button type="text" @click="setMode('editline'),lineinfo(scope)">编辑线路</el-button></el-dropdown-item>
-										<el-dropdown-item class="hasid"  id="9079b8af734711e788410242ac120009"><el-button type="text" @click="settop(scope)">线路置顶</el-button></el-dropdown-item>
-										<el-dropdown-item class="hasid"  id="6e3c1a72734711e788410242ac120009"><el-button type="text" @click="updatastatus(scope)">查看团期</el-button></el-dropdown-item>
-										<el-dropdown-item  v-if="scope.row.isenable == true"><el-button type="text" @click="stop(scope,1)">停止</el-button></el-dropdown-item>
-										<el-dropdown-item  v-if="scope.row.isenable == false"><el-button type="text" @click="stop(scope,2)">启用</el-button></el-dropdown-item>
+										<el-dropdown-item style='color: #2cb1b6;' class="hasid"  id="4dcba294734711e788410242ac120009"> <el-button type="text" @click="setMode('editline'),lineinfo(scope)">编辑线路</el-button></el-dropdown-item>
+										<el-dropdown-item style='color: #2cb1b6;' class="hasid"  id="9079b8af734711e788410242ac120009"><el-button type="text" @click="settop(scope)">线路置顶</el-button></el-dropdown-item>
+										<el-dropdown-item style='color: #2cb1b6;' class="hasid"  id="6e3c1a72734711e788410242ac120009"><el-button type="text" @click="updatastatus(scope)">查看团期</el-button></el-dropdown-item>
+										<el-dropdown-item style='color: #2cb1b6;' v-if="scope.row.isenable == true"><el-button type="text" @click="stop(scope,1)">停止</el-button></el-dropdown-item>
+										<el-dropdown-item style='color: #2cb1b6;'  v-if="scope.row.isenable == false"><el-button type="text" @click="stop(scope,2)">启用</el-button></el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 							</a>

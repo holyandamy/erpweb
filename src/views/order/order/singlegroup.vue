@@ -203,7 +203,7 @@
 
 <script>
 	import { orderexportdetail } from '../../../common/js/config';
-	import paramm from '../../../common/js/getParam';
+	import paramm from '../../../common/js/getParam'
 	export default{
 		data(){
 			return {
