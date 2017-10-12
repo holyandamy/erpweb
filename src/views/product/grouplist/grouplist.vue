@@ -67,7 +67,7 @@
 
         </el-form>
 
-        <el-table :data="lineList" border style="text-align: left; font-size: 12px;">
+        <el-table :data="lineList" border style="text-align: left; font-size: 12px;" @cell-click="showRemark">
           <el-table-column prop="teamno" label=" 团号" width="150">
           </el-table-column>
           <el-table-column prop="linename" label="线路名称">
@@ -148,6 +148,15 @@
         </div>
       </el-dialog>
 
+      <el-dialog title="" :visible.sync="dialogShow" size='tiny' :close-on-click-modal=false>
+        <el-form :model="form" :rules="rules">
+          <el-form-item label="备注：" :label-width="formLabelWidth">
+            <el-input v-model="form.remark">
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+
     </div>
     <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="setMode" @editorFn='editorFn'  :categoryId="editcategory.id"></GroupInfo>
     <Groupnamelist v-else-if="modeType == 'groupnamelist'" @setMode="setMode"   :tdidd="tdidd"></Groupnamelist>
@@ -211,6 +220,7 @@
         editcategory:{},
         optionName: '新增发团计划',
         dialogFormVisible: false,
+        dialogShow:false,
         form: {
           remark:'',
         },
@@ -237,6 +247,10 @@
     methods:{
       toDown(){
         showorhide()
+      },
+      showRemark(){
+        console.log(777)
+        this.dialogShow = true
       },
       // 审核确定 取消
       setAppId (id) {

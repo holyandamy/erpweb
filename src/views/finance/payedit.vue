@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-breadcrumb separator="/">
+    <el-breadcrumb separator="/" style="font-size:18px">
       <el-breadcrumb-item><span @click="handleHide">付款管理</span></el-breadcrumb-item>
       <el-breadcrumb-item>付款登记</el-breadcrumb-item>
     </el-breadcrumb>
@@ -25,6 +25,10 @@
             <el-input @blur="typethis" v-model="collectForm.orderno" @change='getOrder'></el-input>
           </el-col>
         </el-form-item>
+                     <!--
+                         订单编号代表的订单未确认，就不能付款
+                         根据订单编号拿到状态，然后提交的时候给出提示
+                      -->
         <el-form-item label="团号" prop="teamno" v-show="isshowall" >
           <el-col :span="10">
             <el-input v-model="collectForm.teamno" :disabled="true"></el-input>

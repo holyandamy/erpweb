@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-breadcrumb separator="/">
+    <el-breadcrumb separator="/" style="font-size:18px">
       <el-breadcrumb-item><span @click="handleHide">收款管理</span></el-breadcrumb-item>
       <el-breadcrumb-item>收款登记</el-breadcrumb-item>
     </el-breadcrumb>
