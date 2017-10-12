@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-const host = ''
+const host = 'http://api.erp.we2tu.com'
 let base = `${host}/api`;
 export let serverBase = `${host}/ueditor`;
 
