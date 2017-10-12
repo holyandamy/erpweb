@@ -59,7 +59,7 @@
 	import axios from 'axios';
 	import AppRoval from './addapproval.vue'
 	import EditRoval from './editapproval.vue'
-	import {getapprovelist, approvestatus,token} from '../../../common/js/config';
+	import {getapprovelist, approvestatus} from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   export default {

@@ -1,6 +1,14 @@
 <template>
 	<el-form-item label="" label-width="120px">
-		<el-upload action="http://v0.api.upyun.com/xtimg" accept="image/jpeg,image/gif,image/png"  list-type="picture-card" :on-preview="handlePictureCardPreview" :file-list="imglist" :http-request="upload" :on-success="uploadsuccess" :on-remove="handleRemove" multiple>
+		<el-upload action="http://v0.api.upyun.com/xtimg"
+               accept="image/jpeg,image/gif,image/png"
+               list-type="picture-card"
+               :on-preview="handlePictureCardPreview"
+               :file-list="imglist"
+               :before-upload="beforeAvatarUpload"
+               :http-request="upload"
+               :on-success="uploadsuccess"
+               :on-remove="handleRemove" multiple>
 			<i class="el-icon-plus"></i>
 		</el-upload>
 		<!--<el-dialog v-model="dialogVisible" size="tiny">-->
@@ -49,7 +57,6 @@
 
 		},
 		methods: {
-
 			//图片上传
 			async upload(file) {
         const files = await imgupload(file)
@@ -75,8 +82,10 @@
 				},
 			handleRemove(file, fileList) {
 				let index
-				for(let i = 0; i < this.imglist.length; i++) {
-					index = i
+				for(let i= 0; i < this.imglist.length; i++) {
+				  if(file.url==i.url){
+            index = i
+          }
 				}
 				this.imglist.splice(index, 1)
 				let titlename = []
@@ -93,7 +102,24 @@
 			handlePictureCardPreview(file) {
 				this.dialogImageUrl = file.url;
 				this.dialogVisible = true;
-			}
+			},
+      //限制图片的大小和数量(上传之前)
+      beforeAvatarUpload(file) {
+        const isLt1M = file.size / 1024 / 1024 < 1;
+        const isJPG = file.type === 'image/jpeg';
+        const isPNG = file.type === 'image/png';
+//        const isBMP = file.type === 'image/bmp';
+        if (!isLt1M) {
+          this.$message.error('上传图片大小不能超过 1MB!');
+          //bug1:给大小超过1MB的图片加个索引，然后把它删除
+        }
+        //上传的图片格式不对时，也应该把它删除
+        if(!isJPG && !isPNG){  /*  && !isBMP */
+          this.$message.error('只能上传jpg,png格式的图片');
+          return false
+        }
+        return isLt1M
+      }
 		}
 	}
 </script>

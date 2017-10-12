@@ -135,7 +135,7 @@
 <script>
   import paramm from '../../../common/js/getParam'
 	import axios from 'axios';
-	import { getdeplist,adddep,deldep,editdep,token } from '../../../common/js/config';
+	import { getdeplist,adddep,deldep,editdep } from '../../../common/js/config';
 	import { showorhide } from '../../../common/js/showorhid'
 	export default {
 		data() {

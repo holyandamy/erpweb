@@ -71,7 +71,7 @@
 <script>
   import paramm from '../../../common/js/getParam'
   import axios from 'axios';
-  import { companyupdate, province, city, district,companydetail,token } from '../../../common/js/config';
+  import { companyupdate, province, city, district,companydetail } from '../../../common/js/config';
   import ImgLoad from './upload'
   import {showorhide} from '../../../common/js/showorhid'
   export default {

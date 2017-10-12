@@ -170,7 +170,8 @@
                       <td class="el-table_1_column_123 el-table-column--selection">
                         <el-checkbox v-model="allChecked" @change='allCheck' v-if="operationType.type == 'add'">全选</el-checkbox>
                         <!--<div class="cell el-tooltip" v-if="operationType.type == 'edit'">-&#45;&#45;</div>-->
-                        <el-checkbox v-model="checkedAll" @change="checkAll" v-if="operationType.type == 'edit'">全选</el-checkbox>
+                        <!--暂时不改-->
+                        <!--<el-checkbox v-model="checkedAll" @change="checkAll" v-if="operationType.type == 'edit'">全选</el-checkbox>-->
                       </td>
                       <td >
                         <!--<div class="cell">删除</div>-->
@@ -340,7 +341,7 @@
 
         <el-form-item label="线路分类">
           <el-select v-model="search.categoryid" placeholder="请选择" :label-width="labelWidth">
-            <el-option v-for="(linesort,index) in linesorts" :key="linesort.value" :label="linesort.name" :value="linesort.id">
+            <el-option v-for="(linesort,index) in linesorts" :key="linesort.value" :label="linesort.name" :value="linesort.id" style="z-index:9999 !important">
             </el-option>
           </el-select>
         </el-form-item>
@@ -547,7 +548,6 @@
         }
       }
     },
-
     methods: {
       // 编辑  详情时获取信息
       getdetail () {
@@ -692,23 +692,19 @@
           })
         }
       },
-      //编辑功能中的全选
-      checkAll(){
+      //编辑功能中的全选(暂时不改)
+      /*checkAll(){
+        console.log(777,this.checkedAll,this.checkArr)
         if(this.checkedAll){
-          console.log(111);
-          this.checkArr.forEach(function (item, index) {
-            console.log(33,item);
-
+          this.checkArr.map(function (item, index) {
             item.checked = true
           })
         }else{
-          console.log(222);
-
-          this.checkArr.forEach(function (item, index) {
+          this.checkArr.map(function (item, index) {
             item.checked = false
           })
         }
-      },
+      },*/
       // 选择日期添加一行
       addTr () {
         let _this = this;
@@ -1081,4 +1077,5 @@
   .demo-form-inline{
     max-width: 800px;
   }
+
 </style>

@@ -182,10 +182,12 @@
 							<el-form-item label="集合地点：" prop="station">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-              <el-form-item label="图片：" >
+              <el-form-item label="图片："  required>
                 <ImgLoad @geturl="geturl" :checktop="checktop"></ImgLoad>
               </el-form-item>
-
+              <el-form-item label="" style='color:red;'>
+                建议图片格式：jpg、png，图片大小在一M以内，宽高为：300*180，比例为5:3
+              </el-form-item>
 
 						</el-col>
 					</el-row>
@@ -671,7 +673,13 @@
           });
           return
         }
-
+        if(this.baseForm.images == ''){
+          this.$message({
+            message: '请上传图片',
+            type: 'warning'
+          });
+          return
+        }
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 //            if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' ||this.baseForm.fromdistrictid == ''){

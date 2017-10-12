@@ -78,7 +78,7 @@
 	import AddStaff from './addstaff'
 	import EditStaff from './editstaff'
 	import axios from 'axios';
-	import { getuserlist, userstatus, userdel,token } from '../../../common/js/config';
+	import { getuserlist, userstatus, userdel } from '../../../common/js/config';
 	import { showorhide } from '../../../common/js/showorhid'
 	export default {
 		components: {
