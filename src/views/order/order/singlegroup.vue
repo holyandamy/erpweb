@@ -12,7 +12,7 @@
 			<div class="container">
 				<dl class="componyinfo">
 					<dt>
-					<img src="../../../assets/images/loginbg.jpg"/>	
+					<img src="../../../assets/images/loginbg.jpg"/>
 					</dt>
 					<dd>
 						<h4>{{detail.scVo.companyName}}</h4>
@@ -64,7 +64,7 @@
 						<td class="title">旅游天数</td>
 						<td>{{detail.lVo.days}}</td>
 					</tr>
-					
+
 					<tr>
 						<td class="title">出团日期</td>
 						<td>{{detail.starttime}}</td>
@@ -91,11 +91,11 @@
 						<td class="title">送团标志/人</td>
 						<td colspan="3"></td>
 					</tr>
-					
+
 					<tr>
 						<td class="title">产品亮点</td>
 						<td colspan="5">
-							
+
 						</td>
 					</tr>
 					<tr>
@@ -103,7 +103,7 @@
 						<td colspan="5">
 						</td>
 					</tr>
-					
+
 				</table>
 				<table v-if="tripinfo" border="1" cellspacing="" cellpadding="" class="tablebase">
 					<tr>
@@ -225,7 +225,7 @@
 			}
 		},
 		created(){
-		
+
 			this.getdetail()
 		},
 		methods:{
@@ -237,7 +237,7 @@
 				}
 				orderexportdetail(para).then((res) =>{
 					this.detail = res.data.obj
-					
+
 				})
 			}
 		}
@@ -249,7 +249,7 @@
 		width: 800px;
 		margin: 0 auto;
 	}
-	
+
 	header {
 		padding: 7px 0;
 		background: #dee5ec;
@@ -257,7 +257,7 @@
 			text-align: left;
 		}
 	}
-	
+
 	section {
 		.container {
 			background: #fff;
@@ -341,7 +341,7 @@
 					font-weight: bold;
 					margin: 10px 0 5px 0;
 				}
-				
+
 				p {
 					margin-bottom: 10px;
 					font-size: 12px;
@@ -367,7 +367,7 @@
 			td{
 				height: 80px;
 			}
-			
+
 		}
 	}
 </style>

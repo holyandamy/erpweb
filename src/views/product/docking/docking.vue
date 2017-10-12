@@ -55,21 +55,22 @@
 </template>
 
 <script>
-	import {openlist,opensave,token} from '../../../common/js/config';
+	import {openlist,opensave} from '../../../common/js/config';
+	import paramm from '../../../common/js/getParam';
   import md5 from 'js-md5';
 	export default {
 		data() {
 			return {
         cyform:{
           name: '',
-          token:token,
+          token:paramm.getToken(),
           username:'',
           password:'',
           platform:''
         },
         htform:{
           name: '',
-          token:token,
+          token:paramm.getToken(),
           username:'',
           password:'',
           platform:''
@@ -87,7 +88,7 @@
           })
         },
 				getlist(){
-					let para = {token:token}
+					let para = {token:paramm.getToken()}
 					openlist(para).then((res) =>{
 						res.data.obj.forEach((item)=>{
 						    if(item.platform == 1)

@@ -240,7 +240,7 @@
 </template>
 
 <script>
-  import {token,orderdet,openlist} from '../../../common/js/config';
+  import {orderdet,openlist} from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   export default {

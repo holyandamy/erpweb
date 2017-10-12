@@ -124,7 +124,8 @@
 <script>
   import {address} from '../../../common/js/address'
   import axios from 'axios';
-  import {token,custsave,custupdate,custdetail, province, city, district } from '../../../common/js/config';
+  import {custsave,custupdate,custdetail, province, city, district } from '../../../common/js/config';
+  import paramm from '../../../common/js/getParam'
   export default {
     data() {
       //验证手机号码
@@ -147,7 +148,7 @@
       };
       return {
         visitorList: {
-          token,
+          token:paramm.getToken(),
           name: '',
           sexid:'1',
           mobile:'',
@@ -199,7 +200,7 @@
         this.optionName = "编辑游客";
         this.birthdayFlag=false;
         let data = {
-          token,
+          token:paramm.getToken(),
           id: this.$parent.operationType.id,
         }
         custdetail(data).then((res) => {
