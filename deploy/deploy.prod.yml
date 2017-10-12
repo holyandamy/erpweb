@@ -1,18 +1,15 @@
 version: '3'  
 services:  
   erpweb:
-    image: git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
+    image: git.we2tu.com:5000/$PROJECT_NAME:latest
     environment:
-      - "NODE_ENV=test"
+      - "NODE_ENV=prod"
       - "PROJECTNAME=erpweb"
       - "TZ=Asia/Shanghai"
     ports: 
       - 3500:3000
     logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp://172.17.9.13:5514"
-        tag: $PROJECT_NAME
+      driver: json-file
     deploy: 
       replicas: 3
       restart_policy:
