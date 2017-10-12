@@ -169,8 +169,8 @@
             <li>
               <span>图片</span>
               <div class="xc">
-                <div v-if='route.titleimages' v-for="item in detail.routes">  <!--  .split(',')  -->
-                  <img style='width: 168px;height: 168px;margin: 0 10px;' :src="item.titleimages"/>
+                <div v-if='route.titleimages' v-for="im in route.titleimages">  <!--  .split(',')  -->
+                  <img style='width: 168px;height: 168px;margin: 0 10px;' :src="im"/>
                 </div>
                 <div v-if='!route.titleimages'>
                   ---
@@ -369,8 +369,8 @@
           }
           for (var i = 0; i < this.detail.routes.length; i++) {
             let arr = []
-            if(res.data.obj.routes[i].titleimages) {
-              arr = res.data.obj.routes[i].titleimages.split(',')
+            if(res.data.obj.line.routes[i].titleimages) {
+              arr = res.data.obj.line.routes[i].titleimages.split(',')
             }
             this.detail.routes[i].titleimages = arr
           }
