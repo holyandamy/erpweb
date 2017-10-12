@@ -176,7 +176,9 @@
           } else {
             paramm.getCode(res.data,_this)
             _this.getdetail()
-            _this.confirmnamelist = false
+						_this.confirmnamelist = false
+						_this.$emit('setMode', 'orderlistmodel');
+							_this.$emit('getList');
           }
         })
       },

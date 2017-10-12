@@ -29,9 +29,9 @@
           </el-col>
           <el-col :span="8">
             <el-form-item>
-              <el-button type="primary" @click="onSubmit">查询</el-button>  <!--  class="hasid" id="bc6051cd735911e788410242ac120009"     -->
+              <el-button type="primary" @click="onSubmit" >查询</el-button>  <!--  class="hasid" id="bc6051cd735911e788410242ac120009"     -->
               <el-button  type="primary" @click="clearGetList">清空查询</el-button>
-              <el-button  type="primary" >导出列表</el-button>
+            
             </el-form-item>
           </el-col>
         </el-row>
@@ -102,7 +102,7 @@
 
 <script>
   import axios from 'axios';
-  import { customlist,customcancel} from '../../../common/js/config';
+  import { customlist,customcancel,tokenlogin} from '../../../common/js/config';
   import Custominfo from './custominfo'
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
@@ -157,8 +157,10 @@
     },
 
     mounted() {
-      showorhide()
+      showorhide();
+     
     },
+   
 //    updated: function() {
 //      this.$nextTick(function() {
 //        showorhide()
@@ -169,6 +171,7 @@
       toDown(){
         showorhide()
       },
+      
       //点击显示弹窗
       confirmnamelists(list) {
         this.cancellist = true
@@ -235,7 +238,7 @@
       // 清空查询
       clearGetList () {
         this. orderinfo= {
-          status: '',
+          status: '-1',
           token: paramm.getToken(),
           pageIndex: 0,
           pageSize: 10
