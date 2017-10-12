@@ -39,11 +39,7 @@ module.exports = {
         include: [
           resolve('src'),
           resolve('test'),
-<<<<<<< HEAD
-          resolve('node_modules/_element-ui@1.4.6@element-ui/src'),
-=======
           resolve('node_modules/element-ui/src'),
->>>>>>> 2e7f218a0d7b6d30e93be4027169c69218614ad0
         ]
       },
       {
