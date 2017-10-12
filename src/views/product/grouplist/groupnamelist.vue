@@ -16,7 +16,7 @@
       <section class="padding30">
         <el-row style='padding-bottom:50px;'>
           <el-col :span='8'>
-            <el-button type="primary">打印本页</el-button>
+            <a target="_blank"  href="javascript:;"><el-button type="primary">打印本页</el-button></a>
           </el-col>
           <el-col :span='8'>
             <el-button type="primary">导出Excel</el-button>
@@ -108,6 +108,7 @@
             paramm.getCode(res.data, _this)
             return
           }else {
+            console.log(777,this.tdidd)
             _this.backData = res.data.obj
             _this.nameList = res.data.obj.namelist
             _this.total = Number(res.data.obj.total)
