@@ -1,0 +1,21 @@
+version: '3'  
+services:  
+  erpweb:
+    image: git.we2tu.com:5000/$PROJECT_NAME:latest
+    environment:
+      - "NODE_ENV=prod"
+      - "PROJECTNAME=erpweb"
+      - "TZ=Asia/Shanghai"
+    ports: 
+      - 3500:3000
+    logging:
+      driver: json-file
+    deploy: 
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+    networks:
+      - docker-net
+networks:
+  docker-net:
+    external: true
