@@ -1,0 +1,95 @@
+.add-role-item .left .el-checkbox .el-checkbox__label{
+  font-weight: bold !important;
+}
+.bigItem .bigTitle .el-checkbox .el-checkbox__label{
+  font-weight: bold !important;
+  font-size: 16px;
+}
+.el-button--primary{
+  background-color: #2cb1b6;
+  color: #fff;
+  border-color: #2cb1b6;
+}
+.el-button--primary:link{
+  background-color: #2cb1b6;
+  border-color: #2cb1b6;
+}
+.el-button--primary:visited{
+  background-color: #2cb1b6;
+  border-color: #2cb1b6;
+}
+.el-button--primary:hover{
+  background-color: #2cb1b6;
+  border-color: #2cb1b6;
+}
+.el-button--primary:active{
+  background-color: #2cb1b6;
+  border-color: #2cb1b6;
+}
+.el-button--primary:focus{
+  background-color: #2cb1b6;
+  border-color: #2cb1b6;
+}
+.el-button--text{
+  color: #2cb1b6;
+}
+.el-button--text:hover{
+  color: #2cb1b6;
+}
+.el-menu-item.is-active{
+  color: #2cb1b6;
+
+}
+.el-pager li.active{
+  border-color: #2cb1b6;
+  background-color: #2cb1b6;
+}
+.el-pager li:hover{
+  color: #2cb1b6;
+}
+.el-menu-item.is-active{
+  background-color: #2cb1b6;
+  color: #fff;
+}
+.el-menu-item:hover{
+  background-color: #2cb1b6;
+  color: #fff;
+}
+.el-submenu .el-menu-item:hover{
+  background-color: #2cb1b6 !important;
+  color: #fff;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner{
+  background-color: #2cb1b6;
+  border-color: #2cb1b6;
+}
+.el-radio__input.is-checked .el-radio__inner{
+  background-color: #2cb1b6;
+  border-color: #2cb1b6;
+}
+.el-breadcrumb__item__inner, .el-breadcrumb__item__inner a{
+  transition: color .15s linear;
+  font-size: 18px;
+  color: #2cb1b6;
+}
+.el-breadcrumb__item__inner, .el-breadcrumb__item__inner a:hover{
+  transition: color .15s linear;
+  color: #2cb1b6;
+}
+.el-breadcrumb__item:last-child .el-breadcrumb__item__inner, .el-breadcrumb__item:last-child .el-breadcrumb__item__inner a, .el-breadcrumb__item:last-child .el-breadcrumb__item__inner a:hover, .el-breadcrumb__item:last-child .el-breadcrumb__item__inner:hover{
+  color: #2cb1b6;
+  font-size: 18px;
+  cursor: text
+}
+.el-submenu .el-menu-item{
+  height: 40px;
+  line-height: 40px;
+}
+.el-menu-item, .el-submenu__title{
+  height: 45px;
+  line-height: 45px;
+}
+.el-select-dropdown{
+  z-index: 3000 !important;
+}
