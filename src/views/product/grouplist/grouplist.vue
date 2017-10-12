@@ -10,7 +10,7 @@
             </el-breadcrumb>
           </el-col>
           <el-col :span="4">
-            <el-button style='float: right;  margin-top: -10px;' size="large" type="primary"  id="5c18b1d0734611e788410242ac120009" class="hasid" @click="setMode('newGroup','add')" >发团计划</el-button>
+            <el-button  size="large" type="primary"  id="5c18b1d0734611e788410242ac120009" class="defaultbutton hasid" @click="setMode('newGroup','add')" >发团计划</el-button>
           </el-col>
         </el-row>
       </header>
@@ -347,15 +347,6 @@
             return
           }else {
             _this.lineList = res.data.obj.datas
-            _this.lineList.forEach((item) => {
-              //console.log(77777,item.endtime)
-              let time = new Date(item.endtime.replace(/-/g,'/')).getTime() - 86400000
-              time = new Date(time)
-              let year = time.getFullYear() + ''
-              let month = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1) : (time.getMonth() + 1) + ''
-              let day = time.getDate() < 10 ? '0' + time.getDate() : time.getDate() + ''
-              item.endtime = year + '-' + month + '-' + day
-            })
             _this.total = Number(res.data.obj.total)
           }
         })
@@ -399,6 +390,8 @@
     margin-bottom: 30px;
     padding-top: 20px;
     .defaultbutton{
+      float:right;
+      margin-top:-10px;
     }
     .el-menu-item{
       height: 36px;

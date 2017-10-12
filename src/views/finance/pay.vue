@@ -284,7 +284,9 @@
       }
 
     },
-
+    created(){
+      this.payexport()
+    },
     updated: function() {
       this.$nextTick(function() {
         showorhide()

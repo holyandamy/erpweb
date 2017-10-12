@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="print">
     <div>
       <header>
         <el-row>
@@ -16,10 +16,10 @@
       <section class="padding30">
         <el-row style='padding-bottom:50px;'>
           <el-col :span='8'>
-            <a target="_blank"  href="javascript:;"><el-button type="primary">打印本页</el-button></a>
+            <el-button type="primary" @click="printpage">打印本页</el-button>
           </el-col>
           <el-col :span='8'>
-            <el-button type="primary">导出Excel</el-button>
+            <a target="_blank"  href="javascript:;"><el-button type="primary">导出Excel</el-button></a>
           </el-col>
           <el-col :span='8'>
             <el-button type="primary"  @click="handleHide()">关闭窗口</el-button>
@@ -98,6 +98,11 @@
 //    	}
 //    },
     methods:{
+      //页面打印功能
+      printpage(){
+        window.print();
+        return false;
+      },
       getList(){
         let _this = this
         ordernameslist({
