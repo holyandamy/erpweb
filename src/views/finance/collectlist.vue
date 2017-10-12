@@ -169,7 +169,7 @@
   import paramm from '../../common/js/getParam'
   import util from '../../common/js/util'
   import CollectEdit from './collectedit'
-  import { getcollectlist, collectstatus, token,collectdetail} from '../../common/js/config';
+  import { getcollectlist, collectstatus, collectdetail} from '../../common/js/config';
   import { showorhide } from '../../common/js/showorhid'
   //导出excel
   export default {
@@ -279,7 +279,7 @@
 
     },
     created() {
-
+      this.collectexport()
     },
     updated: function() {
       this.$nextTick(function() {
@@ -312,6 +312,7 @@
           + 'confirmstatus=' + this.search.confirmstatus +'&'
           + 'verifstatus=' + this.search.verifstatus +'&'
           + 'businesstype=' + this.search.businesstype;
+        console.log(77,this.plusSrc)
       },
       // 清空查询
       clearGetList () {

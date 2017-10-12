@@ -119,7 +119,7 @@
   import paramm from '../../common/js/getParam'
   import axios from 'axios';
   import util from '../../common/js/util'
-  import { paysave, banlist,token,orderlist } from '../../common/js/config';
+  import { paysave, banlist, orderlist } from '../../common/js/config';
   import ImgUpload from './upload'
   import {showorhide} from '../../common/js/showorhid'
   export default {
