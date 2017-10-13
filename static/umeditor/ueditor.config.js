@@ -33,7 +33,6 @@ import {serverBase} from '../../src/common/js/config.js'
         UEDITOR_HOME_URL: URL
 
         // 服务器统一请求接口路径
-        // , serverUrl:  "http://api.erp.we2tu.com/ueditor"
         , serverUrl:  serverBase
 
 

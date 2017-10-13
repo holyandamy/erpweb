@@ -78,11 +78,12 @@
 
 				},
 			handleRemove(file, fileList) {
+			  let _this=this
         let temArr = []
         this.imglist.forEach(function (item,idx) {
           if(file.url!=item.url) {
             temArr.push(item)
-//            this.imglist.splice(idx, 1)
+            _this.imglist.splice(idx,1)
           }
         })
 

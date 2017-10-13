@@ -179,7 +179,6 @@
     data() {
       return {
         summoney:'',
-        baseUrll: 'http://api.erp.we2tu.com/api/finance/pay/export',
         plusSrc: '',
         detail: [],
         imgArr: [],
