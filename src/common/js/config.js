@@ -13,7 +13,9 @@ export let monthearnDown = `${host}/api/report/finance/collect/export`; //月收
 export let monthspendDown = `${host}/api/report/finance/pay/export`; //月付款统计
 export let collectlistDown = `${host}/api/finance/collect/export`; //收款登记
 export let payDown = `${host}/api/finance/pay/export`; //付款登记
-
+export let upload1 = `${host}/file/upyun/getSign`;
+export let upload2 = `${host}/file/upyun/bodySign`;
+export let namelistImport = `${host}/api/order/namelist/import`;
 /* 首页 */
 export const dashboard = params => { return axios.post(`${base}/sys/dashboard/info`, params).then(res => res); };//首页信息
 export const tokenlogin = params => { return axios.post(`${base}/sys/user/token/login`, params).then(res => res); };
