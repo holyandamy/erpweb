@@ -249,10 +249,12 @@
             if(backData.data.error!=0 || backData.data.err){
               paramm.getCode(backData.data, _this)
             } else {
+
                _this.$message({
                   message:'保存成功，如果想要获取最新权限，请刷新页面或重新登录！',
                   type:'success'
                })
+
               // paramm.getCode(backData.data, _this)
               this.handleHide('edit');
             }

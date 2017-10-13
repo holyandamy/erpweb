@@ -775,9 +775,9 @@
 //        var time=now.getTime();
         var time = vall.getTime();
          if (isPlus) {
-           time+=1000*60*60*24*dayy;//加上3天
+           time+=1000*60*60*24*(dayy-1);//加上3天
          }else {
-           time-=1000*60*60*24*dayy;//减上3天
+           time-=1000*60*60*24*(dayy-1);//减上3天
          }
         vall.setTime(time);
         var M = (vall.getMonth()+1).toString().length == 1 ? '0' + (vall.getMonth()+1).toString(): (vall.getMonth()+1).toString()

@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-breadcrumb separator="/">
+    <el-breadcrumb separator="/" style="font-size:18px">
       <el-breadcrumb-item><span @click="handleHide">收款管理</span></el-breadcrumb-item>
       <el-breadcrumb-item>收款登记</el-breadcrumb-item>
     </el-breadcrumb>
@@ -437,8 +437,10 @@
             orderno: this.collectForm.orderno.trim(),
             pageindex: 0,
             pagesize: 10,
-            source: "",
-            status: "",
+            source: "-1",
+            refund: "0",
+            settle:"-1",
+            status: "0",
             token: paramm.getToken()
           }).then((res)=>{
             if(res.data.error || res.data.err){

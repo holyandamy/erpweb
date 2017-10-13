@@ -60,7 +60,7 @@
 					<el-row>
 						<el-col :span="12">
               订单金额：{{detail.orderpay}}元
-							<el-button style="margin-left: 50px;" @click="editprice = true" v-if='detail.settle!=1'>调整价格</el-button>
+							<el-button style="margin-left: 50px;" @click="editprice = true" v-if='detail.settle!=1' type="primary">调整价格</el-button>
 						</el-col>
 						<el-col :span="12" class="pl-20">
 							客户类型：{{detail.custtypename}}
@@ -93,7 +93,7 @@
 			<h2>
 					<el-row>
 						<el-col :span="12">收款详情</el-col>
-						<el-col :span="12"><el-button v-if='detail.status==2||detail.status==3' @click="addcollpay('collect')" class="hasid" id="869cc288735d11e788410242ac120009">添加收款</el-button></el-col>
+						<el-col :span="12"><el-button v-if='detail.status==2||detail.status==3' @click="addcollpay('collect')" class="hasid" id="869cc288735d11e788410242ac120009"type="primary">添加收款</el-button></el-col>
 					</el-row>
 			</h2>
 			<el-table :data="detail.collections"  border style="width: 100%"> <!--  show-summary   -->
@@ -116,7 +116,7 @@
 			<h2>
 					<el-row>
 						<el-col :span="12">退款详情</el-col>
-						<el-col :span="12"><el-button v-if="detail.status==2||detail.status==3" @click="addcollpay('pay')"  class="hasid" id="89cec1b8735d11e788410242ac120009">添加退款</el-button></el-col>
+						<el-col :span="12"><el-button v-if="detail.status==2||detail.status==3" @click="addcollpay('pay')"  class="hasid" id="89cec1b8735d11e788410242ac120009" type="primary">添加退款</el-button></el-col>
 					</el-row>
 				</h2>
 			<el-table :data="detail.pays" border style="width: 100%">
@@ -157,7 +157,7 @@
 									:on-success="getFilename"
 									action="http://api.erp.we2tu.com/api/order/namelist/import"
 									:auto-upload="false">					
-									<el-button>导入游客名单</el-button>
+									<el-button type="primary">导入游客名单</el-button>
 								</el-upload>
 						</el-col> 
 					</el-row>
@@ -251,7 +251,8 @@
 							</td>
 							<td>
 								<el-button type="text" v-if="detail.status==1 && detail.namelist.length>1" @click="deletepeople(index,namelist.type)">删除</el-button>
-								<el-button type="text" v-if="namelist.name&&(detail.status==2||detail.status==3)" :disabled="namelist.isrefund"  @click="refund(namelist)">{{namelist.isrefund?'已申请退团':'申请退团'}}</el-button>
+								<el-button type="text" v-if="namelist.name&&(detail.status==2||detail.status==3)&&(detail.namelist.length>1)&&(show==true)" :disabled="namelist.isrefund"  @click="refund(namelist)" class="grouphide">
+									{{namelist.isrefund?'已申请退团':'申请退团'}}</el-button>
 							</td>
 						</tr>
 						<tr>
@@ -386,11 +387,11 @@ import axios from 'axios';
 					callback(new Error('请输入正整数!'));
 				} else {
 					if(newvalue < this.sumShou) {
-						callback(new Error('调整金额需大于收款合计和退款合计！'));
+						callback(new Error('调整金额不能低于收款合计或退款合计'));
 						this.editpriceform.money ="";
 					}
 					 else if(newvalue < this.sumFu) {
-						callback(new Error('调整金额需大于收款合计和退款合计！'));
+						callback(new Error('调整金额不能低于收款合计或退款合计'));
 					  this.editpriceform.money ="";
 					} 
 					else {
@@ -399,7 +400,8 @@ import axios from 'axios';
 				}
 			}
 			return {
-        fileList3: [{
+				show:true,
+				fileList3: [{
           name: 'food.jpeg',
           url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
           status: 'finished'
@@ -519,6 +521,9 @@ import axios from 'axios';
 			this.$nextTick(function() {
 				showorhide()
 			})
+		},
+		mounted(){
+     	showorhide();
 		},
 		methods: {
       handleChange (file, fileList) {
@@ -767,6 +772,16 @@ import axios from 'axios';
 				orderdetail(para).then((res) => {
 					this.downloadUrl = downloadUrl
 					this.detail = res.data.obj
+					console.log(	this.detail);
+					var index=0;
+					for(var i=0;i<this.detail.namelist;i++){
+           if(this.detail.namelist[i].isrefund==false){
+						 index++;
+             if(index<=1){
+							_this.show=false;
+						 }
+					 }
+					}
           if(this.detail.collections.length>0){
             this.detail.collections.forEach(function (item) {
               _this.sumShou += parseFloat(item.totalfee)
@@ -1368,4 +1383,7 @@ import axios from 'axios';
       cursor: pointer;
     }
   }
+	.hasid{
+		display: none;
+	}
 </style>

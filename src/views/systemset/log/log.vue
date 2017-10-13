@@ -4,7 +4,7 @@
 			<header>
 				<el-row>
 					<el-col :span="12">
-						<el-breadcrumb separator="/">
+						<el-breadcrumb separator="/" style="font-size:18px">
 							<el-breadcrumb-item>系统设置</el-breadcrumb-item>
 							<el-breadcrumb-item>操作日志</el-breadcrumb-item>
 						</el-breadcrumb>

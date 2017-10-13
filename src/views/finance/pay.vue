@@ -25,7 +25,6 @@
           <el-form-item label="订单号">
             <el-input placeholder="订单号" v-model="search.orderno"></el-input>
           </el-form-item>
-
           <el-form-item label="确认状态">
             <el-select v-model="search.confirmstatus" placeholder="请选择">
               <el-option v-for="item in state" :key="item.value" :label="item.label" :value="item.value">
@@ -141,15 +140,15 @@
               <el-col :span="24">
                 <table style="border:1px solid #ccc;margin-top:10px"  width="100%">
                   <tr>
-                    <td style="text-align:right">金额合计:￥{{summoney}}元</td>
+                    <td style="text-align:right"><span style="margin-right:24px">金额合计:￥{{summoney}}元</span></td>
                   </tr>
                 </table>
               </el-col>
             </el-form-item>
             <el-form-item label="附件图片：">  <!--   prop="remark"  -->
               <ul>
-                <li v-for='imgg in imgArr' style='margin: 10px;width: 50%;'>
-                  <img :src="imgg" alt="" style='width: 100%;height: 100%;'>
+                <li v-if="imgArr" v-for='imgg in imgArr' style='margin: 10px;width: 50%;'>
+                  <img :src="imgg" alt="">
                 </li>
               </ul>
             </el-form-item>
@@ -284,11 +283,14 @@
       }
 
     },
-
+    created(){
+      this.payexport()
+    },
     updated: function() {
       this.$nextTick(function() {
         showorhide()
       })
+      this.payexport()
     },
     methods: {
       toDown() {

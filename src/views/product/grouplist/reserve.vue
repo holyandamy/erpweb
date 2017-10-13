@@ -116,10 +116,10 @@
             <div class="bg_white padding-20-50">
               <el-row>
                 <el-col :span="6">
-                  <el-col :span="5" style="line-height: 55px;">成人</el-col>
-                  <el-col :span="19">
+                  <el-col :span="5" style="line-height: 30px;">成人</el-col>
+                  <el-col :span="19" style="line-height:30px">
                     <!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
-                    <div class="el-input-number">
+                    <div class="el-input-number" style="line-height:30px">
                       <!--is-disabled-->
                       <span class="el-input-number__decrease" @click="minuday(1)"><i class="el-icon-minus"></i></span>
                       <span class="el-input-number__increase" @click="addday(1)"><i class="el-icon-plus"></i></span>
@@ -130,10 +130,10 @@
                   </el-col>
                 </el-col>
                 <el-col :span="6">
-                  <el-col :span="5" style="line-height: 55px;">儿童</el-col>
-                  <el-col :span="19">
+                  <el-col :span="5" style="line-height: 30px;">儿童</el-col>
+                  <el-col :span="19" style="line-height:30px">
                     <!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
-                    <div class="el-input-number">
+                    <div class="el-input-number" style="line-height:30px">
                       <!--is-disabled-->
                       <span class="el-input-number__decrease" @click="minuday(2)"><i class="el-icon-minus"></i></span>
                       <span class="el-input-number__increase" @click="addday(2)"><i class="el-icon-plus"></i></span>
@@ -144,10 +144,10 @@
                   </el-col>
                 </el-col>
                 <el-col :span="6">
-                  <el-col :span="5" style="line-height: 55px;">婴儿</el-col>
-                  <el-col :span="19">
+                  <el-col :span="5" style="line-height: 30px;">婴儿</el-col>
+                  <el-col :span="19" style="line-height:30px">
                     <!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
-                    <div class="el-input-number">
+                    <div class="el-input-number" style="line-height:30px">
                       <!--is-disabled-->
                       <span class="el-input-number__decrease" @click="minuday(3)"><i class="el-icon-minus"></i></span>
                       <span class="el-input-number__increase" @click="addday(3)"><i class="el-icon-plus"></i></span>
@@ -375,7 +375,7 @@
           this.checkArr.forEach(function (item) {
             if(!item.name && !item.certtype && !item.cert && !item.mobile){
             }else {
-              if(item.name == '' || item.name.length<2){
+              if(item.name == ''){
                 _this.$message({
                   message: '姓名为2 到 15 个字符',
                   type: 'warning'
