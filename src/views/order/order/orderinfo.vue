@@ -152,13 +152,14 @@
 
 							<el-button><a :href="downUrl" class='downModel' @click='downVisList'>导出游客名单</a></el-button>
 							<el-button><a :href="downloadUrl" class='downModel' >下载名单模版</a></el-button>
-								<el-upload
+							<!-- 功能后续完善 -->
+								<!-- <el-upload
 									ref="upload"
 									:on-success="getFilename"
-									action="http://api.erp.we2tu.com/api/order/namelist/import"
+									action="namelistImport"
 									:auto-upload="false">					
 									<el-button type="primary">导入游客名单</el-button>
-								</el-upload>
+								</el-upload> -->
 						</el-col> 
 					</el-row>
 
@@ -251,7 +252,7 @@
 							</td>
 							<td>
 								<el-button type="text" v-if="detail.status==1 && detail.namelist.length>1" @click="deletepeople(index,namelist.type)">删除</el-button>
-								<el-button type="text" v-if="namelist.name&&(detail.status==2||detail.status==3)&&(detail.namelist.length>1)&&(show==true)" :disabled="namelist.isrefund"  @click="refund(namelist)" class="grouphide">
+								<el-button type="text" v-if="(namelist.isrefund==true)||(namelist.name)&&(detail.status==2||detail.status==3)&&(detail.namelist.length>1)&&(show==true)" :disabled="namelist.isrefund"  @click="refund(namelist)" class="grouphide">
 									{{namelist.isrefund?'已申请退团':'申请退团'}}</el-button>
 							</td>
 						</tr>
@@ -377,7 +378,7 @@ import axios from 'axios';
 	import { showorhide } from '../../../common/js/showorhid'
 	import paramm from '../../../common/js/getParam'
 //  import $ from 'jquery'
-	import {downloadUrl, orderdetail, banlist, collectsave, orderupdate, orderpay, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave, orderrefund,ordernamelistimport} from '../../../common/js/config';
+	import {namelistImport,downloadUrl, orderdetail, banlist, collectsave, orderupdate, orderpay, ordercancel, ordernamelistconfirm, ordernamelistexport, paysave, orderrefund,ordernamelistimport} from '../../../common/js/config';
 	export default {
 		props: ['listid'],
 		data() {
@@ -412,7 +413,7 @@ import axios from 'axios';
         }],
         downUrl: '',
         downloadUrl: '',
-        baseUrl: 'http://api.erp.we2tu.com/api/order/namelist/export?',
+        baseUrl: namelistImport,
 				pricerules: {
 					money: [{
 						validator: price,
@@ -527,8 +528,7 @@ import axios from 'axios';
 		},
 		methods: {
       handleChange (file, fileList) {
-        console.log(4444,file);
-        console.log(5555,fileList);
+    
         this.fileList3 = fileList.slice(-3);
       },
 //      ajaxFileUpload () {
@@ -573,7 +573,7 @@ import axios from 'axios';
 		        		orderId:this.detail.id
 		        	}
 		        	orderrefund(para).then((res) =>{
-		        		console.log(para,res)
+		        	
 		        		if(res.data.error || res.data.err){
 		        			paramm.getCode(res.data,_this)
 		        		}else{
@@ -763,6 +763,7 @@ import axios from 'axios';
       },
 			//获取详情
 			getdetail() {
+				console.log("进入了")
 			  let _this =this;
 				let para = {
 					id: this.listid,
@@ -774,14 +775,17 @@ import axios from 'axios';
 					this.detail = res.data.obj
 					console.log(	this.detail);
 					var index=0;
-					for(var i=0;i<this.detail.namelist;i++){
+					for(var i=0;i<this.detail.namelist.length;i++){
+						console.log("进入for循环了")
            if(this.detail.namelist[i].isrefund==false){
-						 index++;
-             if(index<=1){
-							_this.show=false;
-						 }
+						 console.log(666)
+						 index++;  
 					 }
 					}
+					if(index<=1){
+							 console.log(2222555)
+							_this.show=false;
+						}
           if(this.detail.collections.length>0){
             this.detail.collections.forEach(function (item) {
               _this.sumShou += parseFloat(item.totalfee)
@@ -1154,7 +1158,7 @@ import axios from 'axios';
 //          formData.append(k, dt[k])
 //        }
         return new Promise((resolve, reject) => {
-          Vue.post('http://api.erp.we2tu.com/api/order/namelist/import', formData, {
+          Vue.post(namelistImport, formData, {
             headers: {
               'Content-Type': 'multipart/form-data; charset=UTF-8'
             },
@@ -1170,7 +1174,7 @@ import axios from 'axios';
       },
       //导入游客名单
       getFilename(res,file){
-				console.log(11111222);
+				
         // axios.post('http://api.erp.we2tu.com/api/order/namelist/import', {token:this.editpriceform.token}, {
         //   headers: {
         //     'Content-Type': 'multipart/form-data; charset=UTF-8'
@@ -1202,7 +1206,7 @@ import axios from 'axios';
               }
             }
           })
-          console.log('777', this.uploadArr)
+          
         })
       }
 		}
