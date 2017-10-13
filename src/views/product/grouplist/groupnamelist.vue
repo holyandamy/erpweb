@@ -71,7 +71,7 @@
 </template>
 <script>
 
-  import {ordernameslist} from '../../../common/js/config'
+  import {ordernameslist,groupnamelistexport} from '../../../common/js/config'
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   export default {
@@ -102,8 +102,6 @@
     methods:{
       //导出excel
       groupnameexport(){
-        const base = 'http://api.erp.we2tu.com/api/order/confirm/export'
-        const groupnamelistexport = params => { return axios.post(`${base}`, params); }
         let para = {
           content:document.getElementById('print').innerHTML,
           token:paramm.getToken()

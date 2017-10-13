@@ -248,9 +248,11 @@
       toDown(){
         showorhide()
       },
-      showRemark(){
+      showRemark(row, column, cell, event){
         console.log(777)
-        this.dialogShow = true
+        if(column.property === 'approveName'){
+          this.dialogShow = true
+        }
       },
       // 审核确定 取消
       setAppId (id) {

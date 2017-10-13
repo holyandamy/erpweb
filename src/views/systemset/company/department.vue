@@ -225,6 +225,7 @@
 						});
 					} else {
 						this.adddepartment = false
+            this.adddatas.name = ''
 						this.$message({
 							message: '添加成功！',
 							type: 'success'
