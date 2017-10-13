@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-const host = '' // 接口请求地址
+const host = 'http://api.erp.we2tu.com' // 接口请求地址
 const otherUrl = 'http://img.etu6.org/erp'
 export const noteUrl = `${otherUrl}/xt-erp-info.pdf`;  // 操作手册
 export const downloadUrl = `${otherUrl}/namelist_template.xls`;  // 名单模版

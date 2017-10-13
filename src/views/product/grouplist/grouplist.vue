@@ -149,7 +149,7 @@
       </el-dialog>
 
     </div>
-    <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="setMode" @editorFn='editorFn'  :categoryId="editcategory.id"></GroupInfo>
+    <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="f" @editorFn='editorFn'  :categoryId="editcategory.id"></GroupInfo>
     <Groupnamelist v-else-if="modeType == 'groupnamelist'" @setMode="setMode"   :tdidd="tdidd"></Groupnamelist>
     <GroupReserve v-else-if="modeType == 'groupreserve'" @setMode="setMode" :categoryId="editcategory.id"></GroupReserve>
     <Grouporder v-else-if="modeType == 'order'"  @setMode="setMode" :operationType="operationType" ></Grouporder>

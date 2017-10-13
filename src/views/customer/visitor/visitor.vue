@@ -244,6 +244,8 @@
     .defaultbutton {
       float: right;
       margin-top: -10px;
+      border-color: #9ad4d6;
+      color: #2cb1b6;
     }
     .el-menu-item:hover{
       background: transparent;
