@@ -3,7 +3,7 @@
 		<header>
 			<el-row>
 				<el-col :span="4">
-					<el-breadcrumb separator="/">
+					<el-breadcrumb separator="/" >
             <el-breadcrumb-item><span @click="handleHide()">线路列表</span></el-breadcrumb-item>
             <el-breadcrumb-item>新增模板</el-breadcrumb-item>
 
