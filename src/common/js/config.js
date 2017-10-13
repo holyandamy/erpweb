@@ -7,6 +7,12 @@ export const downloadUrl = `${otherUrl}/namelist_template.xls`;  // 名单模版
 let base = `${host}/api`;  // 接口
 export let serverBase = `${host}/ueditor`; // 自定义编辑器
 
+export let lineearnDown = `${host}/api/report/receivable/line/export`; // 线路营收报表
+export let transferearnDown = `${host}/api/report/receivable/adjuster/export`; // 计调营收报表
+export let monthearnDown = `${host}/api/report/finance/collect/export`; //月收款统计
+export let monthspendDown = `${host}/api/report/finance/pay/export`; //月付款统计
+export let collectlistDown = `${host}/api/finance/collect/export`; //收款登记
+export let payDown = `${host}/api/finance/pay/export`; //付款登记
 
 /* 首页 */
 export const dashboard = params => { return axios.post(`${base}/sys/dashboard/info`, params).then(res => res); };//首页信息
