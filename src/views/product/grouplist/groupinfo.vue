@@ -2,9 +2,9 @@
   <div>
     <div v-if="modeType= 'groupinfo'">
       <header>
-        <el-row>
+        <el-row >
           <el-col :span="12">
-            <el-breadcrumb separator="/">
+            <el-breadcrumb separator="/" style="font-size:18px;color:#2cb1b6">
               <el-breadcrumb-item>产品管理</el-breadcrumb-item>
               <el-breadcrumb-item><span @click="handleHide()">发团列表</span></el-breadcrumb-item>
               <el-breadcrumb-item>{{optionName}}</el-breadcrumb-item>

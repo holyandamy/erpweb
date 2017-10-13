@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="print">
     <div>
       <header>
         <el-row>
@@ -16,22 +16,23 @@
       <section class="padding30">
         <el-row style='padding-bottom:50px;'>
           <el-col :span='8'>
-            <a target="_blank"  href="javascript:;"><el-button type="primary">打印本页</el-button></a>
+            <el-button type="primary" @click="printpage">打印本页</el-button>
           </el-col>
           <el-col :span='8'>
-            <el-button type="primary">导出Excel</el-button>
+            <a target="_blank" href="" @click="groupnameexport"><el-button type="primary">导出</el-button></a>
           </el-col>
           <el-col :span='8'>
             <el-button type="primary"  @click="handleHide()">关闭窗口</el-button>
           </el-col>
         </el-row>
+
         <el-table :data="nameList" border style="text-align: left; font-size: 12px;">
           <el-table-column
             type="index"
             width="100"
             label="序号">
           </el-table-column>
-          <el-table-column prop="name " label=" 姓名" width="150">
+          <el-table-column prop="name" label="姓名" width="150">
           </el-table-column>
           <el-table-column label="游客类型" >  <!--  prop="type"   -->
             <template scope="scope">
@@ -69,7 +70,8 @@
   </div>
 </template>
 <script>
-  import {ordernameslist} from '../../../common/js/config'
+
+  import {ordernameslist,groupnamelistexport} from '../../../common/js/config'
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   export default {
@@ -98,6 +100,21 @@
 //    	}
 //    },
     methods:{
+      //导出excel
+      groupnameexport(){
+        let para = {
+          content:document.getElementById('print').innerHTML,
+          token:paramm.getToken()
+        }
+        groupnamelistexport(para).then((res) => {
+          console.log(777,res)
+        })
+      },
+      //页面打印功能
+      printpage(){
+        window.print();
+        return false;
+      },
       getList(){
         let _this = this
         ordernameslist({

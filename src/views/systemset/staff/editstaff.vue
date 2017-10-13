@@ -250,7 +250,7 @@
       return {
         finddep:false,
         addstaff: {
-          token: token,
+          token: paramm.getToken(),
           username: '',
           realname: '',
           mobile: '',
