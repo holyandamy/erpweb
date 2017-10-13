@@ -270,6 +270,7 @@
                     <ImgLoad @getRouteImages ='getRouteImages' :idx="index"></ImgLoad>
                   </el-form-item>
 
+
 								</el-col>
 
 							</el-row>

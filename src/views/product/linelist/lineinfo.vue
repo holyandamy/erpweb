@@ -235,18 +235,19 @@
 							this.detail.categorytype = "周边游";
 							break;
 					}
+          console.log(2222);
+          if(res.data.obj.images != '') {
+            console.log(4444);
+            if(res.data.obj.images.indexOf(',') >= 0) {
+              this.toplist = this.detail.images.split(',')
+            } else {
+              this.toplist.push(res.data.obj.images)
+            }
+          } else {
+            res.data.obj.images = ' '
+          }
 
 					if(this.detail.edittype == 0) {
-						if(res.data.obj.images != '') {
-							if(res.data.obj.images.indexOf(',') >= 0) {
-								this.toplist = this.detail.images.split(',')
-							} else {
-								this.toplist.push(res.data.obj.images)
-							}
-						} else {
-							res.data.obj.images = ' '
-						}
-
 						for(let i = 0; i < res.data.obj.routes.length; i++) {
 
 							if(res.data.obj.routes[i].titleimages != "") {
@@ -270,8 +271,9 @@
 						this.detail.routes[0].content = str
 
 					}
+          console.log(888888, this.toplist);
 
-				})
+        })
 
 			},
 			jump(index) {

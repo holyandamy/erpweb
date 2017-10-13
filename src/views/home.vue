@@ -88,7 +88,7 @@ export default {
 	 },
  
     methods: {
-		
+
     	getuserinfo(){
 //			let name = localStorage.getItem('info')
 			let token = Cookies.get('token')

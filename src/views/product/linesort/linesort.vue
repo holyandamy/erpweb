@@ -4,7 +4,7 @@
       <header>
         <el-row>
           <el-col :span="12">
-            <el-breadcrumb separator="/">
+            <el-breadcrumb separator="/" >
               <el-breadcrumb-item>产品管理</el-breadcrumb-item>
               <el-breadcrumb-item>线路分类</el-breadcrumb-item>
             </el-breadcrumb>

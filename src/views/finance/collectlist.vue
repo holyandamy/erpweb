@@ -141,15 +141,15 @@
               <el-col :span="24">
                 <table style="border:1px solid #ccc;margin-top:10px"  width="100%">
                   <tr>
-                    <td style="text-align:right">金额合计:￥{{summoney}}元</td>
+                    <td style="text-align:right"><span style="margin-right:24px">金额合计:￥{{summoney}}元</span></td>
                   </tr>
                 </table>
               </el-col>
             </el-form-item>
             <el-form-item label="附件图片：">  <!--   prop="remark"  -->
               <ul>
-                <li v-for='imgg in imgArr' style='margin: 10px;width: 50%;'>
-                  <img :src="imgg" alt="" style='width: 100%;height: 100%;'>
+                <li v-if="imgArr" v-for='imgg in imgArr' style='margin: 10px;width: 50%;'>
+                  <img :src="imgg" alt="">
                 </li>
               </ul>
             </el-form-item>
@@ -280,11 +280,14 @@
     },
     created() {
       this.collectexport()
+      console.log('created')
     },
     updated: function() {
+      console.log('updated')
       this.$nextTick(function() {
         showorhide()
       })
+      this.collectexport()
     },
 
     methods: {
@@ -381,6 +384,7 @@
             _this.listLoading = false
           }
         })
+
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);

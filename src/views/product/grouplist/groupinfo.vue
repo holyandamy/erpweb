@@ -2,9 +2,9 @@
   <div>
     <div v-if="modeType= 'groupinfo'">
       <header>
-        <el-row>
+        <el-row >
           <el-col :span="12">
-            <el-breadcrumb separator="/">
+            <el-breadcrumb separator="/" style="font-size:18px;color:#2cb1b6">
               <el-breadcrumb-item>产品管理</el-breadcrumb-item>
               <el-breadcrumb-item><span @click="handleHide()">发团列表</span></el-breadcrumb-item>
               <el-breadcrumb-item>{{optionName}}</el-breadcrumb-item>
@@ -169,8 +169,8 @@
             <li>
               <span>图片</span>
               <div class="xc">
-                <div v-if='route.titleimages' v-for="item in detail.routes">  <!--  .split(',')  -->
-                  <img style='width: 168px;height: 168px;margin: 0 10px;' :src="item.titleimages"/>
+                <div v-if='route.titleimages' v-for="im in route.titleimages">  <!--  .split(',')  -->
+                  <img style='width: 168px;height: 168px;margin: 0 10px;' :src="im"/>
                 </div>
                 <div v-if='!route.titleimages'>
                   ---
@@ -240,7 +240,7 @@
 </template>
 
 <script>
-  import {token,orderdet,openlist} from '../../../common/js/config';
+  import {orderdet,openlist} from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   export default {
@@ -369,8 +369,8 @@
           }
           for (var i = 0; i < this.detail.routes.length; i++) {
             let arr = []
-            if(res.data.obj.routes[i].titleimages) {
-              arr = res.data.obj.routes[i].titleimages.split(',')
+            if(res.data.obj.line.routes[i].titleimages) {
+              arr = res.data.obj.line.routes[i].titleimages.split(',')
             }
             this.detail.routes[i].titleimages = arr
           }

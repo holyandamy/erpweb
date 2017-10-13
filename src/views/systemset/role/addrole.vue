@@ -201,7 +201,6 @@
       //post date
       submitFn:function () {
         let _this = this;
-
         if (this.roleName.length == 0) {
           this.$message.error('请输入角色名！');
           return
@@ -250,10 +249,12 @@
             if(backData.data.error!=0 || backData.data.err){
               paramm.getCode(backData.data, _this)
             } else {
-                this.$message({
-                    message:'保存成功，如果想要获取最新权限，请刷新页面或重新登录！',
+
+               _this.$message({
+                  message:'保存成功，如果想要获取最新权限，请刷新页面或重新登录！',
                   type:'success'
-                })
+               })
+
               // paramm.getCode(backData.data, _this)
               this.handleHide('edit');
             }

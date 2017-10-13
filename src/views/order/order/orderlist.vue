@@ -126,7 +126,7 @@
                       <el-dropdown-item>
                         <el-button type="text" class="hasid" id="83b7ed61735d11e788410242ac120009">
                           <!--<router-link  target="_blank" to="/singlegroup">出团单</router-link>-->
-                          <router-link  target="_blank" to="/singlegroup" style='color: #3ec3c8;'>导出出团单</router-link>
+                          <router-link  target="_blank" :to="{path:'/singlegroup',query: {id: list.id}}" style='color: #3ec3c8;'>导出出团单</router-link>
                         </el-button>
                       </el-dropdown-item>
                     </el-dropdown-menu>
@@ -305,7 +305,7 @@
 			//查询按钮显示影藏处理角色权限？
 			handleRole(){
 			tokenlogin({token: paramm.getToken()}).then(function(res){
-				console.log(res.data.obj.auths);
+				
 				let totalId=res.data.obj.auths;
 				let list = document.getElementsByClassName('hasid');
 				for(let i = 0; i < list.length; i++) {

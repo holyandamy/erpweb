@@ -12,7 +12,7 @@
 			<div class="container">
 				<dl class="componyinfo">
 					<dt>
-					<img :src="detail.scVo.logo"/>	
+					<img :src="detail.scVo.logo"/>
 					</dt>
 					<dd>
 						<h4>{{detail.scVo.companyName}}
@@ -107,7 +107,7 @@
 						<td class="title">红包抵扣</td>
 						<td></td>
 					</tr>
-					
+
 					<tr>
 						<td class="title">客人名单</td>
 						<td colspan="5">
@@ -121,16 +121,16 @@
 					<tr>
 						<td class="title">接送信息</td>
 						<td colspan="5">
-							
+
 						</td>
 					</tr>
 					<tr>
 						<td class="title">订单备注</td>
 						<td colspan="5">
-							
+
 						</td>
 					</tr>
-					
+
 				</table>
 				<table v-if="tripinfo" border="1" cellspacing="" cellpadding="" class="tablebase">
 					<tr>
@@ -232,7 +232,8 @@
 </template>
 
 <script>
-	import { orderexportdetail,token } from '../../../common/js/config';
+	import { orderexportdetail} from '../../../common/js/config';
+	import paramm from '../../../common/js/getParam';
 	export default{
 		data(){
 			return {
@@ -259,7 +260,7 @@
 		methods:{
 			getdetail(){
 				let para = {
-					token:token,
+					token:paramm.getToken(),
 					id:this.id
 				}
 				orderexportdetail(para).then((res) =>{
@@ -276,7 +277,7 @@
 		width: 800px;
 		margin: 0 auto;
 	}
-	
+
 	header {
 		padding: 7px 0;
 		background: #dee5ec;
@@ -284,7 +285,7 @@
 			text-align: left;
 		}
 	}
-	
+
 	section {
 		.container {
 			background: #fff;
@@ -393,7 +394,7 @@
 			td{
 				height: 80px;
 			}
-			
+
 		}
 	}
 </style>

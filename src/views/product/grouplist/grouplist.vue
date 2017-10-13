@@ -10,7 +10,7 @@
             </el-breadcrumb>
           </el-col>
           <el-col :span="4">
-            <el-button style='float: right;  margin-top: -10px;' size="large" type="primary"  id="5c18b1d0734611e788410242ac120009" class="hasid" @click="setMode('newGroup','add')" >发团计划</el-button>
+            <el-button  size="large" type="primary"  id="5c18b1d0734611e788410242ac120009" class="defaultbutton hasid" @click="setMode('newGroup','add')" >发团计划</el-button>
           </el-col>
         </el-row>
       </header>
@@ -67,7 +67,7 @@
 
         </el-form>
 
-        <el-table :data="lineList" border style="text-align: left; font-size: 12px;">
+        <el-table :data="lineList" border style="text-align: left; font-size: 12px;" @cell-click="showRemark">
           <el-table-column prop="teamno" label=" 团号" width="150">
           </el-table-column>
           <el-table-column prop="linename" label="线路名称">
@@ -148,6 +148,15 @@
         </div>
       </el-dialog>
 
+      <el-dialog title="" :visible.sync="dialogShow" size='tiny' :close-on-click-modal=false>
+        <el-form :model="form" :rules="rules">
+          <el-form-item label="备注：" :label-width="formLabelWidth">
+            <el-input v-model="form.remark">
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+
     </div>
     <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="setMode" @editorFn='editorFn'  :categoryId="editcategory.id"></GroupInfo>
     <Groupnamelist v-else-if="modeType == 'groupnamelist'" @setMode="setMode"   :tdidd="tdidd"></Groupnamelist>
@@ -211,6 +220,7 @@
         editcategory:{},
         optionName: '新增发团计划',
         dialogFormVisible: false,
+        dialogShow:false,
         form: {
           remark:'',
         },
@@ -237,6 +247,12 @@
     methods:{
       toDown(){
         showorhide()
+      },
+      showRemark(row, column, cell, event){
+        console.log(777)
+        if(column.property === 'approveName'){
+          this.dialogShow = true
+        }
       },
       // 审核确定 取消
       setAppId (id) {
@@ -347,15 +363,6 @@
             return
           }else {
             _this.lineList = res.data.obj.datas
-            _this.lineList.forEach((item) => {
-              //console.log(77777,item.endtime)
-              let time = new Date(item.endtime.replace(/-/g,'/')).getTime() - 86400000
-              time = new Date(time)
-              let year = time.getFullYear() + ''
-              let month = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1) : (time.getMonth() + 1) + ''
-              let day = time.getDate() < 10 ? '0' + time.getDate() : time.getDate() + ''
-              item.endtime = year + '-' + month + '-' + day
-            })
             _this.total = Number(res.data.obj.total)
           }
         })
@@ -399,6 +406,8 @@
     margin-bottom: 30px;
     padding-top: 20px;
     .defaultbutton{
+      float:right;
+      margin-top:-10px;
     }
     .el-menu-item{
       height: 36px;

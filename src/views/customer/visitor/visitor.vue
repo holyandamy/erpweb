@@ -10,7 +10,7 @@
             </el-breadcrumb>
           </el-col>
           <el-col :span="12">
-            <el-button class="hasid" @click="setMode('add','add')" id="33e69794734511e788410242ac120009" style='border-color:#9ad4d6 ;  color: #2cb1b6;  float: right;  margin-top: -10px;'>新增游客</el-button>
+            <el-button class="defaultbutton hasid" @click="setMode('add','add')" id="33e69794734511e788410242ac120009" >新增游客</el-button>
           </el-col>
         </el-row>
       </header>
@@ -240,6 +240,10 @@
         padding: 0 20px;
         display: block;
       }
+    }
+    .defaultbutton {
+      float: right;
+      margin-top: -10px;
     }
     .el-menu-item:hover{
       background: transparent;
