@@ -56,7 +56,7 @@
           <el-table-column  label="操作">
             <template scope="scope">
               <el-button class="hasid" id="ad7954ba735811e788410242ac120009" @click="editorFn(scope.row)" type="text" size="small">编辑</el-button>
-              <el-button v-if='scope.row.total ==0 && lineList.length > 1'  type="text" size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
+              <el-button class="hasid" id="b1593571735811e788410242ac120009" v-if='scope.row.total ==0 && lineList.length > 1'  type="text" size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -338,5 +338,8 @@
   }
   .jump:hover{
     color: blue;
+  }
+  .hasid {
+    display: none;
   }
 </style>

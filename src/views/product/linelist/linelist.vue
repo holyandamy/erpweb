@@ -209,7 +209,12 @@
 		},
 		methods: {
       toDown(){
-        showorhide()
+        console.log(55555);
+        this.$nextTick(function () {
+          showorhide()
+
+
+        })
       },
 			//线路分类筛选
 			checkkind(){
