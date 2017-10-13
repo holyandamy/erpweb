@@ -103,7 +103,7 @@
       //导出excel
       groupnameexport(){
         let para = {
-          content:document.getElementById('print').innerHTML,
+          content:document.getElementById('print').outerHTML,
           token:paramm.getToken()
         }
         groupnamelistexport(para).then((res) => {
