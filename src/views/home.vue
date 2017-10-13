@@ -86,29 +86,9 @@ export default {
 		this.getuserinfo();
 
 	 },
-  updated(){
-		 this.homeHandleRole();
-	 },
-	 mounted(){
-		  this.homeHandleRole();
-	 },
  
     methods: {
-			//根据角色权限设置对应的区域显示影藏
-			homeHandleRole(){
-				let _this=this;
-				var items=document.getElementsByClassName("parentMenu");
-	
-				for(let i=0;i<items.length;i++){
-	        items[i].onclick=function(){
-							console.log(1111222)
-						tokenlogin({token:paramm.getToken()}).then(function(res){
-								// this.userinfo =res.data.obj.username
-				        _this.menu = res.data.obj.menu
-						})
-					}
-				}
-			},
+		
     	getuserinfo(){
 //			let name = localStorage.getItem('info')
 			let token = Cookies.get('token')
