@@ -14,6 +14,8 @@ import Docking from './views/product/docking/docking.vue'
 import Singlegroup from './views/order/order/singlegroup.vue'
 //确认单
 import Conmfirm from './views/order/order/comfirm.vue'
+//出团团
+import exportgroup from './views/order/order/exportgroup.vue'
 //订单管理
 import orderLineft from './views/order/line/line.vue' //公司管理菜单
 import orderList from './views/order/order/orderlist.vue' //公司管理菜单
@@ -225,6 +227,12 @@ let routes = [{
 		path: '/singlegroup',
 		component: Singlegroup,
 		name: '行程单',
+		hidden: true
+	},
+	{
+		path: '/exportgroup',
+		component: exportgroup,
+		name: '出团团',
 		hidden: true
 	}
 ];

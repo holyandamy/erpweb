@@ -251,7 +251,8 @@
 							</td>
 							<td>
 								<el-button type="text" v-if="detail.status==1 && detail.namelist.length>1" @click="deletepeople(index,namelist.type)">删除</el-button>
-								<el-button type="text" v-if="namelist.name&&(detail.status==2||detail.status==3)" :disabled="namelist.isrefund"  @click="refund(namelist)">{{namelist.isrefund?'已申请退团':'申请退团'}}</el-button>
+								<el-button type="text" v-if="namelist.name&&(detail.status==2||detail.status==3)&&(detail.namelist.length>1)&&(show==true)" :disabled="namelist.isrefund"  @click="refund(namelist)" class="grouphide">
+									{{namelist.isrefund?'已申请退团':'申请退团'}}</el-button>
 							</td>
 						</tr>
 						<tr>
@@ -399,7 +400,8 @@ import axios from 'axios';
 				}
 			}
 			return {
-        fileList3: [{
+				show:true,
+				fileList3: [{
           name: 'food.jpeg',
           url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
           status: 'finished'
@@ -770,6 +772,16 @@ import axios from 'axios';
 				orderdetail(para).then((res) => {
 					this.downloadUrl = downloadUrl
 					this.detail = res.data.obj
+					console.log(	this.detail);
+					var index=0;
+					for(var i=0;i<this.detail.namelist;i++){
+           if(this.detail.namelist[i].isrefund==false){
+						 index++;
+             if(index<=1){
+							_this.show=false;
+						 }
+					 }
+					}
           if(this.detail.collections.length>0){
             this.detail.collections.forEach(function (item) {
               _this.sumShou += parseFloat(item.totalfee)

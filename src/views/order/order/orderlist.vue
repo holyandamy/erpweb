@@ -126,7 +126,7 @@
                       <el-dropdown-item>
                         <el-button type="text" class="hasid" id="83b7ed61735d11e788410242ac120009">
                           <!--<router-link  target="_blank" to="/singlegroup">出团单</router-link>-->
-                          <router-link  target="_blank" :to="{path:'/singlegroup',query: {id: list.id}}" style='color: #3ec3c8;'>导出出团单</router-link>
+                          <router-link  target="_blank" :to="{path:'/exportgroup',query: {id: list.id}}" style='color: #3ec3c8;'>导出出团单</router-link>
                         </el-button>
                       </el-dropdown-item>
                     </el-dropdown-menu>
@@ -233,7 +233,7 @@
 					label: '已确认'
 				}, {
 					value: '3',
-					label: '已出团'
+					label: '可出团'
 				}, {
 					value: '4',
 					label: '已取消'
