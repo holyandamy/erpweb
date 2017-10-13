@@ -101,14 +101,13 @@
 
 <script>
   import axios from 'axios';
-  import { reportlist } from '../../../common/js/config';
+  import { reportlist,lineearnDown } from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   import util from '../../../common/js/util'
   export default {
     data() {
       return {
-        baseUrll: 'http://api.erp.we2tu.com/api/report/receivable/line/export',
         plusSrc: '',
         isLoadd: false,
         isShowJs: false,
@@ -175,7 +174,7 @@
         } else {
           dates = startday + '|' + endday
         }
-        this.plusSrc = this.baseUrll + '?'
+        this.plusSrc = lineearnDown + '?'
           + 'token=' + paramm.getToken() +'&'
           + 'date=' + dates +'&'
           + 'lineName=' + this.orderinfo.lineName;

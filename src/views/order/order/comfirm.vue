@@ -2,10 +2,11 @@
 	<div>
 		<header>
 			<div class="container">
-				<el-button size="small">发送邮件</el-button>
+			<!-- 此块功能以后再添加 -->
+				<!-- <el-button size="small">发送邮件</el-button>
 				<el-button size="small">打印本页</el-button>
 				<el-button size="small">导出word</el-button>
-				<el-button size="small" type="text" style="float: right;" onclick="window.history.go(-1)">关闭窗口</el-button>
+				<el-button size="small" type="text" style="float: right;" onclick="window.history.go(-1)">关闭窗口</el-button> -->
 			</div>
 		</header>
 		<section>

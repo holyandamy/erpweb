@@ -84,14 +84,13 @@
 
 <script>
   import axios from 'axios';
-  import { collectlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat } from '../../../common/js/config';
+  import { collectlist, ordernamelistconfirm,orderfin,ordersettle,ordersettlebat,monthearnDown } from '../../../common/js/config';
   import { showorhide } from '../../../common/js/showorhid'
   import paramm from '../../../common/js/getParam'
   import util from '../../../common/js/util'
   export default {
     data() {
       return {
-        baseUrll: 'http://api.erp.we2tu.com/api/report/finance/collect/export',
         plusSrc: '',
         isLoadd: false,
         isShowJs: false,
@@ -154,7 +153,7 @@
         }else{
           dates = ''
         }
-        this.plusSrc = this.baseUrll + '?'
+        this.plusSrc = monthearnDown + '?'
           + 'token=' + paramm.getToken() +'&'
           + 'date=' + dates +'&'
           + 'name=' + this.orderinfo.name;

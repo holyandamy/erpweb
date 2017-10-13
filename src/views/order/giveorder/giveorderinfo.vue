@@ -21,7 +21,7 @@
               接送订单编号：{{backData.code || ''}}
             </el-col>
             <el-col :span="12">
-              线路订单编号：{{backData.lineCode || ''}}
+              线路订单编号：{{backData.ocode || ''}}
             </el-col>
           </el-row>
           <el-row>
