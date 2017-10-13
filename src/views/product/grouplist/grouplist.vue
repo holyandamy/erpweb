@@ -149,9 +149,9 @@
       </el-dialog>
 
       <el-dialog title="" :visible.sync="dialogShow" size='tiny' :close-on-click-modal=false>
-        <el-form :model="form" :rules="rules">
+        <el-form :model="form1" :rules="rules">
           <el-form-item label="备注：" :label-width="formLabelWidth">
-            <el-input v-model="form.remark">
+            <el-input v-model="form1.mark">
             </el-input>
           </el-form-item>
         </el-form>
@@ -224,6 +224,9 @@
         form: {
           remark:'',
         },
+        form1:{
+          mark:''
+        },
         radio: '1',
         formLabelWidth: '100px',
         approveId: ''
@@ -249,7 +252,6 @@
         showorhide()
       },
       showRemark(row, column, cell, event){
-        console.log(777)
         if(column.property === 'approveName'){
           this.dialogShow = true
         }
@@ -286,6 +288,8 @@
               paramm.getCode(res.data,_this);
               _this.getList()
               _this.dialogFormVisible = false;
+              _this.form1.mark = _this.form.remark
+              console.log(777,_this.mark)
               _this.form= {
                 remark:'',
               }

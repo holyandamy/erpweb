@@ -119,10 +119,10 @@
                   <el-col :span="5" style="line-height: 55px;">成人</el-col>
                   <el-col :span="19">
                     <!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
-                    <div class="el-input-number">
+                    <div class="el-input-number" style="position: relative;;">
                       <!--is-disabled-->
-                      <span class="el-input-number__decrease" @click="minuday(1)"><i class="el-icon-minus"></i></span>
-                      <span class="el-input-number__increase" @click="addday(1)"><i class="el-icon-plus"></i></span>
+                      <span class="el-input-number__decrease" @click="minuday(1)"  style="position: absolute;top: 0;"><i class="el-icon-minus"></i></span>
+                      <span class="el-input-number__increase" @click="addday(1)"  style="position: absolute;top: 0;"><i class="el-icon-plus"></i></span>
                       <div class="el-input"><input v-model="adultArr.length" autocomplete="off" disabled type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
 
                       </div>
@@ -133,10 +133,10 @@
                   <el-col :span="5" style="line-height: 55px;">儿童</el-col>
                   <el-col :span="19">
                     <!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
-                    <div class="el-input-number">
+                    <div class="el-input-number" style="position: relative;;">
                       <!--is-disabled-->
-                      <span class="el-input-number__decrease" @click="minuday(2)"><i class="el-icon-minus"></i></span>
-                      <span class="el-input-number__increase" @click="addday(2)"><i class="el-icon-plus"></i></span>
+                      <span class="el-input-number__decrease" @click="minuday(2)" style="position: absolute;top: 0;"><i class="el-icon-minus"></i></span>
+                      <span class="el-input-number__increase" @click="addday(2)" style="position: absolute;top: 0;"><i class="el-icon-plus"></i></span>
                       <div class="el-input"><input v-model="childArr.length" autocomplete="off" disabled type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
 
                       </div>
@@ -147,11 +147,11 @@
                   <el-col :span="5" style="line-height: 55px;">婴儿</el-col>
                   <el-col :span="19">
                     <!--<el-input-number v-model="detail.totaladult" ref="num1" size="small" @change="changeaudlt" :min="0"></el-input-number>-->
-                    <div class="el-input-number">
+                    <div class="el-input-number" style="position: relative;;">
                       <!--is-disabled-->
-                      <span class="el-input-number__decrease" @click="minuday(3)"><i class="el-icon-minus"></i></span>
-                      <span class="el-input-number__increase" @click="addday(3)"><i class="el-icon-plus"></i></span>
-                      <div class="el-input"><input v-model="babyArr.length" autocomplete="off" disabled type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
+                      <span class="el-input-number__decrease" @click="minuday(3)" style="position: absolute;top: 0;"><i class="el-icon-minus"></i></span>
+                      <span class="el-input-number__increase" @click="addday(3)" style="position: absolute;top: 0;"><i class="el-icon-plus"></i></span>
+                      <div class="el-input"><input  v-model="babyArr.length" autocomplete="off" disabled type="text" rows="2" max="10" min="1" validateevent="true" class="el-input__inner">
 
                       </div>
                     </div>
