@@ -170,7 +170,7 @@
   import paramm from '../../common/js/getParam'
   import util from '../../common/js/util'
   import PayEdit from './payedit'
-  import { getpaylist, paystatus, paydetail} from '../../common/js/config';
+  import { getpaylist, paystatus, paydetail,payDown} from '../../common/js/config';
   import { showorhide } from '../../common/js/showorhid'
   //导出excel
   export default {
@@ -306,7 +306,7 @@
         } else {
           dates = startday + '|' + endday
         }
-        this.plusSrc = this.baseUrll + '?'
+        this.plusSrc = payDown + '?'
           + 'date=' + dates +'&'
           + 'token=' + paramm.getToken() +'&'
           + 'companyname=' + this.search.companyname +'&'

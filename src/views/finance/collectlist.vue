@@ -169,7 +169,7 @@
   import paramm from '../../common/js/getParam'
   import util from '../../common/js/util'
   import CollectEdit from './collectedit'
-  import { getcollectlist, collectstatus, collectdetail} from '../../common/js/config';
+  import { getcollectlist, collectstatus, collectdetail,collectlistDown} from '../../common/js/config';
   import { showorhide } from '../../common/js/showorhid'
   //导出excel
   export default {
@@ -303,7 +303,7 @@
         } else {
           dates = startday + '|' + endday
         }
-        this.plusSrc = this.baseUrll + '?'
+        this.plusSrc = collectlistDown + '?'
           + 'date=' + dates +'&'
           + 'token=' + paramm.getToken() +'&'
           + 'companyname=' + this.search.companyname +'&'

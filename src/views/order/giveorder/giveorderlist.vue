@@ -57,7 +57,7 @@
           <el-table-column prop="typeName" label="订单编号/线路订单编号" width="180">
             <template scope="scope" >
                 {{scope.row.code}} / <br>
-                {{scope.row.lineCode}}
+                {{scope.row.ocode}}
             </template>
           </el-table-column>
           <el-table-column prop="lineName" label="线路名称">
