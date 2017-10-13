@@ -19,7 +19,7 @@
             <el-button type="primary" @click="printpage">打印本页</el-button>
           </el-col>
           <el-col :span='8'>
-            <a target="_blank" href="" @click="groupnameexport"><el-button type="primary">导出</el-button></a>
+            <a  href="" @click="groupnameexport"><el-button type="primary">导出</el-button></a>
           </el-col>
           <el-col :span='8'>
             <el-button type="primary"  @click="handleHide()">关闭窗口</el-button>
@@ -100,12 +100,13 @@
 //    	}
 //    },
     methods:{
-      //导出excel
+      //导出
       groupnameexport(){
         let para = {
-          content:document.getElementById('print').outerHTML,
+          content:document.getElementById('print').innerHTML,
           token:paramm.getToken()
         }
+        console.log('content', typeof para.content)
         groupnamelistexport(para).then((res) => {
           console.log(777,res)
         })

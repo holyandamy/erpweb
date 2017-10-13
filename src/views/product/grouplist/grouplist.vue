@@ -67,7 +67,7 @@
 
         </el-form>
 
-        <el-table :data="lineList" border style="text-align: left; font-size: 12px;" @cell-click="showRemark">
+        <el-table :data="lineList" border style="text-align: left; font-size: 12px;">
           <el-table-column prop="teamno" label=" 团号" width="150">
           </el-table-column>
           <el-table-column prop="linename" label="线路名称">
@@ -148,10 +148,6 @@
         </div>
       </el-dialog>
 
-      <el-dialog title="" :visible.sync="dialogShow" size='tiny' :close-on-click-modal=false>
-        备注：<span>{{form1.mark}}</span>
-      </el-dialog>
-
     </div>
     <GroupInfo v-else-if="modeType == 'groupinfo'" @setMode="setMode" @editorFn='editorFn'  :categoryId="editcategory.id"></GroupInfo>
     <Groupnamelist v-else-if="modeType == 'groupnamelist'" @setMode="setMode"   :tdidd="tdidd"></Groupnamelist>
@@ -219,9 +215,6 @@
         form: {
           remark:'',
         },
-        form1:{
-          mark:''
-        },
         index:'',
         radio: '1',
         formLabelWidth: '100px',
@@ -247,12 +240,6 @@
       toDown(){
         showorhide()
       },
-      /*showRemark(row, column, cell, event){
-        this.dialogShow = true
-        if(column.property === 'approveName' && row.id === this.approveId){
-
-        }
-      },*/
       // 审核确定 取消
       setAppId (id) {
         this.dialogFormVisible = true;
@@ -284,10 +271,9 @@
             }else {
               paramm.getCode(res.data,_this);
               _this.getList()
-              _this.form1.mark = _this.form.remark
               _this.dialogFormVisible = false;
               console.log(777,_this.mark)
-          _this.form= {
+              _this.form= {
                 remark:'',
               }
               _this.radio = '1'
