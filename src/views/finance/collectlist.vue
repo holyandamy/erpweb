@@ -280,10 +280,10 @@
     },
     created() {
       this.collectexport()
-      console.log('created')
+      //console.log('created')
     },
     updated: function() {
-      console.log('updated')
+      //console.log('updated')
       this.$nextTick(function() {
         showorhide()
       })
@@ -315,7 +315,7 @@
           + 'confirmstatus=' + this.search.confirmstatus +'&'
           + 'verifstatus=' + this.search.verifstatus +'&'
           + 'businesstype=' + this.search.businesstype;
-        console.log(77,this.plusSrc)
+        //console.log(77,this.plusSrc)
       },
       // 清空查询
       clearGetList () {

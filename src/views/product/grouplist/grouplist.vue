@@ -272,7 +272,7 @@
               paramm.getCode(res.data,_this);
               _this.getList()
               _this.dialogFormVisible = false;
-              console.log(777,_this.mark)
+              //console.log(777,_this.mark)
               _this.form= {
                 remark:'',
               }

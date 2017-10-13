@@ -169,7 +169,7 @@
                     <tr class="el-table__row">
                       <td class="el-table_1_column_123 el-table-column--selection">
                         <el-checkbox v-model="allChecked" @change='allCheck' v-if="operationType.type == 'add'">全选</el-checkbox>
-                        <!--<div class="cell el-tooltip" v-if="operationType.type == 'edit'">-&#45;&#45;</div>-->
+                        <div class="cell el-tooltip" v-if="operationType.type == 'edit'">---</div>
                         <!--暂时不改-->
                         <!--<el-checkbox v-model="checkedAll" @change="checkAll" v-if="operationType.type == 'edit'">全选</el-checkbox>-->
                       </td>
