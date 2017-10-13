@@ -1,10 +1,10 @@
-import { bases } from './config.js'
+import { upload1,upload2 } from './config.js'
 import upyun from 'upyun';
 import axios from 'axios';
 let bucket = new upyun.Bucket('xtimg')
 
 export function getHeaderSign(bucket, method, path) {
-	axios.post('http://api.erp.we2tu.com/file/upyun/getSign', {
+	axios.post(upload1, {
 			bucket,
 			method,
 			path
@@ -18,7 +18,7 @@ export function getHeaderSign(bucket, method, path) {
 		})
 }
 export function bodySignCallback(bucket, params) {
-	return axios.post('http://api.erp.we2tu.com/file/upyun/bodySign', {
+	return axios.post(upload2, {
 			bucket,
 			params
 		})

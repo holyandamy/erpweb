@@ -169,7 +169,7 @@
                 <ImgLoad @geturl="geturl"  :checktop="checktop"></ImgLoad>   <!--  :scope="scope"  -->
               </el-form-item>
               <el-form-item label="" style='color:red;'>
-                建议图片格式：jpg、png，图片大小在一M以内，宽高为：300*180，比例为5:3
+                建议图片格式：jpg、png，图片大小在1M以内，宽高为：300*180，比例为5:3
               </el-form-item>
 						</el-col>
 					</el-row>
@@ -179,7 +179,7 @@
 
 				<div class="tablemenu">
 					<el-button style="float: left;" @click="editor = false; menucheck1=true; menucheck2=false; basetype()">普通方式录入<i :class="[{'el-icon-check': menucheck1},'el-icon--right']"></i></el-button>
-					<el-button style="float: left;" @click="editor = true; menucheck1=false; menucheck2=true; selftype()">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon--right']"></i></el-button>
+					<!--<el-button style="float: left;" @click="editor = true; menucheck1=false; menucheck2=true; selftype()">自定义录入<i :class="[{'el-icon-check': menucheck2},'el-icon&#45;&#45;right']"></i></el-button>-->
 
 					<el-form-item label="行程天数" style="float: left; margin-bottom: 0;">
 								<el-input v-model="baseForm.days" v-if="editor"></el-input>
@@ -1096,7 +1096,8 @@
 				if(typeof document.selection != "undefined") {
 					document.selection.createRange().text = str;
 				} else {
-					listss.value = listss.value.substr(0, listss.selectionStart) + str + listss.value.substring(listss.selectionStart, lists);
+//					listss.value = listss.value.substr(0, listss.selectionStart) + str + listss.value.substring(listss.selectionStart, lists);
+          this.baseForm.routes[index].title = listss.value.substr(0, listss.selectionStart) + str + listss.value.substring(listss.selectionStart, lists);
 				}
 			},
 			changepeople(){
