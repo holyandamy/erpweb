@@ -19,7 +19,7 @@
             <el-button type="primary" @click="printpage">打印本页</el-button>
           </el-col>
           <el-col :span='8'>
-            <a  href="" @click="groupnameexport"><el-button type="primary">导出</el-button></a>
+            <a  target="_blank" href="" @click="groupnameexport" style="display:none"><el-button type="primary">导出</el-button></a>
           </el-col>
           <el-col :span='8'>
             <el-button type="primary"  @click="handleHide()">关闭窗口</el-button>
