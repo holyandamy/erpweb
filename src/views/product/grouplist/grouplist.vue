@@ -91,7 +91,7 @@
           <!--</el-table-column>-->
           <el-table-column prop="status" label="状态" width="80">
           </el-table-column>
-          <el-table-column prop="approveName" label="审批状态" width="90">
+          <el-table-column prop="approveName" label="审批状态" width="90" >
           </el-table-column>
           <el-table-column prop="creater" label="发布人" width="100">
           </el-table-column>
@@ -149,12 +149,7 @@
       </el-dialog>
 
       <el-dialog title="" :visible.sync="dialogShow" size='tiny' :close-on-click-modal=false>
-        <el-form :model="form" :rules="rules">
-          <el-form-item label="备注：" :label-width="formLabelWidth">
-            <el-input v-model="form.remark">
-            </el-input>
-          </el-form-item>
-        </el-form>
+        备注：<span>{{form1.mark}}</span>
       </el-dialog>
 
     </div>
@@ -224,6 +219,10 @@
         form: {
           remark:'',
         },
+        form1:{
+          mark:''
+        },
+        index:'',
         radio: '1',
         formLabelWidth: '100px',
         approveId: ''
@@ -248,12 +247,12 @@
       toDown(){
         showorhide()
       },
-      showRemark(row, column, cell, event){
-        console.log(777)
-        if(column.property === 'approveName'){
-          this.dialogShow = true
+      /*showRemark(row, column, cell, event){
+        this.dialogShow = true
+        if(column.property === 'approveName' && row.id === this.approveId){
+
         }
-      },
+      },*/
       // 审核确定 取消
       setAppId (id) {
         this.dialogFormVisible = true;
@@ -285,8 +284,10 @@
             }else {
               paramm.getCode(res.data,_this);
               _this.getList()
+              _this.form1.mark = _this.form.remark
               _this.dialogFormVisible = false;
-              _this.form= {
+              console.log(777,_this.mark)
+          _this.form= {
                 remark:'',
               }
               _this.radio = '1'

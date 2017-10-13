@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-const host = 'http://api.erp.we2tu.com' // 接口请求地址
+const host = '' // 接口请求地址
 const otherUrl = 'http://img.etu6.org/erp'
 export const noteUrl = `${otherUrl}/xt-erp-info.pdf`;  // 操作手册
 export const downloadUrl = `${otherUrl}/namelist_template.xls`;  // 名单模版
@@ -40,7 +40,7 @@ export const groupDel = params => { return axios.post(`${base}/line/team/del`, p
 export const groupApprove = params => { return axios.post(`${base}/line/team/approve`, params).then(res => res); };//发团列表- 审批
 export const ordernameslist = params => { return axios.post(`${base}/order/team/namelist`, params).then(res => res); };//发团列表- 出团名单
 export const groupexists = params => { return axios.post(`${base}/line/team/exists`, params).then(res => res); };//发团列表- 线路是否已存在团期
-export const groupnamelistexport = (params) => { return axios.post(`${base}/order/confirm/export`, params).then(res => res); } //发团列表  导出
+export const groupnamelistexport = (params) => { return axios.post(`${base}/order/confirm/export`, params,{headers:{'Content-type':application/x-www-form-urlencoded,charset:'utf-8'}}).then(res => res); } //发团列表  导出
 
 /*产品分类*/
 export const linecategorylist = params => { return axios.post(`${base}/line/category/list`, params); };//获取线路管理
