@@ -1,0 +1,82 @@
+{
+    "error": 1,
+    "message": "返回错误",
+    "collectlist": [
+        {
+            "createtime": "2015-05-11",
+            "orderno": "HP2017070315485042440506",
+            "code": "PP2017070811221234",
+            "teamno": "239802983908594839",
+            "companyname": "桂林龙脊梯田、义江asdfasdasd江缘或黄洛瑶寨缘或黄洛瑶寨",
+            "linename": "上海馨途",
+            "businesstypename": "订单预收款",
+            "totalfee": 22356,
+            "confirmstatus": "待确认",
+            "verificationstatus": "核销",
+            "handler": "高压",
+            "id": 455555,
+            "total": 5
+        },
+        {
+            "createtime": "2015-05-12",
+            "orderno": "HP2017070315485042440506",
+            "code": "PP2017070811221234",
+            "teamno": "239802983908594839",
+            "companyname": "桂林龙asdfas脊梯田、义江江缘或黄洛瑶寨缘或黄洛瑶寨",
+            "linename": "上海馨途",
+            "businesstypename": "订单预收款",
+            "totalfee": 22356,
+            "confirmstatus": "待确认",
+            "verificationstatus": "核销",
+            "handler": "高压",
+            "id": 455555,
+            "total": 5
+        },
+        {
+            "createtime": "2015-05-13",
+            "orderno": "HP2017070315485042440506",
+            "code": "PP2017070811221234",
+            "teamno": "239802983908594839",
+            "companyname": "桂林龙脊梯田、义江江缘或黄洛瑶寨缘或黄洛瑶寨",
+            "linename": "上海馨途",
+            "businesstypename": "订单预收款",
+            "totalfee": 22356,
+            "confirmstatus": "待确认",
+            "verificationstatus": "核销",
+            "handler": "高压",
+            "id": 455555,
+            "total": 5
+        },
+        {
+            "createtime": "2015-05-41",
+            "orderno": "HP2017070315485042440506",
+            "code": "PP2017070811221234",
+            "teamno": "239802983908594839",
+            "companyname": "桂林龙脊梯田、义江江缘或黄洛瑶寨缘或黄洛瑶寨",
+            "linename": "上海馨途",
+            "businesstypename": "订单预收款",
+            "totalfee": 22356,
+            "confirmstatus": "待确认",
+            "verificationstatus": "核销",
+            "handler": "高压",
+            "id": 455555,
+            "total": 5
+        },
+        
+        {
+            "createtime": "2015-05-11",
+            "orderno": "HP2017070315485042440506",
+            "code": "PP2017070811221234",
+            "teamno": "239802983908594839",
+            "companyname": "桂林龙脊梯田、义江江缘或黄洛瑶寨缘或黄洛瑶寨",
+            "linename": "上海馨途",
+            "businesstypename": "订单预收款",
+            "totalfee": 22356,
+            "confirmstatus": "待确认",
+            "verificationstatus": "核销",
+            "handler": "高压",
+            "id": 455555,
+            "total": 5
+        }
+    ]
+}
