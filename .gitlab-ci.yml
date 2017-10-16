@@ -41,7 +41,7 @@ build_master_docker:
   tags:
     - docker
   only:
-    - /^release-.*$/
+    - master
 
 deploy_prod_docker:
   stage: deploy
@@ -51,4 +51,4 @@ deploy_prod_docker:
   tags:
     - erp
   only:
-    - /^release-.*$/
+    - master

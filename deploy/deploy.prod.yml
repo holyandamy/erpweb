@@ -15,7 +15,7 @@ services:
       restart_policy:
         condition: on-failure
     networks:
-      - docker-net
+      - prod-net
 networks:
-  docker-net:
+  prod-net:
     external: true
