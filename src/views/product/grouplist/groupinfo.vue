@@ -283,9 +283,9 @@
           _this.pingtai = res.data.obj
         })
       },
-      setMode(type){
-        this.modeType=type;
-      },
+//      setMode(type){
+//        this.modeType=type;
+//      },
       getlineinfo() {
         let para = {
           token: paramm.getToken(),
