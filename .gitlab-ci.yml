@@ -17,7 +17,7 @@ build_test_docker:
   tags:
     - docker
   only:
-    - dev
+    - /^release-*/
 
 deploy_test_docker:
   stage: deploy
@@ -27,7 +27,7 @@ deploy_test_docker:
   tags:
     - docker
   only:
-    - dev
+    - /^release-*/
 
 build_master_docker:
   stage: build
