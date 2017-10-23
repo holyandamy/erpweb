@@ -36,11 +36,154 @@
                   </el-input>
                 </el-col>
               </el-form-item>
+              <div style="color: #2cb1b6; font-size: 20px;padding-top: 20px;line-height: 40px;margin-bottom: 20px;border-bottom:1px solid rgba(151, 151, 151, 0.2)">
+                交通信息</div>
+              <el-radio-group class='trafficRadio' v-model="traffictype" @change='changeTrack' >
+                <el-radio class='trafficRadio_son' :label="0" >普通交通</el-radio>
+                <el-radio :label="1" >控位交通</el-radio>
+              </el-radio-group>
+              <table class="adulttable" width="100%">
+                <thead>
+                <tr>
+                  <td width="150">交通名称</td>
+                  <td width="50">行程</td>
+                  <td width="150">出发地/目的地</td>
+                  <td width="60">经停/直达</td>
+                  <td width="60">去程班次</td>
+                  <td width="150">出发时间/抵达时间</td>
+                  <td width="50">操作</td>
+                </tr>
+                </thead>
+                <tbody>
+              <!--   显示 添加单程 -->
+                <tr v-for='(item,idx) in trackArr' :key="idx">
+                  <!-- 路线名称 -->
+                  <td >
+                    <el-input v-model='item.name' ></el-input>
+                  </td>
+                  <td>
+                    <el-input  disabled value="单程" ></el-input>
+                  </td>
+                  <td>
+                    <el-input  style='width: 40%;'  v-model='item.depart'></el-input> --- <el-input   style='width: 40%;' v-model='item.dest'></el-input>
+                  </td>
+                  <td>
+                    <el-input  v-model='item.stop'></el-input>
+                  </td>
+                  <td>
+                    <el-input  v-model='item.flightno'></el-input>
+                  </td>
+                  <td>
+                    <el-time-picker
+                      :editable=false
+                      :clearable=false
+                      style='width: 40%;'
+                      v-model="item.starttime"
+                      :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                      placeholder="时间">
+                    </el-time-picker> ---
+                    <el-time-picker
+                      :editable=false
+                      :clearable=false
+                      style='width: 40%;'
+                      v-model="item.endtime"
+                      :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                      placeholder="时间">
+                     </el-time-picker>
+                    <!--<el-input class='doubleTrc'  style='width: 40%;' ></el-input> <span v-if="item.type==1">-&#45;&#45; </span><el-input class='doubleTrc' v-if="item.type==1" style='width: 40%;'></el-input>-->
+                  </td>
+                  <td>
+                    <el-button type="text"  @click="deleteTrc(idx)">删除</el-button>
+                  </td>
+                </tr>
+               </tbody>
+                <!-- 显示 添加往返 -->
+               <tfoot v-for='(item,idx) in gobackArr' :key="idx" >
+                <!-- 往 -->
+                  <tr>
+                    <!-- 路线名称 -->
+                    <td rowspan="2">
+                      <el-input v-model='item.name' ></el-input>
+                    </td>
+                    <td>
+                      <el-input disabled value="往"></el-input>
+                    </td>
+                    <td>
+                      <el-input  style='width: 40%;'  v-model='item.depart'></el-input> --- <el-input   style='width: 40%;' v-model='item.dest'></el-input>
+                    </td>
+                    <td>
+                      <el-input  v-model='item.stop'></el-input>
+                    </td>
+                    <td>
+                      <el-input  v-model='item.flightno'></el-input>
+                    </td>
+                    <td>
+                      <el-time-picker
+                        :editable=false
+                        :clearable=false
+                        style='width: 40%;'
+                        v-model="item.starttime"
+                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                        placeholder="时间">
+                      </el-time-picker> ---
+                      <el-time-picker
+                        :editable=false
+                        :clearable=false
+                        style='width: 40%;'
+                        v-model="item.endtime"
+                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                        placeholder="时间">
+                      </el-time-picker>
+                      <!--<el-input class='doubleTrc'  style='width: 40%;' ></el-input> <span v-if="item.type==1">-&#45;&#45; </span><el-input class='doubleTrc' v-if="item.type==1" style='width: 40%;'></el-input>-->
+                    </td>
+                    <td rowspan="2">
+                      <el-button type="text"  @click="deleteTfoot(idx)">删除</el-button>
+                    </td>
+                  </tr>
+                  <!-- 返-->
+                  <tr>
+                    <td>
+                      <el-input  disabled value="返" ></el-input>
+                    </td>
+                    <td>
+                      <el-input  style='width: 40%;'  v-model='item.dest'></el-input> --- <el-input   style='width: 40%;' v-model='item.depart'></el-input>
+                    </td>
+                    <td>
+                      <el-input  v-model='item.stop'></el-input>
+                    </td>
+                    <td>
+                      <el-input  v-model='item.flightno'></el-input>
+                    </td>
+                    <td>
+                      <el-time-picker
+                        :editable=false
+                        :clearable=false
+                        style='width: 40%;'
+                        v-model="item.starttime"
+                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                        placeholder="时间">
+                      </el-time-picker> ---
+                      <el-time-picker
+                        :editable=false
+                        :clearable=false
+                        style='width: 40%;'
+                        v-model="item.endtime"
+                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                        placeholder="时间">
+                      </el-time-picker>
+                    </td>  
+                  </tr>
+              </tfoot>
+            </table>
+
+              <el-button class='trackAdd' type="primary" @click="trackAddSig" v-if='traffictype!=1'>添加单程</el-button>
+              <el-button class='trackAdd' type="primary" @click="trackAddBac" v-if='traffictype!=1'>添加往返</el-button>
+              <el-button class='trackAdd' type="primary"  @click="insertTrack">导入交通</el-button>
+
 
               <div style="color: #2cb1b6; font-size: 20px;padding-top: 20px;line-height: 40px;margin-bottom: 20px;border-bottom:1px solid rgba(151, 151, 151, 0.2)">
                 发团时间</div>
-
-              <el-form-item label="发团时间：" prop="date">
+              <el-form-item label="发团时间：" prop="date" v-if='traffictype!=1'>
                 <el-col :span="4" style="width: 100%;margin-right: 10px">
                   <el-date-picker
                     :clearable = false
@@ -58,7 +201,6 @@
                   <!--placeholder="选择日期"-->
                   <!--:picker-options="pickerOptions0">-->
                   <!--</el-date-picker>-->
-
                 </el-col>
               </el-form-item>
 
@@ -101,8 +243,8 @@
                       <th class="gutter" style="width: 0px;"></th>
                     </tr>
                     </thead>
-                    <tbody>
 
+                    <tbody>
                     <tr class="el-table__row">
                       <td >
                         <div class="cell el-tooltip" >---</div>
@@ -177,9 +319,11 @@
                         <!--<div class="cell">删除</div>-->
                         <div class="cell el-tooltip" >---</div>
                       </td>
+                      <!-- 发团日期 -->
                       <td >
                         <div class="cell el-tooltip" >---</div>
                       </td>
+                     <!--  计划人数 -->
                       <td>
                         <div class="cell el-tooltip" ><el-input v-model="allplan" @change='allPlan'></el-input></div>
                       </td>
@@ -235,7 +379,7 @@
                         <div class="cell el-tooltip" ><el-input v-model="allcostroom" @change='allCostroom'></el-input></div>
                       </td>
                     </tr>
-                    <tr class="el-table__row" v-for='(item,idx) in checkArr' v-if='checkArr.length>0'>
+                    <tr class="el-table__row" v-for='(item,idx) in checkArr' v-if='checkArr.length>0' :key="idx">
                       <td class="el-table_1_column_123 el-table-column--selection">
                         <!--{{item.checked}}-->
                         <el-checkbox v-model="item.checked" @change='sigCheck'></el-checkbox>
@@ -369,12 +513,39 @@
         <el-button type="primary" @click="checkRot()">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="" :visible.sync="trafficLog" style="text-align: left; font-size: 12px;">
+      <el-form >
+        <el-form-item label="关键字：">
+          <el-input v-model="formName" placeholder='请输入关键字搜索' auto-complete="off" style='width: 40%;margin-right: 20px;'></el-input>
+          <el-button type="primary" @click='getTrafficList'>搜索</el-button>
+
+        </el-form-item>
+        <el-form-item label="" >
+        </el-form-item>
+      </el-form>
+      <!-- 搜索区域的列表渲染区域 -->
+      <el-table :data="importData" style="width:100%">
+        <el-table-column prop="name" label="交通名称" width='150'></el-table-column>
+        <el-table-column prop="depart" label="出发" width='100'></el-table-column>
+        <el-table-column prop="stop" label="中转" width='100'></el-table-column>
+        <el-table-column prop="dest" label="抵达" width='100'></el-table-column>
+        <el-table-column prop="flightno" label="去程班次" width='100'></el-table-column>
+        <el-table-column prop="starttime" label="去程时间" ></el-table-column>
+        <el-table-column prop="type" label="类型" width='100' ></el-table-column>
+        <el-table-column  label="选择" width='100'>
+          <template scope="scope">
+            <el-button type="text" size="small" @click='importTrack(scope.row)'>导入</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 <script>
   import {address} from '../../../common/js/address'
   import axios from 'axios';
-  import {token,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist,groupupdate,groupdetail,groupDel,groupexists} from '../../../common/js/config';
+  import {trafficlist,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist,groupupdate,groupdetail,groupDel,groupexists} from '../../../common/js/config';
   import ElDialog from "../../../../node_modules/element-ui/packages/dialog/src/component";
   import paramm from '../../../common/js/getParam'
   export default {
@@ -402,7 +573,39 @@
       return {
         labelWidth: '800px',
         radio: '1',
+        traffictype: 0,
+        danTrc: '单程',
+        /* 单程的渲染数据 */
+        trackArr:[
+          // {
+          //   type:0,
+          //   name:'上海之行',
+          //   depart:'北京',
+          //   dest:'上海',
+          //   stop:'南京',
+          //   flightno:'HK00123',
+          //   starttime:new Date(2016, 9, 10, 18, 40),
+          //   endtime:new Date(2016, 9, 10, 18, 40)
+          // }
+        ],
+         /* 往返的渲染数据 */
+        gobackArr:[
+          // {
+          //   type:0,
+          //   name:'美国之行',
+          //   depart:'北京',
+          //   dest:'纽约',
+          //   stop:'英国',
+          //   flightno:'HK00123',
+          //   starttime:new Date(2016, 9, 10, 18, 40),
+          //   endtime:new Date(2016, 9, 10, 18, 40)
+          // }
+        ],
+        trafficLog: false,
+        importData:[],
+        trafficDays: '',
         lineFlag: false,
+        formName: '',
         notice: '',
         lineItemId: '',
         search: {
@@ -549,6 +752,82 @@
       }
     },
     methods: {
+      changeTrack(){
+        if(this.traffictype==1) this.trackArr=[]
+      },
+      // 添加单程
+      trackAddSig(){
+        this.trackArr.push(
+          {
+          type:0,
+          name:'单程',
+          name1:'上海一日游',
+          depart:'北京',
+          dest:'上海',
+          stop:'南京',
+          flightno:'HK00123',
+          starttime:new Date(2016, 9, 10, 18, 40),
+          endtime:new Date(2016, 9, 10, 18, 40)
+          }
+        )
+      },
+      // 添加往返
+      trackAddBac(){
+        this.gobackArr.push({
+            type:0,
+            name1:'北京——纽约',
+            depart:'北京',
+            dest:'纽约',
+            stop:'英国',
+            flightno:'HK00123',
+            starttime:new Date(2016, 9, 10, 18, 40),
+            endtime:new Date(2016, 9, 10, 18, 40)
+          })
+      },
+      //导入交通
+      insertTrack(){
+        this.trafficLog= true
+      },
+      // 搜索功能
+      getTrafficList(){
+        trafficlist({token: paramm.getToken(),day: this.trafficDays,title:this.formName}).then( (res)=> {
+          console.log(res.data)
+          let _this = this;
+           if(res.data.error || res.data.err) {
+              paramm.getCode(res.data,_this)
+            }else {
+              paramm.getCode(res.data,_this)
+              _this.importData = res.data.obj
+              _this.importData.forEach((item) => {
+                //单程 往返 联程
+                if(item.type === 0){
+                  item.type = '单程'
+                }else if(item.type === 1){
+                  item.type = '往返'
+                }
+              })
+            }
+        })
+      },
+      // 删除单程交通
+      deleteTrc(idx){
+        this.trackArr.splice(idx,1)
+      },
+      //删除往返交通
+      deleteTfoot(idx){
+        this.gobackArr.splice(idx,1)
+      },
+      // 弹框中的导入功能
+      importTrack(row){
+        this.trafficLog= false;
+        console.log(row);
+        if(row.type=="单程"){
+           this.trackArr.push(row);
+        }else{
+           this.gobackArr.push(row);
+        }
+         
+      },
       // 编辑  详情时获取信息
       getdetail () {
         let _this = this;
@@ -582,7 +861,7 @@
         let _this = this;
         openlist({token: paramm.getToken()}).then(function (res) {
           // 平台列表
-          _this.pingtai = res.data.obj
+          _this.pingtai = res.data.obj || []
         })
       },
       allMktaduilt () {
@@ -753,7 +1032,7 @@
             sit: 0,
             isenable: true
           })
-        console.log(444,'this.startTimeArr', this.startTimeArr);
+       
       },
       //获取线路列表
       queryLine(){
@@ -800,6 +1079,7 @@
         _this.lineFlag = false;
         _this.routeName = _this.checkItem.name;
         _this.lineid = _this.checkItem.id;
+        _this.trafficDays = _this.checkItem.days;
       },
       //弹出框出现，调用这个方法，第一次点击下拉框，下拉框样式有问题，第二次点击正常
       getcategoryall(){
@@ -871,7 +1151,7 @@
              _this.isTrue(item.starttime,item.costbaby,'婴儿成本价') || _this.isTrue(item.starttime,item.costchild,'儿童成本价') || _this.isTrue(item.starttime,item.costaduilt,'成人成本价') || _this.isTrue(item.starttime,item.costroom,'成本价单房差')
            ) throw false
 
-           _this. allChecked = false
+           _this.allChecked = false
            delete item.checked
          })
        }catch (e){
@@ -1077,5 +1357,42 @@
   .demo-form-inline{
     max-width: 800px;
   }
+  .trafficRadio{
+    padding-left: 50px;
+    .trafficRadio_son{
+      margin: 0 30px;
+    }
+  }
 
+  .adulttable {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #dee5ec;
+    thead {
+      td {
+        background: #f5f7f9;
+        border-bottom: 1px solid #bfcbda;
+        border-right: 1px solid #bfcbda;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+      }
+    }
+    tbody, tfoot{
+      td {
+        padding: 8px;
+        border-bottom: 1px solid #dee5ec;
+        border-right: 1px solid #dee5ec;
+        min-height: 50px;
+        text-align: center;
+        vertical-align: middle;
+        .doubleTrc{
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+  .trackAdd{
+    margin: 0 30px;
+  }
 </style>

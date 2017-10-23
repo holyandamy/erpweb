@@ -54,7 +54,7 @@
                 <th>金额</th>
                 <th>操作</th>
               </tr>
-              <tr v-for="(domain,index) in collectForm.detail">
+              <tr v-for="(domain,index) in collectForm.detail" :key="index">
                 <td>
                   <el-col :span="20">
                     <el-select placeholder="收款方式" v-model="domain.type">

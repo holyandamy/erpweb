@@ -49,6 +49,16 @@
             <el-input type="textarea" v-model="collectForm.remark" placeholder="请输入内容（120字以内）"></el-input>
           </el-col>
         </el-form-item>
+        <el-form-item label="确认备注" prop="remark">
+          <el-col :span="10">
+            <el-input  v-model="collectForm.cfmRemark" placeholder=""></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="核销备注" prop="remark">
+          <el-col :span="10">
+            <el-input  v-model="collectForm.verfRemark" placeholder=""></el-input>
+          </el-col>
+        </el-form-item>
         <el-form-item label="付款明细" prop="detail">
           <el-col :span="24">
             <table border="" cellspacing="" cellpadding="" class="collecttable" width="90%">
@@ -162,6 +172,8 @@
           linename:'',
           companyname:'',
           remark: '',
+          cfmRemark:'',
+          verfRemark:'',
           attach:'',
           detail: [{
             type:'',

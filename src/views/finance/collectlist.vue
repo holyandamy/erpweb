@@ -91,8 +91,8 @@
                     </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item class="hasid"  id="9250c2ef72b911e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,1)">确认</span></el-dropdown-item>
-                    <el-dropdown-item class="hasid"  id="9250c2ef72b911e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="updatastatus(scope,2)">确认不通过</span></el-dropdown-item>
-                    <el-dropdown-item class="hasid"  id="a5ecf87872b911e7aad70242ac120006" v-if="scope.row.cfmValue =='1'&&scope.row.verfValue =='0'"><span @click="updatastatus(scope,3)">核销</span></el-dropdown-item>
+                    <el-dropdown-item class="hasid"  id="9250c2ef72b911e7aad70242ac120006" v-if="scope.row.cfmValue =='0'"><span @click="setconfirm(scope,2)">确认不通过</span></el-dropdown-item>
+                    <el-dropdown-item class="hasid"  id="a5ecf87872b911e7aad70242ac120006" v-if="scope.row.cfmValue =='1'&&scope.row.verfValue =='0'"><span @click="setverification(scope,3)">核销</span></el-dropdown-item>
                     <!--<el-dropdown-item class="hasid" id="b16981ef72b911e7aad70242ac120006" v-if="scope.row.verfValue ==''"><span @click="updatastatus(scope,4)">反核销</span></el-dropdown-item>-->
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -131,6 +131,12 @@
             <el-form-item label="备注：" prop="remark">
               {{showForm.remark || '- - -'}}
             </el-form-item>
+            <el-form-item label="确认备注：" prop="cfmRemark">
+              {{showForm.cfmRemark || '- - -'}}
+            </el-form-item>
+            <el-form-item label="核销备注：" prop="verfRemark">
+              {{showForm.verfRemark || '- - -'}}
+            </el-form-item>
             <el-form-item label="收款明细：" prop="detail">  <!--  prop="detail" -->
               <el-table :data="detail" border>
                 <el-table-column property="typee" label="收款方式" width="150"></el-table-column>
@@ -147,8 +153,8 @@
               </el-col>
             </el-form-item>
             <el-form-item label="附件图片：">  <!--   prop="remark"  -->
-              <ul>
-                <li v-if="imgArr" v-for='imgg in imgArr' style='margin: 10px;width: 50%;'>
+              <ul v-if="imgArr">
+                <li v-for='(imgg,index) in imgArr' style='margin: 10px;width: 50%;' :key="index">
                   <img :src="imgg" alt="">
                 </li>
               </ul>
@@ -159,6 +165,44 @@
             <el-button @click.native="showFormVisible = false">关闭</el-button>
           </div>
         </el-dialog>
+        <!--确认弹窗-->
+        <el-dialog title="财务确认" :visible.sync="dialogVisible" size="tiny" >
+          <div style="text-align:left;margin-bottom:15px">您是否确认通过这笔款项？</div>
+          <el-form :model="form">
+            <el-form-item   style='text-align: left;'>
+              <el-input
+                type="textarea"
+                :rows="3"
+                placeholder='备注(不超过120字)'
+                v-model="form.remark"></el-input>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer" style="padding-top:0">
+            <el-button @click="confirmPass">确认不通过</el-button>
+            <el-button type="primary" @click="confirmCancel">取消</el-button>
+          </span>
+        </el-dialog>
+        <!--核销弹窗-->
+        <el-dialog title="财务核销" :visible.sync="dialogVerification" size="tiny" >
+          <div style="text-align:left;margin-bottom:15px">您是否确认核销这笔款项？</div>
+          <el-form :model="form1" >
+            <el-form-item   style='text-align: left;'>
+              <el-input
+                type="textarea"
+                :rows="3"
+                placeholder='备注(不超过120字)'
+                v-model="form1.remark"></el-input>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer" style="padding-top:0">
+            <el-button @click="verificatePass">核销通过</el-button>
+            <el-button type="primary" @click="verificateCancel">取消</el-button>
+          </span>
+        </el-dialog>
+
+        <!--
+          点击确认，弹窗对话框，添加备注，发请求（token id status remark）, 点击确认，成功，点击不通过，让弹窗消失
+        -->
       </div>
     </div>
     <CollectEdit v-else @setMode="setMode" @toparent = 'setMode' @getL = 'onSubmit'></CollectEdit>
@@ -258,10 +302,24 @@
         typevalue: '',
         pricetotal: 0, //总价格
         showFormVisible: false, //查看显示
+        dialogVisible:false,  //状态确认显示
+        dialogVerification:false,
         editLoading: false,
         listLoading: false,
-
+        confirmId:'',
+        confirmStatus:'',
+        verificateId:'',
+        verificateStatus:'',
+        cfmRemark:'',
+        verfRemark:'',
         showForm: {},
+        form:{
+          remark:''
+        },
+        form1:{
+          remark:''
+        },
+        //formLabelWidth:'100px',
       editFormRules: {
         name: [{
           required: false,
@@ -408,14 +466,80 @@
         this.showFormVisible = true;
         this.showForm = Object.assign({}, row);
       },
+      setconfirm(scope,i){
+        this.dialogVisible = true
+        this.confirmId = scope.row.id
+        this.confirmStatus = i
+      },
+      setverification(scope,i){
+        this.dialogVerification = true
+        this.verificateId = scope.row.id
+        this.verificateStatus = i
+      },
+      //状态弹出框
+      confirmPass(){
+        let _this = this
+        this.form.token = paramm.getToken()
+        this.form.id = _this.confirmId
+        this.form.status = _this.confirmStatus
+        if(_this.form.remark.length > 120){
+          this.$message({
+            message:'内容不能超过120字',
+            type:'warning'
+          })
+          return 
+        }
+        collectstatus(this.form).then((res) => {
+          if(res.data.error != 0 || res.data.err) {
+           paramm.getCode(res.data,_this)
+          } else {
+            paramm.getCode(res.data,_this);
+            _this.onSubmit()
+            _this.dialogVisible = false
+            _this.form.remark = ''
+          }
+        })
+      },
+      confirmCancel(){
+        this.dialogVisible = false
+        this.form.remark = ''
+      },
+      //核销弹窗框
+      verificatePass(){
+        let _this = this
+        this.form1.token = paramm.getToken()
+        this.form1.id = _this.verificateId
+        this.form1.status = _this.verificateStatus
+        if(_this.form1.remark.length > 120){
+          this.$message({
+            message:'内容不能超过120字',
+            type:'warning'
+          })
+          return 
+        }
+        collectstatus(this.form1).then((res) => {
+          if(res.data.error != 0 || res.data.err) {
+           paramm.getCode(res.data,_this)
+          } else {
+            paramm.getCode(res.data,_this);
+            _this.onSubmit()
+            _this.dialogVerification = false
+            _this.form1.remark = ''
+          }
+        })
+      },
+      verificateCancel(){
+        this.dialogVerification = false
+        this.form1.remark = ''
+      },
       //		状态编辑
       updatastatus(scope, i) {
-
         let _this = this;
         let para = {
           token: paramm.getToken(),
           id: scope.row.id,
-          status: i
+          status: i,
+          remark:'',
         }
         collectstatus(para).then((res) => {
           if(res.data.error != 0 || res.data.err) {
@@ -491,4 +615,5 @@
   #downloadd{
     display: inline-block;
   }
+  
 </style>
