@@ -6,10 +6,11 @@ variables:
     PROJECT_NAME: erpweb
 
 build_test_docker:
-  variables:
-      GIT_SUBMODULE_STRATEGY: recursive
   stage: build
   image: docker:latest
+  before_script:
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
   script:
     - docker build -f Dockerfile -t $PROJECT_NAME .
     - docker tag $PROJECT_NAME git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
@@ -42,7 +43,7 @@ build_master_docker:
     - docker
   only:
     - master
-
+be
 deploy_prod_docker:
   stage: deploy
   image: docker:latest
