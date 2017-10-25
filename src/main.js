@@ -19,6 +19,7 @@ Vue.use(VueRouter)
 /* eslint-disable no-new */
 //定义路由
 const router = new VueRouter({
+	mode: 'history',
 	routes
 })
 
