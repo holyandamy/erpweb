@@ -1,4 +1,4 @@
 [submodule "webwrapper"]
 	path = webwrapper
 	url = ../webwrapper.git
-	branch = master
+	branch = dev
