@@ -8,6 +8,7 @@ RUN echo "${TZ}" > /etc/timezone
 RUN ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime
 RUN apk --update add wget
 RUN mkdir -p /usr/src/app/views
+RUN mkdir -p /usr/src/app/public
 RUN mkdir -p /usr/src/temp
 
 COPY . /usr/src/temp
