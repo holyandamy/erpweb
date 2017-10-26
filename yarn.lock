@@ -4938,9 +4938,9 @@ webpack@^2.6.1:
     webpack-sources "^1.0.1"
     yargs "^6.0.0"
 
-"webwrapper@https://github.com/skunight/wrapper.git":
+"webwrapper@http://git.we2tu.com/zzy/wrapper/repository/archive.tar.gz":
   version "1.0.0"
-  resolved "https://github.com/skunight/wrapper.git#c95d2d84824e4f851bd3ae0efd1136ae40eb6777"
+  resolved "http://git.we2tu.com/zzy/wrapper/repository/archive.tar.gz#2c7bce31ca0bcbc0273e6e0c99c486fb018a8c18"
   dependencies:
     bluebird "^3.5.0"
     ejs "^2.5.7"
