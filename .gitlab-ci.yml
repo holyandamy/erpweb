@@ -4,7 +4,6 @@ stages:
 
 variables:
     PROJECT_NAME: erpweb
-    GIT_SUBMODULE_STRATEGY: recursive
 
 build_test_docker:
   stage: build
