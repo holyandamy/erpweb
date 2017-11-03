@@ -2,6 +2,10 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 const host = '' // 接口请求地址
 const otherUrl = 'http://img.tripb2b.com/erp'
+
+// const host = 'http://api.erp.we2tu.com' // 接口请求地址
+// const otherUrl = 'http://img.etu6.org/erp'
+
 export const noteUrl = `${otherUrl}/xt-erp-info.pdf`;  // 操作手册
 export const downloadUrl = `${otherUrl}/namelist_template.xls`;  // 名单模版
 let base = `${host}/api`;  // 接口
@@ -49,6 +53,13 @@ export const groupApprove = params => { return axios.post(`${base}/line/team/app
 export const ordernameslist = params => { return axios.post(`${base}/order/team/namelist`, params).then(res => res); };//发团列表- 出团名单
 export const groupexists = params => { return axios.post(`${base}/line/team/exists`, params).then(res => res); };//发团列表- 线路是否已存在团期
 export const groupnamelistexport = (params) => { return axios.post(`${base}/order/confirm/export`, params,{headers:{'Content-type':'text/html','charset':'utf-8'}}).then(res => res); } //发团列表  导出
+
+export const trafficlist = (params) => { return axios.post(`${base}/line/team/traffic/list`, params).then(res => res); } //查询控位交通列表
+export const traffitemplateclist = (params) => { return axios.post(`${base}/line/team/traffic/template/list`, params).then(res => res); } //查询普通交通列表
+export const trafficdays = (params) => { return axios.post(`${base}/line/team/traffic/days`, params).then(res => res); } //查询交通对应的每天信息
+export const syscategorysite = (params) => { return axios.post(`${base}/sys/open/categorysite`, params).then(res => res); } //获取同步平台的类目站点信息
+
+
 
 /*产品分类*/
 export const linecategorylist = params => { return axios.post(`${base}/line/category/list`, params); };//获取线路管理
@@ -162,9 +173,7 @@ export const userpwd = params => { return axios.post(`${base}/sys/user/pwd`, par
 /* 员工管理--新增 */
 export const usersave = params => { return axios.post(`${base}/sys/user/save`, params).then(res => res); };//获取员工详情
 
-/* 对接平台设置 */
-
-export const openlist = params => { return axios.post(`${base}/sys/open/list`, params).then(res => res); };
+export const openlist = params => { return axios.post(`${base}/sys/open/list`, params).then(res => res); };//同步到对接平台
 export const opensave = params => { return axios.post(`${base}/sys/open/save`, params).then(res => res); };//获取员工详情
 
 /* 操作日志*/

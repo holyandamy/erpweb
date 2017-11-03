@@ -58,6 +58,7 @@
                   <el-radio label="9">亲子家庭</el-radio>
                   <el-radio label="10">蜜月之旅</el-radio>
                   <el-radio label="11">商务考察</el-radio>
+                  <el-radio label="12">高端主题游</el-radio>
                 </el-radio-group>
 							</el-form-item>
 							<el-form-item label="收客类型：" prop="checkpeople" label-width="120px" required>
