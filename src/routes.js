@@ -43,13 +43,22 @@ import Log from './views/systemset/log/log.vue' //操作日志
 
 //客户管理
 import Visitor from './views/customer/visitor/visitor.vue' //游客管理
+
+//退出登录状态
+import Logout from './views/Logout.vue' //退出
+
 let routes = [{
 		path: '/login',
 		component: Login,
 		name: '',
 		hidden: true
 	},
-
+    {
+        path: '/logout',
+        component: Logout,
+        name: '',
+        hidden: true
+    },
 	{
 		path: '/',
 		component: Home,

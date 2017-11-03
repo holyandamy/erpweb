@@ -178,3 +178,6 @@ export const opensave = params => { return axios.post(`${base}/sys/open/save`, p
 
 /* 操作日志*/
 export const loglist = params => { return axios.post(`${base}/sys/log/list`, params).then(res => res); };//获取员工详情
+
+/* 跳转的URL */
+export const redirectUrls = ['/Line/plan.html','/Line/traffic.html']
