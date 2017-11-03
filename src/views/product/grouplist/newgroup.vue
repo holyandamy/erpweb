@@ -9,7 +9,7 @@
             <el-breadcrumb-item>{{{'add':'新增发团计划','edit':'编辑','detail':'详情'}[operationType.type]}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
-
+         
       </el-row>
     </header>
     <section class="padding30">
@@ -18,7 +18,7 @@
           <el-form :model="groupList"  ref="groupList"   :rules="rules"  label-width="100px" class="demo-ruleForm" style="text-align: left;"><!-- visitorList  -->
             <div style="width:100%;float: left;overflow:hidden">
               <el-form-item label="选择线路：" required>
-                <el-button @click="getcategoryall()">选择</el-button>
+                <el-button @click="getcategoryall()" :disabled="operationType.type == 'edit'">选择</el-button>
                 <span class='routeName' style='padding-left: 10px;' v-text='routeName'>222</span>
               </el-form-item>
               <!--<el-form-item label="取消政策：" >-->
@@ -39,8 +39,8 @@
               <div style="color: #2cb1b6; font-size: 20px;padding-top: 20px;line-height: 40px;margin-bottom: 20px;border-bottom:1px solid rgba(151, 151, 151, 0.2)">
                 交通信息</div>
               <el-radio-group class='trafficRadio' v-model="traffictype" @change='changeTrack' >
-                <el-radio class='trafficRadio_son' :label="0" >普通交通</el-radio>
-                <el-radio :label="1" >控位交通</el-radio>
+                <el-radio class='trafficRadio_son' :label="0" :disabled="operationType.type == 'edit'" >普通交通</el-radio>
+                <el-radio :label="1" :disabled="operationType.type == 'edit'">控位交通</el-radio>
               </el-radio-group>
               <table class="adulttable" width="100%">
                 <thead>
@@ -62,7 +62,7 @@
                     <el-input v-model='item.name' ></el-input>
                   </td>
                   <td>
-                    <el-input  disabled value="单程" ></el-input>
+                    <el-tag type="gray">单程</el-tag>
                   </td>
                   <td>
                     <el-input  style='width: 40%;'  v-model='item.depart'></el-input> --- <el-input   style='width: 40%;' v-model='item.dest'></el-input>
@@ -74,23 +74,25 @@
                     <el-input  v-model='item.flightno'></el-input>
                   </td>
                   <td>
+                   
                     <el-time-picker
-                      :editable=false
+                      :editable=true
                       :clearable=false
-                      style='width: 40%;'
+                      style='width: 30%;'
                       v-model="item.starttime"
                       :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                       placeholder="时间">
                     </el-time-picker> ---
+                    <el-checkbox v-model="item.arrivetype">次日</el-checkbox>
                     <el-time-picker
                       :editable=false
                       :clearable=false
-                      style='width: 40%;'
+                      style='width: 30%;'
                       v-model="item.endtime"
                       :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                       placeholder="时间">
                      </el-time-picker>
-                    <!--<el-input class='doubleTrc'  style='width: 40%;' ></el-input> <span v-if="item.type==1">-&#45;&#45; </span><el-input class='doubleTrc' v-if="item.type==1" style='width: 40%;'></el-input>-->
+                     
                   </td>
                   <td>
                     <el-button type="text"  @click="deleteTrc(idx)">删除</el-button>
@@ -102,11 +104,50 @@
                 <!-- 往 -->
                   <tr>
                     <!-- 路线名称 -->
-                    <td rowspan="2">
+                    <td :rowspan="rowNum">
                       <el-input v-model='item.name' ></el-input>
                     </td>
                     <td>
-                      <el-input disabled value="往"></el-input>
+                      <el-tag type="gray">{{ item.type=="联城"?"联城" : "往" }}</el-tag>
+                    </td>
+                    <td>
+                      <el-input  style='width: 40%;'  v-model='item.depart'></el-input> --- <el-input   style='width: 40%;' v-model='item.dest'></el-input>
+                    </td>
+                    <td>
+                      <el-input  v-model='item.stop'></el-input>
+                    </td>
+                    <td>
+                      <el-input  v-model='item.flightno'></el-input>
+                    </td>
+                    <td>
+                     
+                      <el-time-picker
+                        :editable=false
+                        :clearable=false
+                        style='width: 30%;'
+                        v-model="item.starttime"
+                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                        placeholder="时间">
+                      </el-time-picker> ---
+                       <el-checkbox v-model="item.arrivetype">次日</el-checkbox>
+                      <el-time-picker
+                        :editable=false
+                        :clearable=false
+                        style='width: 30%;'
+                        v-model="item.endtime"
+                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                        placeholder="时间">
+                      </el-time-picker>
+                      <!--<el-input class='doubleTrc'  style='width: 40%;' ></el-input> <span v-if="item.type==1">-&#45;&#45; </span><el-input class='doubleTrc' v-if="item.type==1" style='width: 40%;'></el-input>-->
+                    </td>
+                    <td :rowspan="rowNum">
+                      <el-button type="text"  @click="deleteTfoot(idx)" >删除</el-button>
+                    </td>
+                  </tr>
+                  <!-- 返-->
+                  <tr v-for='(item,idx) in item.others.slice(1)' :key="idx">
+                    <td>
+                        <el-tag type="gray">{{ (item.type=="联城")||(item.type==2)?"联城" : "返" }}</el-tag>
                     </td>
                     <td>
                       <el-input  style='width: 40%;'  v-model='item.depart'></el-input> --- <el-input   style='width: 40%;' v-model='item.dest'></el-input>
@@ -121,52 +162,16 @@
                       <el-time-picker
                         :editable=false
                         :clearable=false
-                        style='width: 40%;'
+                        style='width: 30%;'
                         v-model="item.starttime"
                         :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                         placeholder="时间">
                       </el-time-picker> ---
+                      <el-checkbox v-model="item.arrivetype">次日</el-checkbox>
                       <el-time-picker
                         :editable=false
                         :clearable=false
-                        style='width: 40%;'
-                        v-model="item.endtime"
-                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
-                        placeholder="时间">
-                      </el-time-picker>
-                      <!--<el-input class='doubleTrc'  style='width: 40%;' ></el-input> <span v-if="item.type==1">-&#45;&#45; </span><el-input class='doubleTrc' v-if="item.type==1" style='width: 40%;'></el-input>-->
-                    </td>
-                    <td rowspan="2">
-                      <el-button type="text"  @click="deleteTfoot(idx)">删除</el-button>
-                    </td>
-                  </tr>
-                  <!-- 返-->
-                  <tr>
-                    <td>
-                      <el-input  disabled value="返" ></el-input>
-                    </td>
-                    <td>
-                      <el-input  style='width: 40%;'  v-model='item.dest'></el-input> --- <el-input   style='width: 40%;' v-model='item.depart'></el-input>
-                    </td>
-                    <td>
-                      <el-input  v-model='item.stop'></el-input>
-                    </td>
-                    <td>
-                      <el-input  v-model='item.flightno'></el-input>
-                    </td>
-                    <td>
-                      <el-time-picker
-                        :editable=false
-                        :clearable=false
-                        style='width: 40%;'
-                        v-model="item.starttime"
-                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
-                        placeholder="时间">
-                      </el-time-picker> ---
-                      <el-time-picker
-                        :editable=false
-                        :clearable=false
-                        style='width: 40%;'
+                        style='width: 30%;'
                         v-model="item.endtime"
                         :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                         placeholder="时间">
@@ -195,15 +200,10 @@
                     format="yyyy-MM-dd"
                     :picker-options="pickerOptions0">
                   </el-date-picker>
-                  <!--<el-date-picker-->
-                  <!--v-model="value1"-->
-                  <!--type="datecustom"-->
-                  <!--placeholder="选择日期"-->
-                  <!--:picker-options="pickerOptions0">-->
-                  <!--</el-date-picker>-->
                 </el-col>
               </el-form-item>
 
+             <!-- 发团时间表头模块-->
               <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition"
                    style="width: 100%;">
                 <div class="el-table__body-wrapper">
@@ -307,81 +307,74 @@
                         <div class="cell el-tooltip" >单房差</div>
                       </td>
                     </tr>
-
-                    <tr class="el-table__row">
-                      <td class="el-table_1_column_123 el-table-column--selection">
-                        <el-checkbox v-model="allChecked" @change='allCheck' v-if="operationType.type == 'add'">全选</el-checkbox>
-                        <div class="cell el-tooltip" v-if="operationType.type == 'edit'">---</div>
-                        <!--暂时不改-->
-                        <!--<el-checkbox v-model="checkedAll" @change="checkAll" v-if="operationType.type == 'edit'">全选</el-checkbox>-->
-                      </td>
-                      <td >
-                        <!--<div class="cell">删除</div>-->
-                        <div class="cell el-tooltip" >---</div>
-                      </td>
-                      <!-- 发团日期 -->
-                      <td >
-                        <div class="cell el-tooltip" >---</div>
-                      </td>
-                     <!--  计划人数 -->
-                      <td>
-                        <div class="cell el-tooltip" ><el-input v-model="allplan" @change='allPlan'></el-input></div>
-                      </td>
-                      <td >
-                        <div class="cell el-tooltip" ><el-checkbox v-model="allisorder" @change='allIsorder'></el-checkbox></div>
-                      </td>
-                      <td >
-                        <div class="cell el-tooltip" ><el-radio class="radio" v-model="allconfirm" label='0' >自动</el-radio></div>
-                      </td>
-                      <td  >
-                        <div class="cell el-tooltip" ><el-radio class="radio" v-model="allconfirm" label='1' >手动</el-radio></div>
-                      </td>
-                      <td >
-                        <div class="cell el-tooltip" ><el-input v-model="alldeadline" @change='allDeadline'></el-input></div>
-                      </td>
-                      <td >
-                        <div class="cell el-tooltip" ><el-input v-model="allmktbaby" @change='allMktbaby'></el-input></div>
-                      </td>
-                      <td >
-                        <div class="cell el-tooltip" ><el-input v-model="allmktchild" @change='allMktchild'></el-input></div>
-                      </td>
-
-                      <td >
-                        <div class="cell el-tooltip" ><el-input v-model="allmktaduilt" @change='allMktaduilt'></el-input></div>
-                      </td>
-                      <td >
-                        <div class="cell el-tooltip" ><el-input v-model="allmktroom" @change='allMktroom'></el-input></div>
-                      </td>
-
-                      <td  >
-                        <div class="cell el-tooltip" ><el-input v-model="allsltbaby" @change='allSltbaby'></el-input></div>
-                      </td>
-                      <td  >
-                        <div class="cell el-tooltip" ><el-input v-model="allsltchild" @change='allSltchild'></el-input></div>
-                      </td>
-                      <td  >
-                        <div class="cell el-tooltip" ><el-input v-model="allsltaduilt" @change='allSltaduilt'></el-input></div>
-                      </td>
-                      <td >
-                        <div class="cell el-tooltip" ><el-input v-model="allsltroom" @change='allSltroom'></el-input></div>
-                      </td>
-
-                      <td  >
-                        <div class="cell el-tooltip" ><el-input v-model="allcostbaby" @change='allCostbaby'></el-input></div>
-                      </td>
-                      <td  >
-                        <div class="cell el-tooltip" ><el-input v-model="allcostchild" @change='allCostchild'></el-input></div>
-                      </td>
-                      <td  >
-                        <div class="cell el-tooltip" ><el-input v-model="allcostaduilt" @change='allCostaduilt'></el-input></div>
-                      </td>
-                      <td >
-                        <div class="cell el-tooltip" ><el-input v-model="allcostroom" @change='allCostroom'></el-input></div>
-                      </td>
-                    </tr>
-                    <tr class="el-table__row" v-for='(item,idx) in checkArr' v-if='checkArr.length>0' :key="idx">
+      
+                     <tr class="el-table__row" >
                       <td class="el-table_1_column_123 el-table-column--selection">
                         <!--{{item.checked}}-->
+                        <el-checkbox @change="allCheck" v-model="allChecked">全选</el-checkbox>
+                      </td>
+                      <td>
+                        <div class="cell" style='cursor: pointer;' >---</div>
+                      </td>
+                      <td width='800'>---</td>
+                      <td>
+                        <div class="cell" >
+                          <el-input v-model="allplan" @change="allPlan"></el-input>
+                        </div>
+                      </td>
+                      <td >
+                        <div class="cell" style='cursor: pointer;' >---</div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-radio class="radio" label='0'>自动</el-radio></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-radio class="radio"  label='1'>手动</el-radio></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input  v-model="alldeadline" @change="allDeadline" ></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allmktbaby" @change="allMktbaby"></el-input></div>
+                      </td>
+                       <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allmktchild" @change="allMktchild"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allmktaduilt" @change="allMktaduilt"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allmktroom" @change="allMktroom"></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="allsltbaby" @change="allSltbaby"></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="allsltchild" @change="allSltchild"></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="allsltaduilt" @change="allSltaduilt"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allsltroom" @change="allSltroom"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allcostbaby" @change="allCostbaby"></el-input></div>
+                      </td>
+
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="allcostchild" @change="allCostchild"></el-input></div>
+                      </td>
+                      <td  >
+                        <div class="cell el-tooltip" ><el-input v-model="allcostaduilt" @change="allCostaduilt"></el-input></div>
+                      </td>
+                      <td >
+                        <div class="cell el-tooltip" ><el-input v-model="allcostroom" @change="allCostroom"></el-input></div>
+                      </td>
+                    </tr>
+                   <!-- 发团时间填充模块 -->
+                    <tr class="el-table__row" v-for='(item,idx) in checkArr' :key="idx">
+                      <td class="el-table_1_column_123 el-table-column--selection">
                         <el-checkbox v-model="item.checked" @change='sigCheck'></el-checkbox>
                       </td>
 
@@ -389,7 +382,7 @@
                         <div class="cell" style='cursor: pointer;' @click='sigDel(item,idx)'>删除</div>
                       </td>
                       <td width='800'>
-                        {{item.starttime || '---'}}
+                        {{item.starttime }}
                       </td>
                       <td>
                         <div class="cell" >
@@ -399,11 +392,9 @@
                         </div>
                       </td>
                       <td >
-                        <!--{{item.isorder}}-->
                         <div class="cell el-tooltip" ><el-checkbox v-model="item.isorder"></el-checkbox></div>
                       </td>
                       <td >
-                        <!--{{item.confirm}}-->
                         <div class="cell el-tooltip" ><el-radio class="radio" v-model="item.confirm" label='0'>自动</el-radio></div>
                       </td>
                       <td  >
@@ -464,10 +455,81 @@
               <div style="color: #2cb1b6; font-size: 20px;padding-top: 20px;line-height: 40px;margin-bottom: 20px;border-bottom:1px solid rgba(151, 151, 151, 0.2)">
                 同步到对接平台：</div>
               <div style="overflow: hidden;padding-left: 60px;">
-                <el-checkbox-group v-model="checkList">
-                  <el-checkbox :label="idx" :key="item.name" style="margin-right: 40px;" v-for='(item,idx) in pingtai'>{{item.name}}</el-checkbox>
-                </el-checkbox-group>
+                  <el-checkbox  style="margin-right: 40px;"  v-model="editChi" @change="sys(1)" :disabled="operationType.type == 'edit'" >馨·驰誉</el-checkbox>
+                  <el-checkbox  style="margin-right: 40px;"  v-model="editHuan" @change="sys(2)" :disabled="operationType.type == 'edit'">馨·欢途</el-checkbox>
               </div>
+               <!-- 这里为同步到对接平台的单选中后的show --> 
+             
+               <div v-if="editChi||editHuan">
+                    <h2 style="color: #2cb1b6; font-size: 20px;padding-top: 20px;line-height: 40px;margin-bottom: 20px;border-bottom:1px solid rgba(151, 151, 151, 0.2)">选择类目</h2>
+                    <div  v-if="editChi">
+                      <p>
+                        <span>馨·驰誉</span>
+                          <el-select placeholder="请选择类目"  @change="categoryChange" v-model="categoryvalue" :disabled="operationType.type == 'edit'">
+                            <el-option  value="国内长线" >国内长线</el-option>
+                            <el-option  value="周边短线" >周边短线</el-option>
+                            <el-option  value="出境长线" >出境长线</el-option>
+                          </el-select>
+                            <el-select v-model="subvalue" placeholder="请选择" @change="subchange" v-if="operationType.type == 'add'">
+                            <el-option
+                              v-for="item in lineArr"
+                              :key="item.categoryName"
+                              :label="item.categoryName"
+                              :value="item.categoryName">
+                            </el-option>
+                          </el-select>
+                          <el-input v-model="editsubvalue" placeholder="请输入内容" v-if="operationType.type == 'edit'" size="medium" style="width: 14%" :readonly="true"></el-input>
+                        </p>
+                        <p  style="margin-top:20px " v-if="subvalue!=''|| (operationType.type == 'edit')">
+                          <span>请选择玩法：</span>
+                            <el-radio-group  v-model="initValue" ref="checkedplayName">
+                              <el-radio class="radio" v-for="(item,index) in playArr" :key="index" :label="item.labelId">{{item.labelName}}</el-radio>
+                           </el-radio-group>
+                             <el-radio v-model="editplay" :label="editplay" v-if="operationType.type == 'edit'" disabled >{{editplay}}</el-radio>
+                        </p>
+                        <p  style="margin-top:20px " v-if="subvalue!=''||(operationType.type == 'edit')">
+                           <span>请选择站点:</span>
+                           <el-checkbox-group v-model="checksiteArr" v-if="operationType.type == 'add'">
+                            <el-checkbox  v-for="(item,index) in siteArr" :key="index" :label="item.siteId">{{item.siteName}}</el-checkbox >
+                            </el-checkbox-group>
+                            <el-checkbox v-model="siteChecked" disabled v-for="(item,index) in editnewsiteArr" :key="index" :label="item.siteId" v-if="operationType.type == 'edit'">{{item.siteName}}</el-checkbox >
+                        </p>
+                    </div>
+                     <div v-if="editHuan" style="margin-top:20px">
+                      <p>
+                        <span>馨·欢途</span>
+                          <el-select placeholder="请选择类目"  @change="categoryChange_huan" v-model="categoryvalue_huan" :disabled="operationType.type == 'edit'">
+                            <el-option  value="国内长线">国内长线</el-option>
+                            <el-option  value="周边短线">周边短线</el-option>
+                            <el-option  value="出境长线">出境长线</el-option>
+                          </el-select>
+                            <el-select v-model="subvalue_huan" placeholder="请选择" @change="subchange_huan" v-if="operationType.type == 'add'">
+                            <el-option
+                              v-for="item in lineArr_huan"
+                              :key="item.categoryName"
+                              :label="item.categoryName"
+                              :value="item.categoryName">
+                            </el-option>
+                          </el-select>
+                           <el-input v-model="editsubvalue_huan" placeholder="请输入内容" v-if="operationType.type == 'edit'" size="medium" style="width: 14%" :readonly="true"></el-input>
+                        </p>
+                        <p  style="margin-top:20px "  v-if="subvalue_huan!=''|| (operationType.type == 'edit')">
+                          <span>请选择玩法：</span>
+                            <el-radio-group  v-model="initValue_huan" >
+                              <el-radio class="radio" v-for="(item,index) in playArr_huan" :key="index" :label="item.labelId">{{item.labelName}}</el-radio>
+                           </el-radio-group>
+                              <el-radio v-model="editplay_huan" :label="editplay_huan" v-if="operationType.type == 'edit'" disabled >{{editplay_huan}}</el-radio>
+                        </p>
+                         <p  style="margin-top:20px " v-if="subvalue_huan!=''||(operationType.type == 'edit')">
+                           <span>请选择站点:</span>
+                           <el-checkbox-group v-model="checksiteArr_huan" v-if="operationType.type == 'add'">
+                            <el-checkbox  v-for="(item,index) in siteArr_huan" :key="index" :label="item.siteId">{{item.siteName}}</el-checkbox >
+                          </el-checkbox-group> 
+                           <el-checkbox v-model="siteChecked" disabled v-for="(item,index) in editnewsiteArr_huan" :key="index" :label="item.siteId" v-if="operationType.type == 'edit'">{{item.siteName}}</el-checkbox >
+                        </p>
+                    </div>
+                </div>
+           
               <el-form-item label-width="200px" style="margin-top: 50px">
                 <!--<el-button type="primary" @click="submitForm('visitorList')" style="width: 120px">保存</el-button>-->
                 <el-button type="primary" @click="save" style="width: 120px" v-if="operationType.type !='detail' ">保存</el-button>
@@ -479,7 +541,7 @@
       </el-row>
     </section>
 
-    <!--弹出框-->
+    <!--选择线路的弹出框-->
     <el-dialog title="选择线路" :visible.sync="lineFlag" size="small">
       <el-form :inline="true"  :model="search" class="demo-form-inline" ref="search" >
 
@@ -545,7 +607,7 @@
 <script>
   import {address} from '../../../common/js/address'
   import axios from 'axios';
-  import {trafficlist,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist,groupupdate,groupdetail,groupDel,groupexists} from '../../../common/js/config';
+  import {syscategorysite,traffitemplateclist,trafficlist,trafficdays,custsave,custupdate,custdetail, province, city, district, categoryall, destlist, linelist,groupsave,openlist,groupupdate,groupdetail,groupDel,groupexists} from '../../../common/js/config';
   import ElDialog from "../../../../node_modules/element-ui/packages/dialog/src/component";
   import paramm from '../../../common/js/getParam'
   export default {
@@ -571,38 +633,65 @@
         }, 1000);
       };
       return {
+        rowNum:2,
+        siteChecked:true,
+        editplay:"",
+        editplay_huan:"",
+        editsubvalue:"",
+        editsubvalue_huan:"",
+        editOrAdd:false,
+        categoryvalue:"",
+        categoryvalue_huan:"",
+        subvalue:"",
+        subvalue_huan:"",
         labelWidth: '800px',
+        editChi:false,
+        editHuan:false,
         radio: '1',
         traffictype: 0,
         danTrc: '单程',
-        /* 单程的渲染数据 */
-        trackArr:[
-          // {
-          //   type:0,
-          //   name:'上海之行',
-          //   depart:'北京',
-          //   dest:'上海',
-          //   stop:'南京',
-          //   flightno:'HK00123',
-          //   starttime:new Date(2016, 9, 10, 18, 40),
-          //   endtime:new Date(2016, 9, 10, 18, 40)
-          // }
-        ],
-         /* 往返的渲染数据 */
-        gobackArr:[
-          // {
-          //   type:0,
-          //   name:'美国之行',
-          //   depart:'北京',
-          //   dest:'纽约',
-          //   stop:'英国',
-          //   flightno:'HK00123',
-          //   starttime:new Date(2016, 9, 10, 18, 40),
-          //   endtime:new Date(2016, 9, 10, 18, 40)
-          // }
-        ],
+        /* 单程数组 */
+        trackArr:[],
+         /* 往返数组 */
+        gobackArr:[],
+        savegobackArr:[],
+        /* 交通保存数组 */
+        traffic:[],
+        /* 平台数组 */
+         platformsArrXin:[],
+         platformsArrHuan:[],
+         tongbucategoryid:"",
+         tongbucategoryid_huan:"",
+         tongbucategorytype:"",
+         tongbucategorytype_huan:"",
+         tongbulabelsname:"",
+         tongbulabelsname_huan:"",
+         tongbucompanyId:"",
+         tongbucompanyId_huan:"",
+        platformsArr:[],
+        lianChengArr:[],
+        tongbudetailArr:[],
+        /* 页面中的发团时间以及人数数组 */
+        lineArr:[],
+        lineArr_huan:[],
+        playArr:[],
+        siteArr:[],
+        siteArr_huan:[],
+        /* 同步平台选中的站点id集合 */
+        checksiteArr:[],
+        checksiteArr_huan:[],
+        playArr_huan:[],
+        sysTotal:{},
+        sysTotal_huan:{},
+        /* 页面中已经存在的专门年月日数组 */
+        newTimeArr:[],
         trafficLog: false,
+        /* 交通列表数组 */
         importData:[],
+        initValue:"",
+        initValue_huan:"",
+        siteinitValue:"",
+        /* 线路天数 */
         trafficDays: '',
         lineFlag: false,
         formName: '',
@@ -617,6 +706,8 @@
           linename:''//线路名称
         },
         destinations: [],
+        editnewsiteArr:[],
+        editnewsiteArr_huan:[],
         groupList: {
           token: paramm.getToken(),
           lineid: '',
@@ -634,6 +725,7 @@
           birthday:'',
           notify:''
         },
+
         address:{
           provinceList:[],
           cityList:[],
@@ -714,9 +806,7 @@
         costaduilt: '',
         allcostroom: '',
         costroom: '',
-        checkArr: [
-//          {checked: '',time: ''}
-        ],
+        checkArr: [],
         notify: '',
         cancell: 0,
         cancellId: '',
@@ -752,62 +842,228 @@
       }
     },
     methods: {
-      changeTrack(){
-        if(this.traffictype==1) this.trackArr=[]
+      /* 生成groupid的方法 */
+      getgroupid(){
+       function S4() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+       }
+       return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
       },
-      // 添加单程
+      /* 长途 短途 改变时触发的 */
+      categoryChange(){
+         this.subvalue="" ;
+         if(this.categoryvalue=="国内长线"){
+          this.lineArr=this.sysTotal.longLine
+         
+         }else if(this.categoryvalue=="周边短线"){
+           this.lineArr=this.sysTotal.shortLine
+         }else if(this.categoryvalue=="出境长线"){
+            this.lineArr=this.sysTotal.externalLine
+         }
+      },
+      /* 馨·欢途*/
+      categoryChange_huan(){
+        this.subvalue_huan="" ;
+         if(this.categoryvalue_huan=="国内长线"){
+          this.lineArr_huan=this.sysTotal_huan.longLine
+        
+         }else if(this.categoryvalue_huan=="周边短线"){
+           this.lineArr_huan=this.sysTotal_huan.shortLine
+         }else if(this.categoryvalue_huan=="出境长线"){
+            this.lineArr_huan=this.sysTotal_huan.externalLine
+         }
+      },
+      subchange(){
+        for(var i=0;i<this.lineArr.length;i++){
+          if(this.lineArr[i].categoryName==this.subvalue){
+            this.playArr=this.lineArr[i].labels;
+          }
+        }
+      },
+      subchange_huan(){
+        console.log("huan改变了")
+        for(var i=0;i<this.lineArr_huan.length;i++){
+          if(this.lineArr_huan[i].categoryName==this.subvalue_huan){
+            this.playArr_huan=this.lineArr_huan[i].labels;
+          }
+        }
+          console.log("huan改变了", this.playArr_huan)
+      },
+      /* 请求数据：同步对接平台 */
+      sys(platform){
+         /* 1馨·驰誉 */
+         let _this=this;
+        if(platform==1&&this.editChi==true){
+          let sysPara={
+            "token":paramm.getToken(),
+            "platform":1,
+          }
+          syscategorysite(sysPara).then(function(res){
+             if(res.data.error==1){
+               _this.$message({
+                  message: "无法获取类目,请联系馨途客服",
+                  type: 'warning'
+                });
+                _this.editChi=false;
+                return;
+             }          
+             _this.sysTotal=res.data.obj;
+              _this.siteArr=res.data.obj.sites;
+              _this.tongbucompanyId=res.data.obj.companyId;
+          })
+        }  
+        /* 2馨·欢途*/
+        else if(platform==2&&this.editHuan==true){
+           
+            let sysPara={
+            "token":paramm.getToken(),
+            "platform":2,
+          }
+          syscategorysite(sysPara).then(function(res){
+             if(res.data.error==1){
+               _this.$message({
+                  message: "无法获取类目,请联系馨途客服",
+                  type: 'warning'
+                });
+                _this.editHuan=false;
+                 return;
+             }          
+              _this.sysTotal_huan=res.data.obj;
+               _this.siteArr_huan=res.data.obj.sites;
+              _this.tongbucompanyId_huan=res.data.obj.companyId;
+          })
+        }
+      },
+      /* 普通交通和控位交通切换 */
+      changeTrack(){
+        if(this.operationType.type == 'add'){ this.checkArr.length=0;}
+        this.allplan=this.alldeadline=this.allmktbaby=this.allmktchild=this.allmktaduilt="";
+        this.allmktroom=this.allsltbaby=this.allsltchild=this.allsltaduilt="";
+         this.allsltroom=this.allcostbaby=this.allcostchild=this.allcostaduilt=this.allcostroom="";
+      },
+      // 添加单程 满意
       trackAddSig(){
-        this.trackArr.push(
+        var _this=this;
+        _this.trackArr.push(
           {
           type:0,
-          name:'单程',
-          name1:'上海一日游',
+          groupid:_this.getgroupid(),
+          name:'上海一日游',
           depart:'北京',
           dest:'上海',
           stop:'南京',
           flightno:'HK00123',
           starttime:new Date(2016, 9, 10, 18, 40),
-          endtime:new Date(2016, 9, 10, 18, 40)
+          endtime:new Date(2016, 9, 10, 18, 40),
+          arrivetype:false,
+          others:[]
           }
         )
       },
       // 添加往返
       trackAddBac(){
-        this.gobackArr.push({
-            type:0,
-            name1:'北京——纽约',
+        var _this=this;
+        var trackgetgroupid=_this.getgroupid()
+        _this.gobackArr.push({
+            groupid:trackgetgroupid,
+            type:1,
+            name:'英国两日游',
             depart:'北京',
             dest:'纽约',
             stop:'英国',
             flightno:'HK00123',
             starttime:new Date(2016, 9, 10, 18, 40),
-            endtime:new Date(2016, 9, 10, 18, 40)
+            endtime:new Date(2016, 9, 10, 18, 40),
+            arrivetype:false,
+            others:[{type:1,
+            groupid:trackgetgroupid,
+            name:'英国两日游',
+            depart:'北京',
+            dest:'纽约',
+            stop:'英国',
+            flightno:'HK00123',
+            starttime:new Date(2016, 9, 10, 18, 40),
+            endtime:new Date(2016, 9, 10, 18, 40),
+            arrivetype:false},
+            {type:1,
+            groupid:trackgetgroupid,
+            name:'英国两日游',
+            depart:'上海',
+            dest:'武汉',
+            stop:'南京',
+            flightno:'SH001',
+            starttime:new Date(2016, 9, 10, 18, 40),
+            endtime:new Date(2016, 9, 10, 18, 40),
+            arrivetype:false}]
           })
       },
       //导入交通
       insertTrack(){
-        this.trafficLog= true
+        console.log(666666,this.trafficDays);
+        if(this.trafficDays<1&&this.traffictype==1&&this.operationType.type !== 'edit'){
+          this.$message({
+          message: '请先选择线路再导入控位交通！',
+          type: 'warning'
+          });
+          return;
+        }
+         this.trafficLog= true;
+         this.getTrafficList();
       },
-      // 搜索功能
+      //搜索功能
       getTrafficList(){
-        trafficlist({token: paramm.getToken(),day: this.trafficDays,title:this.formName}).then( (res)=> {
-          console.log(res.data)
-          let _this = this;
+        // 控位交通搜索功能已经完善
+        let _this = this;
+      
+      _this.newTimeArr=[];
+        if(_this.traffictype==1){
+          /* 控位交通的获取列表的接口 */
+          if(_this.checkArr.length!=0){
+                for(var i=0;i<_this.checkArr.length;i++){
+              _this.newTimeArr.push(_this.checkArr[i].date)
+            }
+          }
+          let dates=_this.newTimeArr.length==0?"":_this.newTimeArr.join(",");
+          trafficlist({token: paramm.getToken(),day: _this.trafficDays,title:_this.formName,dates:dates}).then( (res)=> {
+
            if(res.data.error || res.data.err) {
               paramm.getCode(res.data,_this)
             }else {
               paramm.getCode(res.data,_this)
-              _this.importData = res.data.obj
+              _this.importData = res.data.obj;
+         /*      console.log( _this.importData ) */
               _this.importData.forEach((item) => {
-                //单程 往返 联程
                 if(item.type === 0){
                   item.type = '单程'
                 }else if(item.type === 1){
                   item.type = '往返'
+                }else if(item.type === 2){
+                    item.type = '联城'
                 }
               })
             }
         })
+        }
+        //普通交通的搜索功能
+        else{
+          let templatePara={
+            "token": paramm.getToken(),
+            "title":_this.formName
+          }
+          traffitemplateclist(templatePara).then(function(res){
+             _this.importData = res.data.obj;
+             _this.importData.forEach((item) => {
+                if(item.type === 0){
+                  item.type = '单程'
+                }else if(item.type === 1){
+                  item.type = '往返'
+                }else if(item.type === 2){
+                  item.type = '联城'
+                }
+              })
+          })
+        }
+          _this.formName="";
       },
       // 删除单程交通
       deleteTrc(idx){
@@ -820,24 +1076,143 @@
       // 弹框中的导入功能
       importTrack(row){
         this.trafficLog= false;
-        console.log(row);
-        if(row.type=="单程"){
-           this.trackArr.push(row);
-        }else{
-           this.gobackArr.push(row);
+        /* 处理时间格式 满意*/
+        var hh=row.starttime.slice(0,row.starttime.indexOf(":") );
+        var ehh=row.endtime.slice(0,row.endtime.indexOf(":") );
+        var mm=row.starttime.slice(row.starttime.indexOf(":")+1,row.starttime.indexOf(":")+3);
+        var emm=row.endtime.slice(row.endtime.indexOf(":")+1,row.endtime.indexOf(":")+3);
+        for(var i=0;i<row.others.length;i++){
+          row.others[i].starttime= new Date(2017,9,10, row.others[i].starttime.slice(0,row.others[i].starttime.indexOf(":") ), row.others[i].starttime.slice(row.others[i].starttime.indexOf(":")+1,row.others[i].starttime.indexOf(":")+3 ));
+          row.others[i].endtime= new Date(2017,9,10, row.others[i].endtime.slice(0,row.others[i].endtime.indexOf(":") ), row.others[i].endtime.slice(row.others[i].endtime.indexOf(":")+1,row.others[i].endtime.indexOf(":")+3 ));
         }
-         
+         row.starttime=new Date(2017,9,10,hh,mm);
+         row.endtime=new Date(2017,9,10,ehh,emm);
+       console.log(1010,row.others)
+        /* 处理当日 次日问题 */
+        row.arrivetype=row.arrivetype==0?false:true;
+        /* 处理导入后单程  往返  联城*/
+       if(row.type=="单程"||(row.type==0)){ 
+         this.trackArr.push(row);
+       }else if(row.type=="往返"||(row.type==1)){
+        this.gobackArr.push(row);
+       console.log( 55555,this.gobackArr)
+       }else if(row.type=="联城"||(row.type==2)){
+         console.log(row,"进入联城了")
+         this.rowNum=row.others.length;
+         this.gobackArr.push(row);
+        // this.lianChengArr.push(row);
+        // this.gobackArr=this.gobackArr.concat(this.lianChengArr);
+       }
+       this.getTrafficList();
+       /* 请求数据：控位交通需要额外发送请求获取日期以及详情 */
+       if(this.traffictype==1){
+         let daysPara={
+           "token":paramm.getToken(),
+           "code":row.tid
+         }
+        let _this=this;
+        var yyear=new Date(row.endtime-0).getFullYear();
+        var ymonth=new Date(row.endtime-0).getMonth()+1<10?"0"+new Date(row.endtime-0).getMonth()+1:new Date(row.endtime-0).getMonth()+1;
+        var ydate=new Date(row.endtime-0).getDate()<10?"0"+new Date(row.endtime-0).getDate():new Date(row.endtime-0).getDate();
+        row.importEndTime=yyear+"-"+ymonth+"-"+ydate;
+       
+        trafficdays(daysPara).then(function(res){
+          console.log("控位交通",res.data.obj)
+          for(var i=0;i<res.data.obj.length;i++){
+            res.data.obj[i].starttime= res.data.obj[i].date;
+           /*  res.data.obj[i].endtime= res.data.obj[i].starttime+_this.trafficDays; */ 
+           res.data.obj[i].newstarttime=new Date( res.data.obj[i].starttime);
+            res.data.obj[i].isorder=true; 
+            res.data.obj[i].confirm="0"; 
+            res.data.obj[i].deadline=0; 
+            res.data.obj[i].mktbaby=""; 
+            res.data.obj[i].mktchild=""; 
+            res.data.obj[i].mktaduilt=""; 
+            res.data.obj[i].mktroom=""; 
+
+            res.data.obj[i].sltbaby=""; 
+            res.data.obj[i].sltchild=""; 
+            res.data.obj[i].sltaduilt=""; 
+            res.data.obj[i].sltroom=""; 
+
+            res.data.obj[i].costbaby=""; 
+            res.data.obj[i].costchild=""; 
+            res.data.obj[i].costaduilt=""; 
+            res.data.obj[i].costroom=""; 
+
+             res.data.obj[i].plan=res.data.obj[i].total+"";
+             res.data.obj[i].book=0;
+             res.data.obj[i].sit=res.data.obj[i].surplus;
+             res.data.obj[i].isenable=true;
+             res.data.obj[i].tid=row.tid; 
+             res.data.obj[i].checked=false;
+          }
+           _this.checkArr= _this.checkArr.concat(res.data.obj);
+           for(var i=0;i<_this.checkArr.length;i++){
+            _this.startTimeArr.push(_this.checkArr[i].newstarttime)
+           }
+            console.log( _this.checkArr)
+        })
+       }
       },
-      // 编辑  详情时获取信息
+      /* 去掉空格 */
+      trim(str,is_global) 
+            { 
+            var result; 
+            result = str.replace(/(^\s+)|(\s+$)/g,""); 
+            if(is_global.toLowerCase()=="g") 
+            result = result.replace(/\s/g,""); 
+            return result; 
+            } ,
+      // 编辑时获取信息 满意
       getdetail () {
         let _this = this;
+    
         groupdetail({token: paramm.getToken(),id: this.categoryId}).then(function (res) {
+          console.log("进入编辑页",res.data.obj);
+          // 1.交通信息部分
+          /* 设置普通 或 控位 */
+           var result=res.data.obj;
+            _this.traffictype=result.traffictype;
+          
+           for(var i=0;i<result.traffics.length;i++){
+              console.log(result.traffics[i].starttime);
+              var hh=result.traffics[i].starttime.slice(0,result.traffics[i].starttime.indexOf(":") );
+              var ehh=result.traffics[i].endtime.slice(0,result.traffics[i].endtime.indexOf(":") );
+              var mm=result.traffics[i].starttime.slice(result.traffics[i].starttime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
+              var emm=result.traffics[i].endtime.slice(result.traffics[i].endtime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
+              
+              result.traffics[i].starttime=new Date(2016,9,10,hh,mm);
+              result.traffics[i].endtime=new Date(2016,9,10,ehh,emm);
+              result.traffics[i].arrivetype=result.traffics[i].arrivetype==0?false:true;
+          
+             if(result.traffics[i].typeName=="单程"){
+               result.traffics[i].others=[];
+               _this.trackArr.push(result.traffics[i]);
+            
+             }else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联城")){
+               for(var k=0;k<result.traffics[i].others.length;k++){  
+                result.traffics[i].others[k].starttime=new Date(2016,9,10, result.traffics[i].others[k].starttime.slice(0, result.traffics[i].others[k].starttime.indexOf(":")),
+                 result.traffics[i].others[k].starttime.slice( result.traffics[i].others[k].starttime.indexOf(":")+1,result.traffics[i].others[k].starttime.indexOf(":")+3));
+                  
+                  result.traffics[i].others[k].endtime=new Date(2016,9,10, result.traffics[i].others[k].endtime.slice(0, result.traffics[i].others[k].endtime.indexOf(":")),
+                 result.traffics[i].others[k].endtime.slice( result.traffics[i].others[k].endtime.indexOf(":")+1,result.traffics[i].others[k].endtime.indexOf(":")+3));
+                
+               }
+                result.traffics[i].type=result.traffics[i].type==1?"往返":"联城";
+               _this.gobackArr.push(result.traffics[i]);
+              _this.rowNum=result.traffics[i].others.length;
+             }
+           }
+           
+         /* 处理发团时间部分 */
+         _this.checkArr= _this.checkArr.concat(result.details)
           _this.routeName = res.data.obj.linename
           _this.idd = res.data.obj.id
-          _this.lineid = res.data.obj.lineid
+          _this.groupList.lineid = res.data.obj.lineid
           _this.groupList.notify = res.data.obj.notify
           _this.cancell = 0
-          _this.cancellId = res.data.obj.rules[0].id
+        /*   _this.cancellId = res.data.obj.rules[0].id */
           let _thiss = _this
           res.data.obj.platforms.forEach(function (item) {
             if(item.isenable)  _thiss.checkList.push(item.platform - 1)
@@ -846,66 +1221,171 @@
           _this.checkArr = res.data.obj.details.slice(0)
           _this.checkArr.forEach(function (item,idx) {
             item.confirm = item.confirm.toString();
-//            item.checked = item.isenable;
           })
           res.data.obj.details.forEach(function (item,idx) {
             _this.surpluss = item.surplus;
-//            _this.dayss = item.deadline;
             _this.getTimeArr.push(item.endtime);
           })
           _this.dayss = res.data.obj.days;
+        
+         /* 处理同步平台部分*/
+         var newsiteArr=[];
+         var newsiteArr_huan=[];
 
+         console.log("处理同步平台部分",result.platforms)
+         for(var i=0;i<result.platforms.length;i++){
+           
+           /* 驰誉选中*/
+          if(result.platforms[i].platform==1&&(result.platforms[i].isenable)){
+           _this.editChi=true;
+            if(result.platforms[i].categorytype=="shortLine"){
+                result.platforms[i].categorytype="周边短线"
+              }else if(result.platforms[i].categorytype=="longLine"){
+                result.platforms[i].categorytype="国内长线"
+              }else if(result.platforms[i].categorytype=="externalLine"){
+                result.platforms[i].categorytype="出境长线"
+              }
+           _this.categoryvalue=result.platforms[i].categorytype;
+           _this.editsubvalue=result.platforms[i].categoryname;
+           _this.editplay=result.platforms[i].labelsname;
+          newsiteArr=result.platforms[i].sites.split(",");
+           let sysPara={
+            "token":paramm.getToken(),
+            "platform":1,
+          }
+         syscategorysite(sysPara).then(function(res){
+              _this.sysTotal=res.data.obj;
+              _this.siteArr=res.data.obj.sites;
+              _this.tongbucompanyId=res.data.obj.companyId;
+            for(var i=0;i<newsiteArr.length;i++){
+                        console.log("进入for")
+                      for(var k=0;k<_this.siteArr.length;k++){
+                          if(_this.siteArr[k].siteId==newsiteArr[i]){
+                            console.log("又找到一样的id了")
+                            _this.editnewsiteArr.push({"siteId":_this.siteArr[k].siteId,"siteName":_this.siteArr[k].siteName})
+                          }
+                      }
+                    }
+                      console.log(77777, _this.editsubvalue,_this.editnewsiteArr);
+          })
+          }
+          /* 欢途选中 */
+          if(result.platforms[i].platform==2&&(result.platforms[i].isenable)){
+             _this.editHuan=true;
+            if(result.platforms[i].categorytype=="shortLine"){
+                result.platforms[i].categorytype="周边短线"
+              }else if(result.platforms[i].categorytype=="longLine"){
+                result.platforms[i].categorytype="国内长线"
+              }else if(result.platforms[i].categorytype=="externalLine"){
+                result.platforms[i].categorytype="出境长线"
+              }
+           _this.categoryvalue_huan=result.platforms[i].categorytype;
+           _this.editsubvalue_huan=result.platforms[i].categoryname;
+           _this.editplay_huan=result.platforms[i].labelsname;
+          newsiteArr_huan=result.platforms[i].sites.split(",");
+          let sysPara={
+            "token":paramm.getToken(),
+            "platform":2,
+          }
+         syscategorysite(sysPara).then(function(res){
+              _this.sysTotal_huan=res.data.obj;
+              _this.siteArr_huan=res.data.obj.sites;
+              _this.tongbucompanyId_huan=res.data.obj.companyId;
+            for(var i=0;i<newsiteArr_huan.length;i++){
+                        console.log("进入for")
+                      for(var k=0;k<_this.siteArr_huan.length;k++){
+                          if(_this.siteArr_huan[k].siteId==newsiteArr_huan[i]){
+                            console.log("又找到一样的id了")
+                            _this.editnewsiteArr_huan.push({"siteId":_this.siteArr_huan[k].siteId,"siteName":_this.siteArr_huan[k].siteName})
+                          }
+                      }
+                    }
+                    
+          })
+          }
+         }
+
+    /*      for(var k=0;k<result.platforms.length;k++){
+           
+          newsiteArr=result.platforms[k].sites.split(",");
+          platform=result.platforms[k].platform;
+         }
+
+          if(platform==1&&_this.editChi==true){
+         
+          let sysPara={
+            "token":paramm.getToken(),
+            "platform":1,
+          }
+          syscategorysite(sysPara).then(function(res){
+             _this.sysTotal=res.data.obj;
+              _this.siteArr=res.data.obj.sites;
+              _this.tongbucompanyId=res.data.obj.companyId;
+            for(var i=0;i<newsiteArr.length;i++){
+                        console.log("进入for")
+                      for(var k=0;k<_this.siteArr.length;k++){
+                          if(_this.siteArr[k].siteId==newsiteArr[i]){
+                            console.log("又找到一样的id了")
+                            _this.editnewsiteArr.push({"siteId":_this.siteArr[k].siteId,"siteName":_this.siteArr[k].siteName})
+                          }
+                      }
+                    }
+                      console.log(77777, _this.editsubvalue,_this.editnewsiteArr);
+          })
+        }  */        
         })
+ 
       },
       getPingtai () {
         let _this = this;
+        /* 请求数据：同步到对接平台 */
         openlist({token: paramm.getToken()}).then(function (res) {
           // 平台列表
           _this.pingtai = res.data.obj || []
         })
       },
       allMktaduilt () {
-        this.changeParam('mktaduilt', 'allmktaduilt')
+        this.changeParam('allmktaduilt','mktaduilt' )
       },
       allMktroom () {
-        this.changeParam('mktroom', 'allmktroom')
+        this.changeParam('allmktroom','mktroom' )
       },
       allSltbaby () {
-        this.changeParam('sltbaby', 'allsltbaby')
+        this.changeParam('allsltbaby','sltbaby' )
       },
       allSltchild () {
-        this.changeParam('sltchild', 'allsltchild')
+        this.changeParam('allsltchild','sltchild')
       },
       allSltaduilt () {
-        this.changeParam('sltaduilt', 'allsltaduilt')
+        this.changeParam( 'allsltaduilt','sltaduilt')
       },
       allSltroom () {
-        this.changeParam('sltroom', 'allsltroom')
+        this.changeParam('allsltroom','sltroom')
       },
 
       allCostbaby () {
-        this.changeParam('costbaby', 'allcostbaby')
+        this.changeParam('allcostbaby','costbaby' )
       },
       allCostchild () {
-        this.changeParam('costchild', 'allcostchild')
+        this.changeParam('allcostchild','costchild' )
       },
       allCostaduilt () {
-        this.changeParam('costaduilt', 'allcostaduilt')
+        this.changeParam('allcostaduilt','costaduilt' )
       },
       allCostroom () {
-        this.changeParam('costroom', 'allcostroom')
+        this.changeParam('allcostroom','costroom' )
       },
       // 儿童
       allMktchild () {
-        this.changeParam('mktchild', 'allmktchild')
+        this.changeParam('allmktchild','mktchild' )
       },
       // 婴儿
       allMktbaby () {
-        this.changeParam('mktbaby', 'allmktbaby')
+        this.changeParam('allmktbaby','mktbaby' )
       },
       // 报名截止
       allDeadline () {
-        this.changeParam('deadline', 'alldeadline')
+        this.changeParam( 'alldeadline','deadline')
       },
       // 是否接客
       allIsorder (event){
@@ -919,15 +1399,15 @@
           })
         }
       },
-      // 计划人数
       allPlan () {
-        this.changeParam('plan', 'allplan')
+        this.changeParam('allplan','plan')
       },
       // 封装输入框全写
       changeParam (param, allParam) {
         let _this = this;
+
         this.checkArr.forEach(function (item) {
-          if(item.checked) item[param] = _this[allParam]
+          if(item.checked) item[allParam] = _this[param]
         })
       },
       // 全选单选删除
@@ -953,12 +1433,14 @@
         }
 
       },
+      /* 反全选只要一个没选中，全选就不选中 */
       sigCheck () {
         let isAll = this.checkArr.every(function (item) {
           return (item.checked == true);
         })
         isAll == true ? this.allChecked = true : this.allChecked = false
       },
+      /* 全选 */
       allCheck (event) {
         if(this.allChecked){
           this.checkArr.forEach(function (item, index) {
@@ -988,6 +1470,7 @@
       addTr () {
         let _this = this;
         // 开始时间
+        console.log(this.value1)
         this.startTimeArr.push(this.value1);
         var M = (this.value1.getMonth()+1).toString().length==1 ? '0'+ (this.value1.getMonth()+1).toString() : (this.value1.getMonth()+1).toString();
         var D = this.value1.getDate().toString().length==1 ? '0'+ this.value1.getDate().toString() : this.value1.getDate().toString();
@@ -1012,10 +1495,10 @@
         this.checkArr.push(
           {checked: '',
             starttime: selectTime,
-            plan: '',
+            endtime:'',
             isorder: true,
-            confirm: '0',
-            deadline:'',
+            confirm: "0",
+            deadline:0,
             mktbaby: '',
             mktchild:'',
             mktaduilt: '',
@@ -1028,9 +1511,11 @@
             costchild: '',
             costaduilt: '',
             costroom: '',
+            plan: 0,
             book: 0,
             sit: 0,
-            isenable: true
+            isenable: true,
+            tid:"",
           })
        
       },
@@ -1053,6 +1538,7 @@
 //        var now=new Date();
 //        var time=now.getTime();
         var time = vall.getTime();
+        console.log("求截止时间",vall,time);
          if (isPlus) {
            time+=1000*60*60*24*(dayy-1);//加上3天
          }else {
@@ -1078,8 +1564,9 @@
 //        })
         _this.lineFlag = false;
         _this.routeName = _this.checkItem.name;
-        _this.lineid = _this.checkItem.id;
+        _this.groupList.lineid = _this.checkItem.id;
         _this.trafficDays = _this.checkItem.days;
+        console.log( _this.trafficDays);
       },
       //弹出框出现，调用这个方法，第一次点击下拉框，下拉框样式有问题，第二次点击正常
       getcategoryall(){
@@ -1098,53 +1585,166 @@
           return true
         }
       },
-      // 点击保存 取消
+      // 点击保存 满意
       save () {
+
         let _this = this;
-        // 线路
-        if(!this.lineid) {
+        // 保存之前线路必须选择
+        if(!_this.groupList.lineid) {
           this.$message({
             message: '请选择线路',
             type: 'warning'
           });
           return;
         }
-        // 取消政策
-//        if(this.cancell) {
-//          if(isNaN(this.cancell) || parseFloat(this.cancell)<=0 || parseFloat(this.cancell)%0.5 != 0){
-//            _this.$message({
-//              message: '取消政策时间为大于0且为0.5倍数的数字',
-//              type: 'warning'
-//            });
-//            return;
-//          }
-//        }
+         console.log("保存了",_this.gobackArr);
+         for(var i=0;i<_this.gobackArr.length;i++){
+            _this.savegobackArr= _this.savegobackArr.concat(_this.gobackArr[i].others)
+         }
+         _this.traffic=_this.trackArr.concat(_this.savegobackArr); 
+         for(var i=0;i< _this.traffic.length;i++){
+            /* 提交时处理当日 次日 */
+            _this.traffic[i].arrivetype= _this.traffic[i].arrivetype==false?0:1;
+            /* 开始时间 */
+            var startH=new Date(_this.traffic[i].starttime).getHours();
+                startH=startH<10?"0"+startH:startH;
+            var startM=new Date(_this.traffic[i].starttime).getMinutes();   
+                startM=startM<10?"0"+startM:startM;
+                _this.traffic[i].starttime= startH+":"+ startM;
+           /* 结束时间 */
+           var endH=new Date(_this.traffic[i].endtime).getHours();
+                endH=endH<10?"0"+endH:endH;
+            var endM=new Date(_this.traffic[i].endtime).getMinutes();   
+                endM=endM<10?"0"+endM:endM;
+             _this.traffic[i].endtime= endH+":"+ endM;
+             /* 处理手动单程 往返的direction */
+             if( _this.traffic[i].type=="单程"|| _this.traffic[i].type==0){
+                 _this.traffic[i].direction=_this.traffic[i].type=0;
+             }else if( _this.traffic[i].type=="往返"||_this.traffic[i].type==1){
+                _this.traffic[i].direction=_this.traffic[i].type=1;
+             }else if( _this.traffic[i].type=="联城"||_this.traffic[i].type==2){
+                _this.traffic[i].direction=_this.traffic[i].type=2;
+             }
+              if(!_this.traffic[i].id){
+               _this.traffic[i].id="";
+             }
+              if(!_this.traffic[i].tid){
+               _this.traffic[i].tid="";
+             }
+          }
+     
+         for(var i=0;i<_this.lineArr.length;i++){
+           if(_this.lineArr[i].categoryName==_this.subvalue){
+             _this.tongbucategoryid=_this.lineArr[i].categoryId;
+           }
+         }
+           for(var i=0;i<_this.lineArr_huan.length;i++){
+           if(_this.lineArr_huan[i].categoryName==_this.subvalue_huan){
+             _this.tongbucategoryid_huan=_this.lineArr_huan[i].categoryId;
+           }
+         }
+         if(_this.categoryvalue=="国内长线"){
+           _this.tongbucategorytype="longLine"
+         }else if(_this.categoryvalue=="周边短线"){
+            _this.tongbucategorytype="shortLine"
+         }else if(_this.categoryvalue=="出境长线"){
+            _this.tongbucategorytype="externalLine"
+         }
+
+          if(_this.categoryvalue_huan=="国内长线"){
+           _this.tongbucategorytype_huan="longLine"
+         }else if(_this.categoryvalue_huan=="周边短线"){
+            _this.tongbucategorytype_huan="shortLine"
+         }else if(_this.categoryvalue_huan=="出境长线"){
+            _this.tongbucategorytype_huan="externalLine"
+         }
+          for(var i=0;i<_this.playArr.length;i++){
+            if(_this.playArr[i].labelId== _this.initValue){
+              _this.tongbulabelsname=_this.playArr[i].labelName;
+            }
+          }
+          for(var i=0;i<_this.playArr_huan.length;i++){
+            if(_this.playArr_huan[i].labelId== _this.initValue_huan){
+              _this.tongbulabelsname_huan=_this.playArr_huan[i].labelName;
+            }
+          }
+          /* 解决保存发送请求的platforms数组  */
+         _this.platformsArrXin=[{
+                id:"",
+                platform:_this.editChi?1:2,
+                categoryid: _this.tongbucategoryid,
+                categorytype: _this.tongbucategorytype,
+                categoryname:_this.subvalue,
+                sourceid:"",
+                sites:_this.checksiteArr.join(","),
+                isenable:_this.editChi,
+                labels: _this.initValue,
+                labelsname:_this.tongbulabelsname,
+                companyId:_this.tongbucompanyId,
+                companyname:"" ,
+                memberId:"",  
+         },{
+                id:"",
+                platform:_this.editHuan?2:1,
+                categoryid: _this.tongbucategoryid_huan,
+                categorytype: _this.tongbucategorytype_huan,
+                categoryname:_this.subvalue_huan,
+                sourceid:"",
+                sites:_this.checksiteArr_huan.join(","),
+                isenable:_this.editHuan,
+                labels: _this.initValue_huan,
+                labelsname:_this.tongbulabelsname_huan,
+                companyId:_this.tongbucompanyId_huan,
+                companyname:"" ,
+                memberId:"",  
+         }];
+          /* 若平台没有勾选就不保存 */
+          if(!_this.editChi&&!_this.editHuan){
+             _this.platformsArrXin=[]
+         }
+         else if(!_this.editChi){
+             _this.platformsArrXin= _this.platformsArrXin.slice(1)
+         }
+         else if(!_this.editHuan){
+             _this.platformsArrXin= _this.platformsArrXin.slice(0,1)
+         }
+        
+         for(var i=0;i<_this.checkArr.length;i++){
+
+           _this.checkArr[i].confirm=Number(_this.checkArr[i].confirm);
+            _this.checkArr[i].deadline=Number(_this.checkArr[i].deadline);
+         }
+         _this.tongbudetailArr= _this.tongbudetailArr.concat(_this.checkArr);
+       
+         _this.platformsArr= _this.platformsArr.concat(_this.platformsArrXin);
+        
         // 集合通知
-        if(this.groupList.notify.toString().length >120) {
+        if(_this.groupList.notify.toString().length >120) {
           this.$message({
             message: '集合通知不能超过120字',
             type: 'warning'
           });
           return;
         }
-        if (this.checkArr.length == 0) {
+        if (_this.checkArr.length == 0) {
           this.$message({
             message: '请添加发团信息',
             type: 'warning'
           });
           return;
         }
+       
        try{
          this.checkArr.forEach(function (item,idx) {
            item.surplus = _this.surpluss;
 
-           if(isNaN(item.plan) || parseFloat(item.plan)<=0 || parseInt(item.plan)!=item.plan) {
-             _this.$message({
-               message: item.starttime+'日计划人数为大于或等于1的整数',
-               type: 'warning'
-             })
-             throw false
-           }
+          //  if(isNaN(item.plan) || parseFloat(item.plan)<=0 || parseInt(item.plan)!=item.plan) {
+          //    _this.$message({
+          //      message: item.starttime+'日计划人数为大于或等于1的整数',
+          //      type: 'warning'
+          //    })
+          //    throw false
+          //  }
            if(_this.isTrue(item.starttime,item.deadline,'截止天数') ||
              _this.isTrue(item.starttime,item.mktbaby,'婴儿市场价') || _this.isTrue(item.starttime,item.mktchild,'儿童市场价') || _this.isTrue(item.starttime,item.mktaduilt,'成人市场价') || _this.isTrue(item.starttime,item.mktroom,'市场价单房差') ||
              _this.isTrue(item.starttime,item.sltbaby,'婴儿结算价') || _this.isTrue(item.starttime,item.sltchild,'儿童结算价') || _this.isTrue(item.starttime,item.sltaduilt,'成人结算价') || _this.isTrue(item.starttime,item.sltroom,'结算价单房差') ||
@@ -1159,20 +1759,8 @@
        }
         // 合作平台
 
-        // todo 1.1
         let platforms = [];
-//        var checkListNew = []
-//        this.checkList.forEach(function (item) {
-//          checkListNew.push(item+1)
-//        })
-//        this.pingtai.forEach(function (item,idx) {
-//          if (checkListNew.indexOf(item.platform) != -1) {
-//            platforms.push({platform: item.platform, isenable: true,id: _this.platformId[idx]});
-//          }else {
-//            platforms.push({platform: item.platform, isenable: false,id: _this.platformId[idx]});
-//          }
-//        })
-        // todo 1.2
+
         this.pingtai.forEach(function (item,idx) {
           platforms.push({platform: item.platform, isenable: false,id: _this.platformId[idx]})
         })
@@ -1190,19 +1778,23 @@
           })
           _this.TemStArr = this.getTimeArr.concat(_this.TemStArr)
         }
-        this.checkArr.forEach(function (item,idx) {
+        _this.checkArr.forEach(function (item,idx) {
           item.endtime = _this.TemStArr[idx] || ''
         })
-        // 1 创建
+        /* 发布线路 添加时候的保存  满意 */
+         let savePara={
+           lineid:_this.groupList.lineid,
+           notify: _this.groupList.notify|| '',
+           traffictype: _this.traffictype,
+           traffics: _this.traffic,
+           platforms: _this.platformsArrXin,
+           rules: [{releasetime:0,type:1}] || [],
+           details: _this.tongbudetailArr,
+           token:paramm.getToken(),
+         }
+        // 1 添加
         if(_this.operationType.type == 'add'){
-          groupsave({
-            token: paramm.getToken(),
-            lineid: _this.lineid,
-            notify: _this.groupList.notify || '',
-            rules: [{releasetime:0,type:1}] || [],
-            platforms: platforms,
-            details: _this.checkArr
-          }).then(res =>{
+          groupsave(savePara).then(res =>{
             if(res.data.error || res.data.err) {
               paramm.getCode(res.data, _this)
               //减去之前加上的时间
@@ -1214,12 +1806,13 @@
             }
             if(!res.data.error) {
               paramm.getCode(res.data, _this)
-              _this.$emit('setMode', 'list');
+              _this.$emit('setMode', 'list');  
             }
           })
         }
         // 2 编辑
         if(_this.operationType.type == 'edit'){
+          
           _this.checkArr.forEach(function (item) {
             delete item.linename;
             delete item.creater;
@@ -1228,16 +1821,19 @@
             delete item.teamno;
             delete item.surplus;
           })
+          /* 编辑的时候 保存  满意 */
           groupupdate({
             token: paramm.getToken(),
-            lineid: _this.lineid,
+            lineid: _this.groupList.lineid,
             notify: _this.groupList.notify || '',
+            traffictype: _this.traffictype,
+            traffics:_this.traffic,
             rules: [{releasetime:0,type:1,id:_this.cancellId}] || [],
-            platforms: platforms,
-            details: _this.checkArr,
+            platforms: _this.platformsArrXin,
+            details: _this.tongbudetailArr,
             id: _this.idd
           }).then(res =>{
-            if(res.data.error || res.data.err) {
+            if(res.data.error) {
               this.$message({
                 message: res.data.message || '失败',
                 type: 'error'
@@ -1255,7 +1851,7 @@
                 message: '编辑成功',
                 type: 'success'
               });
-              _this.$emit('setMode', 'list');
+            _this.$emit('setMode', 'list');  
             }
           })
         }
@@ -1265,15 +1861,17 @@
         this.$emit('setMode', 'list', option);
       }
     },
+    created(){
+       this.getPingtai();
+    },
     beforeMount () {
-      this.getPingtai();
       if(this.operationType.type == 'edit' || this.operationType.type == 'detail') this.getdetail();
     }
-
   }
 </script>
 
 <style scoped lang="scss">
+
   header {
     padding: 0 40px;
     background: white;
@@ -1309,6 +1907,10 @@
       border-top-right-radius: 5px;
       color: #333;
     }
+  }
+  .el-select-dropdown__item.selected{
+   background-color:#fff;
+   color:#000;
   }
   section{
     .el-col{
@@ -1394,5 +1996,8 @@
   }
   .trackAdd{
     margin: 0 30px;
+  }
+  .el-checkbox-group{
+    display: inline;
   }
 </style>

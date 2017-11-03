@@ -12,6 +12,16 @@ import '../static/umeditor/ueditor.all.js'
 import '../static/umeditor/lang/zh-cn/zh-cn.js'
 import '../static/umeditor/ueditor.parse.min.js'
 import Cookies from 'js-cookie';
+
+// import "../static/js_date/js/date-picker/datepicker.min.css";
+// import "../static/js_date/js/date-picker/datepicker.calendar.css";
+// import "../static/js_date/js/date-picker/timepicker.css";
+
+// import '../static/js_date/js/jquery-1.8.3.min.js';
+// import '../static/js_date/js/tmpl/jquery.tmpl.min.js';
+// import '../static/js_date/js/date-picker/jquery.timeselect.js';
+// import '../static/js_date/js/date-picker/datepicker.js';
+// import '../static/js_date/js/date-picker/jquery.calendar.v2.js';
 //import $ from 'jquery'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
@@ -19,6 +29,7 @@ Vue.use(VueRouter)
 /* eslint-disable no-new */
 //定义路由
 const router = new VueRouter({
+	mode:"history",
 	routes
 })
 

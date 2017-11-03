@@ -26,7 +26,7 @@
 							    <el-input type="password" v-model="cyform.password" placeholder="密码"></el-input>
 							  </el-form-item>
 							  </el-form-item><el-form-item>
-							    <el-button type="primary" @click="onSubmit(1)">编辑</el-button>
+							    <el-button type="primary" @click="onSubmit(1)">绑定</el-button>
 							  </el-form-item>
 							</el-form>
 						</el-col>
@@ -44,7 +44,7 @@
 							    <el-input type="password" v-model="htform.password" placeholder="密码"></el-input>
 							  </el-form-item>
 							  </el-form-item><el-form-item>
-							    <el-button type="primary" @click="onSubmit(2)">编辑</el-button>
+							    <el-button type="primary" @click="onSubmit(2)">绑定</el-button>
 							  </el-form-item>
 							</el-form>
 						</el-col>
@@ -89,6 +89,7 @@
         },
 				getlist(){
 					let para = {token:paramm.getToken()}
+					console.log(para.token)
 					openlist(para).then((res) =>{
 						res.data.obj.forEach((item)=>{
 						    if(item.platform == 1)
@@ -99,7 +100,7 @@
 					})
 				},
 				onSubmit(str){
-				    console.log(this.htform);
+				   
 					let para = {}
 					if(str == 1){
 						para = Object.assign({},this.cyform);
@@ -108,8 +109,11 @@
             para = Object.assign({},this.htform);
 						para.platform = 2
 					}
-
-          para.password = para.password ? md5(para.password) : '';
+					 console.log(para);
+					 if(para.password.length!=32){
+             para.password= md5(para.password)
+					 }
+					para.token=paramm.getToken();
 					opensave(para).then((res) => {
 						if(res.data.error){
 						  this.open(res.data.message, 'error')

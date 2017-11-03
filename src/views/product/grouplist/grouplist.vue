@@ -154,6 +154,7 @@
     <GroupReserve v-else-if="modeType == 'groupreserve'" @setMode="setMode" :categoryId="editcategory.id"></GroupReserve>
     <Grouporder v-else-if="modeType == 'order'"  @setMode="setMode" :operationType="operationType" ></Grouporder>
     <Reserve v-else-if="modeType == 'reserve'" @setMode="setMode" :categoryId="editcategory.id" :operationType="operationType"></Reserve>  <!-- @setMode="setMode"   :categoryId="editcategory.id"-->
+    <!-- 点击grouplist页面的编辑，切换到编辑交通模块 -->
     <NewGroup v-else  @setMode="setMode" :operationType="operationType" :categoryId="editcategory.id"></NewGroup>
   </div>
 </template>
