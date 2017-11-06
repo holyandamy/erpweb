@@ -76,8 +76,8 @@
                   <td>
                    
                     <el-time-picker
-                      :editable=true
-                      :clearable=false
+                      :editable="true"
+                      :clearable="true"
                       style='width: 30%;'
                       v-model="item.starttime"
                       :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
@@ -85,8 +85,8 @@
                     </el-time-picker> ---
                     <el-checkbox v-model="item.arrivetype">次日</el-checkbox>
                     <el-time-picker
-                      :editable=false
-                      :clearable=false
+                      :editable="true"
+                      :clearable="true"
                       style='width: 30%;'
                       v-model="item.endtime"
                       :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
@@ -95,7 +95,7 @@
                      
                   </td>
                   <td>
-                    <el-button type="text"  @click="deleteTrc(idx)">删除</el-button>
+                    <el-button type="text"  @click="deleteTrc(idx)" :disabled="item.del">删除</el-button>
                   </td>
                 </tr>
                </tbody>
@@ -122,8 +122,8 @@
                     <td>
                      
                       <el-time-picker
-                        :editable=false
-                        :clearable=false
+                        :editable="false"
+                        :clearable="false"
                         style='width: 30%;'
                         v-model="item.starttime"
                         :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
@@ -131,8 +131,8 @@
                       </el-time-picker> ---
                        <el-checkbox v-model="item.arrivetype">次日</el-checkbox>
                       <el-time-picker
-                        :editable=false
-                        :clearable=false
+                        :editable="false"
+                        :clearable="false"
                         style='width: 30%;'
                         v-model="item.endtime"
                         :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
@@ -141,7 +141,7 @@
                       <!--<el-input class='doubleTrc'  style='width: 40%;' ></el-input> <span v-if="item.type==1">-&#45;&#45; </span><el-input class='doubleTrc' v-if="item.type==1" style='width: 40%;'></el-input>-->
                     </td>
                     <td :rowspan="rowNum">
-                      <el-button type="text"  @click="deleteTfoot(idx)" >删除</el-button>
+                      <el-button type="text"  @click="deleteTfoot(idx)" :disabled="item.del">删除</el-button>
                     </td>
                   </tr>
                   <!-- 返-->
@@ -187,8 +187,9 @@
 
 
               <div style="color: #2cb1b6; font-size: 20px;padding-top: 20px;line-height: 40px;margin-bottom: 20px;border-bottom:1px solid rgba(151, 151, 151, 0.2)">
-                发团时间</div>
-              <el-form-item label="发团时间：" prop="date" v-if='traffictype!=1'>
+                发团时间
+              </div>
+              <!-- <el-form-item label="发团时间：" prop="date" v-if='traffictype!=1'>
                 <el-col :span="4" style="width: 100%;margin-right: 10px">
                   <el-date-picker
                     :clearable = false
@@ -201,7 +202,29 @@
                     :picker-options="pickerOptions0">
                   </el-date-picker>
                 </el-col>
-              </el-form-item>
+              </el-form-item> -->
+              <!-- 满意 -->
+                <div class="test" v-if="traffictype!=1">
+                      <div class="traffic-noraml-wrap mb20">
+                    
+                              <div class="group-box">
+                                  <span class="clear-day action-clearday">清除所选日期</span>
+                                  <a class="button-middle-v1 button-bg-green button-font-white button-operate-datepicker-add">添加日历</a>
+                                  <a class="button-middle-v1 button-bg-green button-font-white ml6 button-operate-datepicker-sub">删除日历</a>
+                              </div>
+                              <div class="date-list-wrap"></div>
+                      </div>
+                    <table class="iframe-lineroad-table mb10 iframe-lineroad-border iframe-lineroad-border-third tc table-price" align="center">
+                        <tbody id="line-price">
+                        </tbody>
+                    </table>
+                    <script id="tmp-lineprice-info" type="text/x-jquery-tmpl">
+                    <tr data-date="${date}" class="tr-append lineprice-append">
+                      <td><label><input type="checkbox" class="item-select"><span class="index"></span></label></td>
+                      <td>${date}<br>${week}</td>
+                    </tr>
+                    </script>
+	            </div>	
 
              <!-- 发团时间表头模块-->
               <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition"
@@ -326,10 +349,10 @@
                         <div class="cell" style='cursor: pointer;' >---</div>
                       </td>
                       <td >
-                        <div class="cell el-tooltip" ><el-radio class="radio" label='0'>自动</el-radio></div>
+                        <div class="cell el-tooltip" >---</div>
                       </td>
                       <td  >
-                        <div class="cell el-tooltip" ><el-radio class="radio"  label='1'>手动</el-radio></div>
+                        <div class="cell el-tooltip" >---</div>
                       </td>
                       <td >
                         <div class="cell el-tooltip" ><el-input  v-model="alldeadline" @change="allDeadline" ></el-input></div>
@@ -602,6 +625,7 @@
         </el-table-column>
       </el-table>
     </el-dialog>
+ 
   </div>
 </template>
 <script>
@@ -633,6 +657,8 @@
         }, 1000);
       };
       return {
+        newDateArr:[],
+        isDel:[],
         rowNum:2,
         siteChecked:true,
         editplay:"",
@@ -940,8 +966,9 @@
         this.allplan=this.alldeadline=this.allmktbaby=this.allmktchild=this.allmktaduilt="";
         this.allmktroom=this.allsltbaby=this.allsltchild=this.allsltaduilt="";
          this.allsltroom=this.allcostbaby=this.allcostchild=this.allcostaduilt=this.allcostroom="";
+         if(this.traffictype!=1){this.dates()}
       },
-      // 添加单程 满意
+      // 添加单程 
       trackAddSig(){
         var _this=this;
         _this.trackArr.push(
@@ -1018,11 +1045,13 @@
       _this.newTimeArr=[];
         if(_this.traffictype==1){
           /* 控位交通的获取列表的接口 */
+          console.log(9999999999,_this.checkArr);
           if(_this.checkArr.length!=0){
                 for(var i=0;i<_this.checkArr.length;i++){
-              _this.newTimeArr.push(_this.checkArr[i].date)
+              _this.newTimeArr.push(_this.checkArr[i].date||_this.checkArr[i].starttime)
             }
           }
+         console.log(11111,_this.newTimeAr);
           let dates=_this.newTimeArr.length==0?"":_this.newTimeArr.join(",");
           trafficlist({token: paramm.getToken(),day: _this.trafficDays,title:_this.formName,dates:dates}).then( (res)=> {
 
@@ -1167,14 +1196,19 @@
       // 编辑时获取信息 满意
       getdetail () {
         let _this = this;
-    
+       
         groupdetail({token: paramm.getToken(),id: this.categoryId}).then(function (res) {
           console.log("进入编辑页",res.data.obj);
           // 1.交通信息部分
-          /* 设置普通 或 控位 */
            var result=res.data.obj;
             _this.traffictype=result.traffictype;
-          
+          /* 若是控位交通 编辑的时候刚开始的数据不能删除 */
+          if(_this.traffictype==1){
+            _this.isDel=result.traffics;
+              for(var i=0;i<_this.isDel.length;i++){
+              _this.isDel[i].del=true;
+              }
+          }
            for(var i=0;i<result.traffics.length;i++){
               console.log(result.traffics[i].starttime);
               var hh=result.traffics[i].starttime.slice(0,result.traffics[i].starttime.indexOf(":") );
@@ -1212,6 +1246,11 @@
           _this.groupList.lineid = res.data.obj.lineid
           _this.groupList.notify = res.data.obj.notify
           _this.cancell = 0
+          for(var i=0;i< _this.checkArr.length;i++){
+             _this.newDateArr.push( _this.checkArr[i].starttime)
+          }
+           _this.dates();
+          console.log("新的时间日期数组", _this.newDateArr)
         /*   _this.cancellId = res.data.obj.rules[0].id */
           let _thiss = _this
           res.data.obj.platforms.forEach(function (item) {
@@ -1227,8 +1266,10 @@
             _this.getTimeArr.push(item.endtime);
           })
           _this.dayss = res.data.obj.days;
+        /* 新增日历框部分 */
         
-         /* 处理同步平台部分*/
+
+        /* 处理同步平台部分*/
          var newsiteArr=[];
          var newsiteArr_huan=[];
 
@@ -1410,9 +1451,10 @@
           if(item.checked) item[allParam] = _this[param]
         })
       },
-      // 全选单选删除
+      // 全选单选删除 满意
       sigDel (item,idx) {
         let _this = this;
+         $(".date-list-wrap").find(".c" + item.starttime).removeClass("selected");
         if(item.id){
           groupDel({token:paramm.getToken(),id:item.id}).then((res)=>{
             if(res.data.error || res.data.err) {
@@ -1491,7 +1533,7 @@
         }catch (e){
           throw e
         }
-
+         /*满意  */
         this.checkArr.push(
           {checked: '',
             starttime: selectTime,
@@ -1585,7 +1627,7 @@
           return true
         }
       },
-      // 点击保存 满意
+      // 点击保存
       save () {
 
         let _this = this;
@@ -1597,6 +1639,41 @@
           });
           return;
         }
+          for(var i=0;i<_this.checkArr.length;i++){
+
+           _this.checkArr[i].confirm=Number(_this.checkArr[i].confirm);
+            _this.checkArr[i].deadline=Number(_this.checkArr[i].deadline);
+         }
+         if (_this.checkArr.length == 0) {
+          this.$message({
+            message: '请添加发团信息',
+            type: 'warning'
+          });
+          return;
+        }
+          try{
+         this.checkArr.forEach(function (item,idx) {
+           item.surplus = _this.surpluss;
+
+          //  if(isNaN(item.plan) || parseFloat(item.plan)<=0 || parseInt(item.plan)!=item.plan) {
+          //    _this.$message({
+          //      message: item.starttime+'日计划人数为大于或等于1的整数',
+          //      type: 'warning'
+          //    })
+          //    throw false
+          //  }
+           if(_this.isTrue(item.starttime,item.deadline,'截止天数') ||
+             _this.isTrue(item.starttime,item.mktbaby,'婴儿市场价') || _this.isTrue(item.starttime,item.mktchild,'儿童市场价') || _this.isTrue(item.starttime,item.mktaduilt,'成人市场价') || _this.isTrue(item.starttime,item.mktroom,'市场价单房差') ||
+             _this.isTrue(item.starttime,item.sltbaby,'婴儿结算价') || _this.isTrue(item.starttime,item.sltchild,'儿童结算价') || _this.isTrue(item.starttime,item.sltaduilt,'成人结算价') || _this.isTrue(item.starttime,item.sltroom,'结算价单房差') ||
+             _this.isTrue(item.starttime,item.costbaby,'婴儿成本价') || _this.isTrue(item.starttime,item.costchild,'儿童成本价') || _this.isTrue(item.starttime,item.costaduilt,'成人成本价') || _this.isTrue(item.starttime,item.costroom,'成本价单房差')
+           ) throw false
+
+           _this.allChecked = false
+           delete item.checked
+         })
+       }catch (e){
+          throw e
+       }
          console.log("保存了",_this.gobackArr);
          for(var i=0;i<_this.gobackArr.length;i++){
             _this.savegobackArr= _this.savegobackArr.concat(_this.gobackArr[i].others)
@@ -1709,11 +1786,7 @@
              _this.platformsArrXin= _this.platformsArrXin.slice(0,1)
          }
         
-         for(var i=0;i<_this.checkArr.length;i++){
-
-           _this.checkArr[i].confirm=Number(_this.checkArr[i].confirm);
-            _this.checkArr[i].deadline=Number(_this.checkArr[i].deadline);
-         }
+       
          _this.tongbudetailArr= _this.tongbudetailArr.concat(_this.checkArr);
        
          _this.platformsArr= _this.platformsArr.concat(_this.platformsArrXin);
@@ -1726,37 +1799,9 @@
           });
           return;
         }
-        if (_this.checkArr.length == 0) {
-          this.$message({
-            message: '请添加发团信息',
-            type: 'warning'
-          });
-          return;
-        }
+        
        
-       try{
-         this.checkArr.forEach(function (item,idx) {
-           item.surplus = _this.surpluss;
-
-          //  if(isNaN(item.plan) || parseFloat(item.plan)<=0 || parseInt(item.plan)!=item.plan) {
-          //    _this.$message({
-          //      message: item.starttime+'日计划人数为大于或等于1的整数',
-          //      type: 'warning'
-          //    })
-          //    throw false
-          //  }
-           if(_this.isTrue(item.starttime,item.deadline,'截止天数') ||
-             _this.isTrue(item.starttime,item.mktbaby,'婴儿市场价') || _this.isTrue(item.starttime,item.mktchild,'儿童市场价') || _this.isTrue(item.starttime,item.mktaduilt,'成人市场价') || _this.isTrue(item.starttime,item.mktroom,'市场价单房差') ||
-             _this.isTrue(item.starttime,item.sltbaby,'婴儿结算价') || _this.isTrue(item.starttime,item.sltchild,'儿童结算价') || _this.isTrue(item.starttime,item.sltaduilt,'成人结算价') || _this.isTrue(item.starttime,item.sltroom,'结算价单房差') ||
-             _this.isTrue(item.starttime,item.costbaby,'婴儿成本价') || _this.isTrue(item.starttime,item.costchild,'儿童成本价') || _this.isTrue(item.starttime,item.costaduilt,'成人成本价') || _this.isTrue(item.starttime,item.costroom,'成本价单房差')
-           ) throw false
-
-           _this.allChecked = false
-           delete item.checked
-         })
-       }catch (e){
-          throw e
-       }
+     
         // 合作平台
 
         let platforms = [];
@@ -1768,7 +1813,7 @@
         // 结束时间
         if(_this.operationType.type == 'add'){
           _this.startTimeArr.forEach(function (item) {
-            _this.TemStArr.push(_this.getDateEnd(item, _this.checkItem.days,true))
+            _this.TemStArr.push(_this.getDateEnd(item, _this.trafficDays,true))
           })
         }
 
@@ -1781,7 +1826,7 @@
         _this.checkArr.forEach(function (item,idx) {
           item.endtime = _this.TemStArr[idx] || ''
         })
-        /* 发布线路 添加时候的保存  满意 */
+        /* 发布线路 添加时候的保存  */
          let savePara={
            lineid:_this.groupList.lineid,
            notify: _this.groupList.notify|| '',
@@ -1821,7 +1866,7 @@
             delete item.teamno;
             delete item.surplus;
           })
-          /* 编辑的时候 保存  满意 */
+          /* 编辑的时候 保存  */
           groupupdate({
             token: paramm.getToken(),
             lineid: _this.groupList.lineid,
@@ -1859,6 +1904,225 @@
       },
       handleHide: function (option) {
         this.$emit('setMode', 'list', option);
+      },
+      dates(){
+
+         var _this=this;
+  console.log("进来时调用",_this.newDateArr.length,typeof _this.newDateArr)
+    var currentDate = new Date();
+    var currentMonthDiff = 0;
+    var currentyear = currentDate.getFullYear();//年
+    var today = getDate(-1);
+    var calendar = {
+        add: function (opts,params) {
+            var wrap = $(".date-list-wrap");
+            $("<div>", { "class": "calendar_custom_v2 date-picker-dialog" }).appendTo(wrap).datepickerCalendar(opts, $.extend(params,{url:""}));
+        },
+        sub: function () {
+            var wrap = $(".date-list-wrap");
+            var last = wrap.find(".date-picker-dialog").last();
+            last.find("td.selected").each(function () {
+                var date = $(this).attr("title");
+                console.log(date,666666);
+                /* 满意 */
+                 for(var i=0;i< _this.checkArr.length;i++){
+              if( _this.checkArr[i].starttime==date){
+                    _this.checkArr.splice(i,1)
+                   console.log("删除了", _this.checkArr)
+              }
+             }
+            })
+            last.remove();
+        },
+        index: function () {
+            $("#line-price .index").each(function (index) {$(this).text((index+1).LenWithZero(2)) });
+        },
+        cancel: function (date) {
+            $(".date-list-wrap").find(".c" + date).removeClass("selected");
+        }
+    }
+
+
+    function getDate(dates) {
+        var dd = new Date();
+        dd.setDate(dd.getDate() + dates);
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1;
+        var d = dd.getDate();
+        return new Date(y, m - 1, d);
+    }
+
+    function getWeek(date){
+        function weekMap(n){
+            switch (n){
+                case 0:return "周日";break;
+                case 1:return "周一";break;
+                case 2:return "周二";break;
+                case 3:return "周三";break;
+                case 4:return "周四";break;
+                case 5:return "周五";break;
+                case 6:return "周六";break;
+            }
+        }
+        var d=new Date(date);
+        return weekMap(d.getDay());
+    }
+    //时间格式化
+    Date.prototype.format = function (format) {
+        var o = {
+            "M+": this.getMonth() + 1,  //month
+            "d+": this.getDate(),     //day
+            "h+": this.getHours(),    //hour
+            "m+": this.getMinutes(),  //minute
+            "s+": this.getSeconds(), //second
+            "q+": Math.floor((this.getMonth() + 3) / 3),  //quarter
+            "S": this.getMilliseconds() //millisecond
+        }
+        if (typeof this == "string") { return this; }
+        if (format == null || format == "undefined") { format = "yyyy-MM-dd"; }
+
+        if (/(y+)/.test(format)) {
+            format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+            }
+        }
+        return format;
+    }
+
+     function getMonth(number) {
+         var d = new Date(currentyear, currentDate.getMonth(), 1);
+         var year = d.getFullYear();
+         var month = d.getMonth() + number;
+         return new Date(year, month, 1);
+     }
+
+     function calendarSelect(month,selectedList,whiteList){
+       
+         calendar.add({
+             defaultDate: getMonth(month), beforeShowDay: function (date) { var selected = "",allow=""; if ($.inArray(date.format(), selectedList) > -1) { selected = " selected "; }if ($.inArray(date.format(), whiteList) > -1 || whiteList.length==0) { allow = " allowselect "; } if (date.getTime() > today.getTime()) { if (date.getDay() == 6 || date.getDay() == 0) { return [false, allow+"weekend" + selected + " c" + date.format(), date.format()]; } else { return [false, allow+"workday" + selected + " c" + date.format(), date.format()]; } } else { return [false, selected + "c" + date.format(), ""]; } }
+         }, { url: "" });
+     }
+
+     function orderIndexNum(obj) {
+         $(obj).closest('table').find('.index').each(function (index, element) {
+             $(this).text(index + 1);
+         });
+         if (typeof resetTr != "undefined") resetTr();
+     }
+
+    /*满意*/
+
+      function getMonthDiff(datelist){
+         var newDate = new Date();
+         var beginday = newDate.getTime();
+         var endday = newDate.getTime();
+         for(var i = 0;i < datelist.length; i++) {
+             var selectday = Date.parse(new Date(datelist[i]));
+             if(selectday>endday){
+                 endday = selectday;
+             }
+         }
+         newDate.setTime(beginday);
+         var date1 = newDate.format('yyyy-MM-dd');
+         newDate.setTime(endday);
+         var date2 = newDate.format('yyyy-MM-dd');
+
+         //用-分成数组
+         date1 = date1.split("-");
+         date2 = date2.split("-");
+         //获取年,月数
+         var year1 = parseInt(date1[0]) ,
+             month1 = parseInt(date1[1]) ,
+             year2 = parseInt(date2[0]) ,
+             month2 = parseInt(date2[1]) ,
+         //通过年,月差计算月份差
+             months = (year2 - year1) * 12 + (month2-month1) + 1;
+         return months;
+     }
+     
+     var monthdiff = getMonthDiff(_this.newDateArr);
+     for (var i = 0; i <monthdiff; i++) {
+         calendarSelect(i,_this.newDateArr,[]);
+     }
+     currentMonthDiff=monthdiff+1;
+
+     //添加
+     $(".button-operate-datepicker-add").click(function () {
+         if (currentMonthDiff > 8) {    
+          _this.$message({
+          showClose: true,
+          message: '只能添加近8个月份额',
+          type: 'warning'
+        });; return; }
+         calendarSelect(currentMonthDiff, [], []);
+         currentMonthDiff++;
+ 
+     });
+     //删除
+     $(".button-operate-datepicker-sub").click(function () {
+         console.log(9999999,currentMonthDiff)
+         currentMonthDiff < 1 ? currentMonthDiff = 0 : currentMonthDiff--, calendar.sub();
+
+     });
+     
+     /* 选中每一个日期触发的事件  满意*/
+     $(".date-list-wrap").on("click", ".allowselect", function () {
+           console.log("选中日期了");
+         var td = $(this);
+          var date=td.attr("title");
+          console.log(date)
+         td.toggleClass("selected");
+         if (td.hasClass("selected")) {
+              _this.checkArr.push(
+          { checked: '',
+            starttime: date,
+            endtime:'',
+            isorder: true,
+            confirm: "0",
+            deadline:0,
+            mktbaby: '',
+            mktchild:'',
+            mktaduilt: '',
+            mktroom: '',
+            sltbaby: '',
+            sltchild: '',
+            sltaduilt: '',
+            sltroom: '',
+            costbaby: '',
+            costchild: '',
+            costaduilt: '',
+            costroom: '',
+            plan: 0,
+            book: 0,
+            sit: 0,
+            isenable: true,
+            tid:"",
+          })
+          for(var i=0;i< _this.checkArr.length;i++){
+            _this.checkArr[i].newstarttime= new Date(_this.checkArr[i].starttime);
+            _this.startTimeArr.push(_this.checkArr[i].newstarttime)
+          }
+         } else {
+             for(var i=0;i< _this.checkArr.length;i++){
+              if( _this.checkArr[i].starttime==date){
+                    _this.checkArr.splice(i,1)
+                   console.log("删除了", _this.checkArr)
+              }
+             }
+         }
+       
+     })
+   //清除所选日期
+     $(".action-clearday").click(function () {
+       console.log("触发了");
+        _this.checkArr=[];
+         $(".date-list-wrap .allowselect").removeClass("selected");
+     });
+
       }
     },
     created(){
@@ -1866,77 +2130,119 @@
     },
     beforeMount () {
       if(this.operationType.type == 'edit' || this.operationType.type == 'detail') this.getdetail();
-    }
+    },
+    // updated(){
+    //    this.dates();
+    // },
+     
+     mounted(){
+      if(this.operationType.type=="add"){
+        this.dates();
+      }
+   }
   }
+ 
 </script>
 
-<style scoped lang="scss">
+<style>
 
+ /* 日历样式 */
+
+  .traffic-noraml-wrap{ height: auto; overflow:hidden; width: 100%;}
+       .mb20 {margin-bottom:  20px}
+      .mb10 {margin-bottom:  10px}
+       .ml6 {margin-left: 6px}
+       .site-map-title-wrap {
+          border-bottom: 2px solid #e5e5e5;
+          height: 36px;
+           line-height: 36px;
+           *position: relative;
+      }
+      .button-middle-v1 {font-size:12px;line-height:28px;height:28px;padding:0 20px;display:inline-block;cursor:pointer;}
+      .button-bg-green{background-color:#4bba46;border:solid 1px #3d9e39;.select-more-white-button{border-left:solid 1px #42a03e;}.select-dropdown-box{background-color:#4bba46;border:solid 1px #42a03e !important;}.select-dropdown-item a:hover,.selected a{background-color:#42a03e !important;}.select-dropdown-item{border-bottom:solid 1px #42a03e !important;a{color:#fff !important;}}}
+       .button-font-white{color:#fff;}
+
+     .site-map-title-wrap .map-title-bar {
+         display: inline-block;
+         font-size: 14px;
+          font-weight: 700;
+         font-family: '微软雅黑';
+         padding: 0 15px;
+         border-bottom: 2px solid #2d92d8;
+          *display: inline;
+          zoom: 1;
+         height: 36px;
+           line-height: 36px;
+      }
+     .group-box span{ font-size: 14px; font-weight: bold; margin-right: 20px; cursor: pointer; line-height: 30px; margin-bottom: 10px; color: #06c;}
+
+     .date-list-wrap{ height: auto; overflow:hidden;}
+      .date-list-wrap .calendar_custom_v2{position:static;float:left;margin:10px;}
+      .date-list-wrap .ui-datepicker-prev,.date-list-wrap .ui-datepicker-next{display:none;}
+     .date-list-wrap .ui-state-disabled .ui-state-default{color:#ccc;}
+      .date-list-wrap .allowselect{cursor:pointer !important;}
+   .date-list-wrap .allowselect .ui-state-default{color:#000;}
+      .date-list-wrap .selected{background-attachment:scroll;background-clip:border-box;background-color:#fdf8e1!important;background-image:url("selected.png") !important;background-origin:padding-box;background-position:center top;background-repeat:no-repeat;background-size:auto auto}
+
+      /* 以前样式 */
   header {
     padding: 0 40px;
     background: white;
     margin-bottom: 30px;
     padding-top: 20px;
-    .defaultbutton {
+  }
+  header .defaultbutton {
       border-color: #9ad4d6;
       color: #2cb1b6;
       float: right;
       margin-top: -10px;
     }
-    .el-menu-item {
+  header .el-menu-item {
       height: 36px;
       line-height: 36px;
       border-top: 3px solid transparent;
       padding: 0;
-      a {
+     
+    }
+ header .el-menu-item a {
         padding: 0 20px;
         display: block;
       }
-    }
-    .el-menu-item:hover {
+  header .el-menu-item:hover {
       background: transparent;
       border-bottom: transparent;
       color: #3ec3c8;
       height: 36px;
       line-height: 36px;
     }
-    .el-menu-item.is-active {
+  header .el-menu-item .is-active {
       background: #eef1f6;
       border-top: 3px solid #3ec3c8!important;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
       color: #333;
     }
-  }
-  .el-select-dropdown__item.selected{
+  .el-select-dropdown__item .selected{
    background-color:#fff;
    color:#000;
   }
-  section{
-    .el-col{
-      li{
+
+section .el-col li{
         float: left;
         padding: 0px 10px;
         margin: 0 5px;
         cursor: pointer;
         border-radius: 5px;
         border: 1px solid transparent;
-        &:hover,
-        .checked {
+}
+/* 看下有没有问题 */
+section .el-col li:hover,  .checked {
           border: 1px solid #3ec3c8!important;
           color: #3ec3c8;
-        }
-      }
-    }
-    .demo-ruleForm{
-      .el-form-item {
-        .el-col-4 {
-          width: 200px;
-        }
-      }
-    }
+   }
+  section   .demo-ruleForm .el-col-4{
+    width: 200px;
   }
-
   .el-breadcrumb {
     font-size: 18px;
     margin-bottom: 20px;
@@ -1953,7 +2259,7 @@
   table{
     font-size:12px;
   }
-  .cell{
+  .el-table .cell{
     padding: 0 5px;
   }
   .demo-form-inline{
@@ -1961,17 +2267,17 @@
   }
   .trafficRadio{
     padding-left: 50px;
-    .trafficRadio_son{
+   
+  }
+ .trafficRadio  .trafficRadio_son{
       margin: 0 30px;
     }
-  }
-
   .adulttable {
     margin-top: 20px;
     margin-bottom: 20px;
     border: 1px solid #dee5ec;
-    thead {
-      td {
+  }
+   .adulttable thead td {
         background: #f5f7f9;
         border-bottom: 1px solid #bfcbda;
         border-right: 1px solid #bfcbda;
@@ -1979,21 +2285,17 @@
         line-height: 40px;
         text-align: center;
       }
-    }
-    tbody, tfoot{
-      td {
+.adulttable tbody td, .adulttable tfoot  td{
         padding: 8px;
         border-bottom: 1px solid #dee5ec;
         border-right: 1px solid #dee5ec;
         min-height: 50px;
         text-align: center;
         vertical-align: middle;
-        .doubleTrc{
+}
+.adulttable tbody td .doubleTrc, .adulttabl tfoot td .doubleTrc{
           margin-top: 10px;
         }
-      }
-    }
-  }
   .trackAdd{
     margin: 0 30px;
   }
