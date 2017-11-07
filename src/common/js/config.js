@@ -18,8 +18,8 @@ export let monthspendDown = `${host}/api/report/finance/pay/export`; //月付款
 export let collectlistDown = `${host}/api/finance/collect/export`; //收款登记
 export let payDown = `${host}/api/finance/pay/export`; //付款登记
 
-export let upload1 = `${host}/file/upyun/getSign`;
-export let upload2 = `${host}/file/upyun/bodySign`;
+export let upload1 = `${host}/api/file/upyun/getSign`;
+export let upload2 = `${host}/api/file/upyun/bodySign`;
 
 export let namelistImport = `${host}/api/order/namelist/import`;
 /* 首页 */
