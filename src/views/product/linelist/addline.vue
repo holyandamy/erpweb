@@ -163,7 +163,7 @@
 							</el-form-item>
               <el-form-item label="上传图片：" label-width="120px" required>
                 <ul v-if='baseImages'>
-                  <li  style='float:left;' v-for="imgSrc0 in baseImages.split(',')">
+                  <li  style='float:left;' v-for="(imgSrc0,index) in baseImages.split(',')" :key="index">
                     <img style='width: 148px;height: 148px;margin: 0 10px;' :src='imgSrc0' alt="">
                   </li>
                 </ul>

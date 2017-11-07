@@ -395,14 +395,14 @@
                         <div class="cell el-tooltip" ><el-input v-model="allcostroom" @change="allCostroom"></el-input></div>
                       </td>
                     </tr>
-                   <!-- 发团时间填充模块 -->
+                   <!-- 发团时间填充模块 满意-->
                     <tr class="el-table__row" v-for='(item,idx) in checkArr' :key="idx">
                       <td class="el-table_1_column_123 el-table-column--selection">
                         <el-checkbox v-model="item.checked" @change='sigCheck'></el-checkbox>
                       </td>
 
                       <td>
-                        <div class="cell" style='cursor: pointer;' @click='sigDel(item,idx)'>删除</div>
+                        <div class="cell" style='cursor: pointer;' @click='sigDel(item,idx)'>{{traffictype!=1?"删除":"---"}}</div>
                       </td>
                       <td width='800'>
                         {{item.starttime }}
@@ -962,11 +962,15 @@
       },
       /* 普通交通和控位交通切换 */
       changeTrack(){
-        if(this.operationType.type == 'add'){ this.checkArr.length=0;}
+        if(this.operationType.type == 'add'){ 
+          this.checkArr.length=0; 
+          this.trackArr=[];
+          this.gobackArr=[];
+          }
         this.allplan=this.alldeadline=this.allmktbaby=this.allmktchild=this.allmktaduilt="";
         this.allmktroom=this.allsltbaby=this.allsltchild=this.allsltaduilt="";
          this.allsltroom=this.allcostbaby=this.allcostchild=this.allcostaduilt=this.allcostroom="";
-         if(this.traffictype!=1){this.dates()}
+         if(this.traffictype!=1){this.dates()}; 
       },
       // 添加单程 
       trackAddSig(){
@@ -1059,8 +1063,8 @@
               paramm.getCode(res.data,_this)
             }else {
               paramm.getCode(res.data,_this)
+              /* 控位交通中弹窗中的交通列表数据渲染 */
               _this.importData = res.data.obj;
-         /*      console.log( _this.importData ) */
               _this.importData.forEach((item) => {
                 if(item.type === 0){
                   item.type = '单程'
@@ -1096,10 +1100,25 @@
       },
       // 删除单程交通
       deleteTrc(idx){
+      
+          for(var k=0;k<this.checkArr.length;k++){
+            if(this.checkArr[k].tid==this.trackArr[idx].tid){
+              this.checkArr.splice(k,1);
+              k--;
+            }
+          }
+        
         this.trackArr.splice(idx,1)
       },
       //删除往返交通
       deleteTfoot(idx){
+        console.log(idx,this.trackArr,99999,this.checkArr);
+        for(var k=0;k<this.checkArr.length;k++){
+            if(this.checkArr[k].tid==this.gobackArr[idx].tid){
+              this.checkArr.splice(k,1);
+              k--;
+            }
+          }
         this.gobackArr.splice(idx,1)
       },
       // 弹框中的导入功能
@@ -1129,11 +1148,8 @@
          console.log(row,"进入联城了")
          this.rowNum=row.others.length;
          this.gobackArr.push(row);
-        // this.lianChengArr.push(row);
-        // this.gobackArr=this.gobackArr.concat(this.lianChengArr);
        }
        this.getTrafficList();
-       /* 请求数据：控位交通需要额外发送请求获取日期以及详情 */
        if(this.traffictype==1){
          let daysPara={
            "token":paramm.getToken(),
@@ -1196,7 +1212,7 @@
       // 编辑时获取信息 满意
       getdetail () {
         let _this = this;
-       
+
         groupdetail({token: paramm.getToken(),id: this.categoryId}).then(function (res) {
           console.log("进入编辑页",res.data.obj);
           // 1.交通信息部分
@@ -1906,12 +1922,10 @@
         this.$emit('setMode', 'list', option);
       },
       dates(){
-
          var _this=this;
-  console.log("进来时调用",_this.newDateArr.length,typeof _this.newDateArr)
     var currentDate = new Date();
     var currentMonthDiff = 0;
-    var currentyear = currentDate.getFullYear();//年
+    var currentyear = currentDate.getFullYear();
     var today = getDate(-1);
     var calendar = {
         add: function (opts,params) {

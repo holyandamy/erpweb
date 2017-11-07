@@ -17,8 +17,10 @@ export let monthearnDown = `${host}/api/report/finance/collect/export`; //月收
 export let monthspendDown = `${host}/api/report/finance/pay/export`; //月付款统计
 export let collectlistDown = `${host}/api/finance/collect/export`; //收款登记
 export let payDown = `${host}/api/finance/pay/export`; //付款登记
+
 export let upload1 = `${host}/file/upyun/getSign`;
 export let upload2 = `${host}/file/upyun/bodySign`;
+
 export let namelistImport = `${host}/api/order/namelist/import`;
 /* 首页 */
 export const dashboard = params => { return axios.post(`${base}/sys/dashboard/info`, params).then(res => res); };//首页信息
@@ -43,12 +45,13 @@ export const teamlist = params => { return axios.post(`${base}/line/team/list`, 
 export const grouplist = params => { return axios.post(`${base}/line/team/list`, params).then(res => res); };//模板列表
 export const reserveNum = params => { return axios.post(`${base}/sys/user/match`, params).then(res => res); };//预定输入手机号或公司名
 export const groupsave = params => { return axios.post(`${base}/line/team/save`, params).then(res => res); };//新增发团计划
-export const orderSave = params => { return axios.post(`${base}/order/save`, params).then(res => res); };//发团 预定
+export const orderSave = params => { return axios.post(`${base}/order/save`, params).then(res => res); };//发团 预定 提交 满意
 export const orderdet = params => { return axios.post(`${base}/line/team/order/detail`, params).then(res => res); }//发团 下单详情
 export const groupdetail = params => { return axios.post(`${base}/line/team/detail`, params).then(res => res); };//发团列表 详情
 export const groupupdate = params => { return axios.post(`${base}/line/team/update`, params).then(res => res); };//发团列表 编辑
 export const groupStop = params => { return axios.post(`${base}/line/team/status`, params).then(res => res); };//发团列表 停止
-export const groupDel = params => { return axios.post(`${base}/line/team/del`, params).then(res => res); };//发团列表- 编辑- 删除
+
+export const groupDel = params => { return axios.post(`${base}/line/team/del`, params).then(res => res); };//发团列表- 编辑- 删除  满意
 export const groupApprove = params => { return axios.post(`${base}/line/team/approve`, params).then(res => res); };//发团列表- 审批
 export const ordernameslist = params => { return axios.post(`${base}/order/team/namelist`, params).then(res => res); };//发团列表- 出团名单
 export const groupexists = params => { return axios.post(`${base}/line/team/exists`, params).then(res => res); };//发团列表- 线路是否已存在团期
