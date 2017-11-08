@@ -9,11 +9,13 @@ build_test_docker:
   stage: build
   image: docker:latest
   script:
+    - yarn
+    - yarn run build
     - docker build -f Dockerfile -t $PROJECT_NAME .
     - docker tag $PROJECT_NAME git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
     - docker push git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
   tags:
-    - docker
+    - erptest
   only:
     - /^release-*/
 
@@ -23,7 +25,7 @@ deploy_test_docker:
   script: 
     - docker stack deploy -c deploy/deploy.test.yml $PROJECT_NAME
   tags:
-    - docker
+    - erptest
   only:
     - /^release-*/
 
