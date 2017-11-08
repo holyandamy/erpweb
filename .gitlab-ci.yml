@@ -9,7 +9,7 @@ build_test_docker:
   stage: build
   image: docker:latest
   cache:
-    path:
+    paths:
       - ~/.cache/
   script:
     - yarn
