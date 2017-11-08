@@ -94,7 +94,8 @@
                   </el-select>
                 </el-col>
               </el-form-item>
-              <el-form-item label="目的地：" prop ="backaddress" required>
+							<!-- 满意 -->
+              <el-form-item label="目的地" required>
                 <el-col :span="5">
 
                   <el-select filterable  v-model="baseForm.toprovinceid" placeholder="请选择" @change="changeprovinceback">
@@ -163,7 +164,7 @@
 							</el-form-item>
               <el-form-item label="上传图片：" label-width="120px" required>
                 <ul v-if='baseImages'>
-                  <li  style='float:left;' v-for="imgSrc0 in baseImages.split(',')">
+                  <li  style='float:left;' v-for="(imgSrc0,index) in baseImages.split(',')" :key="index">
                     <img style='width: 148px;height: 148px;margin: 0 10px;' :src='imgSrc0' alt="">
                   </li>
                 </ul>
@@ -210,7 +211,7 @@
 							<el-row>
 								<el-col :span="7" class="star">
 									<!--<span style="color: red;">*</span>-->
-									<el-form-item label="标题：" prop="title" required>
+									<el-form-item label="标题："  required>
 										<el-input v-model="route.title" class="insertinput"></el-input>
 									</el-form-item>
 								</el-col>
@@ -246,7 +247,7 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-									<el-form-item label="行程：" prop="content" required>
+									<el-form-item label="行程：" required>
 										<el-input type="textarea" v-model="route.content"></el-input>
 									</el-form-item>
 								</el-col>

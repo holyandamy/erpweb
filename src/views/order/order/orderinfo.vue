@@ -57,6 +57,7 @@
 							负责人：{{detail.creater}}
 						</el-col>
 					</el-row>
+					<!-- 满意 -->
 					<el-row>
 						<el-col :span="12">
               订单金额：{{detail.orderpay}}元

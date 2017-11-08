@@ -59,23 +59,24 @@
                 <tr v-for='(item,idx) in trackArr' :key="idx">
                   <!-- 路线名称 -->
                   <td >
-                    <el-input v-model='item.name' ></el-input>
+                    <el-input v-model='item.name' :disabled="traffictype==1"></el-input>
                   </td>
                   <td>
                     <el-tag type="gray">单程</el-tag>
                   </td>
                   <td>
-                    <el-input  style='width: 40%;'  v-model='item.depart'></el-input> --- <el-input   style='width: 40%;' v-model='item.dest'></el-input>
+                    <el-input  style='width: 40%;'  v-model='item.depart' :disabled="traffictype==1"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="traffictype==1"></el-input>
                   </td>
                   <td>
-                    <el-input  v-model='item.stop'></el-input>
+                    <el-input  v-model='item.stop' :disabled="traffictype==1"></el-input>
                   </td>
                   <td>
-                    <el-input  v-model='item.flightno'></el-input>
+                    <el-input  v-model='item.flightno' :disabled="traffictype==1"></el-input>
                   </td>
                   <td>
                    
                     <el-time-picker
+                      :disabled="traffictype==1"
                       :editable="true"
                       :clearable="true"
                       style='width: 30%;'
@@ -83,8 +84,9 @@
                       :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                       placeholder="时间">
                     </el-time-picker> ---
-                    <el-checkbox v-model="item.arrivetype">次日</el-checkbox>
+                    <el-checkbox v-model="item.arrivetype" :disabled="traffictype==1">次日</el-checkbox>
                     <el-time-picker
+                      :disabled="traffictype==1"
                       :editable="true"
                       :clearable="true"
                       style='width: 30%;'
@@ -105,23 +107,24 @@
                   <tr>
                     <!-- 路线名称 -->
                     <td :rowspan="rowNum">
-                      <el-input v-model='item.name' ></el-input>
+                      <el-input v-model='item.name' :disabled="traffictype==1"></el-input>
                     </td>
                     <td>
                       <el-tag type="gray">{{ item.type=="联城"?"联城" : "往" }}</el-tag>
                     </td>
                     <td>
-                      <el-input  style='width: 40%;'  v-model='item.depart'></el-input> --- <el-input   style='width: 40%;' v-model='item.dest'></el-input>
+                      <el-input  style='width: 40%;'  v-model='item.depart' :disabled="traffictype==1"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="traffictype==1"></el-input>
                     </td>
                     <td>
-                      <el-input  v-model='item.stop'></el-input>
+                      <el-input  v-model='item.stop' :disabled="traffictype==1"></el-input>
                     </td>
                     <td>
-                      <el-input  v-model='item.flightno'></el-input>
+                      <el-input  v-model='item.flightno' :disabled="traffictype==1"></el-input>
                     </td>
                     <td>
                      
                       <el-time-picker
+                      :disabled="traffictype==1"
                         :editable="false"
                         :clearable="false"
                         style='width: 30%;'
@@ -129,8 +132,9 @@
                         :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                         placeholder="时间">
                       </el-time-picker> ---
-                       <el-checkbox v-model="item.arrivetype">次日</el-checkbox>
+                       <el-checkbox v-model="item.arrivetype" :disabled="traffictype==1">次日</el-checkbox>
                       <el-time-picker
+                       :disabled="traffictype==1"
                         :editable="false"
                         :clearable="false"
                         style='width: 30%;'
@@ -150,16 +154,17 @@
                         <el-tag type="gray">{{ (item.type=="联城")||(item.type==2)?"联城" : "返" }}</el-tag>
                     </td>
                     <td>
-                      <el-input  style='width: 40%;'  v-model='item.depart'></el-input> --- <el-input   style='width: 40%;' v-model='item.dest'></el-input>
+                      <el-input  style='width: 40%;'  v-model='item.depart' :disabled="traffictype==1"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="traffictype==1"></el-input>
                     </td>
                     <td>
-                      <el-input  v-model='item.stop'></el-input>
+                      <el-input  v-model='item.stop' :disabled="traffictype==1"></el-input>
                     </td>
                     <td>
-                      <el-input  v-model='item.flightno'></el-input>
+                      <el-input  v-model='item.flightno' :disabled="traffictype==1"></el-input>
                     </td>
                     <td>
                       <el-time-picker
+                      :disabled="traffictype==1"
                         :editable=false
                         :clearable=false
                         style='width: 30%;'
@@ -167,8 +172,9 @@
                         :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                         placeholder="时间">
                       </el-time-picker> ---
-                      <el-checkbox v-model="item.arrivetype">次日</el-checkbox>
+                      <el-checkbox v-model="item.arrivetype" :disabled="traffictype==1">次日</el-checkbox>
                       <el-time-picker
+                      :disabled="traffictype==1"
                         :editable=false
                         :clearable=false
                         style='width: 30%;'
@@ -395,21 +401,22 @@
                         <div class="cell el-tooltip" ><el-input v-model="allcostroom" @change="allCostroom"></el-input></div>
                       </td>
                     </tr>
-                   <!-- 发团时间填充模块 -->
+                   <!-- 发团时间填充模块 满意-->
                     <tr class="el-table__row" v-for='(item,idx) in checkArr' :key="idx">
                       <td class="el-table_1_column_123 el-table-column--selection">
                         <el-checkbox v-model="item.checked" @change='sigCheck'></el-checkbox>
                       </td>
 
                       <td>
-                        <div class="cell" style='cursor: pointer;' @click='sigDel(item,idx)'>删除</div>
+                        <div class="cell" style='cursor: pointer;' @click='sigDel(item,idx)'>{{traffictype!=1?"删除":"---"}}</div>
                       </td>
                       <td width='800'>
                         {{item.starttime }}
                       </td>
                       <td>
                         <div class="cell" >
-                          <el-input v-model="item.plan"></el-input>
+                          <!-- 计划人数 -->
+                          <el-input v-model="item.plan" :disabled="traffictype==1"></el-input>
                           <span v-if="operationType.type == 'edit'" style='color: green;'>已收：{{item.book + item.sit}}</span>
 
                         </div>
@@ -962,11 +969,15 @@
       },
       /* 普通交通和控位交通切换 */
       changeTrack(){
-        if(this.operationType.type == 'add'){ this.checkArr.length=0;}
+        if(this.operationType.type == 'add'){ 
+          this.checkArr.length=0; 
+          this.trackArr=[];
+          this.gobackArr=[];
+          }
         this.allplan=this.alldeadline=this.allmktbaby=this.allmktchild=this.allmktaduilt="";
         this.allmktroom=this.allsltbaby=this.allsltchild=this.allsltaduilt="";
          this.allsltroom=this.allcostbaby=this.allcostchild=this.allcostaduilt=this.allcostroom="";
-         if(this.traffictype!=1){this.dates()}
+         if(this.traffictype!=1){this.dates()}; 
       },
       // 添加单程 
       trackAddSig(){
@@ -975,13 +986,13 @@
           {
           type:0,
           groupid:_this.getgroupid(),
-          name:'上海一日游',
-          depart:'北京',
-          dest:'上海',
-          stop:'南京',
-          flightno:'HK00123',
-          starttime:new Date(2016, 9, 10, 18, 40),
-          endtime:new Date(2016, 9, 10, 18, 40),
+          name:'',
+          depart:'',
+          dest:'',
+          stop:'',
+          flightno:'',
+          starttime:new Date(2016, 9, 10, 0, 0),
+          endtime:new Date(2016, 9, 10, 0, 0),
           arrivetype:false,
           others:[]
           }
@@ -994,39 +1005,39 @@
         _this.gobackArr.push({
             groupid:trackgetgroupid,
             type:1,
-            name:'英国两日游',
-            depart:'北京',
-            dest:'纽约',
-            stop:'英国',
-            flightno:'HK00123',
-            starttime:new Date(2016, 9, 10, 18, 40),
-            endtime:new Date(2016, 9, 10, 18, 40),
+            name:'',
+            depart:'',
+            dest:'',
+            stop:'',
+            flightno:'',
+            starttime:new Date(2016, 9, 10, 0, 0),
+            endtime:new Date(2016, 9, 10, 0, 0),
             arrivetype:false,
             others:[{type:1,
             groupid:trackgetgroupid,
-            name:'英国两日游',
-            depart:'北京',
-            dest:'纽约',
-            stop:'英国',
-            flightno:'HK00123',
-            starttime:new Date(2016, 9, 10, 18, 40),
-            endtime:new Date(2016, 9, 10, 18, 40),
+            name:'',
+            depart:'',
+            dest:'',
+            stop:'',
+            flightno:'',
+            starttime:new Date(2016, 9, 10, 0, 0),
+            endtime:new Date(2016, 9, 10, 0, 0),
             arrivetype:false},
             {type:1,
             groupid:trackgetgroupid,
-            name:'英国两日游',
-            depart:'上海',
-            dest:'武汉',
-            stop:'南京',
-            flightno:'SH001',
-            starttime:new Date(2016, 9, 10, 18, 40),
-            endtime:new Date(2016, 9, 10, 18, 40),
+            name:'',
+            depart:'',
+            dest:'',
+            stop:'',
+            flightno:'',
+            starttime:new Date(2016, 9, 10, 0, 0),
+            endtime:new Date(2016, 9, 10, 0, 0),
             arrivetype:false}]
           })
       },
       //导入交通
       insertTrack(){
-        console.log(666666,this.trafficDays);
+       
         if(this.trafficDays<1&&this.traffictype==1&&this.operationType.type !== 'edit'){
           this.$message({
           message: '请先选择线路再导入控位交通！',
@@ -1045,22 +1056,23 @@
       _this.newTimeArr=[];
         if(_this.traffictype==1){
           /* 控位交通的获取列表的接口 */
-          console.log(9999999999,_this.checkArr);
+          console.log("控位交通的获取列表的接口")
           if(_this.checkArr.length!=0){
                 for(var i=0;i<_this.checkArr.length;i++){
               _this.newTimeArr.push(_this.checkArr[i].date||_this.checkArr[i].starttime)
             }
           }
-         console.log(11111,_this.newTimeAr);
+
           let dates=_this.newTimeArr.length==0?"":_this.newTimeArr.join(",");
+          // 查询控位交通列表
           trafficlist({token: paramm.getToken(),day: _this.trafficDays,title:_this.formName,dates:dates}).then( (res)=> {
 
            if(res.data.error || res.data.err) {
               paramm.getCode(res.data,_this)
             }else {
-              paramm.getCode(res.data,_this)
+              
+              /* 控位交通中弹窗中的交通列表数据渲染 */
               _this.importData = res.data.obj;
-         /*      console.log( _this.importData ) */
               _this.importData.forEach((item) => {
                 if(item.type === 0){
                   item.type = '单程'
@@ -1075,6 +1087,7 @@
         }
         //普通交通的搜索功能
         else{
+           console.log("普通交通的获取列表的接口")
           let templatePara={
             "token": paramm.getToken(),
             "title":_this.formName
@@ -1096,10 +1109,25 @@
       },
       // 删除单程交通
       deleteTrc(idx){
+      
+          for(var k=0;k<this.checkArr.length;k++){
+            if(this.checkArr[k].tid==this.trackArr[idx].tid){
+              this.checkArr.splice(k,1);
+              k--;
+            }
+          }
+        
         this.trackArr.splice(idx,1)
       },
       //删除往返交通
       deleteTfoot(idx){
+        console.log(idx,this.trackArr,99999,this.checkArr);
+        for(var k=0;k<this.checkArr.length;k++){
+            if(this.checkArr[k].tid==this.gobackArr[idx].tid){
+              this.checkArr.splice(k,1);
+              k--;
+            }
+          }
         this.gobackArr.splice(idx,1)
       },
       // 弹框中的导入功能
@@ -1113,10 +1141,11 @@
         for(var i=0;i<row.others.length;i++){
           row.others[i].starttime= new Date(2017,9,10, row.others[i].starttime.slice(0,row.others[i].starttime.indexOf(":") ), row.others[i].starttime.slice(row.others[i].starttime.indexOf(":")+1,row.others[i].starttime.indexOf(":")+3 ));
           row.others[i].endtime= new Date(2017,9,10, row.others[i].endtime.slice(0,row.others[i].endtime.indexOf(":") ), row.others[i].endtime.slice(row.others[i].endtime.indexOf(":")+1,row.others[i].endtime.indexOf(":")+3 ));
+          row.others[i].arrivetype=row.others[i].arrivetype==0?false:true;
         }
          row.starttime=new Date(2017,9,10,hh,mm);
          row.endtime=new Date(2017,9,10,ehh,emm);
-       console.log(1010,row.others)
+       console.log(1010,row,row.others)
         /* 处理当日 次日问题 */
         row.arrivetype=row.arrivetype==0?false:true;
         /* 处理导入后单程  往返  联城*/
@@ -1129,11 +1158,8 @@
          console.log(row,"进入联城了")
          this.rowNum=row.others.length;
          this.gobackArr.push(row);
-        // this.lianChengArr.push(row);
-        // this.gobackArr=this.gobackArr.concat(this.lianChengArr);
        }
        this.getTrafficList();
-       /* 请求数据：控位交通需要额外发送请求获取日期以及详情 */
        if(this.traffictype==1){
          let daysPara={
            "token":paramm.getToken(),
@@ -1146,7 +1172,8 @@
         row.importEndTime=yyear+"-"+ymonth+"-"+ydate;
        
         trafficdays(daysPara).then(function(res){
-          console.log("控位交通",res.data.obj)
+          console.log("控位交通",res.data.obj);
+          paramm.getCode(res.data,_this)
           for(var i=0;i<res.data.obj.length;i++){
             res.data.obj[i].starttime= res.data.obj[i].date;
            /*  res.data.obj[i].endtime= res.data.obj[i].starttime+_this.trafficDays; */ 
@@ -1171,7 +1198,7 @@
 
              res.data.obj[i].plan=res.data.obj[i].total+"";
              res.data.obj[i].book=0;
-             res.data.obj[i].sit=res.data.obj[i].surplus;
+             res.data.obj[i].sit=0;
              res.data.obj[i].isenable=true;
              res.data.obj[i].tid=row.tid; 
              res.data.obj[i].checked=false;
@@ -1196,7 +1223,7 @@
       // 编辑时获取信息 满意
       getdetail () {
         let _this = this;
-       
+
         groupdetail({token: paramm.getToken(),id: this.categoryId}).then(function (res) {
           console.log("进入编辑页",res.data.obj);
           // 1.交通信息部分
@@ -1604,6 +1631,10 @@
 //            _this.lineid = _this.checkItem.id;
 //          }
 //        })
+        _this.trackArr=[];
+        _this.gobackArr=[];
+        _this.checkArr=[];
+        $(".date-list-wrap .allowselect").removeClass("selected");
         _this.lineFlag = false;
         _this.routeName = _this.checkItem.name;
         _this.groupList.lineid = _this.checkItem.id;
@@ -1629,7 +1660,7 @@
       },
       // 点击保存
       save () {
-
+       console.log(999999,this.checkArr)
         let _this = this;
         // 保存之前线路必须选择
         if(!_this.groupList.lineid) {
@@ -1906,12 +1937,10 @@
         this.$emit('setMode', 'list', option);
       },
       dates(){
-
          var _this=this;
-  console.log("进来时调用",_this.newDateArr.length,typeof _this.newDateArr)
     var currentDate = new Date();
     var currentMonthDiff = 0;
-    var currentyear = currentDate.getFullYear();//年
+    var currentyear = currentDate.getFullYear();
     var today = getDate(-1);
     var calendar = {
         add: function (opts,params) {
@@ -2048,7 +2077,7 @@
      for (var i = 0; i <monthdiff; i++) {
          calendarSelect(i,_this.newDateArr,[]);
      }
-     currentMonthDiff=monthdiff+1;
+     currentMonthDiff=monthdiff;
 
      //添加
      $(".button-operate-datepicker-add").click(function () {
@@ -2059,12 +2088,13 @@
           type: 'warning'
         });; return; }
          calendarSelect(currentMonthDiff, [], []);
+         console.log(9999999,currentMonthDiff);
          currentMonthDiff++;
  
      });
      //删除
      $(".button-operate-datepicker-sub").click(function () {
-         console.log(9999999,currentMonthDiff)
+         console.log(22222,currentMonthDiff)
          currentMonthDiff < 1 ? currentMonthDiff = 0 : currentMonthDiff--, calendar.sub();
 
      });
@@ -2191,12 +2221,7 @@
     margin-bottom: 30px;
     padding-top: 20px;
   }
-  header .defaultbutton {
-      border-color: #9ad4d6;
-      color: #2cb1b6;
-      float: right;
-      margin-top: -10px;
-    }
+ 
   header .el-menu-item {
       height: 36px;
       line-height: 36px;
@@ -2301,5 +2326,8 @@ section .el-col li:hover,  .checked {
   }
   .el-checkbox-group{
     display: inline;
+  }
+  .el-dialog--small{
+    width: 65%;
   }
 </style>
