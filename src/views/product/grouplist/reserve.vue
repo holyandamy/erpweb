@@ -329,6 +329,7 @@
                     <!--<el-input disabled='disabled' v-model="namelist.name"></el-input> &lt;!&ndash; v-model="namelist.name"&ndash;&gt;-->
                   </td>
                   <td>
+                    <!-- 满意 -->
                     <el-select v-model="item.certtype" placeholder="请选择">
                       <el-option
                         v-for="item in options"
@@ -440,6 +441,7 @@
           remark: [
             { min: 0, max: 120, message: '不能超过120字!', trigger: 'blur' }]
         },
+        /* 满意 */
         options: [{
           value: '1',
           label: '身份证'
@@ -605,9 +607,13 @@
         this.visitorList.list = newChckArr
         this.visitorList.mobile = this.visitorList.mobile.toString()
         /* 满意 */
+        console.log(88888,_this.checkArr)
         orderSave(this.visitorList).then(function (res) {
           if(res.data.error || res.data.err){
-            paramm.getCode(res.data,_this)
+            paramm.getCode(res.data,_this);
+            for(var i=0;i<_this.checkArr.length;i++){
+              _this.checkArr[i].certtype=_this.checkArr[i].value
+            }
           }else {
             paramm.getCode(res.data,_this)
             _this.$emit('setMode', 'list');
@@ -728,7 +734,7 @@
           }else{
             this.edittype = false
           }
-          //设置交通信息模块
+          //设置交通信息模块 满意
            var result=res.data.obj;
              for(var i=0;i<result.traffics.length;i++){
               console.log(result.traffics[i].starttime);
