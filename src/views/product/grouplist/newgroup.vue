@@ -1037,7 +1037,7 @@
       },
       //导入交通
       insertTrack(){
-        console.log(666666,this.trafficDays);
+       
         if(this.trafficDays<1&&this.traffictype==1&&this.operationType.type !== 'edit'){
           this.$message({
           message: '请先选择线路再导入控位交通！',
@@ -1056,20 +1056,21 @@
       _this.newTimeArr=[];
         if(_this.traffictype==1){
           /* 控位交通的获取列表的接口 */
-          console.log(9999999999,_this.checkArr);
+          console.log("控位交通的获取列表的接口")
           if(_this.checkArr.length!=0){
                 for(var i=0;i<_this.checkArr.length;i++){
               _this.newTimeArr.push(_this.checkArr[i].date||_this.checkArr[i].starttime)
             }
           }
-         console.log(11111,_this.newTimeAr);
+
           let dates=_this.newTimeArr.length==0?"":_this.newTimeArr.join(",");
+          // 查询控位交通列表
           trafficlist({token: paramm.getToken(),day: _this.trafficDays,title:_this.formName,dates:dates}).then( (res)=> {
 
            if(res.data.error || res.data.err) {
               paramm.getCode(res.data,_this)
             }else {
-              paramm.getCode(res.data,_this)
+              
               /* 控位交通中弹窗中的交通列表数据渲染 */
               _this.importData = res.data.obj;
               _this.importData.forEach((item) => {
@@ -1086,6 +1087,7 @@
         }
         //普通交通的搜索功能
         else{
+           console.log("普通交通的获取列表的接口")
           let templatePara={
             "token": paramm.getToken(),
             "title":_this.formName
@@ -1139,6 +1141,7 @@
         for(var i=0;i<row.others.length;i++){
           row.others[i].starttime= new Date(2017,9,10, row.others[i].starttime.slice(0,row.others[i].starttime.indexOf(":") ), row.others[i].starttime.slice(row.others[i].starttime.indexOf(":")+1,row.others[i].starttime.indexOf(":")+3 ));
           row.others[i].endtime= new Date(2017,9,10, row.others[i].endtime.slice(0,row.others[i].endtime.indexOf(":") ), row.others[i].endtime.slice(row.others[i].endtime.indexOf(":")+1,row.others[i].endtime.indexOf(":")+3 ));
+          row.others[i].arrivetype=row.others[i].arrivetype==0?false:true;
         }
          row.starttime=new Date(2017,9,10,hh,mm);
          row.endtime=new Date(2017,9,10,ehh,emm);
@@ -1169,7 +1172,8 @@
         row.importEndTime=yyear+"-"+ymonth+"-"+ydate;
        
         trafficdays(daysPara).then(function(res){
-          console.log("控位交通",res.data.obj)
+          console.log("控位交通",res.data.obj);
+          paramm.getCode(res.data,_this)
           for(var i=0;i<res.data.obj.length;i++){
             res.data.obj[i].starttime= res.data.obj[i].date;
            /*  res.data.obj[i].endtime= res.data.obj[i].starttime+_this.trafficDays; */ 
