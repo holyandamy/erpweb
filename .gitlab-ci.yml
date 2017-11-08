@@ -8,6 +8,9 @@ variables:
 build_test_docker:
   stage: build
   image: docker:latest
+  cache:
+    path:
+      - ~/.cache/
   script:
     - yarn
     - yarn run build
