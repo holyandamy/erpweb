@@ -116,7 +116,8 @@
 					para.token=paramm.getToken();
 					opensave(para).then((res) => {
 						if(res.data.error){
-						  this.open(res.data.message, 'error')
+							this.open(res.data.message, 'error');
+							this.getlist();
               return;
             }
             this.open('同步成功！', 'success')

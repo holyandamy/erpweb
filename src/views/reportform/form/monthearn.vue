@@ -34,7 +34,8 @@
         </el-row>
       </el-form>
       <section style="padding: 0 30px;">
-        <el-table :data="orderLists" border style="text-align: left; font-size: 12px;">
+        <!-- 满意   orderLists-->
+        <el-table :data="orderLists" border style="text-align: left; font-size: 12px;" v-if="orderLists.length!=0">
           <el-table-column
             type="index"
             width="200"
@@ -51,7 +52,8 @@
           <el-table-column prop="allTotal" label="合计"  width='200'>
           </el-table-column>
         </el-table>
-        <div id='totalAll'>
+        <!-- 满意 -->
+        <div id='totalAll' v-if="orderLists.length!=0">
           <span  style='float: left;'>合计</span>
           <span>{{orderListsSum.allTotal}}</span>
           <span>{{orderListsSum.refund}}</span>
@@ -190,6 +192,7 @@
         this.setmode = type
         this.typpe = typpe
       },
+      /* 获取列表数据 满意*/
       getList() {
         let page = this.orderinfo
         page.pageindex = this.currentPage - 1
@@ -205,9 +208,10 @@
               type: 'error'
             });
           }else{
-            this.orderLists = res.data.obj.datas
-            this.orderListsSum = res.data.obj.totalVo
-            this.total = Number(res.data.obj.total)
+            this.orderLists = res.data.obj.datas;
+            console.log( 99999,this.orderLists)
+            this.orderListsSum = res.data.obj.totalVo;
+            this.total = Number(res.data.obj.total);
           }
 
         })
@@ -216,6 +220,7 @@
       handleCurrentChange(val) {
         this.getList()
       },
+      /* 满意 */
       onSubmit() {
         this.getList()
       },
