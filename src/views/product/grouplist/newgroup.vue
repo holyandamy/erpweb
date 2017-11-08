@@ -1258,7 +1258,7 @@
                result.traffics[i].others=[];
                _this.trackArr.push(result.traffics[i]);
             
-             }else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联程")){
+             }else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联城")){
                for(var k=0;k<result.traffics[i].others.length;k++){  
                 result.traffics[i].others[k].starttime=new Date(2016,9,10, result.traffics[i].others[k].starttime.slice(0, result.traffics[i].others[k].starttime.indexOf(":")),
                  result.traffics[i].others[k].starttime.slice( result.traffics[i].others[k].starttime.indexOf(":")+1,result.traffics[i].others[k].starttime.indexOf(":")+3));
@@ -1715,11 +1715,26 @@
        }catch (e){
           throw e
        }
-         /* 处理交通 */
+         /* 处理交通  满意*/
+             /* 普通交通 下添加往返 把数据需要额外处理 */
+          
          for(var i=0;i<_this.gobackArr.length;i++){
+           _this.gobackArr[i].others[0].name= _this.gobackArr[i].name;
+           _this.gobackArr[i].others[0].depart= _this.gobackArr[i].depart;
+           _this.gobackArr[i].others[0].dest= _this.gobackArr[i].dest;
+           _this.gobackArr[i].others[0].stop= _this.gobackArr[i].stop;
+           _this.gobackArr[i].others[0].flightno= _this.gobackArr[i].flightno;
+           _this.gobackArr[i].others[0].starttime= _this.gobackArr[i].starttime;
+           _this.gobackArr[i].others[0].endtime= _this.gobackArr[i].endtime;
+           _this.gobackArr[i].others[0].arrivetype= _this.gobackArr[i].arrivetype;
+           _this.gobackArr[i].others[0].direction=-1;
             _this.savegobackArr= _this.savegobackArr.concat(_this.gobackArr[i].others)
+            
          }
          _this.traffic=_this.trackArr.concat(_this.savegobackArr); 
+         console.log( _this.traffic,"交通初始信息")
+      
+
          for(var i=0;i< _this.traffic.length;i++){
             /* 提交时处理当日 次日 */
             _this.traffic[i].arrivetype= _this.traffic[i].arrivetype==false?0:1;
@@ -1737,11 +1752,11 @@
              _this.traffic[i].endtime= endH+":"+ endM;
              /* 处理手动单程 往返的direction */
              if( _this.traffic[i].type=="单程"|| _this.traffic[i].type==0){
-                 _this.traffic[i].direction=_this.traffic[i].type=0;
+                _this.traffic[i].type=0;
              }else if( _this.traffic[i].type=="往返"||_this.traffic[i].type==1){
-                _this.traffic[i].direction=_this.traffic[i].type=1;
+                _this.traffic[i].type=1;
              }else if( _this.traffic[i].type=="联程"||_this.traffic[i].type==2){
-                _this.traffic[i].direction=_this.traffic[i].type=2;
+                _this.traffic[i].type=2;
              }
               if(!_this.traffic[i].id){
                _this.traffic[i].id="";
@@ -1750,6 +1765,8 @@
                _this.traffic[i].tid="";
              }
           }
+        
+          console.log(  _this.traffic,"交通模块")
         /* 处理下发平台 */
          for(var i=0;i<_this.lineArr.length;i++){
            if(_this.lineArr[i].categoryName==_this.subvalue){
@@ -1868,6 +1885,9 @@
          console.log( "保存的时候", _this.checkArr);
             _this.tongbudetailArr= _this.tongbudetailArr.concat(_this.checkArr);
         /* 发布线路 添加时候的保存  */
+
+       
+          
          let savePara={
            lineid:_this.groupList.lineid,
            notify: _this.groupList.notify|| '',

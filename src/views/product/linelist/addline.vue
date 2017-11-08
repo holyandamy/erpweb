@@ -631,10 +631,10 @@
         oldday:''
       }
 		},
-		created(){
+		/* created(){
 			this.getprovince()
 
-		},
+		}, */
 		methods: {
 			geturl(url) {
         this.urlAdd= url
