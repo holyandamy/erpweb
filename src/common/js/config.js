@@ -2,6 +2,10 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 const host = '' // 接口请求地址
 const otherUrl = 'http://img.tripb2b.com/erp'
+
+// const host = 'http://api.erp.we2tu.com' // 接口请求地址
+// const otherUrl = 'http://img.etu6.org/erp'
+
 export const noteUrl = `${otherUrl}/xt-erp-info.pdf`;  // 操作手册
 export const downloadUrl = `${otherUrl}/namelist_template.xls`;  // 名单模版
 let base = `${host}/api`;  // 接口
@@ -13,8 +17,10 @@ export let monthearnDown = `${host}/api/report/finance/collect/export`; //月收
 export let monthspendDown = `${host}/api/report/finance/pay/export`; //月付款统计
 export let collectlistDown = `${host}/api/finance/collect/export`; //收款登记
 export let payDown = `${host}/api/finance/pay/export`; //付款登记
-export let upload1 = `${host}/file/upyun/getSign`;
-export let upload2 = `${host}/file/upyun/bodySign`;
+
+export let upload1 = `${host}/api/file/upyun/getSign`;
+export let upload2 = `${host}/api/file/upyun/bodySign`;
+
 export let namelistImport = `${host}/api/order/namelist/import`;
 /* 首页 */
 export const dashboard = params => { return axios.post(`${base}/sys/dashboard/info`, params).then(res => res); };//首页信息
@@ -39,16 +45,24 @@ export const teamlist = params => { return axios.post(`${base}/line/team/list`, 
 export const grouplist = params => { return axios.post(`${base}/line/team/list`, params).then(res => res); };//模板列表
 export const reserveNum = params => { return axios.post(`${base}/sys/user/match`, params).then(res => res); };//预定输入手机号或公司名
 export const groupsave = params => { return axios.post(`${base}/line/team/save`, params).then(res => res); };//新增发团计划
-export const orderSave = params => { return axios.post(`${base}/order/save`, params).then(res => res); };//发团 预定
+export const orderSave = params => { return axios.post(`${base}/order/save`, params).then(res => res); };//发团 预定 提交 满意
 export const orderdet = params => { return axios.post(`${base}/line/team/order/detail`, params).then(res => res); }//发团 下单详情
 export const groupdetail = params => { return axios.post(`${base}/line/team/detail`, params).then(res => res); };//发团列表 详情
 export const groupupdate = params => { return axios.post(`${base}/line/team/update`, params).then(res => res); };//发团列表 编辑
 export const groupStop = params => { return axios.post(`${base}/line/team/status`, params).then(res => res); };//发团列表 停止
-export const groupDel = params => { return axios.post(`${base}/line/team/del`, params).then(res => res); };//发团列表- 编辑- 删除
+
+export const groupDel = params => { return axios.post(`${base}/line/team/del`, params).then(res => res); };//发团列表- 编辑- 删除  满意
 export const groupApprove = params => { return axios.post(`${base}/line/team/approve`, params).then(res => res); };//发团列表- 审批
 export const ordernameslist = params => { return axios.post(`${base}/order/team/namelist`, params).then(res => res); };//发团列表- 出团名单
 export const groupexists = params => { return axios.post(`${base}/line/team/exists`, params).then(res => res); };//发团列表- 线路是否已存在团期
 export const groupnamelistexport = (params) => { return axios.post(`${base}/order/confirm/export`, params,{headers:{'Content-type':'text/html','charset':'utf-8'}}).then(res => res); } //发团列表  导出
+
+export const trafficlist = (params) => { return axios.post(`${base}/line/team/traffic/list`, params).then(res => res); } //查询控位交通列表
+export const traffitemplateclist = (params) => { return axios.post(`${base}/line/team/traffic/template/list`, params).then(res => res); } //查询普通交通列表
+export const trafficdays = (params) => { return axios.post(`${base}/line/team/traffic/days`, params).then(res => res); } //查询交通对应的每天信息
+export const syscategorysite = (params) => { return axios.post(`${base}/sys/open/categorysite`, params).then(res => res); } //获取同步平台的类目站点信息
+
+
 
 /*产品分类*/
 export const linecategorylist = params => { return axios.post(`${base}/line/category/list`, params); };//获取线路管理
@@ -64,7 +78,7 @@ export const ordercancel = params => { return axios.post(`${base}/order/cancel`,
 export const ordernamelistconfirm = params => { return axios.post(`${base}/order/namelist/confirm`, params); };//确认游客名单接口
 export const ordernamelistexport = params => { return axios.post(`${base}/order/namelist/export`, params); };//导出游客名单
 export const orderexportdetail = params => { return axios.post(`${base}/order/export/detail`, params); };//获取确认单详情
-export const orderpay = params => { return axios.post(`${base}/order/pay`, params); };//调整价格
+export const orderpay = params => { return axios.post(`${base}/order/pay`, params); };//调整价格  满意
 export const orderrefund = params => { return axios.post(`${base}/order/namelist/refund`, params); };//申请退款
 export const orderfin = params => { return axios.post(`${base}/order/fin`, params); };//订单 出团确认
 export const ordersettle = params => { return axios.post(`${base}/order/settle`, params); };//订单 结算
@@ -162,10 +176,11 @@ export const userpwd = params => { return axios.post(`${base}/sys/user/pwd`, par
 /* 员工管理--新增 */
 export const usersave = params => { return axios.post(`${base}/sys/user/save`, params).then(res => res); };//获取员工详情
 
-/* 对接平台设置 */
-
-export const openlist = params => { return axios.post(`${base}/sys/open/list`, params).then(res => res); };
+export const openlist = params => { return axios.post(`${base}/sys/open/list`, params).then(res => res); };//同步到对接平台
 export const opensave = params => { return axios.post(`${base}/sys/open/save`, params).then(res => res); };//获取员工详情
 
 /* 操作日志*/
 export const loglist = params => { return axios.post(`${base}/sys/log/list`, params).then(res => res); };//获取员工详情
+
+/* 跳转的URL */
+export const redirectUrls = ['/Line/plan.html','/Line/traffic.html']

@@ -42,8 +42,149 @@
               <span>操作人：</span>
             </p>
           </el-row>
+           <!-- 交通信息模块 满意 -->
+            <table class="adulttable" width="100%">
+                <thead>
+                <tr>
+                  <td width="150">交通名称</td>
+                  <td width="50">行程</td>
+                  <td width="150">出发地/目的地</td>
+                  <td width="60">经停/直达</td>
+                  <td width="60">去程班次</td>
+                  <td width="150">出发时间/抵达时间</td>
+               
+                </tr>
+                </thead>
+                <tbody>
+              <!--   显示 添加单程 -->
+                <tr v-for='(item,idx) in trackArr' :key="idx">
+                  <!-- 路线名称 -->
+                  <td >
+                    <el-input v-model='item.name' :disabled="true"></el-input>
+                  </td>
+                  <td>
+                    <el-tag type="gray">单程</el-tag>
+                  </td>
+                  <td>
+                    <el-input  style='width: 40%;'  v-model='item.depart' :disabled="true"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="true"></el-input>
+                  </td>
+                  <td>
+                    <el-input  v-model='item.stop' :disabled="true"></el-input>
+                  </td>
+                  <td>
+                    <el-input  v-model='item.flightno' :disabled="true"></el-input>
+                  </td>
+                  <td>
+                   
+                    <el-time-picker
+                     :disabled="true"
+                      :editable="true"
+                      :clearable="true"
+                      style='width: 30%;'
+                      v-model="item.starttime"
+                      :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                      placeholder="时间">
+                    </el-time-picker> ---
+                    <el-checkbox v-model="item.arrivetype" :disabled="true">次日</el-checkbox>
+                    <el-time-picker
+                     :disabled="true"
+                      :editable="true"
+                      :clearable="true"
+                      style='width: 30%;'
+                      v-model="item.endtime"
+                      :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                      placeholder="时间">
+                     </el-time-picker>
+                     
+                  </td>
+                  
+                </tr>
+               </tbody>
+                <!-- 显示 添加往返 -->
+               <tfoot v-for='(item,idx) in gobackArr' :key="idx" >
+                <!-- 往 -->
+                  <tr>
+                    <!-- 路线名称 -->
+                    <td :rowspan="rowNum">
+                      <el-input v-model='item.name' :disabled="true"></el-input>
+                    </td>
+                    <td>
+                      <el-tag type="gray">{{ item.type=="联城"?"联城" : "往" }}</el-tag>
+                    </td>
+                    <td>
+                      <el-input  style='width: 40%;'  v-model='item.depart' :disabled="true"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="true"></el-input>
+                    </td>
+                    <td>
+                      <el-input  v-model='item.stop' :disabled="true"></el-input>
+                    </td>
+                    <td>
+                      <el-input  v-model='item.flightno' :disabled="true"></el-input>
+                    </td>
+                    <td>
+                     
+                      <el-time-picker
+                        :disabled="true"
+                        :editable="false"
+                        :clearable="false"
+                        style='width: 30%;'
+                        v-model="item.starttime"
+                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                        placeholder="时间">
+                      </el-time-picker> ---
+                       <el-checkbox v-model="item.arrivetype" :disabled="true">次日</el-checkbox>
+                      <el-time-picker
+                        :disabled="true"
+                        :editable="false"
+                        :clearable="false"
+                        style='width: 30%;'
+                        v-model="item.endtime"
+                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                        placeholder="时间">
+                      </el-time-picker>
+                      <!--<el-input class='doubleTrc'  style='width: 40%;' ></el-input> <span v-if="item.type==1">-&#45;&#45; </span><el-input class='doubleTrc' v-if="item.type==1" style='width: 40%;'></el-input>-->
+                    </td>
+                  
+                  </tr>
+                  <!-- 返-->
+                  <tr v-for='(item,idx) in item.others.slice(1)' :key="idx">
+                    <td>
+                        <el-tag type="gray">{{ (item.type=="联城")||(item.type==2)?"联城" : "返" }}</el-tag>
+                    </td>
+                    <td>
+                      <el-input  style='width: 40%;'  v-model='item.depart' :disabled="true"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="true"></el-input>
+                    </td>
+                    <td>
+                      <el-input  v-model='item.stop' :disabled="true"></el-input>
+                    </td>
+                    <td>
+                      <el-input  v-model='item.flightno' :disabled="true"></el-input>
+                    </td>
+                    <td>
+                      <el-time-picker
+                        :disabled="true"
+                        :editable=false
+                        :clearable=false
+                        style='width: 30%;'
+                        v-model="item.starttime"
+                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                        placeholder="时间">
+                      </el-time-picker> ---
+                      <el-checkbox v-model="item.arrivetype" :disabled="true">次日</el-checkbox>
+                      <el-time-picker
+                       :disabled="true"
+                        :editable=false
+                        :clearable=false
+                        style='width: 30%;'
+                        v-model="item.endtime"
+                        :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                        placeholder="时间">
+                      </el-time-picker>
+                    </td>  
+                  </tr>
+              </tfoot>
+            </table>
         </div>
-
+       
       </div>
       <h2 class="d_jump">客户信息</h2>
       <div class="bgfff bgfff-bot">
@@ -59,12 +200,12 @@
                       <el-col :span="4" style='line-height: 45px;'>
                         <el-select  v-model="visitorList.custtype">
                           <el-option label="请选择" :value=0 disabled ></el-option>
-                          <el-option label="直客" :value=1 selected></el-option>
+                          <el-option label="直客" :value="1" selected></el-option>
                           <el-option label="旅行社" :value=2></el-option>
                         </el-select>
                       </el-col>
                     </el-form-item>
-                    <el-form-item label="联系人：" required prop="name">
+                    <el-form-item label="联系人："  prop="name">
                       <el-col :span="4" style='line-height: 45px;'>
                         <el-input v-model="visitorList.contact" ></el-input>
                       </el-col>
@@ -188,6 +329,7 @@
                     <!--<el-input disabled='disabled' v-model="namelist.name"></el-input> &lt;!&ndash; v-model="namelist.name"&ndash;&gt;-->
                   </td>
                   <td>
+                    <!-- 满意 -->
                     <el-select v-model="item.certtype" placeholder="请选择">
                       <el-option
                         v-for="item in options"
@@ -264,6 +406,10 @@
         }, 1000);
       };
       return {
+            /* 单程数组 */
+        trackArr:[],
+         /* 往返数组 */
+        gobackArr:[],
         modeType: 'reserve',
         menus: ['下单', '基本信息', '行程', '预定须知', '发布平台'],
         active:0,
@@ -295,6 +441,7 @@
           remark: [
             { min: 0, max: 120, message: '不能超过120字!', trigger: 'blur' }]
         },
+        /* 满意 */
         options: [{
           value: '1',
           label: '身份证'
@@ -454,13 +601,19 @@
         let newChckArr = []
         this.checkArr.forEach(function (item,idx) {
 //          if(item.name == '') _this.checkArr.splice(idx,1)
-          if(item.name != '') newChckArr.push(item)
+          if(item.name != '') {newChckArr.push(item)}
+          item.certtype=Number( item.certtype);
         })
         this.visitorList.list = newChckArr
         this.visitorList.mobile = this.visitorList.mobile.toString()
+        /* 满意 */
+        console.log(88888,_this.checkArr)
         orderSave(this.visitorList).then(function (res) {
           if(res.data.error || res.data.err){
-            paramm.getCode(res.data,_this)
+            paramm.getCode(res.data,_this);
+            for(var i=0;i<_this.checkArr.length;i++){
+              _this.checkArr[i].certtype=_this.checkArr[i].value
+            }
           }else {
             paramm.getCode(res.data,_this)
             _this.$emit('setMode', 'list');
@@ -567,6 +720,7 @@
       },
       // 获取详情
       getlineinfo(){
+        var _this=this;
         let para = {
           token:paramm.getToken(),
           id:this.categoryId
@@ -580,6 +734,37 @@
           }else{
             this.edittype = false
           }
+          //设置交通信息模块 满意
+           var result=res.data.obj;
+             for(var i=0;i<result.traffics.length;i++){
+              console.log(result.traffics[i].starttime);
+              var hh=result.traffics[i].starttime.slice(0,result.traffics[i].starttime.indexOf(":") );
+              var ehh=result.traffics[i].endtime.slice(0,result.traffics[i].endtime.indexOf(":") );
+              var mm=result.traffics[i].starttime.slice(result.traffics[i].starttime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
+              var emm=result.traffics[i].endtime.slice(result.traffics[i].endtime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
+              
+              result.traffics[i].starttime=new Date(2016,9,10,hh,mm);
+              result.traffics[i].endtime=new Date(2016,9,10,ehh,emm);
+              result.traffics[i].arrivetype=result.traffics[i].arrivetype==0?false:true;
+          
+             if(result.traffics[i].typeName=="单程"){
+               result.traffics[i].others=[];
+               _this.trackArr.push(result.traffics[i]);
+            
+             }else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联城")){
+               for(var k=0;k<result.traffics[i].others.length;k++){  
+                result.traffics[i].others[k].starttime=new Date(2016,9,10, result.traffics[i].others[k].starttime.slice(0, result.traffics[i].others[k].starttime.indexOf(":")),
+                 result.traffics[i].others[k].starttime.slice( result.traffics[i].others[k].starttime.indexOf(":")+1,result.traffics[i].others[k].starttime.indexOf(":")+3));
+                  
+                  result.traffics[i].others[k].endtime=new Date(2016,9,10, result.traffics[i].others[k].endtime.slice(0, result.traffics[i].others[k].endtime.indexOf(":")),
+                 result.traffics[i].others[k].endtime.slice( result.traffics[i].others[k].endtime.indexOf(":")+1,result.traffics[i].others[k].endtime.indexOf(":")+3));
+                
+               }
+                result.traffics[i].type=result.traffics[i].type==1?"往返":"联城";
+               _this.gobackArr.push(result.traffics[i]);
+              _this.rowNum=result.traffics[i].others.length;
+             }
+           }
         })
       },
       // 公司手机输入
@@ -999,4 +1184,30 @@
   .moneyy{
     margin-right: 20px;
   }
+
+  /* 交通信息样式  满意*/
+   .adulttable {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #dee5ec;
+  }
+   .adulttable thead td {
+        background: #f5f7f9;
+        border-bottom: 1px solid #bfcbda;
+        border-right: 1px solid #bfcbda;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+      }
+  .adulttable tbody td, .adulttable tfoot  td{
+          padding: 8px;
+          border-bottom: 1px solid #dee5ec;
+          border-right: 1px solid #dee5ec;
+          min-height: 50px;
+          text-align: center;
+          vertical-align: middle;
+  }
+  .adulttable tbody td .doubleTrc, .adulttabl tfoot td .doubleTrc{
+            margin-top: 10px;
+          }
 </style>

@@ -116,7 +116,7 @@
 										</el-select>
 								</el-col>
 							</el-form-item>-->
-							<el-form-item label="目的地：" prop ="backaddress" required>
+							<el-form-item label="目的地：" required>
 								<el-col :span="5">
 
 										<el-select filterable  v-model="baseForm.toprovinceid" placeholder="请选择" @change="changeprovinceback">
@@ -258,7 +258,7 @@
 							</el-row>
 							<el-row>
 								<el-col :span="14">
-									<el-form-item label="行程：" prop="content" required>
+									<el-form-item label="行程：" required>
 										<el-input type="textarea" v-model="route.content"></el-input>
 									</el-form-item>
 								</el-col>
@@ -519,22 +519,36 @@
 
 					}]
 				},
+				/* 满意 */
 				baseFormrules: {
-//					categorytype: [{
-//						required: true,
-//						trigger: 'change',
-//						validator:category
-//					}],
+					// categorytype: [{
+					// 	required: true,
+					// 	trigger: 'change',
+					// 	validator:category
+					// }],
 					name: [{
 						required: true,
 						message: '请填写线路名称',
 						trigger: 'blur,change'
 					}],
+				
 					type: [{
 						required: true,
 						message: '请选择出行方式',
 						trigger: 'change'
 					}],
+					 checkpeople:[{
+						type: 'array',
+						required: true,
+						message: '请选择收客类型',
+						trigger: 'change'
+					}],
+						fromprovinceid:[{
+						required: true,
+						message: '请选择出港地',
+						trigger: 'blur'
+					}],
+			
 //				checkpeople: [{ type: 'array', required: true, message: '请至少选择一个收客类型', trigger: 'change' }],
 				typepeo: [{required: true,trigger: 'change', validator:typepeocheck}],
 //				fromprovinceid: [{required: true, trigger: 'change',validator:startaddresscheck}],
@@ -550,9 +564,9 @@
 
 			}
 		},
-		mounted: function() {
+	/* 	mounted: function() {
 			this.getprovince()
-		},
+		}, */
 		methods: {
 			geturl(url) {
 				this.baseForm.images = url

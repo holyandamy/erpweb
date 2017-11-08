@@ -30,7 +30,7 @@
 
 							<template slot="title"></i>{{item.authname}}</template>
 							<!-- 显示子菜单 -->
-							<el-menu-item v-for="child in item.childs" :index="child.path" style='min-width: 0 !important;' @click="showhome=false,$router.push(child.path)" :key="child.path"
+							<el-menu-item v-for="child in item.childs" :index="child.path" style='min-width: 0 !important;' @click="menuFilter(child.path)" :key="child.path"
 							 v-if="!child.hidden"  :id="child.id"  >{{child.authname}}</el-menu-item>
 
 						</el-submenu>
@@ -68,6 +68,7 @@
 <script>
 import Cookies from 'js-cookie';
 import {tokenlogin} from '../common/js/config';
+import {redirectUrls} from '../common/js/config';
 import paramm from '../common/js/getParam.js';
 export default {
     data() {
@@ -88,7 +89,15 @@ export default {
 	 },
  
     methods: {
-
+			menuFilter(url) {
+				for(let key of redirectUrls) {
+					if(url.match(new RegExp(key))) {
+						return window.location.href = url
+					}
+				}
+				this.showhome=false;
+			  this.$router.push(url)
+			},
     	getuserinfo(){
 //			let name = localStorage.getItem('info')
 			let token = Cookies.get('token')

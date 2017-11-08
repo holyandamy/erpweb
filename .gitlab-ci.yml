@@ -6,18 +6,23 @@ variables:
     PROJECT_NAME: erpweb
 
 build_test_docker:
-  variables:
-      GIT_SUBMODULE_STRATEGY: recursive
   stage: build
   image: docker:latest
+  cache:
+    paths:
+      - ./node_modules/
   script:
+    - yarn
+    - yarn run build
+    - rm -f ./node_modules/webwrapper/yarn.lock
+    - yarn install --cwd ./node_modules/webwrapper/
     - docker build -f Dockerfile -t $PROJECT_NAME .
     - docker tag $PROJECT_NAME git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
     - docker push git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
   tags:
-    - docker
+    - erptest
   only:
-    - dev
+    - /^release-*/
 
 deploy_test_docker:
   stage: deploy
@@ -25,21 +30,28 @@ deploy_test_docker:
   script: 
     - docker stack deploy -c deploy/deploy.test.yml $PROJECT_NAME
   tags:
-    - docker
+    - erptest
   only:
-    - dev
+    - /^release-*/
 
 build_master_docker:
   stage: build
   image: docker:latest
+  cache:
+    paths:
+      - ./node_modules/
   script:
+    - yarn
+    - yarn run build
+    - rm -f ./node_modules/webwrapper/yarn.lock
+    - yarn install --cwd ./node_modules/webwrapper/
     - docker build -f Dockerfile -t $PROJECT_NAME .
     - docker tag $PROJECT_NAME git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
     - docker tag $PROJECT_NAME git.we2tu.com:5000/$PROJECT_NAME:latest
     - docker push git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
     - docker push git.we2tu.com:5000/$PROJECT_NAME:latest
   tags:
-    - docker
+    - erptest
   only:
     - master
 

@@ -80,6 +80,7 @@
 					</thead>
 				</table>
         <div v-loading="listLoading" v-if='isLoadd && orderLists.length==0' element-loading-text="拼命加载中" style='height: 200px;'></div>
+				<!-- 满意 -->
 				<dl class="list" v-for="(list,index) in orderLists">
 					<dt><span>订单编号：{{list.code}} / 馨途订单编号：{{list.sourceid}}</span><span style="margin-left: 50px;">订单来源：{{list.platformname}}</span> </dt>
 
@@ -88,9 +89,13 @@
 							<li style="width: 30%;">{{list.teamno}} <br />{{list.linename.length>70?list.linename.substring(0,70)+'...':list.linename}}<br /> 下单时间：{{list.createtime}}</li>
 							<li style="width: 10%;">出团：{{list.starttime}} <br /> 人数：{{list.custnumber}}</li>
 							<li style="width: 10%;">{{list.companyname}} <br /> {{list.contactmobile}}</li>
-							<li style="width: 5%;">￥{{list.orderfee}}</li>
+							<!-- 订单金额 -->
 							<li style="width: 5%;">￥{{list.orderpay}}</li>
+							<!-- 应收 -->
+							<li style="width: 5%;">￥{{list.orderpay-list.pay}}</li>
+							<!-- 	已收 -->
 							<li style="width: 5%;">￥{{list.collection}}</li>
+							<!-- 退款 -->
 							<li style="width: 5%;">￥{{list.pay}}</li>
               <li style="width: 10%;">{{list.settleName}}</li>
 							<li style="width: 10%;">{{list.statusName}}</li>
@@ -443,6 +448,8 @@
 					if(res.data.error || res.data.err){
 
 					}else{
+						/* 满意*/
+						console.log(66666, res.data.obj.datas)
 						this.orderLists = res.data.obj.datas
 						this.total = Number(res.data.obj.total)
 					}
