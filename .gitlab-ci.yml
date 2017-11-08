@@ -11,6 +11,7 @@ build_test_docker:
   script:
     - yarn
     - yarn run build
+    - yarn install --cwd ./node_modules/webwrapper/
     - docker build -f Dockerfile -t $PROJECT_NAME .
     - docker tag $PROJECT_NAME git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
     - docker push git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
