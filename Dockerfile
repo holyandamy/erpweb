@@ -14,7 +14,6 @@ RUN mkdir -p /usr/src/temp
 COPY . /usr/src/temp
 WORKDIR /usr/src/temp/
 WORKDIR /usr/src/temp/node_modules/webwrapper
-RUN yarn
 RUN ./node_modules/.bin/gulp release
 RUN rm -rf src/
 
