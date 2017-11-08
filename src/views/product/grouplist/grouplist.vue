@@ -10,7 +10,7 @@
             </el-breadcrumb>
           </el-col>
           <el-col :span="4">
-            <el-button  size="large" type="primary"  id="5c18b1d0734611e788410242ac120009" class="defaultbutton hasid" @click="setMode('newGroup','add')" >发团计划</el-button>
+            <el-button  size="large" type="primary"  id="5c18b1d0734611e788410242ac120009" class="defaultbutton hasid" @click="setMode('newGroup','add')" style="color:#fff;" >发团计划</el-button>
           </el-col>
         </el-row>
       </header>
@@ -452,4 +452,5 @@
   .hasid {
     display: none;
   }
+ 
 </style>

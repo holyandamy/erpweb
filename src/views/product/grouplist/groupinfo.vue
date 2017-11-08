@@ -56,7 +56,6 @@
                   <td width="60">经停/直达</td>
                   <td width="60">去程班次</td>
                   <td width="150">出发时间/抵达时间</td>
-                  <td width="50">操作</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -64,23 +63,24 @@
                 <tr v-for='(item,idx) in trackArr' :key="idx">
                   <!-- 路线名称 -->
                   <td >
-                    <el-input v-model='item.name' ></el-input>
+                    <el-input v-model='item.name' :disabled="true"></el-input>
                   </td>
                   <td>
                     <el-tag type="gray">单程</el-tag>
                   </td>
                   <td>
-                    <el-input  style='width: 40%;'  v-model='item.depart'></el-input> --- <el-input   style='width: 40%;' v-model='item.dest'></el-input>
+                    <el-input  style='width: 40%;'  v-model='item.depart' :disabled="true"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="true"></el-input>
                   </td>
                   <td>
-                    <el-input  v-model='item.stop'></el-input>
+                    <el-input  v-model='item.stop' :disabled="true"></el-input>
                   </td>
                   <td>
-                    <el-input  v-model='item.flightno'></el-input>
+                    <el-input  v-model='item.flightno' :disabled="true"></el-input>
                   </td>
                   <td>
                    
                     <el-time-picker
+                      :disabled="true"
                       :editable="true"
                       :clearable="true"
                       style='width: 30%;'
@@ -88,8 +88,9 @@
                       :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                       placeholder="时间">
                     </el-time-picker> ---
-                    <el-checkbox v-model="item.arrivetype">次日</el-checkbox>
+                    <el-checkbox v-model="item.arrivetype" :disabled="true">次日</el-checkbox>
                     <el-time-picker
+                      :disabled="true"
                       :editable="true"
                       :clearable="true"
                       style='width: 30%;'
@@ -99,9 +100,7 @@
                      </el-time-picker>
                      
                   </td>
-                  <td>
-                    <el-button type="text"  @click="deleteTrc(idx)" :disabled="item.del">删除</el-button>
-                  </td>
+                
                 </tr>
                </tbody>
                 <!-- 显示 添加往返 -->
@@ -110,23 +109,24 @@
                   <tr>
                     <!-- 路线名称 -->
                     <td :rowspan="rowNum">
-                      <el-input v-model='item.name' ></el-input>
+                      <el-input v-model='item.name' :disabled="true" ></el-input>
                     </td>
                     <td>
                       <el-tag type="gray">{{ item.type=="联城"?"联城" : "往" }}</el-tag>
                     </td>
                     <td>
-                      <el-input  style='width: 40%;'  v-model='item.depart'></el-input> --- <el-input   style='width: 40%;' v-model='item.dest'></el-input>
+                      <el-input  style='width: 40%;'  v-model='item.depart' :disabled="true"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="true"></el-input>
                     </td>
                     <td>
-                      <el-input  v-model='item.stop'></el-input>
+                      <el-input  v-model='item.stop' :disabled="true"></el-input>
                     </td>
                     <td>
-                      <el-input  v-model='item.flightno'></el-input>
+                      <el-input  v-model='item.flightno' :disabled="true"></el-input>
                     </td>
                     <td>
                      
                       <el-time-picker
+                        :disabled="true"
                         :editable="false"
                         :clearable="false"
                         style='width: 30%;'
@@ -134,8 +134,9 @@
                         :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                         placeholder="时间">
                       </el-time-picker> ---
-                       <el-checkbox v-model="item.arrivetype">次日</el-checkbox>
+                       <el-checkbox v-model="item.arrivetype" :disabled="true">次日</el-checkbox>
                       <el-time-picker
+                        :disabled="true"
                         :editable="false"
                         :clearable="false"
                         style='width: 30%;'
@@ -145,9 +146,6 @@
                       </el-time-picker>
                       <!--<el-input class='doubleTrc'  style='width: 40%;' ></el-input> <span v-if="item.type==1">-&#45;&#45; </span><el-input class='doubleTrc' v-if="item.type==1" style='width: 40%;'></el-input>-->
                     </td>
-                    <td :rowspan="rowNum">
-                      <el-button type="text"  @click="deleteTfoot(idx)" :disabled="item.del">删除</el-button>
-                    </td>
                   </tr>
                   <!-- 返-->
                   <tr v-for='(item,idx) in item.others.slice(1)' :key="idx">
@@ -155,16 +153,17 @@
                         <el-tag type="gray">{{ (item.type=="联城")||(item.type==2)?"联城" : "返" }}</el-tag>
                     </td>
                     <td>
-                      <el-input  style='width: 40%;'  v-model='item.depart'></el-input> --- <el-input   style='width: 40%;' v-model='item.dest'></el-input>
+                      <el-input  style='width: 40%;'  v-model='item.depart' :disabled="true"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="true"></el-input>
                     </td>
                     <td>
-                      <el-input  v-model='item.stop'></el-input>
+                      <el-input  v-model='item.stop' :disabled="true"></el-input>
                     </td>
                     <td>
-                      <el-input  v-model='item.flightno'></el-input>
+                      <el-input  v-model='item.flightno' :disabled="true"></el-input>
                     </td>
                     <td>
                       <el-time-picker
+                        :disabled="true"
                         :editable=false
                         :clearable=false
                         style='width: 30%;'
@@ -172,8 +171,9 @@
                         :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                         placeholder="时间">
                       </el-time-picker> ---
-                      <el-checkbox v-model="item.arrivetype">次日</el-checkbox>
+                      <el-checkbox v-model="item.arrivetype" :disabled="true">次日</el-checkbox>
                       <el-time-picker
+                        :disabled="true"
                         :editable=false
                         :clearable=false
                         style='width: 30%;'

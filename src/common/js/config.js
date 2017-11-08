@@ -1,10 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-// const host = '' // 接口请求地址
-// const otherUrl = 'http://img.tripb2b.com/erp'
+const host = '' // 接口请求地址
+const otherUrl = 'http://img.tripb2b.com/erp'
 
-const host = 'http://api.erp.we2tu.com' // 接口请求地址
-const otherUrl = 'http://img.etu6.org/erp'
+// const host = 'http://api.erp.we2tu.com' // 接口请求地址
+// const otherUrl = 'http://img.etu6.org/erp'
 
 export const noteUrl = `${otherUrl}/xt-erp-info.pdf`;  // 操作手册
 export const downloadUrl = `${otherUrl}/namelist_template.xls`;  // 名单模版
@@ -78,7 +78,7 @@ export const ordercancel = params => { return axios.post(`${base}/order/cancel`,
 export const ordernamelistconfirm = params => { return axios.post(`${base}/order/namelist/confirm`, params); };//确认游客名单接口
 export const ordernamelistexport = params => { return axios.post(`${base}/order/namelist/export`, params); };//导出游客名单
 export const orderexportdetail = params => { return axios.post(`${base}/order/export/detail`, params); };//获取确认单详情
-export const orderpay = params => { return axios.post(`${base}/order/pay`, params); };//调整价格
+export const orderpay = params => { return axios.post(`${base}/order/pay`, params); };//调整价格  满意
 export const orderrefund = params => { return axios.post(`${base}/order/namelist/refund`, params); };//申请退款
 export const orderfin = params => { return axios.post(`${base}/order/fin`, params); };//订单 出团确认
 export const ordersettle = params => { return axios.post(`${base}/order/settle`, params); };//订单 结算
