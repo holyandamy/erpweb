@@ -110,7 +110,7 @@
                       <el-input v-model='item.name' :disabled="traffictype==1"></el-input>
                     </td>
                     <td>
-                      <el-tag type="gray">{{ item.type=="联城"?"联城" : "往" }}</el-tag>
+                      <el-tag type="gray">{{ item.type=="联程"?"联程" : "往" }}</el-tag>
                     </td>
                     <td>
                       <el-input  style='width: 40%;'  v-model='item.depart' :disabled="traffictype==1"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="traffictype==1"></el-input>
@@ -151,7 +151,7 @@
                   <!-- 返-->
                   <tr v-for='(item,idx) in item.others.slice(1)' :key="idx">
                     <td>
-                        <el-tag type="gray">{{ (item.type=="联城")||(item.type==2)?"联城" : "返" }}</el-tag>
+                        <el-tag type="gray">{{ (item.type=="联程")||(item.type==2)?"联程" : "返" }}</el-tag>
                     </td>
                     <td>
                       <el-input  style='width: 40%;'  v-model='item.depart' :disabled="traffictype==1"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="traffictype==1"></el-input>
@@ -967,12 +967,13 @@
           })
         }
       },
-      /* 普通交通和控位交通切换 */
+      /* 普通交通和控位交通切换  满意*/
       changeTrack(){
         if(this.operationType.type == 'add'){ 
           this.checkArr.length=0; 
           this.trackArr=[];
           this.gobackArr=[];
+          this.startTimeArr=[];
           }
         this.allplan=this.alldeadline=this.allmktbaby=this.allmktchild=this.allmktaduilt="";
         this.allmktroom=this.allsltbaby=this.allsltchild=this.allsltaduilt="";
@@ -1052,7 +1053,7 @@
       getTrafficList(){
         // 控位交通搜索功能已经完善
         let _this = this;
-      
+      console.log(3333999)
       _this.newTimeArr=[];
         if(_this.traffictype==1){
           /* 控位交通的获取列表的接口 */
@@ -1079,7 +1080,8 @@
                 }else if(item.type === 1){
                   item.type = '往返'
                 }else if(item.type === 2){
-                    item.type = '联城'
+                    
+                    item.type = '联程'
                 }
               })
             }
@@ -1100,14 +1102,14 @@
                 }else if(item.type === 1){
                   item.type = '往返'
                 }else if(item.type === 2){
-                  item.type = '联城'
+                  item.type = '联程'
                 }
               })
           })
         }
           _this.formName="";
       },
-      // 删除单程交通
+      // 删除单程交通  满意
       deleteTrc(idx){
       
           for(var k=0;k<this.checkArr.length;k++){
@@ -1116,7 +1118,9 @@
               k--;
             }
           }
-        
+         this.allplan=this.alldeadline=this.allmktbaby=this.allmktchild=this.allmktaduilt="";
+        this.allmktroom=this.allsltbaby=this.allsltchild=this.allsltaduilt="";
+         this.allsltroom=this.allcostbaby=this.allcostchild=this.allcostaduilt=this.allcostroom="";
         this.trackArr.splice(idx,1)
       },
       //删除往返交通
@@ -1128,6 +1132,9 @@
               k--;
             }
           }
+          this.allplan=this.alldeadline=this.allmktbaby=this.allmktchild=this.allmktaduilt="";
+        this.allmktroom=this.allsltbaby=this.allsltchild=this.allsltaduilt="";
+         this.allsltroom=this.allcostbaby=this.allcostchild=this.allcostaduilt=this.allcostroom="";
         this.gobackArr.splice(idx,1)
       },
       // 弹框中的导入功能
@@ -1148,14 +1155,14 @@
        console.log(1010,row,row.others)
         /* 处理当日 次日问题 */
         row.arrivetype=row.arrivetype==0?false:true;
-        /* 处理导入后单程  往返  联城*/
+        /* 处理导入后单程  往返  联程*/
        if(row.type=="单程"||(row.type==0)){ 
          this.trackArr.push(row);
        }else if(row.type=="往返"||(row.type==1)){
         this.gobackArr.push(row);
        console.log( 55555,this.gobackArr)
-       }else if(row.type=="联城"||(row.type==2)){
-         console.log(row,"进入联城了")
+       }else if(row.type=="联程"||(row.type==2)){
+         console.log(row,"进入联程了")
          this.rowNum=row.others.length;
          this.gobackArr.push(row);
        }
@@ -1251,7 +1258,7 @@
                result.traffics[i].others=[];
                _this.trackArr.push(result.traffics[i]);
             
-             }else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联城")){
+             }else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联程")){
                for(var k=0;k<result.traffics[i].others.length;k++){  
                 result.traffics[i].others[k].starttime=new Date(2016,9,10, result.traffics[i].others[k].starttime.slice(0, result.traffics[i].others[k].starttime.indexOf(":")),
                  result.traffics[i].others[k].starttime.slice( result.traffics[i].others[k].starttime.indexOf(":")+1,result.traffics[i].others[k].starttime.indexOf(":")+3));
@@ -1260,7 +1267,7 @@
                  result.traffics[i].others[k].endtime.slice( result.traffics[i].others[k].endtime.indexOf(":")+1,result.traffics[i].others[k].endtime.indexOf(":")+3));
                 
                }
-                result.traffics[i].type=result.traffics[i].type==1?"往返":"联城";
+                result.traffics[i].type=result.traffics[i].type==1?"往返":"联程";
                _this.gobackArr.push(result.traffics[i]);
               _this.rowNum=result.traffics[i].others.length;
              }
@@ -1604,8 +1611,7 @@
       },
       //求截止日期
       getDateEnd (vall, dayy,isPlus) {
-//        var now=new Date();
-//        var time=now.getTime();
+
         var time = vall.getTime();
         console.log("求截止时间",vall,time);
          if (isPlus) {
@@ -1634,6 +1640,8 @@
         _this.trackArr=[];
         _this.gobackArr=[];
         _this.checkArr=[];
+        _this.startTimeArr=[];
+
         $(".date-list-wrap .allowselect").removeClass("selected");
         _this.lineFlag = false;
         _this.routeName = _this.checkItem.name;
@@ -1670,11 +1678,13 @@
           });
           return;
         }
+        /* 处理发团时间 */
           for(var i=0;i<_this.checkArr.length;i++){
 
            _this.checkArr[i].confirm=Number(_this.checkArr[i].confirm);
             _this.checkArr[i].deadline=Number(_this.checkArr[i].deadline);
          }
+         
          if (_this.checkArr.length == 0) {
           this.$message({
             message: '请添加发团信息',
@@ -1705,7 +1715,7 @@
        }catch (e){
           throw e
        }
-         console.log("保存了",_this.gobackArr);
+         /* 处理交通 */
          for(var i=0;i<_this.gobackArr.length;i++){
             _this.savegobackArr= _this.savegobackArr.concat(_this.gobackArr[i].others)
          }
@@ -1730,7 +1740,7 @@
                  _this.traffic[i].direction=_this.traffic[i].type=0;
              }else if( _this.traffic[i].type=="往返"||_this.traffic[i].type==1){
                 _this.traffic[i].direction=_this.traffic[i].type=1;
-             }else if( _this.traffic[i].type=="联城"||_this.traffic[i].type==2){
+             }else if( _this.traffic[i].type=="联程"||_this.traffic[i].type==2){
                 _this.traffic[i].direction=_this.traffic[i].type=2;
              }
               if(!_this.traffic[i].id){
@@ -1740,7 +1750,7 @@
                _this.traffic[i].tid="";
              }
           }
-     
+        /* 处理下发平台 */
          for(var i=0;i<_this.lineArr.length;i++){
            if(_this.lineArr[i].categoryName==_this.subvalue){
              _this.tongbucategoryid=_this.lineArr[i].categoryId;
@@ -1807,19 +1817,17 @@
                 memberId:"",  
          }];
           /* 若平台没有勾选就不保存 */
-          if(!_this.editChi&&!_this.editHuan){
-             _this.platformsArrXin=[]
-         }
-         else if(!_this.editChi){
-             _this.platformsArrXin= _this.platformsArrXin.slice(1)
-         }
-         else if(!_this.editHuan){
-             _this.platformsArrXin= _this.platformsArrXin.slice(0,1)
-         }
+        //   if(!_this.editChi&&!_this.editHuan){
+        //      _this.platformsArrXin=[{isenable:false},{isenable:false}]
+        //  }
+        //  else if(!_this.editChi){
+             
+        //      _this.platformsArrXin= _this.platformsArrXin.slice(1)
+        //  }
+        //  else if(!_this.editHuan){
+        //      _this.platformsArrXin= _this.platformsArrXin.slice(0,1)
+        //  }
         
-       
-         _this.tongbudetailArr= _this.tongbudetailArr.concat(_this.checkArr);
-       
          _this.platformsArr= _this.platformsArr.concat(_this.platformsArrXin);
         
         // 集合通知
@@ -1830,9 +1838,7 @@
           });
           return;
         }
-        
-       
-     
+
         // 合作平台
 
         let platforms = [];
@@ -1840,14 +1846,16 @@
         this.pingtai.forEach(function (item,idx) {
           platforms.push({platform: item.platform, isenable: false,id: _this.platformId[idx]})
         })
-
-        // 结束时间
+        console.log(_this.startTimeArr,"开始时间");
+        
+        
+        // 结束时间 发团时间 满意
         if(_this.operationType.type == 'add'){
           _this.startTimeArr.forEach(function (item) {
             _this.TemStArr.push(_this.getDateEnd(item, _this.trafficDays,true))
           })
         }
-
+        console.log( "满意",_this.TemStArr);
         if(_this.operationType.type == 'edit'){
           _this.startTimeArr.forEach(function (item) {
             _this.TemStArr.push(_this.getDateEnd(item, _this.dayss,true))
@@ -1857,6 +1865,8 @@
         _this.checkArr.forEach(function (item,idx) {
           item.endtime = _this.TemStArr[idx] || ''
         })
+         console.log( "保存的时候", _this.checkArr);
+            _this.tongbudetailArr= _this.tongbudetailArr.concat(_this.checkArr);
         /* 发布线路 添加时候的保存  */
          let savePara={
            lineid:_this.groupList.lineid,
@@ -1880,6 +1890,7 @@
               _this.TemStArr = []
               return
             }
+            /* 满意   */
             if(!res.data.error) {
               paramm.getCode(res.data, _this)
               _this.$emit('setMode', 'list');  
@@ -2104,7 +2115,6 @@
            console.log("选中日期了");
          var td = $(this);
           var date=td.attr("title");
-          console.log(date)
          td.toggleClass("selected");
          if (td.hasClass("selected")) {
               _this.checkArr.push(
@@ -2132,6 +2142,8 @@
             isenable: true,
             tid:"",
           })
+          _this.startTimeArr=[];
+             console.log( _this.checkArr[0].starttime);
           for(var i=0;i< _this.checkArr.length;i++){
             _this.checkArr[i].newstarttime= new Date(_this.checkArr[i].starttime);
             _this.startTimeArr.push(_this.checkArr[i].newstarttime)
@@ -2140,11 +2152,10 @@
              for(var i=0;i< _this.checkArr.length;i++){
               if( _this.checkArr[i].starttime==date){
                     _this.checkArr.splice(i,1)
-                   console.log("删除了", _this.checkArr)
               }
              }
          }
-       
+       console.log(_this.startTimeArr,"开始时间数组");
      })
    //清除所选日期
      $(".action-clearday").click(function () {
