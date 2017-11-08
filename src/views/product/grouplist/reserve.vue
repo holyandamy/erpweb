@@ -205,7 +205,7 @@
                         </el-select>
                       </el-col>
                     </el-form-item>
-                    <el-form-item label="联系人：" required prop="name">
+                    <el-form-item label="联系人："  prop="name">
                       <el-col :span="4" style='line-height: 45px;'>
                         <el-input v-model="visitorList.contact" ></el-input>
                       </el-col>

@@ -564,9 +564,9 @@
 
 			}
 		},
-		mounted: function() {
+	/* 	mounted: function() {
 			this.getprovince()
-		},
+		}, */
 		methods: {
 			geturl(url) {
 				this.baseForm.images = url
