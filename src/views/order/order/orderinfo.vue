@@ -600,6 +600,10 @@ import axios from 'axios';
 					{
 						value: 4,
 						label: '港澳通行证'
+					},
+						{
+						value: 5,
+						label: '其他'
 					}
 				],
 				businesstype: [{ //1现金，2对公汇款，3刷卡，4支付宝，5微信，6网银，7其他
