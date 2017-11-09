@@ -1088,7 +1088,6 @@
 				if(typeof document.selection != "undefined") {
 					document.selection.createRange().text = str;
 				} else {
-//					listss.value = listss.value.substr(0, listss.selectionStart) + str + listss.value.substring(listss.selectionStart, lists);
           this.baseForm.routes[index].title = listss.value.substr(0, listss.selectionStart) + str + listss.value.substring(listss.selectionStart, lists);
 				}
 			},
