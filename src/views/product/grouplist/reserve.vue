@@ -39,7 +39,8 @@
             <div style="clear: both;"></div>
             <p>
               <span>集合通知：</span>{{detailOut.notify}} <br>
-              <span>操作人：</span>
+              <span>操作人：</span><br>
+              <span>交通：</span>
             </p>
           </el-row>
            <!-- 交通信息模块 满意 -->
@@ -109,7 +110,7 @@
                       <el-input v-model='item.name' :disabled="true"></el-input>
                     </td>
                     <td>
-                      <el-tag type="gray">{{ item.type=="联城"?"联城" : "往" }}</el-tag>
+                      <el-tag type="gray">{{ item.type=="联程"?"联程" : "往" }}</el-tag>
                     </td>
                     <td>
                       <el-input  style='width: 40%;'  v-model='item.depart' :disabled="true"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="true"></el-input>
@@ -148,7 +149,7 @@
                   <!-- 返-->
                   <tr v-for='(item,idx) in item.others.slice(1)' :key="idx">
                     <td>
-                        <el-tag type="gray">{{ (item.type=="联城")||(item.type==2)?"联城" : "返" }}</el-tag>
+                        <el-tag type="gray">{{ (item.type=="联程")||(item.type==2)?"联程" : "返" }}</el-tag>
                     </td>
                     <td>
                       <el-input  style='width: 40%;'  v-model='item.depart' :disabled="true"></el-input> --- <el-input   style='width: 40%;' v-model='item.dest' :disabled="true"></el-input>
@@ -210,7 +211,9 @@
                         <el-input v-model="visitorList.contact" ></el-input>
                       </el-col>
                     </el-form-item>
-                    <el-form-item label="公司名称：" prop="company" v-if='visitorList.custtype == 2' required>
+                    
+                    <el-form-item label="公司名称："  v-if='visitorList.custtype == 2' required>
+                      
                       <el-col :span="4" style='line-height: 45px;'>
                         <el-input v-model="visitorList.comname" @change='getJidiaoo'></el-input>
                         <div class='phoneInp' v-if='isShowc && companyArr.length>0'>
@@ -454,6 +457,9 @@
         }, {
           value: '4',
           label: '港澳通行证'
+        },{
+          value: '5',
+          label: '其他'
         }],
         value: '',
         checkArr: [],
@@ -746,7 +752,9 @@
               result.traffics[i].starttime=new Date(2016,9,10,hh,mm);
               result.traffics[i].endtime=new Date(2016,9,10,ehh,emm);
               result.traffics[i].arrivetype=result.traffics[i].arrivetype==0?false:true;
-          
+              for(var k=0;k<result.traffics[i].others.length;k++){
+                result.traffics[i].others[k].arrivetype=result.traffics[i].others[k].arrivetype==0?false:true;
+              }
              if(result.traffics[i].typeName=="单程"){
                result.traffics[i].others=[];
                _this.trackArr.push(result.traffics[i]);
@@ -760,7 +768,7 @@
                  result.traffics[i].others[k].endtime.slice( result.traffics[i].others[k].endtime.indexOf(":")+1,result.traffics[i].others[k].endtime.indexOf(":")+3));
                 
                }
-                result.traffics[i].type=result.traffics[i].type==1?"往返":"联城";
+                result.traffics[i].type=result.traffics[i].type==1?"往返":"联程";
                _this.gobackArr.push(result.traffics[i]);
               _this.rowNum=result.traffics[i].others.length;
              }

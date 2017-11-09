@@ -455,8 +455,10 @@
             orderno: this.collectForm.orderno.trim(),
             pageindex: 0,
             pagesize: 10,
-            source: "",
-            status: "",
+            source: "-1",
+            status: "0",
+            refund: "0",
+            settle:"-1",
             token: paramm.getToken()
           }).then((res)=>{
             if(res.data.error || res.data.err){
