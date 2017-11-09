@@ -211,7 +211,9 @@
                         <el-input v-model="visitorList.contact" ></el-input>
                       </el-col>
                     </el-form-item>
-                    <el-form-item label="公司名称：" prop="company" v-if='visitorList.custtype == 2' required>
+                    
+                    <el-form-item label="公司名称："  v-if='visitorList.custtype == 2' required>
+                      
                       <el-col :span="4" style='line-height: 45px;'>
                         <el-input v-model="visitorList.comname" @change='getJidiaoo'></el-input>
                         <div class='phoneInp' v-if='isShowc && companyArr.length>0'>
@@ -455,6 +457,9 @@
         }, {
           value: '4',
           label: '港澳通行证'
+        },{
+          value: '5',
+          label: '其他'
         }],
         value: '',
         checkArr: [],
