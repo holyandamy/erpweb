@@ -1702,6 +1702,95 @@
           });
           return;
         }
+         /* 处理下发平台 */
+         for(var i=0;i<_this.lineArr.length;i++){
+           if(_this.lineArr[i].categoryName==_this.subvalue){
+             _this.tongbucategoryid=_this.lineArr[i].categoryId;
+           }
+         }
+           for(var i=0;i<_this.lineArr_huan.length;i++){
+           if(_this.lineArr_huan[i].categoryName==_this.subvalue_huan){
+             _this.tongbucategoryid_huan=_this.lineArr_huan[i].categoryId;
+           }
+         }
+         if(_this.categoryvalue=="国内长线"){
+           _this.tongbucategorytype="longLine"
+         }else if(_this.categoryvalue=="周边短线"){
+            _this.tongbucategorytype="shortLine"
+         }else if(_this.categoryvalue=="出境长线"){
+            _this.tongbucategorytype="externalLine"
+         }
+
+          if(_this.categoryvalue_huan=="国内长线"){
+           _this.tongbucategorytype_huan="longLine"
+         }else if(_this.categoryvalue_huan=="周边短线"){
+            _this.tongbucategorytype_huan="shortLine"
+         }else if(_this.categoryvalue_huan=="出境长线"){
+            _this.tongbucategorytype_huan="externalLine"
+         }
+          for(var i=0;i<_this.playArr.length;i++){
+            if(_this.playArr[i].labelId== _this.initValue){
+              _this.tongbulabelsname=_this.playArr[i].labelName;
+            }
+          }
+          for(var i=0;i<_this.playArr_huan.length;i++){
+            if(_this.playArr_huan[i].labelId== _this.initValue_huan){
+              _this.tongbulabelsname_huan=_this.playArr_huan[i].labelName;
+            }
+          }
+          /* 解决保存发送请求的platforms数组  */
+         _this.platformsArrXin=[{
+                id:"",
+                platform:1,
+                categoryid: _this.tongbucategoryid,
+                categorytype: _this.tongbucategorytype,
+                categoryname:_this.subvalue,
+                sourceid:"",
+                sites:_this.checksiteArr.join(","),
+                isenable:_this.editChi,
+                labels: _this.initValue,
+                labelsname:_this.tongbulabelsname,
+                companyId:_this.tongbucompanyId,
+                companyname:"" ,
+                memberId:"",  
+         },{
+                id:"",
+                platform:2,
+                categoryid: _this.tongbucategoryid_huan,
+                categorytype: _this.tongbucategorytype_huan,
+                categoryname:_this.subvalue_huan,
+                sourceid:"",
+                sites:_this.checksiteArr_huan.join(","),
+                isenable:_this.editHuan,
+                labels: _this.initValue_huan,
+                labelsname:_this.tongbulabelsname_huan,
+                companyId:_this.tongbucompanyId_huan,
+                companyname:"" ,
+                memberId:"",  
+         }];
+        /* 满意 */
+         _this.platformsArr=_this.platformsArrXin;
+        console.log( _this.platformsArr,"平台数据");
+        if( _this.platformsArr[0].isenable){
+          if(! _this.platformsArr[0].categorytype||!_this.platformsArr[0].categoryname||!_this.platformsArr[0].labels||!_this.platformsArr[0].sites){
+          this.$message({
+          message: '请完善您的馨·驰誉平台的玩法站点',
+          type: 'warning'
+        });
+         return;
+          }
+         
+        }
+        if( _this.platformsArr[1].isenable){
+          if(! _this.platformsArr[1].categorytype||!_this.platformsArr[1].categoryname||!_this.platformsArr[1].labels||!_this.platformsArr[1].sites){
+          this.$message({
+          message: '请完善您的馨·欢途平台的玩法站点',
+          type: 'warning'
+        });
+         return;
+          }
+        }
+
           try{
          this.checkArr.forEach(function (item,idx) {
            item.surplus = _this.surpluss;
@@ -1774,75 +1863,8 @@
              }
           }
         
-        /* 处理下发平台 */
-         for(var i=0;i<_this.lineArr.length;i++){
-           if(_this.lineArr[i].categoryName==_this.subvalue){
-             _this.tongbucategoryid=_this.lineArr[i].categoryId;
-           }
-         }
-           for(var i=0;i<_this.lineArr_huan.length;i++){
-           if(_this.lineArr_huan[i].categoryName==_this.subvalue_huan){
-             _this.tongbucategoryid_huan=_this.lineArr_huan[i].categoryId;
-           }
-         }
-         if(_this.categoryvalue=="国内长线"){
-           _this.tongbucategorytype="longLine"
-         }else if(_this.categoryvalue=="周边短线"){
-            _this.tongbucategorytype="shortLine"
-         }else if(_this.categoryvalue=="出境长线"){
-            _this.tongbucategorytype="externalLine"
-         }
+       
 
-          if(_this.categoryvalue_huan=="国内长线"){
-           _this.tongbucategorytype_huan="longLine"
-         }else if(_this.categoryvalue_huan=="周边短线"){
-            _this.tongbucategorytype_huan="shortLine"
-         }else if(_this.categoryvalue_huan=="出境长线"){
-            _this.tongbucategorytype_huan="externalLine"
-         }
-          for(var i=0;i<_this.playArr.length;i++){
-            if(_this.playArr[i].labelId== _this.initValue){
-              _this.tongbulabelsname=_this.playArr[i].labelName;
-            }
-          }
-          for(var i=0;i<_this.playArr_huan.length;i++){
-            if(_this.playArr_huan[i].labelId== _this.initValue_huan){
-              _this.tongbulabelsname_huan=_this.playArr_huan[i].labelName;
-            }
-          }
-          /* 解决保存发送请求的platforms数组  */
-         _this.platformsArrXin=[{
-                id:"",
-                platform:1,
-                categoryid: _this.tongbucategoryid,
-                categorytype: _this.tongbucategorytype,
-                categoryname:_this.subvalue,
-                sourceid:"",
-                sites:_this.checksiteArr.join(","),
-                isenable:_this.editChi,
-                labels: _this.initValue,
-                labelsname:_this.tongbulabelsname,
-                companyId:_this.tongbucompanyId,
-                companyname:"" ,
-                memberId:"",  
-         },{
-                id:"",
-                platform:2,
-                categoryid: _this.tongbucategoryid_huan,
-                categorytype: _this.tongbucategorytype_huan,
-                categoryname:_this.subvalue_huan,
-                sourceid:"",
-                sites:_this.checksiteArr_huan.join(","),
-                isenable:_this.editHuan,
-                labels: _this.initValue_huan,
-                labelsname:_this.tongbulabelsname_huan,
-                companyId:_this.tongbucompanyId_huan,
-                companyname:"" ,
-                memberId:"",  
-         }];
-
-         _this.platformsArr= _this.platformsArr.concat(_this.platformsArrXin);
-        
         // 集合通知
         if(_this.groupList.notify.toString().length >120) {
           this.$message({
@@ -1857,7 +1879,7 @@
           platforms.push({platform: item.platform, isenable: false,id: _this.platformId[idx]})
         })
 
-        // 结束时间 发团时间 满意  关键
+        // 结束时间 发团时间 
 
         if(_this.operationType.type == 'add'){
           _this.startTimeArr.forEach(function (item) {
@@ -1873,10 +1895,10 @@
         _this.checkArr.forEach(function (item,idx) {
           item.endtime = _this.TemStArr[idx] || ''
         })
-         console.log( "保存的时候", _this.checkArr);
+ 
             _this.tongbudetailArr= _this.tongbudetailArr.concat(_this.checkArr);
         /* 发布线路 添加时候的保存  */
-
+        
          let savePara={
            lineid:_this.groupList.lineid,
            notify: _this.groupList.notify|| '',
