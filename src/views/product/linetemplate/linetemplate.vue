@@ -369,4 +369,8 @@
   .hasid {
     display: none;
   }
+	.demo-form-inline{
+		width: 100%;
+	}
+
 </style>
