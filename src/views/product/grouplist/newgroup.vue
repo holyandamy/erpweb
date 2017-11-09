@@ -339,7 +339,6 @@
       
                      <tr class="el-table__row" >
                       <td class="el-table_1_column_123 el-table-column--selection">
-                        <!--{{item.checked}}-->
                         <el-checkbox @change="allCheck" v-model="allChecked">全选</el-checkbox>
                       </td>
                       <td>

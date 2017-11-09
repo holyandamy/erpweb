@@ -40,6 +40,7 @@
                   <el-option label="护照" :value=2></el-option>
                   <el-option label="军官证" :value=3></el-option>
                   <el-option label="港澳通行证" :value=4></el-option>
+                   <el-option label="其他" :value=5></el-option>
                 </el-select>
               </el-col>
               <el-col :span="11">
