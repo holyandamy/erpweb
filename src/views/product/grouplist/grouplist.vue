@@ -302,7 +302,6 @@
             this.getList()
           }
         }
-
       },
       deleteRow(index, rows){
         let _this = this;
