@@ -661,7 +661,7 @@
       };
       return {
        /* 自动手动 */
-        autoOrHand:"0",
+        autoOrHand:"-1",
         newDateArr:[],
         isDel:[],
         rowNum:2,
@@ -1704,7 +1704,7 @@
         if( _this.platformsArr[0].isenable&&_this.operationType.type == 'add'){
           if(! _this.platformsArr[0].categorytype||!_this.platformsArr[0].categoryname||!_this.platformsArr[0].labels||!_this.platformsArr[0].sites){
           this.$message({
-          message: '请完善您的馨·驰誉平台的玩法站点',
+          message: '请完善您的馨·驰誉平台的类目，玩法，站点',
           type: 'warning'
         });
          return;
@@ -1714,7 +1714,7 @@
         if( _this.platformsArr[1].isenable&&_this.operationType.type == 'add'){
           if(! _this.platformsArr[1].categorytype||!_this.platformsArr[1].categoryname||!_this.platformsArr[1].labels||!_this.platformsArr[1].sites){
           this.$message({
-          message: '请完善您的馨·欢途平台的玩法站点',
+          message: '请完善您的馨·欢途平台的类目，玩法，站点',
           type: 'warning'
         });
          return;
