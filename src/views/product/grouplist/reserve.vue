@@ -396,16 +396,14 @@
           return callback(new Error('手机号码不能为空'));
         }
         setTimeout(() => {
-          if(!Number.isInteger(value)) {
-            callback(new Error('请输入数字值'));
-          } else {
+          /* 关键 明天看 */
             let mobilereg = /^[0-9]{11}$/;
             if(mobilereg.test(value)) {
               callback();
             } else {
               callback(new Error('请输入正确的手机号码'));
             }
-          }
+          
         }, 1000);
       };
       return {
