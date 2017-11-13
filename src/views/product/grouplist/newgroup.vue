@@ -660,6 +660,10 @@
         }, 1000);
       };
       return {
+        tongbucompanyName:"",
+        tongbucompanyName_huan:"",
+        tongbumemberId:"",
+        tongbumemberId_huan:"",
        /* 自动手动 */
         autoOrHand:"-1",
         newDateArr:[],
@@ -901,7 +905,9 @@
             this.lineArr_huan=this.sysTotal_huan.externalLine
          }
       },
+      /* 满意 */
       subchange(){
+        this.playArr=[];
         for(var i=0;i<this.lineArr.length;i++){
           if(this.lineArr[i].categoryName==this.subvalue){
             this.playArr=this.lineArr[i].labels;
@@ -909,6 +915,7 @@
         }
       },
       subchange_huan(){
+        this.playArr_huan=[];
         for(var i=0;i<this.lineArr_huan.length;i++){
           if(this.lineArr_huan[i].categoryName==this.subvalue_huan){
             this.playArr_huan=this.lineArr_huan[i].labels;
@@ -936,6 +943,9 @@
              _this.sysTotal=res.data.obj;
               _this.siteArr=res.data.obj.sites;
               _this.tongbucompanyId=res.data.obj.companyId;
+              /* 满意新增 */
+              _this.tongbucompanyName=res.data.obj.companyName;
+              _this.tongbumemberId=res.data.obj.memberId;
           })
         }  
         /* 2馨·欢途*/
@@ -957,6 +967,8 @@
               _this.sysTotal_huan=res.data.obj;
                _this.siteArr_huan=res.data.obj.sites;
               _this.tongbucompanyId_huan=res.data.obj.companyId;
+               _this.tongbucompanyName_huan=res.data.obj.companyName;
+              _this.tongbumemberId_huan=res.data.obj.memberId;
           })
         }
       },
@@ -1306,6 +1318,9 @@
            /* 驰誉选中*/
           if(result.platforms[i].platform==1&&(result.platforms[i].isenable)){
            _this.editChi=true;
+           _this.tongbucompanyName=result.platforms[i].companyname;
+           _this.tongbumemberId=result.platforms[i].memberId;
+
             if(result.platforms[i].categorytype=="shortLine"){
                 result.platforms[i].categorytype="周边短线"
               }else if(result.platforms[i].categorytype=="longLine"){
@@ -1337,6 +1352,9 @@
           /* 欢途选中 */
           if(result.platforms[i].platform==2&&(result.platforms[i].isenable)){
              _this.editHuan=true;
+             _this.tongbucompanyName_huan=result.platforms[i].companyname;
+             _this.tongbumemberId_huan=result.platforms[i].memberId;
+
             if(result.platforms[i].categorytype=="shortLine"){
                 result.platforms[i].categorytype="周边短线"
               }else if(result.platforms[i].categorytype=="longLine"){
@@ -1683,8 +1701,8 @@
                 labels: _this.initValue,
                 labelsname:_this.tongbulabelsname,
                 companyId:_this.tongbucompanyId,
-                companyname:"" ,
-                memberId:"",  
+                companyname: _this.tongbucompanyName,
+                memberId:_this.tongbumemberId,  
          },{
                 id:"",
                 platform:2,
@@ -1697,12 +1715,13 @@
                 labels: _this.initValue_huan,
                 labelsname:_this.tongbulabelsname_huan,
                 companyId:_this.tongbucompanyId_huan,
-                companyname:"" ,
-                memberId:"",  
+                companyname:_this.tongbucompanyName_huan,
+                memberId:_this.tongbumemberId_huan,  
          }];
          _this.platformsArr=_this.platformsArrXin;
+         console.log(_this.platformsArr[0],"馨驰誉站点玩法数据");
         if( _this.platformsArr[0].isenable&&_this.operationType.type == 'add'){
-          if(! _this.platformsArr[0].categorytype||!_this.platformsArr[0].categoryname||!_this.platformsArr[0].labels||!_this.platformsArr[0].sites){
+          if(! _this.platformsArr[0].categorytype||!_this.platformsArr[0].categoryname||(_this.platformsArr[0].labelsname=="")||!_this.platformsArr[0].sites){
           this.$message({
           message: '请完善您的馨·驰誉平台的类目，玩法，站点',
           type: 'warning'
@@ -1712,7 +1731,7 @@
          
         }
         if( _this.platformsArr[1].isenable&&_this.operationType.type == 'add'){
-          if(! _this.platformsArr[1].categorytype||!_this.platformsArr[1].categoryname||!_this.platformsArr[1].labels||!_this.platformsArr[1].sites){
+          if(! _this.platformsArr[1].categorytype||!_this.platformsArr[1].categoryname||(_this.platformsArr[1].labelsname=="")||!_this.platformsArr[1].sites){
           this.$message({
           message: '请完善您的馨·欢途平台的类目，玩法，站点',
           type: 'warning'
@@ -1759,7 +1778,7 @@
        }catch (e){
           throw e
        }
-         /* 处理交通  满意*/
+         /* 处理交通 */
              /* 普通交通 下添加往返 把数据需要额外处理 */
          for(var i=0;i<_this.gobackArr.length;i++){
            _this.gobackArr[i].others[0].name= _this.gobackArr[i].name;
