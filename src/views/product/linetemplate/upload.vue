@@ -8,7 +8,7 @@
                :http-request="upload"
                :before-upload="beforeAvatarUpload"
                :on-success="uploadsuccess"
-               :on-remove="handleRemove" multiple>
+               :on-remove="handleRemove" >
 			<i class="el-icon-plus"></i>
 		</el-upload>
 		<el-dialog v-model="dialogVisible" size="tiny">
@@ -59,6 +59,7 @@
 				return files.file
 			},
 			uploadsuccess(response, file, fileList) {
+				console.log("上传成功了")
 				this.imglist = fileList
 				let titlename = []
 				for(let i = 0; i < this.imglist.length; i++) {
@@ -75,37 +76,17 @@
           this.$emit('getRouteImages',titlename.join(','),this.idx);
         }
 
-
 				},
-			handleRemove(file, fileList) {
-			  let _this=this
-        let temArr = []
-        this.imglist.forEach(function (item,idx) {
-          if(file.url!=item.url) {
-            temArr.push(item)
-            _this.imglist.splice(idx,1)
-          }
-        })
+	    handleRemove(file, fileList) {
+				console.log("点击删除",fileList)
+				this.imglist = fileList;
+				let titlename = [];
+				for(let i = 0; i < this.imglist.length; i++) {
+					titlename.push(this.imglist[i].raw.url)
 
-        let index
-//				for(let i = 0; i < this.imglist.length; i++) {
-//          if(file.url==i.url){
-//            index = i
-//            this.imglist.splice(index, 1)
-//          }
-//				}
-
-        let titlename = []
-				for(let i = 0; i < temArr.length; i++) {
-					titlename.push(temArr[i].raw.url)
 				}
-				if(this.checktop){
-					let imageurl = titlename.join(',')
-					this.$emit('geturl',imageurl);
-				}else{
-//					this.route.titleimages = titlename.join(',')
-          this.$emit('getRouteImages',titlename.join(','),this.idx);
-        }
+				let imageurl = titlename.join(',')
+				this.$emit('geturl',imageurl);
 			},
 			handlePictureCardPreview(file) {
 				this.dialogImageUrl = file.url;
