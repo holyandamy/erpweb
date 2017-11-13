@@ -182,7 +182,7 @@
 							<el-form-item label="集合地点：" prop="station">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-              <el-form-item label="图片："  required>
+              <el-form-item label="图片："  required >
                 <ImgLoad @geturl="geturl" :checktop="checktop"></ImgLoad>
               </el-form-item>
               <el-form-item label="" style='color:red;'>
@@ -703,7 +703,7 @@
 //              });
 //            }
 
-
+            console.log(	this.baseForm.images.split(","),"图片数组")
 						let para = this.baseForm
 						let html = this.$refs.ue.getUEContent()
             if(para.checkpeople.indexOf('成人')!= -1) {
@@ -751,6 +751,8 @@
 							para.routes[0].content = html
 							para.edittype = 1
 						}
+						/* 满意 */
+						console.log("保存之前的图片数组",para)
             templatsave(para).then((res) => {
 							if(res.data.error == 1) {
 								this.$message({

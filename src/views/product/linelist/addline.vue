@@ -803,11 +803,14 @@
 			  let _this = this;
 			this.$refs[formName].validate((valid) => {
 					if(valid) {
+						console.log( this.urlAdd,9999)
             if(this.baseForm.images && this.urlAdd) {
-              this.baseForm.images = this.baseImages+ ',' + this.urlAdd
+							this.baseForm.images = this.baseImages+ ',' + this.urlAdd;
+								console.log(this.baseForm.images.split(","),9999)
             }
             if(this.baseImages) {
-              this.baseForm.images = this.baseImages
+							this.baseForm.images = this.baseImages;
+								console.log(this.baseForm.images.split(","),66666)
             }
             if(this.baseForm.routes.length>0 && this.routeTit.length>0){
               this.baseForm.routes.forEach(function (item,idx) {
@@ -866,11 +869,13 @@
 							para.routes[0].content = html
 							para.edittype = 1
 						}
+						console.log(para.images.split(","),"图片列表")
             linesave(para).then((res) => {
 							if(res.data.error || res.data.err) {
 								paramm.getCode(res.data,_this )
 							} else {
                 paramm.getCode(res.data,_this )
+								/* 满意 */
 								this.handleHide()
 							}
 

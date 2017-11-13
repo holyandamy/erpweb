@@ -395,16 +395,17 @@
         if(!value) {
           return callback(new Error('手机号码不能为空'));
         }
-        setTimeout(() => {
-          /* 关键 明天看 */
-            let mobilereg = /^[0-9]{11}$/;
-            if(mobilereg.test(value)) {
-              callback();
-            } else {
-              callback(new Error('请输入正确的手机号码'));
-            }
+        // setTimeout(() => {
+        //   /* 关键 明天看 */
+        //     let mobilereg = /^[0-9]{11}$/;
+        //     console.log("hhh",value)
+        //     if(mobilereg.test(value)) {
+        //       callback();
+        //     } else {
+        //       callback(new Error('请输入正确的手机号码'));
+        //     }
           
-        }, 1000);
+        // }, 1000);
       };
       return {
             /* 单程数组 */
