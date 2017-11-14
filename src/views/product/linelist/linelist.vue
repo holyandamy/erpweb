@@ -79,17 +79,17 @@
               {{scope.row.name.length>70?scope.row.name.substring(0,70)+'...':scope.row.name}}
             </template>
 					</el-table-column>
-					<el-table-column prop="categoryName" label="线路分类"  width="200">
+					<el-table-column prop="categoryName" label="线路分类"  width="150">
 					</el-table-column>
-					<el-table-column prop="depart" label="出发地" width="160">
+					<el-table-column prop="depart" label="出发地" width="100">
 					</el-table-column>
-					<el-table-column prop="dest" label="目的地" width="160">
+					<el-table-column prop="dest" label="目的地" width="100">
 					</el-table-column>
-					<el-table-column prop="days" label="天数" width="90">
+					<el-table-column prop="days" label="天数" width="80">
 					</el-table-column>
-					<el-table-column prop="creater" label="创建人" width="150">
+					<el-table-column prop="creater" label="创建人" width="100">
 					</el-table-column>
-					<el-table-column prop="status" label="状态" width="150">
+					<el-table-column prop="status" label="状态" width="80">
 						<template scope="scope">
 							<span v-if="scope.row.isenable == true" style="text-align: center;">正常</span>
 							<span v-if="scope.row.isenable == false" style="text-align: center;">停止</span>

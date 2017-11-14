@@ -941,6 +941,7 @@ import axios from 'axios';
               }
              if(result.traffics[i].typeName=="单程"){
                result.traffics[i].others=[];
+							  _this.trackArr=[];
                _this.trackArr.push(result.traffics[i]);
             
              }else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联城")){
@@ -953,7 +954,8 @@ import axios from 'axios';
                 
                }
                 result.traffics[i].type=result.traffics[i].type==1?"往返":"联程";
-               _this.gobackArr.push(result.traffics[i]);
+                _this.gobackArr=[];
+							 _this.gobackArr.push(result.traffics[i]);
               _this.rowNum=result.traffics[i].others.length;
              }
            }

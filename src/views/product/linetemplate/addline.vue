@@ -323,7 +323,7 @@
 									</el-form-item>
 								</el-col>
 							</el-row>
-							<el-form-item label="对外备注；" prop="outremark">
+							<el-form-item label="对外备注：" prop="outremark">
 								<el-input type="textarea" v-model="baseForm.outremark"></el-input>
 							</el-form-item>
 							<el-form-item label="内部备注：" prop="innerremark">
@@ -568,8 +568,9 @@
 			this.getprovince()
 		}, */
 		methods: {
+			/* 获得上方图片的地址 形式以,隔开的字符串 */
 			geturl(url) {
-				this.baseForm.images = url
+				this.baseForm.images = url;
 			},
       getRouteImages(url,idx) {
         let _this =this;

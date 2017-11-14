@@ -92,7 +92,7 @@
 							<!-- 订单金额 -->
 							<li style="width: 5%;">￥{{list.orderpay}}</li>
 							<!-- 应收 -->
-							<li style="width: 5%;">￥{{list.orderpay-list.pay}}</li>
+							<li style="width: 5%;">￥{{(list.orderpay-list.pay).toFixed(2)}}</li>
 							<!-- 	已收 -->
 							<li style="width: 5%;">￥{{list.collection}}</li>
 							<!-- 退款 -->

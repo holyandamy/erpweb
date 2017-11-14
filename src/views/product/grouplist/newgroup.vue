@@ -2313,4 +2313,8 @@
   .el-dialog--small{
     width: 65%;
   }
+  .el-input__inner{
+   padding: 3px 2px;
+  }
+  
 </style>
