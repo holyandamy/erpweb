@@ -78,8 +78,8 @@
         }
 
 				},
+				/* 删除相片的时候也要实时更新保存时候的图片数据 */
 	    handleRemove(file, fileList) {
-				console.log("点击删除",fileList)
 				this.imglist = fileList;
 				let titlename = [];
 				for(let i = 0; i < this.imglist.length; i++) {
@@ -91,7 +91,6 @@
 					this.$emit('geturl',imageurl);
 
 				}else{
-					console.log("满意")
 					this.$emit('getRouteImages',titlename.join(','),this.idx);
         }
 			},

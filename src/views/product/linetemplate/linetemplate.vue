@@ -79,18 +79,18 @@
               {{scope.row.name.length>70?scope.row.name.substring(0,70)+'...':scope.row.name}}
             </template>
 					</el-table-column>
-					<el-table-column prop="categoryName" label="线路分类"  width="220">
+					<el-table-column prop="categoryName" label="线路分类"  width="200">
 					</el-table-column>
-					<el-table-column prop="depart" label="出发地" width="200">
+					<el-table-column prop="depart" label="出发地" width="100">
 					</el-table-column>
-					<el-table-column prop="dest" label="目的地" width="200">
+					<el-table-column prop="dest" label="目的地" width="100">
 					</el-table-column>
-					<el-table-column prop="days" label="天数" width="90">
+					<el-table-column prop="days" label="天数" width="80">
 					</el-table-column>
-					<el-table-column prop="creater" label="创建人" width="130">
+					<el-table-column prop="creater" label="创建人" width="100">
 					</el-table-column>
 
-					<el-table-column fixed="right" label="操作" width="160">
+					<el-table-column fixed="right" label="操作" width="110">
 						<template scope="scope">
 							<el-button class="hasid" id="d245d97b734711e788410242ac120009" @click="setMode('lineinfo'),lineinfo(scope)" type="text" size="small">查看</el-button>
 							<el-button class="hasid" id="ce9c845e734711e788410242ac120009" @click="setMode('editline'),lineinfo(scope)" type="text" size="small">编辑</el-button>

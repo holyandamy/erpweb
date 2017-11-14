@@ -46,9 +46,9 @@
                 <span>集合通知：</span>{{detailOut.notify}}
               </p>
             </el-row>
-            <p>交通&nbsp;：</p>
+            <p v-if="isTraffic.length!=0">交通&nbsp;：</p>
             <!-- 交通信息模块  满意 -->
-            <table class="adulttable" width="100%">
+            <table class="adulttable" width="100%" v-if="isTraffic.length!=0">
                 <thead>
                 <tr>
                   <td width="150">交通名称</td>
@@ -389,6 +389,7 @@
     props: ['categoryId'],
     data() {
       return {
+        isTraffic:[],
         optionName:'下单',
         modeType: 'groupinfo',
         menus: ['下单', '基本信息', '行程', '预定须知', '发布平台'],
@@ -446,6 +447,10 @@
           if(this.detail.images) this.toplist = this.detail.images.split(',')
           //设置交通信息模块
            var result=res.data.obj;
+              _this.isTraffic=result.traffics;
+              console.log( typeof _this.isTraffic)
+            if(result.traffics.length!=0){
+              console.log(999999)
              for(var i=0;i<result.traffics.length;i++){
               console.log(result.traffics[i].starttime);
               var hh=result.traffics[i].starttime.slice(0,result.traffics[i].starttime.indexOf(":") );
@@ -477,6 +482,7 @@
               _this.rowNum=result.traffics[i].others.length;
              }
            }
+            }
           // 设置平台显示状态
           this.detailOut.platforms.forEach(function (item,idx) {
             if(item.isenable) _this.checkList.push(idx)
