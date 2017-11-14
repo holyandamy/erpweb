@@ -72,7 +72,6 @@
 					this.$emit('geturl',imageurl);
 
 				}else{
-//					this.route.titleimages = titlename.join(',')
           this.$emit('getRouteImages',titlename.join(','),this.idx);
         }
 
@@ -85,8 +84,14 @@
 					titlename.push(this.imglist[i].raw.url)
 
 				}
-				let imageurl = titlename.join(',')
-				this.$emit('geturl',imageurl);
+				if(this.checktop){
+					let imageurl = titlename.join(',')
+					this.$emit('geturl',imageurl);
+
+				}else{
+					console.log("满意")
+					this.$emit('getRouteImages',titlename.join(','),this.idx);
+        }
 			},
 			handlePictureCardPreview(file) {
 				this.dialogImageUrl = file.url;
