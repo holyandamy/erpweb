@@ -59,19 +59,21 @@
 				return files.file
 			},
 			uploadsuccess(response, file, fileList) {
-				console.log("上传成功了")
+				console.log("上传成功了",fileList)
 				this.imglist = fileList
 				let titlename = []
 				for(let i = 0; i < this.imglist.length; i++) {
 					titlename.push(this.imglist[i].raw.url)
 
 				}
-
+        /* 上方的图片上传 */
 				if(this.checktop){
 					let imageurl = titlename.join(',')
 					this.$emit('geturl',imageurl);
 
-				}else{
+				}
+				/* 下方的图片上传 */
+				else{
           this.$emit('getRouteImages',titlename.join(','),this.idx);
         }
 
