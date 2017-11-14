@@ -88,9 +88,9 @@
 							备注:{{detail.remark}}
 						</el-col>
 					</el-row>
-					 <p>交通&nbsp;：</p>
+					 <p v-if="isTraffic">交通&nbsp;：</p>
 					  <!-- 交通信息模块 满意 -->
-            <table class="trafficModule" width="100%">
+            <table class="trafficModule" width="100%" v-if="isTraffic">
                 <thead>
                 <tr>
                   <td width="150">交通名称</td>
@@ -543,6 +543,7 @@ import axios from 'axios';
 				}
 			}
 			return {
+				isTraffic:"",
 				     /* 单程数组 */
         trackArr:[],
          /* 往返数组 */
@@ -925,42 +926,43 @@ import axios from 'axios';
 					this.detail = res.data.obj
 					console.log(	this.detail);
 				 //设置交通信息模块 满意
-           var result=res.data.obj;
-             for(var i=0;i<result.traffics.length;i++){
-              console.log(result.traffics[i].starttime);
-              var hh=result.traffics[i].starttime.slice(0,result.traffics[i].starttime.indexOf(":") );
-              var ehh=result.traffics[i].endtime.slice(0,result.traffics[i].endtime.indexOf(":") );
-              var mm=result.traffics[i].starttime.slice(result.traffics[i].starttime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
-              var emm=result.traffics[i].endtime.slice(result.traffics[i].endtime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
-              
-              result.traffics[i].starttime=new Date(2016,9,10,hh,mm);
-              result.traffics[i].endtime=new Date(2016,9,10,ehh,emm);
-							result.traffics[i].arrivetype=result.traffics[i].arrivetype==0?false:true;
-							for(var k=0;k<result.traffics[i].others.length;k++){
-                result.traffics[i].others[k].arrivetype=result.traffics[i].others[k].arrivetype==0?false:true;
-              }
-             if(result.traffics[i].typeName=="单程"){
-               result.traffics[i].others=[];
-							  _this.trackArr=[];
-               _this.trackArr.push(result.traffics[i]);
-            
-             }else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联城")){
-               for(var k=0;k<result.traffics[i].others.length;k++){  
-                result.traffics[i].others[k].starttime=new Date(2016,9,10, result.traffics[i].others[k].starttime.slice(0, result.traffics[i].others[k].starttime.indexOf(":")),
-                 result.traffics[i].others[k].starttime.slice( result.traffics[i].others[k].starttime.indexOf(":")+1,result.traffics[i].others[k].starttime.indexOf(":")+3));
-                  
-                  result.traffics[i].others[k].endtime=new Date(2016,9,10, result.traffics[i].others[k].endtime.slice(0, result.traffics[i].others[k].endtime.indexOf(":")),
-                 result.traffics[i].others[k].endtime.slice( result.traffics[i].others[k].endtime.indexOf(":")+1,result.traffics[i].others[k].endtime.indexOf(":")+3));
-                
-               }
-                result.traffics[i].type=result.traffics[i].type==1?"往返":"联程";
-                _this.gobackArr=[];
-							 _this.gobackArr.push(result.traffics[i]);
-              _this.rowNum=result.traffics[i].others.length;
-             }
-           }
-				
-				
+					 var result=res.data.obj;
+					 _this.isTraffic=result.traffics;
+					 if(result.traffics){
+							for(var i=0;i<result.traffics.length;i++){
+											console.log(result.traffics[i].starttime);
+											var hh=result.traffics[i].starttime.slice(0,result.traffics[i].starttime.indexOf(":") );
+											var ehh=result.traffics[i].endtime.slice(0,result.traffics[i].endtime.indexOf(":") );
+											var mm=result.traffics[i].starttime.slice(result.traffics[i].starttime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
+											var emm=result.traffics[i].endtime.slice(result.traffics[i].endtime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
+											
+											result.traffics[i].starttime=new Date(2016,9,10,hh,mm);
+											result.traffics[i].endtime=new Date(2016,9,10,ehh,emm);
+											result.traffics[i].arrivetype=result.traffics[i].arrivetype==0?false:true;
+											for(var k=0;k<result.traffics[i].others.length;k++){
+												result.traffics[i].others[k].arrivetype=result.traffics[i].others[k].arrivetype==0?false:true;
+											}
+										if(result.traffics[i].typeName=="单程"){
+											result.traffics[i].others=[];
+												_this.trackArr=[];
+											_this.trackArr.push(result.traffics[i]);
+										
+										}else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联城")){
+											for(var k=0;k<result.traffics[i].others.length;k++){  
+												result.traffics[i].others[k].starttime=new Date(2016,9,10, result.traffics[i].others[k].starttime.slice(0, result.traffics[i].others[k].starttime.indexOf(":")),
+												result.traffics[i].others[k].starttime.slice( result.traffics[i].others[k].starttime.indexOf(":")+1,result.traffics[i].others[k].starttime.indexOf(":")+3));
+													
+													result.traffics[i].others[k].endtime=new Date(2016,9,10, result.traffics[i].others[k].endtime.slice(0, result.traffics[i].others[k].endtime.indexOf(":")),
+												result.traffics[i].others[k].endtime.slice( result.traffics[i].others[k].endtime.indexOf(":")+1,result.traffics[i].others[k].endtime.indexOf(":")+3));
+												
+											}
+												result.traffics[i].type=result.traffics[i].type==1?"往返":"联程";
+												_this.gobackArr=[];
+											_this.gobackArr.push(result.traffics[i]);
+											_this.rowNum=result.traffics[i].others.length;
+										}
+									}
+					 }
 				var index=0;
 					for(var i=0;i<this.detail.namelist.length;i++){
 						console.log("进入for循环了")
@@ -1013,6 +1015,7 @@ import axios from 'axios';
 					let otheradult = this.detail.totaladult - adultAll.length
 					let otherchild = this.detail.totalchild - childAll.length
 					let otherbaby = this.detail.totalbaby - babyAll.length
+					console.log("成人数量",otheradult,"小孩数量",otherchild,"婴儿数量",otherbaby)
 					for(let j = 0; j < otheradult; j++) {
 						this.detail.namelist.push({
 							name: '',
@@ -1049,7 +1052,7 @@ import axios from 'axios';
 						})
 					}
 
-					//this.detail = res
+				
 				})
 			},
 			//获取账号列表

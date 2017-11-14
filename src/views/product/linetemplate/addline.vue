@@ -216,7 +216,7 @@
 				</div>
 				<div class="base" v-show="!editor" ref="baseday" id="baseday">
 					<ul>
-						<li class="daylist" v-for="(route,index) in baseForm.routes">
+						<li class="daylist" v-for="(route,index) in baseForm.routes" :key="index">
 							<div class="day" prop="number">
 								第<span v-model="route.number">{{index+1}}</span>天
 							</div>
@@ -575,7 +575,8 @@
       getRouteImages(url,idx) {
         let _this =this;
         this.baseForm.routes.forEach(function (item,index) {
-            if(idx ==index){
+						/* 行程天数和routes数组排序对应的时候赋值 */
+						if(idx ==index){
               item.titleimages= url
             }
         })
@@ -697,12 +698,6 @@
         }
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
-//            if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' ||this.baseForm.fromdistrictid == ''){
-//              thiss.$message({
-//                message: data.message || '成功',
-//                type: 'success'
-//              });
-//            }
 
             console.log(	this.baseForm.images.split(","),"图片数组")
 						let para = this.baseForm
