@@ -276,7 +276,7 @@
 							<el-row>
 								<el-col :span="14">
                   <el-form-item label="图片：" prop="">
-                    <ImgLoad :route="route"  @getRouteImages ='getRouteImages' :idx="index"></ImgLoad>
+                    <ImgLoad :route="route"  @getRouteImages ='getRouteImages' :idx="index" :checktop="false"></ImgLoad>
                   </el-form-item>
 
 								</el-col>

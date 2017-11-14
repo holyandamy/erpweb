@@ -81,21 +81,24 @@
 
 				},
 			handleRemove(file, fileList) {
-        let temArr = []
-        this.imglist.forEach(function (item,idx) {
-          if(file.url!=item.url) {
-            temArr.push(item)
-          }
-        })
+        this.imglist=fileList;
+        // let temArr = []
+        // this.imglist.forEach(function (item,idx) {
+        //   if(file.url!=item.url) {
+        //     temArr.push(item)
+        //   }
+        // })
 				let titlename = []
-				for(let i = 0; i < temArr.length; i++) {
-					titlename.push(temArr[i].raw.url)
+				for(let i = 0; i < this.imglist.length; i++) {
+					titlename.push(this.imglist[i].raw.url)
 				}
 				if(this.checktop){
 					let imageurl = titlename.join(',')
 					this.$emit('geturl',imageurl);
 				}else{
 //          this.route.titleimages = titlename.join(',')
+	        console.log("满意")
+					this.$emit('getRouteImages',titlename.join(','),this.idx);
 				}
 			},
 			handlePictureCardPreview(file) {
