@@ -184,3 +184,4 @@ export const loglist = params => { return axios.post(`${base}/sys/log/list`, par
 
 /* 跳转的URL */
 export const redirectUrls = ['/Line/plan.html','/Line/traffic.html','/Line/category.html','/Line/route.html','/Line/line.html','/Line/date.html','/Customer/visitor.html','/Customer/branch.html','/Customer/localtravel.html','/System/photo.html']
+
