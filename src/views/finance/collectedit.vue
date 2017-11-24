@@ -241,6 +241,7 @@
       handleHide: function() {
         this.$emit('setMode', 'collectlist');
       },
+      /* 保存事件  满意修改*/
       submitForm(formName) {
         let _this = this;
         if(this.collectForm.businesstype == '') {
@@ -315,7 +316,7 @@
           throw e
         }
         this.$refs[formName].validate((valid) => {
-          if(valid) {
+         console.log(valid,this.collectForm,"有效")
             let para = this.collectForm
             //console.log(1111, this.collectForm)
             for(let i =0;i<this.collectForm.detail.length;i++){
@@ -336,6 +337,7 @@
               })
               return false
             }
+            console.log("验证有效发送保存数据请求",)
             collectsave(para).then((res) => {
               console.log(777,res)
               if(res.data.error!=0 || res.data.err){
@@ -348,10 +350,6 @@
                 _this.$emit('getL', 'onSubmit')
               }
             });
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
         });
       },
       typethis() {
