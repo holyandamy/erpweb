@@ -335,7 +335,7 @@
         }
 
         this.$refs[formName].validate((valid) => {
-          if(valid) {
+            console.log(valid,this.collectForm,"有效")
             let para = this.collectForm
             console.log(1111, this.collectForm)
             for(let i =0;i<this.collectForm.detail.length;i++){
@@ -366,10 +366,7 @@
                 _this.$emit('getL', 'onSubmit')
               }
             });
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
+        
         });
       },
       typethis() {
