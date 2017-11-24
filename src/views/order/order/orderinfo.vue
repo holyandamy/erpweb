@@ -443,19 +443,20 @@
 				<tr v-for="(domain, index) in collectionsForm.detail">
 					<td>
 						<el-col :span="20">
-							<el-select placeholder="选择" v-model="domain.type">
+							<el-select placeholder="选择" v-model="domain.type" >
 								<el-option v-for="item in businesstype" :key="item.value" :label="item.label" :value="item.value">
 								</el-option>
 							</el-select>
-
 						</el-col>
 					</td>
 					<td>
 						<el-col :span="20">
-							<el-select placeholder="收款账号" v-model="domain.accountid">
+							<!-- 满意 -->
+							<el-select placeholder="收款账号" v-model="domain.accountid" v-if="domain.type!=1">
 								<el-option v-for="item in banklist" :key="item.bankNameAccount" :label="item.bankNameAccount" :value="item.id">
 								</el-option>
 							</el-select>
+							<span v-else>---</span>
 						</el-col>
 					</td>
 					<td>
