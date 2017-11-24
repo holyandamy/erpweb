@@ -452,7 +452,7 @@
 					<td>
 						<el-col :span="20">
 							<!-- 满意 -->
-							<el-select placeholder="收款账号" v-model="domain.accountid" v-if="domain.type!=1">
+							<el-select placeholder="收款账号" v-model="domain.accountid" v-if="(domain.type!=1)&&(domain.type!=7)">
 								<el-option v-for="item in banklist" :key="item.bankNameAccount" :label="item.bankNameAccount" :value="item.id">
 								</el-option>
 							</el-select>
