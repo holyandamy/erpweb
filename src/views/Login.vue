@@ -18,8 +18,8 @@
 
 				<el-form-item style="width:100%;">
 					<el-button type="primary" style="width:100%;"  @keyup.enter="handleLogin"    @click.native.prevent="handleLogin">登录</el-button>
-
 				</el-form-item>
+				<p style="margin-top:10px;color:orange;font-size:14px;">请使用谷歌浏览器登录！</p>
 			</div>
 		</div>
 	</el-form>
