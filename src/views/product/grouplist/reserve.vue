@@ -40,11 +40,11 @@
             <p>
               <span>集合通知：</span>{{detailOut.notify}} <br>
               <span>操作人：</span><br>
-              <span>交通：</span>
+              <span v-if="isTraffic.length!=0">交通：</span>
             </p>
           </el-row>
            <!-- 交通信息模块 满意 -->
-            <table class="adulttable" width="100%">
+            <table class="adulttable" width="100%" v-if="isTraffic.length!=0">
                 <thead>
                 <tr>
                   <td width="150">交通名称</td>
@@ -395,20 +395,20 @@
         if(!value) {
           return callback(new Error('手机号码不能为空'));
         }
-        setTimeout(() => {
-          if(!Number.isInteger(value)) {
-            callback(new Error('请输入数字值'));
-          } else {
-            let mobilereg = /^[0-9]{11}$/;
-            if(mobilereg.test(value)) {
-              callback();
-            } else {
-              callback(new Error('请输入正确的手机号码'));
-            }
-          }
-        }, 1000);
+        // setTimeout(() => {
+        //   /* 关键 明天看 */
+        //     let mobilereg = /^[0-9]{11}$/;
+        //     console.log("hhh",value)
+        //     if(mobilereg.test(value)) {
+        //       callback();
+        //     } else {
+        //       callback(new Error('请输入正确的手机号码'));
+        //     }
+          
+        // }, 1000);
       };
       return {
+        isTraffic:[],
             /* 单程数组 */
         trackArr:[],
          /* 往返数组 */
@@ -742,6 +742,8 @@
           }
           //设置交通信息模块 满意
            var result=res.data.obj;
+             _this.isTraffic=result.traffics;
+           if(result.traffics.length!=0){
              for(var i=0;i<result.traffics.length;i++){
               console.log(result.traffics[i].starttime);
               var hh=result.traffics[i].starttime.slice(0,result.traffics[i].starttime.indexOf(":") );
@@ -772,6 +774,7 @@
                _this.gobackArr.push(result.traffics[i]);
               _this.rowNum=result.traffics[i].others.length;
              }
+           }
            }
         })
       },

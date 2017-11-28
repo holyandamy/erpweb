@@ -168,7 +168,7 @@
                     <img style='width: 148px;height: 148px;margin: 0 10px;' :src='imgSrc0' alt="">
                   </li>
                 </ul>
-                <ImgLoad @geturl="geturl"  :checktop="checktop"></ImgLoad>   <!--  :scope="scope"  -->
+                <ImgLoad @geturl="geturl"  :checktop="checktop"></ImgLoad> 
               </el-form-item>
               <el-form-item label="" style='color:red;'>
                 建议图片格式：jpg、png，图片大小在1M以内，宽高为：300*180，比例为5:3
@@ -270,7 +270,7 @@
                         <img style='width: 148px;height: 148px;margin: 0 10px;' :src='imgSrc' alt="">
                       </li>
                     </ul>
-                    <ImgLoad @getRouteImages ='getRouteImages' :idx="index"></ImgLoad>
+                    <ImgLoad @getRouteImages ='getRouteImages' :idx="index" :checktop="false"></ImgLoad>
                   </el-form-item>
 
 								</el-col>
@@ -575,16 +575,15 @@
 					includePkg: '',
 					checkpeople:[],
 					routes: [{
-						'number': 1,
-						'title': '',
-//						'imglist': [],
-						'titleimages': '',
-						'isbreakfast': false,
-						'islunch': false,
-						'isdinner': false,
-						'content': '',
-						'hotel': '',
-						'remark': ''
+					  number: 1,
+						title: '',
+						titleimages: '',
+						isbreakfast: false,
+						islunch: false,
+						isdinner: false,
+						content: '',
+						hotel: '',
+						remark: ''
 
 					}]
 				},
@@ -643,17 +642,20 @@
           this.urlAdd= ''
 
         }
-      },
+			},
+			/* 满意 */
       getRouteImages(url,idx) {
         let _this =this;
         if(!this.baseForm.id) {
-          console.log(11);
+          console.log(11,url.split(","));
           this.baseForm.routes.forEach(function (item,index) {
             if(idx ==index){
               item.titleimages= url
             }
-          })
-        }
+					})
+					
+				}
+				console.log(66,  this.baseForm.routes);
         if(this.routeTit.length>0){
           console.log(22);
 
@@ -803,11 +805,14 @@
 			  let _this = this;
 			this.$refs[formName].validate((valid) => {
 					if(valid) {
+						console.log( this.urlAdd,9999)
             if(this.baseForm.images && this.urlAdd) {
-              this.baseForm.images = this.baseImages+ ',' + this.urlAdd
+							this.baseForm.images = this.baseImages+ ',' + this.urlAdd;
+								console.log(this.baseForm.images.split(","),9999)
             }
             if(this.baseImages) {
-              this.baseForm.images = this.baseImages
+							this.baseForm.images = this.baseImages;
+								console.log(this.baseForm.images.split(","),66666)
             }
             if(this.baseForm.routes.length>0 && this.routeTit.length>0){
               this.baseForm.routes.forEach(function (item,idx) {
@@ -866,11 +871,13 @@
 							para.routes[0].content = html
 							para.edittype = 1
 						}
+							console.log("保存之前的图片数组",para)
             linesave(para).then((res) => {
 							if(res.data.error || res.data.err) {
 								paramm.getCode(res.data,_this )
 							} else {
                 paramm.getCode(res.data,_this )
+								/* 满意 */
 								this.handleHide()
 							}
 

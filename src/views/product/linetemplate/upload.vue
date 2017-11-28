@@ -8,7 +8,7 @@
                :http-request="upload"
                :before-upload="beforeAvatarUpload"
                :on-success="uploadsuccess"
-               :on-remove="handleRemove" multiple>
+               :on-remove="handleRemove" >
 			<i class="el-icon-plus"></i>
 		</el-upload>
 		<el-dialog v-model="dialogVisible" size="tiny">
@@ -59,52 +59,39 @@
 				return files.file
 			},
 			uploadsuccess(response, file, fileList) {
+				console.log("上传成功了",fileList)
 				this.imglist = fileList
 				let titlename = []
 				for(let i = 0; i < this.imglist.length; i++) {
 					titlename.push(this.imglist[i].raw.url)
 
 				}
-
+        /* 上方的图片上传 */
 				if(this.checktop){
 					let imageurl = titlename.join(',')
 					this.$emit('geturl',imageurl);
 
-				}else{
-//					this.route.titleimages = titlename.join(',')
+				}
+				/* 下方的图片上传 */
+				else{
           this.$emit('getRouteImages',titlename.join(','),this.idx);
         }
 
-
 				},
-			handleRemove(file, fileList) {
-			  let _this=this
-        let temArr = []
-        this.imglist.forEach(function (item,idx) {
-          if(file.url!=item.url) {
-            temArr.push(item)
-            _this.imglist.splice(idx,1)
-          }
-        })
+				/* 删除相片的时候也要实时更新保存时候的图片数据 */
+	    handleRemove(file, fileList) {
+				this.imglist = fileList;
+				let titlename = [];
+				for(let i = 0; i < this.imglist.length; i++) {
+					titlename.push(this.imglist[i].raw.url)
 
-        let index
-//				for(let i = 0; i < this.imglist.length; i++) {
-//          if(file.url==i.url){
-//            index = i
-//            this.imglist.splice(index, 1)
-//          }
-//				}
-
-        let titlename = []
-				for(let i = 0; i < temArr.length; i++) {
-					titlename.push(temArr[i].raw.url)
 				}
 				if(this.checktop){
 					let imageurl = titlename.join(',')
 					this.$emit('geturl',imageurl);
+
 				}else{
-//					this.route.titleimages = titlename.join(',')
-          this.$emit('getRouteImages',titlename.join(','),this.idx);
+					this.$emit('getRouteImages',titlename.join(','),this.idx);
         }
 			},
 			handlePictureCardPreview(file) {

@@ -157,6 +157,7 @@ float: left;
 		top: 0px;
 		width: 100%;
 		aside{
+			overflow-y: auto;
 			background: #353f4d;
 			height: 100%;
 			position: fixed;

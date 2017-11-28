@@ -182,7 +182,7 @@
 							<el-form-item label="集合地点：" prop="station">
 								<el-input v-model="baseForm.station"></el-input>
 							</el-form-item>
-              <el-form-item label="图片："  required>
+              <el-form-item label="图片："  required >
                 <ImgLoad @geturl="geturl" :checktop="checktop"></ImgLoad>
               </el-form-item>
               <el-form-item label="" style='color:red;'>
@@ -216,7 +216,7 @@
 				</div>
 				<div class="base" v-show="!editor" ref="baseday" id="baseday">
 					<ul>
-						<li class="daylist" v-for="(route,index) in baseForm.routes">
+						<li class="daylist" v-for="(route,index) in baseForm.routes" :key="index">
 							<div class="day" prop="number">
 								第<span v-model="route.number">{{index+1}}</span>天
 							</div>
@@ -276,7 +276,7 @@
 							<el-row>
 								<el-col :span="14">
                   <el-form-item label="图片：" prop="">
-                    <ImgLoad :route="route"  @getRouteImages ='getRouteImages' :idx="index"></ImgLoad>
+                    <ImgLoad :route="route"  @getRouteImages ='getRouteImages' :idx="index" :checktop="false"></ImgLoad>
                   </el-form-item>
 
 								</el-col>
@@ -323,7 +323,7 @@
 									</el-form-item>
 								</el-col>
 							</el-row>
-							<el-form-item label="对外备注；" prop="outremark">
+							<el-form-item label="对外备注：" prop="outremark">
 								<el-input type="textarea" v-model="baseForm.outremark"></el-input>
 							</el-form-item>
 							<el-form-item label="内部备注：" prop="innerremark">
@@ -568,13 +568,15 @@
 			this.getprovince()
 		}, */
 		methods: {
+			/* 获得上方图片的地址 形式以,隔开的字符串 */
 			geturl(url) {
-				this.baseForm.images = url
+				this.baseForm.images = url;
 			},
       getRouteImages(url,idx) {
         let _this =this;
         this.baseForm.routes.forEach(function (item,index) {
-            if(idx ==index){
+						/* 行程天数和routes数组排序对应的时候赋值 */
+						if(idx ==index){
               item.titleimages= url
             }
         })
@@ -696,14 +698,8 @@
         }
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
-//            if(this.baseForm.fromprovinceid == '' || this.baseForm.fromcityid == '' ||this.baseForm.fromdistrictid == ''){
-//              thiss.$message({
-//                message: data.message || '成功',
-//                type: 'success'
-//              });
-//            }
 
-
+            console.log(	this.baseForm.images.split(","),"图片数组")
 						let para = this.baseForm
 						let html = this.$refs.ue.getUEContent()
             if(para.checkpeople.indexOf('成人')!= -1) {
@@ -751,6 +747,8 @@
 							para.routes[0].content = html
 							para.edittype = 1
 						}
+						/* 满意 */
+						console.log("保存之前的图片数组",para)
             templatsave(para).then((res) => {
 							if(res.data.error == 1) {
 								this.$message({
