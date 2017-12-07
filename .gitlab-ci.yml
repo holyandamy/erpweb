@@ -61,6 +61,6 @@ deploy_prod_docker:
   script: 
     - docker stack deploy -c deploy/deploy.prod.yml $PROJECT_NAME
   tags:
-    - erp
+    - erpprodshell
   only:
     - master
