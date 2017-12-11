@@ -169,8 +169,8 @@
           },
             {
               min: 3,
-              max: 19,
-              message: '长度在 3 到19 个字符',
+              max: 30,
+              message: '长度在 3 到30 个字符',
               trigger: 'blur'
             }
           ],
@@ -214,8 +214,8 @@
           },
             {
               min: 3,
-              max: 19,
-              message: '长度在 3 到19 个字符',
+              max: 30,
+              message: '长度在 3 到30 个字符',
               trigger: 'blur'
             }
           ],
