@@ -81,8 +81,7 @@ import Cookies from 'js-cookie';
                           }else{
                               sessionStorage.setItem('token',res.data.obj.token)
                           }
-
-                      this.$router.push({ path: '/index.html'});
+													location.href = '/index.html'
                       }else{
                           this.$message.error(res.data.message);
                           this.loading = false;
