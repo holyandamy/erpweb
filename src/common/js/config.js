@@ -1,10 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-// const host = '' // 接口请求地址
-// const otherUrl = 'http://img.tripb2b.com/erp'
-
 const host = '' // 接口请求地址
-const otherUrl = 'http://img.etu6.org/erp'
+const otherUrl = 'http://img.tripb2b.com/erp'
+
+// const host = 'http://api.erp.we2tu.com' // 接口请求地址
+// const otherUrl = 'http://img.etu6.org/erp'
 
 export const noteUrl = `${otherUrl}/xt-erp-info.pdf`;  // 操作手册
 export const downloadUrl = `${otherUrl}/namelist_template.xls`;  // 名单模版
@@ -183,5 +183,5 @@ export const opensave = params => { return axios.post(`${base}/sys/open/save`, p
 export const loglist = params => { return axios.post(`${base}/sys/log/list`, params).then(res => res); };//获取员工详情
 
 /* 跳转的URL */
-export const redirectUrls = ['/Line/plan.html','/Line/traffic.html','/Line/category.html','/Line/route.html','/Line/line.html','/Line/date.html','/Customer/visitor.html','/Customer/branch.html','/Customer/localtravel.html','/System/photo.html']
+export const redirectUrls = ['/Line/plan.html','/Line/traffic.html','/Line/category.html','/Line/route.html','/Line/line.html','/Line/date.html','/Customer/visitor.html','/Customer/branch.html','/Customer/localtravel.html','/System/photo.html','/Order/order.html','/Order/give.html','/Order/custom.html','/Finance/receivables.html','/Finance/paymanager.html','/index.html']
 

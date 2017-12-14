@@ -10,15 +10,11 @@
 					<el-col :span="3">&nbsp;</el-col>
 				</el-row>
 				<el-row class="userinfo">
-					<a class="headerimg" > <router-link to="/main"><img src="../assets/images/header.png"/></router-link></a>
+					<a class="headerimg" href="javascript:;" @click="jumpIndex"><img src="../assets/images/header.png"/></a>
 					<div class="clearfix"></div>
 					<el-dropdown trigger="hover">
 					<p class="el-dropdown-link userinfo-inner">{{userinfo}}<!--<i class="el-icon-arrow-down"></i>--></p>
-					<!--<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>我的审批</el-dropdown-item>
-						<el-dropdown-item>审批列表</el-dropdown-item>
-						<el-dropdown-item>个人资料</el-dropdown-item>
-					</el-dropdown-menu>-->
+				
 				</el-dropdown>
 					<p class="out"><a  @click="logout">退出</a><!-- | <a href="#">消息</a>--></p>
 				</el-row>
@@ -89,6 +85,9 @@ export default {
 	 },
  
     methods: {
+			jumpIndex(){
+       location.href="index.html"
+			},
 			menuFilter(url) {
 				for(let key of redirectUrls) {
 					if(url.match(new RegExp(key))) {
