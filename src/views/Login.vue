@@ -86,7 +86,6 @@ import Cookies from 'js-cookie';
                           this.$message.error(res.data.message);
                           this.loading = false;
                       }
-
                   })
 
                 } else {
