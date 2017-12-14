@@ -10,7 +10,7 @@
 					<el-col :span="3">&nbsp;</el-col>
 				</el-row>
 				<el-row class="userinfo">
-					<a class="headerimg" > <router-link to="/main"><img src="../assets/images/header.png"/></router-link></a>
+					<a class="headerimg" > <router-link to="/index.html"><img src="../assets/images/header.png"/></router-link></a>
 					<div class="clearfix"></div>
 					<el-dropdown trigger="hover">
 					<p class="el-dropdown-link userinfo-inner">{{userinfo}}<!--<i class="el-icon-arrow-down"></i>--></p>
