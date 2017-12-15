@@ -47,6 +47,9 @@ import Visitor from './views/customer/visitor/visitor.vue' //游客管理
 //退出登录状态
 import Logout from './views/Logout.vue' //退出
 
+/* index */
+import retindex from './views/retindex.vue' //退出
+
 let routes = [{
 		path: '/login',
 		component: Login,
@@ -61,16 +64,10 @@ let routes = [{
     },
 	{
 		path: '/',
-		component: Home,
+		component: retindex,
 		name: 'home',
 		hidden: true,
-		children: [{
-				path: '/main',
-				component: Main,
-				name: 'main'
-			},
-
-		]
+		
 	},
 	{
 		path: '/',
