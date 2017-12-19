@@ -183,5 +183,5 @@ export const opensave = params => { return axios.post(`${base}/sys/open/save`, p
 export const loglist = params => { return axios.post(`${base}/sys/log/list`, params).then(res => res); };//获取员工详情
 
 /* 跳转的URL */
-export const redirectUrls = ['/Line/plan.html','/Line/traffic.html','/Line/category.html','/Line/route.html','/Line/line.html','/Line/date.html','/Customer/visitor.html','/Customer/branch.html','/Customer/localtravel.html','/System/photo.html','/Order/order.html','/Order/give.html','/Order/custom.html','/Finance/receivables.html','/Finance/paymanager.html','/index.html']
+export const redirectUrls = ['/Line/plan.html','/Line/traffic.html','/Line/category.html','/Line/route.html','/Line/line.html','/Line/date.html','/Customer/visitor.html','/Customer/branch.html','/Customer/localtravel.html','/System/photo.html','/ORDER/order.html','/ORDER/give.html','/ORDER/custom.html','/Finance/receivables.html','/Finance/paymanager.html','/index.html','/System/docking.html']
 
