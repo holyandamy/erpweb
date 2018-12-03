@@ -519,7 +519,7 @@
 
 					}]
 				},
-				/* 满意 */
+				/*  */
 				baseFormrules: {
 					// categorytype: [{
 					// 	required: true,
@@ -531,7 +531,7 @@
 						message: '请填写线路名称',
 						trigger: 'blur,change'
 					}],
-				
+
 					type: [{
 						required: true,
 						message: '请选择出行方式',
@@ -548,7 +548,7 @@
 						message: '请选择出港地',
 						trigger: 'blur'
 					}],
-			
+
 //				checkpeople: [{ type: 'array', required: true, message: '请至少选择一个收客类型', trigger: 'change' }],
 				typepeo: [{required: true,trigger: 'change', validator:typepeocheck}],
 //				fromprovinceid: [{required: true, trigger: 'change',validator:startaddresscheck}],
@@ -747,7 +747,7 @@
 							para.routes[0].content = html
 							para.edittype = 1
 						}
-						/* 满意 */
+						/*  */
 						console.log("保存之前的图片数组",para)
             templatsave(para).then((res) => {
 							if(res.data.error == 1) {
@@ -981,7 +981,7 @@
 				listss.focus();
 				if(typeof document.selection != "undefined") {
 					document.selection.createRange().text = str;
-				
+
 				} else {
 					this.baseForm.routes[index].title = listss.value.substr(0, listss.selectionStart) + str + listss.value.substring(listss.selectionStart, lists);
 						console.log("触发了")
@@ -1099,5 +1099,5 @@
 	.linetype li:last-child {
 		border-right: 0!important;
 	}
-	
+
 </style>

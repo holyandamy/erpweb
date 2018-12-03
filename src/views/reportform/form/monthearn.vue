@@ -34,7 +34,7 @@
         </el-row>
       </el-form>
       <section style="padding: 0 30px;">
-        <!-- 满意   orderLists-->
+        <!--    orderLists-->
         <el-table :data="orderLists" border style="text-align: left; font-size: 12px;" v-if="orderLists.length!=0">
           <el-table-column
             type="index"
@@ -52,7 +52,7 @@
           <el-table-column prop="allTotal" label="合计"  width='200'>
           </el-table-column>
         </el-table>
-        <!-- 满意 -->
+        <!--  -->
         <div id='totalAll' v-if="orderLists.length!=0">
           <span  style='float: left;'>合计</span>
           <span>{{orderListsSum.allTotal}}</span>
@@ -192,7 +192,7 @@
         this.setmode = type
         this.typpe = typpe
       },
-      /* 获取列表数据 满意*/
+      /* 获取列表数据 */
       getList() {
         let page = this.orderinfo
         page.pageindex = this.currentPage - 1
@@ -220,7 +220,7 @@
       handleCurrentChange(val) {
         this.getList()
       },
-      /* 满意 */
+      /*  */
       onSubmit() {
         this.getList()
       },

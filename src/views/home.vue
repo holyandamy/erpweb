@@ -14,7 +14,7 @@
 					<div class="clearfix"></div>
 					<el-dropdown trigger="hover">
 					<p class="el-dropdown-link userinfo-inner">{{userinfo}}<!--<i class="el-icon-arrow-down"></i>--></p>
-				
+
 				</el-dropdown>
 					<p class="out"><a  @click="logout">退出</a><!-- | <a href="#">消息</a>--></p>
 				</el-row>
@@ -26,8 +26,16 @@
 
 							<template slot="title"></i>{{item.authname}}</template>
 							<!-- 显示子菜单 -->
-							<el-menu-item v-for="child in item.childs" :index="child.path" style='min-width: 0 !important;' @click="menuFilter(child.path)" :key="child.path"
-							 v-if="!child.hidden"  :id="child.id"  >{{child.authname}}</el-menu-item>
+							<el-menu-item
+                v-for="child in item.childs"
+                :index="child.path"
+                style='min-width: 0 !important;'
+                @click="menuFilter(child.path)"
+                :key="child.path"
+							 v-if="!child.hidden"
+                :id="child.id"  >
+                {{child.authname}}
+              </el-menu-item>
 
 						</el-submenu>
 						<el-menu-item v-if="item.leaf&&item.childs.length>0" :index="item.childs[0].path">{{item.childs[0].authname}}</el-menu-item>
@@ -38,14 +46,39 @@
 
 					<li v-for="(item,index) in menu" v-if="!item.hidden" class="el-submenu item">
 						<template v-if="!item.leaf">
-							<div class="el-submenu__title" style="padding-left: 20px;height: 46px;line-height: 46px; " @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
-							<ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
-								<li v-for="childnode in item.childs" v-if="!childnode.hidden" :key="childnode.path" class="el-menu-item" style="padding-left: 40px;min-width: 0;" :class="$route.path==childnode.path?'is-active':''" @click="$router.push(childnode.path)">{{childnode.authname}}</li>
+							<div
+                class="el-submenu__title"
+                style="padding-left: 20px;height: 46px;line-height: 46px; "
+                @mouseover="showMenu(index,true)"
+                @mouseout="showMenu(index,false)">
+                <i :class="item.iconCls"></i>
+              </div>
+							<ul
+                class="el-menu submenu"
+                :class="'submenu-hook-'+index"
+                @mouseover="showMenu(index,true)"
+                @mouseout="showMenu(index,false)">
+								<li
+                  v-for="childnode in item.childs"
+                  v-if="!childnode.hidden"
+                  :key="childnode.path"
+                  class="el-menu-item"
+                  style="padding-left: 40px;min-width: 0;"
+                  :class="$route.path==childnode.path?'is-active':''"
+                  @click="$router.push(childnode.path)">
+                  {{childnode.authname}}
+                </li>
 							</ul>
 						</template>
 						<template v-else>
 							<li class="el-submenu">
-								<div class="el-submenu__title el-menu-item" style="padding-left: 20px;height: 46px;line-height: 46px;padding: 0 20px;" :class="$route.path==item.childnode[0].path?'is-active':''" @click="$router.push(item.childnode[0].path)"></div>
+								<div
+                  class="el-submenu__title el-menu-item"
+                  style="padding-left: 20px;height: 46px;line-height: 46px;padding: 0 20px;"
+                  :class="$route.path==item.childnode[0].path?'is-active':''"
+                  @click="$router.push(item.childnode[0].path)">
+
+                </div>
 							</li>
 						</template>
 					</li>
@@ -83,7 +116,7 @@ export default {
 		this.getuserinfo();
 
 	 },
- 
+
     methods: {
 			jumpIndex(){
        location.href="index.html"

@@ -15,7 +15,7 @@ export default {
             context = r[2];
         reg = null;
         r = null;
-        return context == null || context == "" || context == "undefined" ? "" : context;
+        return context?context: "";
     },
     formatDate: {
 

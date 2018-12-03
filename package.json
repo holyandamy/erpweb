@@ -21,8 +21,7 @@
     "upyun": "^3.2.1",
     "vue": "^2.4.2",
     "vue-router": "^2.7.0",
-    "vuex": "^2.3.1",
-    "webwrapper": "http://git.we2tu.com/zzy/wrapper/repository/archive.tar.gz"
+    "vuex": "^2.3.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

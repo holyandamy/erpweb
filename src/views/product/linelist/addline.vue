@@ -94,7 +94,7 @@
                   </el-select>
                 </el-col>
               </el-form-item>
-							<!-- 满意 -->
+							<!--  -->
               <el-form-item label="目的地" required>
                 <el-col :span="5">
 
@@ -168,7 +168,7 @@
                     <img style='width: 148px;height: 148px;margin: 0 10px;' :src='imgSrc0' alt="">
                   </li>
                 </ul>
-                <ImgLoad @geturl="geturl"  :checktop="checktop"></ImgLoad> 
+                <ImgLoad @geturl="geturl"  :checktop="checktop"></ImgLoad>
               </el-form-item>
               <el-form-item label="" style='color:red;'>
                 建议图片格式：jpg、png，图片大小在1M以内，宽高为：300*180，比例为5:3
@@ -643,7 +643,7 @@
 
         }
 			},
-			/* 满意 */
+			/*  */
       getRouteImages(url,idx) {
         let _this =this;
         if(!this.baseForm.id) {
@@ -653,7 +653,7 @@
               item.titleimages= url
             }
 					})
-					
+
 				}
 				console.log(66,  this.baseForm.routes);
         if(this.routeTit.length>0){
@@ -877,7 +877,7 @@
 								paramm.getCode(res.data,_this )
 							} else {
                 paramm.getCode(res.data,_this )
-								/* 满意 */
+								/*  */
 								this.handleHide()
 							}
 
@@ -1168,22 +1168,24 @@
 
 		},
 		changepeople(){
-				if(JSON.stringify(this.baseForm.checkpeople).indexOf("婴儿") > 0){
-					this.baseForm.isbaby = true
-				}else{
-					this.baseForm.isbaby = false
-				}
-				if(JSON.stringify(this.baseForm.checkpeople).indexOf("儿童") > 0){
-					this.baseForm.ischild = true
-				}else{
-					this.baseForm.ischild = false
-				}
-				if(JSON.stringify(this.baseForm.checkpeople).indexOf("成人") > 0){
-					this.baseForm.isadult = true
-				}else{
-					this.baseForm.isadult = false
-				}
-
+       let checkpeople = JSON.stringify(this.baseForm.checkpeople);
+     switch(checkpeople){
+       case "婴儿":
+         this.baseForm.isbaby = true
+         this.baseForm.ischild = false
+         this.baseForm.isadult = false
+           break;
+       case "儿童":
+         this.baseForm.ischild = true
+         this.baseForm.isbaby = false
+         this.baseForm.isadult = false
+         break;
+       case "成人":
+         this.baseForm.isadult = true
+         this.baseForm.isbaby = false
+         this.baseForm.ischild = false
+         break;
+      }
 		}
 
 		}

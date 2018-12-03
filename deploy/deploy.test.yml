@@ -1,16 +1,16 @@
-version: '3'  
-services:  
+version: '3'
+services:
   erpweb:
     image: git.we2tu.com:5000/$PROJECT_NAME:$CI_COMMIT_REF_NAME
     environment:
       - "NODE_ENV=test"
       - "PROJECTNAME=erpweb"
       - "TZ=Asia/Shanghai"
-    ports: 
+    ports:
       - 3500:3000
     logging:
       driver: json-file
-    deploy: 
+    deploy:
       replicas: 3
       update_config:
         parallelism: 1

@@ -97,7 +97,7 @@
 					this.$emit('geturl',imageurl);
 				}else{
 //          this.route.titleimages = titlename.join(',')
-	        console.log("满意")
+	        console.log("")
 					this.$emit('getRouteImages',titlename.join(','),this.idx);
 				}
 			},

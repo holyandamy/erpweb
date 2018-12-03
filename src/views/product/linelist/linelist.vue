@@ -25,7 +25,12 @@
 						<el-col :span="20">
 							<ul class="kindid">
 								<li @click="changecondition('-1')" :class="{checked:ischecked == -1}">全部</li>
-								<li v-for="(linesort,index) in linesorts" :class="{checked:ischecked == index}" @click="changecondition(index,linesort)">{{linesort.name}}</li>
+								<li
+                  v-for="(linesort,index) in linesorts"
+                  :class="{checked:ischecked == index}"
+                  @click="changecondition(index,linesort)">
+                  {{linesort.name}}
+                </li>
 							</ul>
 						</el-col>
 					</el-row>
@@ -37,7 +42,12 @@
 						<el-col :span="20">
 							<ul>
 								<li @click="changedest(-1)" :class="{checked:checkeddest == -1}">全部</li>
-								<li v-for="(destination,index) in destinations" :class="{checked:checkeddest == index}" @click="changedest(index,destination)">{{destination.name}}</li>
+								<li
+                  v-for="(destination,index) in destinations"
+                  :class="{checked:checkeddest == index}"
+                  @click="changedest(index,destination)">
+                  {{destination.name}}
+                </li>
 							</ul>
 						</el-col>
 					</el-row>
@@ -106,7 +116,12 @@
 						        操作<i class="el-icon-caret-bottom el-icon--right"></i>
 						      </span>
 									<el-dropdown-menu slot="dropdown">
-										<el-dropdown-item style='color: #2cb1b6;' class="hasid"  id="4dcba294734711e788410242ac120009"> <el-button type="text" @click="setMode('editline'),lineinfo(scope)">编辑线路</el-button></el-dropdown-item>
+										<el-dropdown-item
+                      style='color: #2cb1b6;'
+                      class="hasid"
+                      id="4dcba294734711e788410242ac120009">
+                      <el-button type="text" @click="setMode('editline'),lineinfo(scope)">编辑线路</el-button>
+                    </el-dropdown-item>
 										<el-dropdown-item style='color: #2cb1b6;' class="hasid"  id="9079b8af734711e788410242ac120009"><el-button type="text" @click="settop(scope)">线路置顶</el-button></el-dropdown-item>
 										<el-dropdown-item style='color: #2cb1b6;' class="hasid"  id="6e3c1a72734711e788410242ac120009"><el-button type="text" @click="updatastatus(scope)">查看团期</el-button></el-dropdown-item>
 										<el-dropdown-item style='color: #2cb1b6;' v-if="scope.row.isenable == true"><el-button type="text" @click="stop(scope,1)">停止</el-button></el-dropdown-item>
@@ -121,7 +136,12 @@
 				</el-table>
 
 				<div class="page">
-					<el-pagination  @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="search.pagesize" layout="total, prev, pager, next" :total="total">
+					<el-pagination
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-size="search.pagesize"
+            layout="total, prev, pager, next"
+            :total="total">
 					</el-pagination>
 
 				</div>

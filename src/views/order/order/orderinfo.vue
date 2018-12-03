@@ -57,7 +57,7 @@
 							负责人：{{detail.creater}}
 						</el-col>
 					</el-row>
-				
+
 					<el-row>
 						<el-col :span="12">
               订单金额：{{detail.orderpay}}元
@@ -89,7 +89,7 @@
 						</el-col>
 					</el-row>
 					 <p v-if="isTraffic">交通&nbsp;：</p>
-					  <!-- 交通信息模块 满意 -->
+					  <!-- 交通信息模块  -->
             <table class="trafficModule" width="100%" v-if="isTraffic">
                 <thead>
                 <tr>
@@ -99,7 +99,7 @@
                   <td width="60">经停/直达</td>
                   <td width="60">去程班次</td>
                   <td width="150">出发时间/抵达时间</td>
-               
+
                 </tr>
                 </thead>
                 <tbody>
@@ -122,7 +122,7 @@
                     <el-input  v-model='item.flightno' :disabled="true"></el-input>
                   </td>
                   <td>
-                   
+
                     <el-time-picker
                      :disabled="true"
                       :editable="true"
@@ -142,9 +142,9 @@
                       :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                       placeholder="时间">
                      </el-time-picker>
-                     
+
                   </td>
-                  
+
                 </tr>
                </tbody>
                 <!-- 显示 添加往返 -->
@@ -168,7 +168,7 @@
                       <el-input  v-model='item.flightno' :disabled="true"></el-input>
                     </td>
                     <td>
-                     
+
                       <el-time-picker
                         :disabled="true"
                         :editable="false"
@@ -190,7 +190,7 @@
                       </el-time-picker>
                       <!--<el-input class='doubleTrc'  style='width: 40%;' ></el-input> <span v-if="item.type==1">-&#45;&#45; </span><el-input class='doubleTrc' v-if="item.type==1" style='width: 40%;'></el-input>-->
                     </td>
-                  
+
                   </tr>
                   <!-- 返-->
                   <tr v-for='(item,idx) in item.others.slice(1)' :key="idx">
@@ -226,7 +226,7 @@
                         :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                         placeholder="时间">
                       </el-time-picker>
-                    </td>  
+                    </td>
                   </tr>
               </tfoot>
             </table>
@@ -279,7 +279,7 @@
         <el-col style='text-align: left;padding: 20px 0;font-weight: bold;'>退款合计：￥{{sumFu}}元</el-col>
       </el-row>
 			<h2>
-				
+
 					<el-row>
 						<el-col :span="15">游客信息</el-col>
 						<el-col :span="9">
@@ -299,10 +299,10 @@
 									ref="upload"
 									:on-success="getFilename"
 									action="namelistImport"
-									:auto-upload="false">					
+									:auto-upload="false">
 									<el-button type="primary">导入游客名单</el-button>
 								</el-upload> -->
-						</el-col> 
+						</el-col>
 					</el-row>
 
 			</h2>
@@ -451,7 +451,7 @@
 					</td>
 					<td>
 						<el-col :span="20">
-							<!-- 满意 -->
+							<!--  -->
 							<el-select placeholder="收款账号" v-model="domain.accountid" v-if="(domain.type!=1)&&(domain.type!=7)">
 								<el-option v-for="item in banklist" :key="item.bankNameAccount" :label="item.bankNameAccount" :value="item.id">
 								</el-option>
@@ -537,7 +537,7 @@ import axios from 'axios';
 					 else if(newvalue < this.sumFu) {
 						callback(new Error('调整金额不能低于收款合计或退款合计'));
 					  this.editpriceform.money ="";
-					} 
+					}
 					else {
 						callback()
 					}
@@ -680,7 +680,7 @@ import axios from 'axios';
 		},
 		methods: {
       handleChange (file, fileList) {
-    
+
         this.fileList3 = fileList.slice(-3);
       },
 //      ajaxFileUpload () {
@@ -711,7 +711,7 @@ import axios from 'axios';
 //        )
 //        return false;
 //      },
-      
+
 			refund(info){
           let _this =this;
 				 this.$confirm('退团申请后该游客信息不可编辑', '退团申请', {
@@ -725,7 +725,7 @@ import axios from 'axios';
 		        		orderId:this.detail.id
 		        	}
 		        	orderrefund(para).then((res) =>{
-		        	
+
 		        		if(res.data.error || res.data.err){
 		        			paramm.getCode(res.data,_this)
 		        		}else{
@@ -926,7 +926,7 @@ import axios from 'axios';
 					this.downloadUrl = downloadUrl
 					this.detail = res.data.obj
 					console.log(	this.detail);
-				 //设置交通信息模块 满意
+				 //设置交通信息模块
 					 var result=res.data.obj;
 					 _this.isTraffic=result.traffics;
 					 if(result.traffics){
@@ -936,7 +936,7 @@ import axios from 'axios';
 											var ehh=result.traffics[i].endtime.slice(0,result.traffics[i].endtime.indexOf(":") );
 											var mm=result.traffics[i].starttime.slice(result.traffics[i].starttime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
 											var emm=result.traffics[i].endtime.slice(result.traffics[i].endtime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
-											
+
 											result.traffics[i].starttime=new Date(2016,9,10,hh,mm);
 											result.traffics[i].endtime=new Date(2016,9,10,ehh,emm);
 											result.traffics[i].arrivetype=result.traffics[i].arrivetype==0?false:true;
@@ -947,15 +947,15 @@ import axios from 'axios';
 											result.traffics[i].others=[];
 												_this.trackArr=[];
 											_this.trackArr.push(result.traffics[i]);
-										
+
 										}else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联城")){
-											for(var k=0;k<result.traffics[i].others.length;k++){  
+											for(var k=0;k<result.traffics[i].others.length;k++){
 												result.traffics[i].others[k].starttime=new Date(2016,9,10, result.traffics[i].others[k].starttime.slice(0, result.traffics[i].others[k].starttime.indexOf(":")),
 												result.traffics[i].others[k].starttime.slice( result.traffics[i].others[k].starttime.indexOf(":")+1,result.traffics[i].others[k].starttime.indexOf(":")+3));
-													
+
 													result.traffics[i].others[k].endtime=new Date(2016,9,10, result.traffics[i].others[k].endtime.slice(0, result.traffics[i].others[k].endtime.indexOf(":")),
 												result.traffics[i].others[k].endtime.slice( result.traffics[i].others[k].endtime.indexOf(":")+1,result.traffics[i].others[k].endtime.indexOf(":")+3));
-												
+
 											}
 												result.traffics[i].type=result.traffics[i].type==1?"往返":"联程";
 												_this.gobackArr=[];
@@ -969,7 +969,7 @@ import axios from 'axios';
 						console.log("进入for循环了")
            if(this.detail.namelist[i].isrefund==false){
 						 console.log(666)
-						 index++;  
+						 index++;
 					 }
 					}
 					if(index<=1){
@@ -1053,7 +1053,7 @@ import axios from 'axios';
 						})
 					}
 
-				
+
 				})
 			},
 			//获取账号列表
@@ -1365,7 +1365,7 @@ import axios from 'axios';
       },
       //导入游客名单
       getFilename(res,file){
-				
+
         // axios.post('http://api.erp.we2tu.com/api/order/namelist/import', {token:this.editpriceform.token}, {
         //   headers: {
         //     'Content-Type': 'multipart/form-data; charset=UTF-8'
@@ -1397,7 +1397,7 @@ import axios from 'axios';
               }
             }
           })
-          
+
         })
       }
 		}
@@ -1581,7 +1581,7 @@ import axios from 'axios';
 	.hasid{
 		display: none;
 	}
-	 /* 交通信息样式  满意*/
+	 /* 交通信息样式  */
    .trafficModule {
     margin-top: 20px;
     margin-bottom: 20px;

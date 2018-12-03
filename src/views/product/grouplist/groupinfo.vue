@@ -47,7 +47,7 @@
               </p>
             </el-row>
             <p v-if="isTraffic.length!=0">交通&nbsp;：</p>
-            <!-- 交通信息模块  满意 -->
+            <!-- 交通信息模块   -->
             <table class="adulttable" width="100%" v-if="isTraffic.length!=0">
                 <thead>
                 <tr>
@@ -79,7 +79,7 @@
                     <el-input  v-model='item.flightno' :disabled="true"></el-input>
                   </td>
                   <td>
-                   
+
                     <el-time-picker
                       :disabled="true"
                       :editable="true"
@@ -99,9 +99,9 @@
                       :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                       placeholder="时间">
                      </el-time-picker>
-                     
+
                   </td>
-                
+
                 </tr>
                </tbody>
                 <!-- 显示 添加往返 -->
@@ -125,7 +125,7 @@
                       <el-input  v-model='item.flightno' :disabled="true"></el-input>
                     </td>
                     <td>
-                     
+
                       <el-time-picker
                         :disabled="true"
                         :editable="false"
@@ -182,12 +182,12 @@
                         :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                         placeholder="时间">
                       </el-time-picker>
-                    </td>  
+                    </td>
                   </tr>
               </tfoot>
             </table>
 
-            
+
             <el-table :data="groupList"
                       border
                       style="width: 100%">
@@ -439,7 +439,7 @@
           id: this.categoryId
         }
         let _this = this;
-        /*获取产品管理 下面 下单信息  满意  */
+        /*获取产品管理 下面 下单信息    */
         orderdet(para).then((res) => {
           this.detailOut = res.data.obj
           this.detail = res.data.obj.line
@@ -457,7 +457,7 @@
               var ehh=result.traffics[i].endtime.slice(0,result.traffics[i].endtime.indexOf(":") );
               var mm=result.traffics[i].starttime.slice(result.traffics[i].starttime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
               var emm=result.traffics[i].endtime.slice(result.traffics[i].endtime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
-              
+
               result.traffics[i].starttime=new Date(2016,9,10,hh,mm);
               result.traffics[i].endtime=new Date(2016,9,10,ehh,emm);
               result.traffics[i].arrivetype=result.traffics[i].arrivetype==0?false:true;
@@ -467,15 +467,15 @@
              if(result.traffics[i].typeName=="单程"){
                result.traffics[i].others=[];
                _this.trackArr.push(result.traffics[i]);
-            
+
              }else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联城")){
-               for(var k=0;k<result.traffics[i].others.length;k++){  
+               for(var k=0;k<result.traffics[i].others.length;k++){
                 result.traffics[i].others[k].starttime=new Date(2016,9,10, result.traffics[i].others[k].starttime.slice(0, result.traffics[i].others[k].starttime.indexOf(":")),
                  result.traffics[i].others[k].starttime.slice( result.traffics[i].others[k].starttime.indexOf(":")+1,result.traffics[i].others[k].starttime.indexOf(":")+3));
-                  
+
                   result.traffics[i].others[k].endtime=new Date(2016,9,10, result.traffics[i].others[k].endtime.slice(0, result.traffics[i].others[k].endtime.indexOf(":")),
                  result.traffics[i].others[k].endtime.slice( result.traffics[i].others[k].endtime.indexOf(":")+1,result.traffics[i].others[k].endtime.indexOf(":")+3));
-                
+
                }
                 result.traffics[i].type=result.traffics[i].type==1?"往返":"联程";
                _this.gobackArr.push(result.traffics[i]);

@@ -43,7 +43,7 @@
               <span v-if="isTraffic.length!=0">交通：</span>
             </p>
           </el-row>
-           <!-- 交通信息模块 满意 -->
+           <!-- 交通信息模块  -->
             <table class="adulttable" width="100%" v-if="isTraffic.length!=0">
                 <thead>
                 <tr>
@@ -53,7 +53,7 @@
                   <td width="60">经停/直达</td>
                   <td width="60">去程班次</td>
                   <td width="150">出发时间/抵达时间</td>
-               
+
                 </tr>
                 </thead>
                 <tbody>
@@ -76,7 +76,7 @@
                     <el-input  v-model='item.flightno' :disabled="true"></el-input>
                   </td>
                   <td>
-                   
+
                     <el-time-picker
                      :disabled="true"
                       :editable="true"
@@ -96,9 +96,9 @@
                       :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                       placeholder="时间">
                      </el-time-picker>
-                     
+
                   </td>
-                  
+
                 </tr>
                </tbody>
                 <!-- 显示 添加往返 -->
@@ -122,7 +122,7 @@
                       <el-input  v-model='item.flightno' :disabled="true"></el-input>
                     </td>
                     <td>
-                     
+
                       <el-time-picker
                         :disabled="true"
                         :editable="false"
@@ -144,7 +144,7 @@
                       </el-time-picker>
                       <!--<el-input class='doubleTrc'  style='width: 40%;' ></el-input> <span v-if="item.type==1">-&#45;&#45; </span><el-input class='doubleTrc' v-if="item.type==1" style='width: 40%;'></el-input>-->
                     </td>
-                  
+
                   </tr>
                   <!-- 返-->
                   <tr v-for='(item,idx) in item.others.slice(1)' :key="idx">
@@ -180,12 +180,12 @@
                         :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                         placeholder="时间">
                       </el-time-picker>
-                    </td>  
+                    </td>
                   </tr>
               </tfoot>
             </table>
         </div>
-       
+
       </div>
       <h2 class="d_jump">客户信息</h2>
       <div class="bgfff bgfff-bot">
@@ -211,9 +211,9 @@
                         <el-input v-model="visitorList.contact" ></el-input>
                       </el-col>
                     </el-form-item>
-                    
+
                     <el-form-item label="公司名称："  v-if='visitorList.custtype == 2' required>
-                      
+
                       <el-col :span="4" style='line-height: 45px;'>
                         <el-input v-model="visitorList.comname" @change='getJidiaoo'></el-input>
                         <div class='phoneInp' v-if='isShowc && companyArr.length>0'>
@@ -332,7 +332,7 @@
                     <!--<el-input disabled='disabled' v-model="namelist.name"></el-input> &lt;!&ndash; v-model="namelist.name"&ndash;&gt;-->
                   </td>
                   <td>
-                    <!-- 满意 -->
+                    <!--  -->
                     <el-select v-model="item.certtype" placeholder="请选择">
                       <el-option
                         v-for="item in options"
@@ -404,7 +404,7 @@
         //     } else {
         //       callback(new Error('请输入正确的手机号码'));
         //     }
-          
+
         // }, 1000);
       };
       return {
@@ -444,7 +444,7 @@
           remark: [
             { min: 0, max: 120, message: '不能超过120字!', trigger: 'blur' }]
         },
-        /* 满意 */
+        /*  */
         options: [{
           value: '1',
           label: '身份证'
@@ -612,7 +612,7 @@
         })
         this.visitorList.list = newChckArr
         this.visitorList.mobile = this.visitorList.mobile.toString()
-        /* 满意 */
+        /*  */
         console.log(88888,_this.checkArr)
         orderSave(this.visitorList).then(function (res) {
           if(res.data.error || res.data.err){
@@ -740,7 +740,7 @@
           }else{
             this.edittype = false
           }
-          //设置交通信息模块 满意
+          //设置交通信息模块
            var result=res.data.obj;
              _this.isTraffic=result.traffics;
            if(result.traffics.length!=0){
@@ -750,7 +750,7 @@
               var ehh=result.traffics[i].endtime.slice(0,result.traffics[i].endtime.indexOf(":") );
               var mm=result.traffics[i].starttime.slice(result.traffics[i].starttime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
               var emm=result.traffics[i].endtime.slice(result.traffics[i].endtime.indexOf(":")+1,result.traffics[i].starttime.indexOf(":")+3);
-              
+
               result.traffics[i].starttime=new Date(2016,9,10,hh,mm);
               result.traffics[i].endtime=new Date(2016,9,10,ehh,emm);
               result.traffics[i].arrivetype=result.traffics[i].arrivetype==0?false:true;
@@ -760,15 +760,15 @@
              if(result.traffics[i].typeName=="单程"){
                result.traffics[i].others=[];
                _this.trackArr.push(result.traffics[i]);
-            
+
              }else if((result.traffics[i].typeName=="往返")||(result.traffics[i].typeName=="联城")){
-               for(var k=0;k<result.traffics[i].others.length;k++){  
+               for(var k=0;k<result.traffics[i].others.length;k++){
                 result.traffics[i].others[k].starttime=new Date(2016,9,10, result.traffics[i].others[k].starttime.slice(0, result.traffics[i].others[k].starttime.indexOf(":")),
                  result.traffics[i].others[k].starttime.slice( result.traffics[i].others[k].starttime.indexOf(":")+1,result.traffics[i].others[k].starttime.indexOf(":")+3));
-                  
+
                   result.traffics[i].others[k].endtime=new Date(2016,9,10, result.traffics[i].others[k].endtime.slice(0, result.traffics[i].others[k].endtime.indexOf(":")),
                  result.traffics[i].others[k].endtime.slice( result.traffics[i].others[k].endtime.indexOf(":")+1,result.traffics[i].others[k].endtime.indexOf(":")+3));
-                
+
                }
                 result.traffics[i].type=result.traffics[i].type==1?"往返":"联程";
                _this.gobackArr.push(result.traffics[i]);
@@ -1196,7 +1196,7 @@
     margin-right: 20px;
   }
 
-  /* 交通信息样式  满意*/
+  /* 交通信息样式  */
    .adulttable {
     margin-top: 20px;
     margin-bottom: 20px;

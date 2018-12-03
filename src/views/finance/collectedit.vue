@@ -241,7 +241,7 @@
       handleHide: function() {
         this.$emit('setMode', 'collectlist');
       },
-      /* 保存事件  满意修改*/
+      /* 保存事件  修改*/
       submitForm(formName) {
         let _this = this;
         if(this.collectForm.businesstype == '') {
